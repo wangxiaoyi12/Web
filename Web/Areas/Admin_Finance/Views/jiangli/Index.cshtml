@@ -1,0 +1,268 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+}
+
+<!-- BEGIN PAGE BAR -->
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="/SysManage/Home/Index">首页</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#">财务管理</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="/Admin_Finance/jiangli/Index"><span>市场奖励管理</span></a>
+        </li>
+    </ul>
+</div>
+<!-- END PAGE BAR -->
+<!-- BEGIN PAGE CONTENT -->
+<div class="row">
+    <!-- BEGIN SAMPLE TABLE PORTLET-->
+    <div class="col-md-12">
+        <div class="portlet box green">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-database"></i>市场奖励申请列表
+                </div>
+                @*<div class="tools">
+                    <a style="color:white" onclick="ToExcel()" title="导出Excel"> <i class="fa fa-sign-out"></i>导出Excel </a>
+                    <a style="color:white" onclick="GiveDraw()" title="批量发放"> <i class="fa fa-sign-out"></i>批量发放</a>
+                </div>*@
+            </div>
+            <div class="portlet-body">
+                <div class="table-responsive">
+                    @*<div class="table-toolbar col-md-3">
+                        <div class="btn-group">
+                            <a id="delete" onclick="_deleteList()" class="btn red">
+                                <i class="fa fa-trash-o"></i> 删除
+                            </a>
+                        </div>
+                    </div>*@
+                    <form class="form form-horizontal form-inline">
+                        <fieldset>
+                            <div class="control-group">
+                                <div class="controls">
+                                    <div class="col-md-3">
+                                    </div>
+                                    <div class="col-md-9 text-right">
+                                        <div class="input-group col-md-6">
+                                            <input type="text" value="" id="start" placeholder="起始时间" class="form-control ">
+                                            <span class="input-group-addon"> to </span>
+                                            <input type="text" value="" id="end" placeholder="结束时间" class="form-control ">
+                                        </div>
+                                        <div class="input-group col-md-3">
+                                            <input type="text" class="form-control" placeholder="搜索关键字" id="keyword" />
+                                            <span class="input-group-btn">
+                                                <a class="btn btn-default" href="javascript:searchList();">
+                                                    <span class="glyphicon glyphicon-search"></span>
+                                                </a>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+
+                </div>
+                <div class="table-responsive">
+                    <table id="datatable" class="table table-striped table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th style="width:3%;padding:10px"><input type="checkbox" id='checkAll'></th>
+                                <th>编号</th>
+                                <th>姓名</th>
+                                <th>申请奖励</th>
+                                <th>奖励实物</th>
+                                <th>状态</th>
+                                <th>申请时间</th>
+                                <th style="">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody class="sorting_disabled"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END SAMPLE TABLE PORTLET-->
+</div>
+
+@section scripts {
+    <script type="text/javascript">
+        var oTable;
+        $(document).ready(function () {
+            oTable = initTable();
+            $('#start').datetimepicker({
+                language: 'zh-CN',
+                format: 'yyyy-mm-dd',
+                autoclose: 1,
+                minView: 2
+            }).on('changeDate', function (ev) {
+                var start = $('#start').val();
+                $('#end').datetimepicker('setStartDate', start);
+                $('#start').datetimepicker('hide');
+            });
+            $('#end').datetimepicker({
+                language: 'zh-CN',
+                format: 'yyyy-mm-dd',
+                autoclose: 1,
+                minView: 2
+            }).on('changeDate', function (ev) {
+                var end = $('#end').val();
+                $('#start').datetimepicker('setEndDate', end);
+                $('#end').datetimepicker('hide');
+            });
+
+        });
+        function searchList() {
+            oTable.ajax.reload()
+        }
+        /**
+        * 表格初始化
+        * returns {*|jQuery}
+        */
+        function initTable() {
+            var table = $("#datatable").DataTable({
+                dom: '<f<t>lip>',
+                "searching": false,
+                "order": [[6, "desc"]],
+                "orderCellsTop": true,
+                ordering: false,
+                serverSide: true,
+                language: {
+                    url: '/assets/global/plugins/DataTables-1.10.12/zh-CN.json'//汉化
+                },
+                ajax: {
+                    url: "/Admin_Finance/jiangli/getDataSource",
+                    type: "post",
+                    data: function (e) {
+                        return {
+                            startTime: $("#start").val(),
+                            end: $("#end").val(),
+                            key: $("#keyword").val(),
+                            start: e.start,
+                            length: e.length,
+                            draw: e.draw
+                        }
+                    }
+                },
+                columnDefs: [
+                   { "searchable": false, "targets": 0 },//第一列禁用搜索
+                   { "orderable": false, "targets": 0 }, //第一列禁用排序
+                   { "orderable": false, "targets": 2 }, //第一列禁用排序
+                   { "orderable": false, "targets": 3 }, //第一列禁用排序
+                   { "orderable": false, "targets": 5 }, //第一列禁用排序
+                   { "orderable": false, "targets": 7 }, //第一列禁用排序
+                   { "orderable": false, "targets": 7 }, //第一列禁用排序
+                   { "orderable": false, "targets": 7 }, //第一列禁用排序
+                   { "orderable": false, "targets": 7 }, //第一列禁用排序
+                   { "orderable": false, "targets": 7 }, //第一列禁用排序
+                   { "orderable": false, "targets": 7 }, //第一列禁用排序
+                ],
+                columns: [//绑定数据
+                    {
+                        data: 'id',
+                        createdCell: function (nTd, sData, oData, iRow, iCol) {
+
+                            $(nTd).html("<input type='checkbox' name='checkList' value='" + sData + "'>");
+                        }
+                    },
+                    { data: 'MemberCode' },
+                    { data: 'NickName' },
+                    { data: 'TypeName' },
+                    { data: 'JiangL' },
+                    {
+                        data: 'State',
+                        createdCell: function (nTd, sData, oData, iRow, iCol) {
+                            if (oData.DrawState == "已发放") {
+                                $(nTd).html("<span class=\"label label-sm label-warning\"> " + oData.State + " </span>")
+                            } else {
+                                $(nTd).html("<span class=\"label label-sm label-danger\"> " + oData.State + " </span>")
+                            }
+
+                        }
+                    },
+                    {
+                        data: 'CreateTime',
+                        render: function (data, type, row, meta) {
+                            return '<span class="" title=' + data + '>' + data + '</span>';
+                        }
+                    },
+                      {
+                          data: 'id',
+                          createdCell: function (nTd, sData, oData, iRow, iCol) {
+                              if (oData.State == "未发放") {
+                                  $(nTd).html("<a onclick=\"Issue(" + oData.id + ",1)\" name='Edit' class='btn green btn-xs'><i class='fa fa-check'></i>发放</a>&nbsp;")
+                               .append("<a onclick=\"Issue(" + oData.id + ",2)\" name='Edit' class='btn red btn-xs'><i class='fa fa-mail-reply'></i>驳回</a>")
+                              } else {
+                                  if (oData.State == "已发放") {
+                                      $(nTd).html("<span class=\"label label-sm label-success\"><i class='fa fa-check'></i> " + oData.State + " </span>")
+                                  } else {
+                                      $(nTd).html("<span class=\"label label-sm label-danger\"><i class='fa fa-times'></i> " + oData.State + " </span>")
+                                  }
+                              }
+                          }
+                      }
+                ]
+            });
+            return table;
+        }
+        /**
+        * 操作处理
+        * returns {*|jQuery}
+        */
+        function Issue(id, type) {
+            confirm("确认执行此操作吗？", "数据更改后不可恢复，您确定吗？", function () {
+                //提交数据
+                $.ajax({
+                    url: "/Admin_Finance/jiangli/Issue",
+                    data: { id: id, type: type },
+                    type: "post",
+                    success: function (result) {
+                        alert("成功提示", result.Msg);
+                        oTable.ajax.reload()
+                    }, error: function (error) {
+                        console.log(error);
+                    }
+                });
+            });
+        }
+        function GiveDraw() {
+            var str = "";
+            $("input[name='checkList']:checked").each(function (i, o) {
+                str += $(this).val();
+                str += ",";
+            });
+            if (str.length > 0) {
+                var id = str.substr(0, str.length - 1);
+                confirm("批量发放确认!", "确定要批量发放提现申请吗？", function () {
+                    $.ajax({
+                        url: "/Admin_Finance/DrawManage/GiveDraw",
+                        data: { idList: id },
+                        type: "post",
+                        success: function (backdata) {
+                            alert("成功提示", backdata.Msg);
+                            $("#checkAll").prop("checked", false);
+                            oTable.ajax.reload(null, false);
+                        }, error: function (error) {
+                            alert("提示", "发放失败，系统错误");
+                        }
+                    });
+                })
+            } else {
+                alert("操作提示", "至少选择一条记录操作");
+            }
+        }
+        function ToExcel() {
+            var href = "/Admin_Finance/jiangli/ToExcel/提现记录列表?startTime=" + $("#start").val() + "&end=" + $("#end").val() + "&key=" + $("#keyword").val();
+            window.open(href);
+        }
+    </script>
+}

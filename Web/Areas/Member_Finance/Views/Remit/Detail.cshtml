@@ -1,0 +1,193 @@
+﻿@model DataBase.Fin_Remit
+@{
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+}
+<!-- BEGIN PAGE BAR -->
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="/SysManage/Desk/Index">首页</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#"><span>财务管理</span></a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="/Member_Finance/Remit/Index"><span>汇款申请</span></a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#"><span>申请信息</span></a>
+        </li>
+    </ul>
+</div>
+<!-- END PAGE BAR -->
+<!-- BEGIN PAGE CONTENT -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet light bordered">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="font-green-sharp fa fa-user"></i>
+                    <span class="caption-subject font-green-sharp bold uppercase">@ViewBag.Title<span>汇款申请</span></span>
+                </div>
+            </div>
+            <div class="portlet-body">
+                @using (Ajax.BeginForm("Save", null, new AjaxOptions()
+                {
+                    HttpMethod = "Post",
+                    OnBegin = "SubAjax.Loading",
+                    OnComplete = "SubAjax.Complate",
+                    OnFailure = "SubAjax.Failure",
+                    OnSuccess = "SubAjax.Success"
+                }, new { @class = "form-horizontal", @role = "form", @id = "commentForm" }))
+                {
+                    <div class="form-body">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red">*</span>会员编号：</label>
+                            <div class="col-md-4">
+                                <input type="hidden" name="RemitId" value="@Model.RemitId" />
+                                <input type="hidden" name="MemberCode" value="@Model.MemberCode" />
+                                <input type="hidden" name="MemberId" value="@Model.MemberId" />
+                                <input type="hidden" name="NickName" value="@Model.NickName" />
+                                <input type="hidden" name="ServiceCenterCode" value="@Model.ServiceCenterCode" />
+                                <input type="hidden" name="ServiceCenterId" value="@Model.ServiceCenterId" />
+                                <label class="control-label">@Model.MemberCode</label>
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red"></span>公司微信收款码：</label>
+                            <div class="col-md-4">
+                                <img id="img" src="@ViewBag.img" alt="" height="120" />
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red"></span>公司支付宝收款码：</label>
+                            <div class="col-md-4">
+                                <img id="ZhiFuB" src="@ViewBag.ZhiFuB" alt="" height="120" />
+                            </div>
+                            <span></span>
+                        </div>
+                        @*
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red">*</span>公司支付宝账户：</label>
+                            <div class="col-md-4">
+                                <label class="control-label">@ViewBag.ZhiFuB</label>
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red">*</span>公司支付宝姓名：</label>
+                            <div class="col-md-4">
+                                <label class="control-label">@ViewBag.ZhiFuBName</label>
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red">*</span>公司银行账户：</label>
+                            <div class="col-md-4">
+                                <label class="control-label">@ViewBag.YinHang</label>
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red">*</span>公司银行姓名：</label>
+                            <div class="col-md-4">
+                                <label class="control-label">@ViewBag.YinHangName</label>
+                            </div>
+                            <span></span>
+                        </div>*@
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red">*</span>汇款人：</label>
+                            <div class="col-md-4">
+                                <input type="text" name="BankAccount" value="@Model.BankAccount" class="form-control" placeholder="请输入汇款人" datatype="*2-10" nullmsg="" errormsg="汇款人输入汉字2-10个">
+                            </div>
+                            <span></span>
+                        </div>
+                        @*<div class="form-group">
+                                <label class="col-md-2 control-label"><span style="color:red">*</span>汇款时间：</label>
+                                <div class="col-md-4">
+                                    <div class="input-group ">
+                                        <input type="text" name="RemitTime" id="RemitTime" value="@Model.RemitTime" class="form-control" placeholder="请输入汇款时间" datatype="*">
+                                        <span class="input-group-btn">
+                                            <button class="btn default" type="button">
+                                                <i class="fa fa-calendar"></i>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                                <span></span>
+                            </div>*@
+                        @*<div class="form-group">
+                                <label class="col-md-2 control-label"><span style="color:red">*</span>银行名称：</label>
+                                <div class="col-md-4">
+                                    <select name="BankName" class="form-control select2" datatype="*" nullmsg="" errormsg="请选择银行">
+                                        <option value="">请选择银行...</option>
+                                        @{
+                                            foreach (var item in ViewData["Banks"] as dynamic)
+                                            {
+                                                if (Model.BankName == item.BasicDataName)
+                                                {
+                                                    <option value="@item.BasicDataName" selected="selected">@item.BasicDataName</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@item.BasicDataName">@item.BasicDataName</option>
+                                                }
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                                <span></span>
+                            </div>*@
+                        @*<div class="form-group">
+                                <label class="col-md-2 control-label"><span style="color:red">*</span>汇款账号：</label>
+                                <div class="col-md-4">
+                                    <input type="text" name="BankCode" value="@Model.BankCode" datatype="*" class="form-control" errormsg="请填写汇款账号">
+                                </div>
+                                <span></span>
+                            </div>*@
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red">*</span>汇款金额：</label>
+                            <div class="col-md-4">
+                                <input type="text" name="Amount" value="@Model.Amount" datatype="n1-10" class="form-control" errormsg="汇款金额不正确，请输入整数">
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red"></span>备注：</label>
+                            <div class="col-md-4">
+                                <textarea type="text" name="Comment" rows="5" class="form-control">@Model.Comment</textarea>
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-actions">
+                            <div class="row">
+                                <div class="col-md-offset-3 col-md-9">
+                                    <button type="submit" id="SubSave" class="btn green"><i class="fa fa-check"></i><span>保 存</span></button>
+                                    <button type="button" class="btn default" onclick="window.history.back()"><i class="fa fa-mail-reply"></i>返回</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END PAGE CONTENT -->
+
+@section scripts{
+    <script>
+        $(function () {
+            $('#RemitTime').datetimepicker({
+                language: 'zh-CN',
+                format: 'yyyy-mm-dd hh:ii',
+                autoclose: 1
+            });
+        });
+    </script>
+}

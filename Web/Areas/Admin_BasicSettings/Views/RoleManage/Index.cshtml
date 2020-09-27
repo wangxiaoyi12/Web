@@ -1,0 +1,144 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+}
+<!-- BEGIN PAGE BAR -->
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="/SysManage/Home/Index">首页</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#">基础设置</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="/Admin_BasicSettings/RoleManage/Index"><span>角色管理</span></a>
+        </li>
+    </ul>
+</div>
+<!-- END PAGE BAR -->
+<!-- BEGIN PAGE CONTENT -->
+<div class="row">
+    <!-- BEGIN SAMPLE TABLE PORTLET-->
+    <div class="col-md-12">
+        <div class="portlet box green">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-database"></i>系统角色数据列表
+                </div>
+                <div class="tools">
+                    <a style="color:white" onclick="ToExcel()" title="导出Excel"> <i class="fa fa-sign-out"></i>导出Excel </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="table-responsive">
+                    <div class="table-toolbar">
+                        <div class="btn-group">
+                            <a id="add" href="/Admin_BasicSettings/RoleManage/Detail" class="btn green">
+                                <i class="fa fa-plus"></i> 新建
+                            </a>
+                            <a id="delete" onclick="_deleteList()" class="btn red">
+                                <i class="fa fa-trash-o"></i> 删除
+                            </a>
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="table-responsive">
+                    <table id="datatable" class="table table-striped table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th style="width:3%"><input type="checkbox" id='checkAll'></th>
+                                <th>角色名称</th>
+                                <th style="width:20%">类型</th>
+                                <th style="width:10%">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END SAMPLE TABLE PORTLET-->
+</div>
+
+<!-- END PAGE CONTENT -->
+@section scripts {
+    <script type="text/javascript">
+        var oTable;
+        $(document).ready(function () {
+            oTable = initTable();
+            ///双击table行
+            $(document).on("dblclick", "#datatable tbody tr", function () {
+                var id = $(this).find("input[name='checkList']").val();
+                window.location.href = "/Admin_BasicSettings/RoleManage/Detail?id=" + id + "&commentForm=commentForm";
+            });
+        });
+
+        /**
+        * 表格初始化
+        * returns {*|jQuery}
+        */
+        function initTable() {
+            var table = $("#datatable").DataTable({
+                dom: '<f<t>lip>',
+                ordering: false,
+                language: {
+                    url: '/assets/global/plugins/DataTables-1.10.12/zh-CN.json'//汉化
+                },
+                ajax: {
+                    url: "/Admin_BasicSettings/RoleManage/getDataSource",
+                    type: "post"
+                },
+                columnDefs: [
+                   { "searchable": false, "targets": 0 },//第一列禁用搜索
+                   { "orderable": false, "targets": 0 }, //第一列禁用排序
+                   { "searchable": false, "targets": 3 },//第一列禁用搜索
+                   { "orderable": false, "targets": 3 } //第一列禁用排序
+                ],
+                columns: [//绑定数据
+                   {
+                       data: "id",
+                       createdCell: function (nTd, sData, oData, iRow, iCol) {
+                           $(nTd).html("<input type='checkbox' name='checkList' value='" + sData + "'>");
+                       }
+                   },
+                   { data: 'role_name' },
+                   {
+                       data: 'role_type',
+                       createdCell: function (nTd, sData, oData, iRow, iCol) {
+                           switch (sData) {
+                               case "2":
+                                   $(nTd).html("<span>系统用户</span>");
+                                   break;
+                               case "1":
+                                   $(nTd).html("<span>超级用户</span>");
+                                   break;
+                               default:
+                           }
+                       }
+                   },
+                   {
+                       data: 'id',
+                       createdCell: function (nTd, sData, oData, iRow, iCol) {
+                           $(nTd).html("<a href='/Admin_BasicSettings/RoleManage/Detail/" + oData.id + "' name='Edit' class='btn green btn-xs redd'><i class='fa fa-edit'></i> 编辑</a>&nbsp;")
+                       }
+                   }
+                ],
+                initComplete: function (settings, json) {
+                    $("a[name='Edit']").css("visibility", $("#IsEdit").val());
+                }
+            });
+            return table;
+        }
+
+        function ToExcel() {
+            var href = "/Admin_BasicSettings/RoleManage/ToExcel/角色列表";
+            window.open(href);
+        }
+    </script>
+}

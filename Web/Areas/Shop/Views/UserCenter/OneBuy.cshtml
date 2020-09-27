@@ -1,0 +1,105 @@
+﻿@using DataBase
+@using Business
+@{
+    ViewBag.Title = "我的订单";
+    string curUserID = User_Shop.GetMemberID();
+    //1.获取订单分页数据
+    int pageIndex = ReqHelper.GetInt("pageIndex",1);
+    int pageSize = 8;
+    var query = DB.ShopOneBuyDetail.Where(q=>q.MemberID== curUserID);
+
+    int recordCount = query.Count();
+    query = query.OrderByDescending(q=>q.CreateTime);
+    List<ShopOneBuyDetail> orderList = query.Skip((pageIndex - 1) * pageSize)
+        .Take(pageSize)
+        .ToList();
+}
+@section Head{
+
+}
+@section Footer{
+
+}
+<!--用户中心样式-->
+<div class="user_style clearfix">
+    <div class="user_center clearfix">
+        <!--左侧菜单图层-->
+        @Html.Partial("LeftMenu")
+        <!--右侧内容图层-->
+        <div class="right_style">
+            <div class="user_title_name"><span>一元购记录</span></div>
+            <div class="Order_form_list">
+                <table>
+                    <thead>
+                        <tr>
+                            <td class="list_name_title0">商品</td>
+                            <td class="list_name_title1">价值(元)</td>
+                            <td class="list_name_title2">数量</td>
+                            <td class="list_name_title3">购买时间</td>
+                        </tr>
+                    </thead>
+                    @if (orderList.Count > 0)
+                    {
+                        foreach (var item in orderList)
+                        {
+                            ShopProduct product = item.ShopOneBuy.ShopProduct;
+                            string url = Url_Shop.GetProduct(product);
+                            <tbody>
+                                <tr><td colspan="6" class="Order_form_time">期号：@item.ShopOneBuy.Code</td></tr>
+                                <tr>
+                                    <td>
+                                        <table class="Order_product_style">
+                                            <tbody>
+                                                <tr style="border-bottom:0px;">
+                                                    <td>
+                                                        <div class="product_name clearfix">
+                                                            <a href="@url" target="_blank" class="product_img"><img src="@Url_Shop.GetProductImg(product)" width="80" height="80"></a>
+                                                            <a href="@url" target="_blank">@product.Title</a>
+                                                            <p class="specification">@product.SubTitle</p>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                    <td class="split_line">
+                                        @product.PriceShopping
+                                    </td>
+                                    <td class="split_line">@item.Count</td>
+                                    <td>@(item.CreateTime.ToString("yyyy-MM-dd HH:mm")) </td>
+                                </tr>
+                            </tbody>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="6" class="blank" style="height:100px;line-height:100px;">没有数据了</td>
+                        </tr>
+                    }
+                </table>
+            </div>
+            <div id="pageOne" class="pageBar"></div>
+            <script>
+                var pageOne = $('#pageOne').pageBar({
+                    pageIndex: @(pageIndex),
+                    pageSize: @(pageSize),
+                    showType:'default',
+                    recordCount: @(recordCount),
+                    submitEvent: function (index) {
+                        var state=urlHelper.getQueryString('state');
+                        var result=[];
+                        if(state.length>0)
+                            result.push('state='+state);
+                        if(index>1)
+                            result.push('pageindex='+index);
+                        var url=location.pathname;
+                        if(result.length>0)
+                            url=url+'?'+result.join('&');
+                        location.href=url;
+                    }
+                });
+            </script>
+        </div>
+    </div>
+</div>

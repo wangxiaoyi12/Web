@@ -1,0 +1,199 @@
+﻿@model DataBase.Member_Info
+@{
+    var Path = "/Member_member/member/";
+}
+
+<!-- BEGIN PAGE BAR -->
+<!-- END PAGE BAR -->
+<!-- BEGIN PAGE CONTENT -->
+<style>
+    body {
+        color: black;
+    }
+    .select2-selection__rendered{
+        display:none;
+    }
+</style>
+<div class="bill">
+
+    <div class="personal">
+        <div class="container top-container">
+            <div class="row">
+                <header class="header header_1">
+                    <div class="fix_nav">
+                        <div class="nav_inner">
+                            <a class="nav-left back-icon" href="javascript:history.back();">@("返回")</a>
+                            <div class="tit">@("申请代理")</div>
+                            @*<a style="float:right;margin:-44px 10px;" href="/Member_Member/Member/Team">
+                                    @("我的推广")
+                                </a>*@
+                        </div>
+                    </div>
+                </header>
+            </div>
+        </div>
+    </div>
+    <div class="container middle ">
+        <div class="portlet-body">
+            @using (Ajax.BeginForm("SaveDL", null, new AjaxOptions()
+            {
+                HttpMethod = "Post",
+                OnBegin = "SubAjax.Loading",
+                OnComplete = "SubAjax.Complate",
+                OnFailure = "SubAjax.Failure",
+                OnSuccess = "SubAjax.Success"
+            }, new { @class = "form-horizontal", @role = "form", @id = "commentForm" }))
+            {
+                <div class="form-body">
+                    @{
+                        if (Model.IsDL == "是")
+                        {
+                            <div id="divApplyed">
+                                @("您申请的")@Model.DLName（@DB.Member_Info.GetTextDL(Model)）@("已通过管理员审核"),@("您的编号为")：@Model.Code
+                            </div>
+                        }
+                        else if (Model.IsDL == "审核中")
+                        {
+                            <div id="divApplying">
+                                @("您的申请已经提交"),@("正在审核中"),@("请耐心等待")
+                            </div>
+                        }
+                        else if (Model.IsDL == "否")
+                        {
+                            <div class="form-group">
+                                <label class="col-md-2 control-label"><span style="color:red"></span>@("会员编号")：</label>
+                                <label class="control-label text-left">@Model.Code</label>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label"> @("姓名")：</label>
+                                <label class="control-label text-left">@Model.NickName</label>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label"> @("代理级别")：</label>
+                                <div class="col-md-4">
+                                    <select name="DLName" id="DLName" class="form-control select2" onchange="show1()" datatype="*" nullmsg="" errormsg="请选代理级别">
+                                        <option value="县级代理" selected="selected">县级代理</option>
+                                        <option value="市级代理">市级代理</option>
+                                        <option value="省级代理">省级代理</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group" id="ShengId1">
+                                <label class="col-md-2 control-label"><span style="color:red">*</span>省：</label>
+                                <div class="col-md-4">
+                                    <select id="ShengId" name="ShengId" class="form-control select2" datatype="*" errormsg="请选择省" onchange="changeProv()">
+                                        <option value="">请选择省...</option>
+                                        @{
+                                            foreach (var item in ViewData["Sheng"] as dynamic)
+                                            {
+                                                if (Model.ShengId == item.id)
+                                                {
+                                                    <option value="@item.id" selected="selected">@item.name</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@item.id">@item.name</option>
+                                                }
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                                <span></span>
+                            </div>
+                            <div class="form-group" id="ShiId1">
+                                <label class="col-md-2 control-label"><span style="color:red">*</span>市：</label>
+                                <div class="col-md-4">
+                                    <select id="ShiId" name="ShiId" class="form-control select2" datatype="*" errormsg="请选择市" onchange="changeCity()">
+                                        <option value="">请选择市...</option>
+                                    </select>
+                                </div>
+                                <span></span>
+                            </div>
+                            <div class="form-group" id="XianId1">
+                                <label class="col-md-2 control-label"><span style="color:red"></span>区：</label>
+                                <div class="col-md-4">
+                                    <select id="XianId" name="XianId" class="form-control select2" errormsg="请选择区">
+                                        <option value="">请选择区...</option>
+                                    </select>
+                                </div>
+                                <span></span>
+                            </div>
+                            <div class="row" id="divBtn">
+                                <button class="btn btn-block btn-primary" id="SubSave" @*class="btn green"*@ type='button' onclick="FuTou1()">
+                                    @("提交申请")
+                                </button>
+                            </div>
+                        }
+                    }
+                </div>
+            }
+        </div>
+
+    </div>
+</div>
+
+<!-- END PAGE CONTENT -->
+<script src="~/assets/global/plugins/select2/js/select2.full.js"></script>
+<script src="~/assets/pages/scripts/components-select2.js" charset="gb2312"></script>
+<script src="~/assets/pages/scripts/components-select2.min.js" charset="gb2312" type="text/javascript"></script>
+<script>
+    function show1() {
+        var value = $("#DLName").val();
+        if (value == "县级代理") {
+            $("#ShengId1").show();
+            $("#ShiId1").show();
+            $("#XianId1").show();
+        } else if (value == "市级代理") {
+            $("#ShengId1").show();
+            $("#ShiId1").show();
+            $("#XianId1").hide();
+        } else if (value == "省级代理") {
+            $("#ShengId1").show();
+            $("#ShiId1").hide();
+            $("#XianId1").hide();
+        }
+    }
+    function changeProv() {
+        var id = $("#ShengId").val();
+        $('#ShiId').empty();
+        $.post("/Ajax/GetCity", { id: id }, function (d) {
+            $("#ShiId").select2({
+                data: d, cache: true
+            });
+            changeCity();
+        })
+    }
+    function changeCity() {
+        var id = $("#ShiId").val();
+        $('#XianId').empty();
+        $.post("/Ajax/GetCounty", { id: id }, function (d) {
+            $("#XianId").select2({
+                data: d, cache: true
+            });
+        })
+        })
+    }
+    function FuTou1() {
+        //alert("11");
+        //var obj = $("#PayBtn");
+        //obj.prop('disabled', true);
+        //obj.attr('disabled', true);
+        $.post("/mobile/mobilecenter/SaveDL", { DLName: $("#DLName").val(), ShengId: $("#ShengId").val(), ShiId: $("#ShiId").val(), XianId: $("#XianId").val()}, function (data) {
+
+            if (data.status == 1) {
+                show(data.msg);
+                setTimeout(function () {
+                    location.href = "/mobile/mobilecenter/index";
+                }, 500);
+            } else {
+                show(data.msg);
+            }
+        });
+
+
+
+    }
+</script>
+
+
+@Html.Partial("_Footer")

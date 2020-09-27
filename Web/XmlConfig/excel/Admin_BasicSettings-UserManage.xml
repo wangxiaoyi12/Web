@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<fields>
+  <field>
+    <code>LoginName</code>
+    <name>登录账号</name>
+  </field>
+  <field>
+    <code>RealName</code>
+    <name>真实姓名</name>
+  </field>
+  <field>
+    <code>Sex</code>
+    <name>性别</name>
+  </field>
+  <field>
+    <code>Mobile</code>
+    <name>手机</name>
+  </field>
+  <field>
+    <code>DepartmentName</code>
+    <name>部门</name>
+  </field>
+  <field>
+    <code>PositionName</code>
+    <name>岗位</name>
+  </field>
+  <field>
+    <code>RoleName</code>
+    <name>角色</name>
+  </field>
+  <field>
+    <code>LastLogin</code>
+    <name>上次登录</name>
+  </field>
+  <field>
+    <code>EmpState</code>
+    <name>状态</name>
+  </field>
+</fields>

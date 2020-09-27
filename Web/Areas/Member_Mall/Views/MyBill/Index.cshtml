@@ -1,0 +1,172 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+    var Path = "/Member_Mall/MyBill/";
+    var title = "我的订单";
+    var timeFlag = "申请时间";
+}
+
+<!-- BEGIN PAGE BAR -->
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="/SysManage/Desk/Index">首页</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li href="@(Path)Index">
+            <a><span>@title</span></a>
+        </li>
+    </ul>
+</div>
+<!-- END PAGE BAR -->
+<!-- BEGIN PAGE CONTENT -->
+<div class="row">
+    <!-- BEGIN SAMPLE TABLE PORTLET-->
+    <div class="col-md-12">
+        <div class="portlet box green">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-database"></i>@(title)列表
+                </div>
+                <div class="tools">
+                    <a href="javascript:;" class="collapse"> </a>
+                    <a href="javascript:;" class="reload"> </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="table-responsive">
+                    <form class="form form-horizontal form-inline">
+                        <fieldset>
+                            <div class="control-group">
+                                <div class="controls">
+                                    <div class="col-md-3">
+                                        @* <a id="add" href="@(Path)Detail" class="btn green">
+                                                <i class="fa fa-plus"></i> 新增
+                                            </a>
+                                            <a id="delete" onclick="_deleteList()" class="btn red">
+                                                    <i class="fa fa-trash-o"></i> 删除
+                                                </a>*@
+                                        <a id="express"  href="http://www.kuaidi100.com/" target="_blank" class="btn green">
+                                            <i class="fa fa-trash-o"></i> 查快递
+                                        </a>
+                                    </div>
+                                    <div class="col-md-9 text-right">
+                                        <div class="input-group col-md-6">
+                                            <input type="text" value="" id="start" placeholder="@(timeFlag)起" class="form-control ">
+                                            <span class="input-group-addon"> to </span>
+                                            <input type="text" value="" id="end" placeholder="@(timeFlag)至" class="form-control ">
+                                        </div>
+                                        <div class="input-group col-md-3">
+                                            <input type="text" class="form-control" placeholder="搜索关键字" id="keyword" />
+                                            <span class="input-group-btn">
+                                                <a class="btn btn-default" href="javascript:searchList();">
+                                                    <span class="glyphicon glyphicon-search"></span>
+                                                </a>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+                <div class="table-responsive">
+                    <table id="datatable" class="table table-striped table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th style="width:3%"><input type="checkbox" id='checkAll'></th>
+                                <th>物流公司</th>
+                                <th>物流编号</th>
+                                <th>商品名称</th>
+                                <th>订单金额</th>
+                                <th>会员编号</th>
+                                <th>会员姓名</th>
+                                <th>联系电话</th>
+                                <th>收件地址</th>
+                                <th>下单时间</th>
+                                <th>发货时间</th>
+                                <th>状态</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END SAMPLE TABLE PORTLET-->
+</div>
+
+@section scripts {
+    <script type="text/javascript">
+        var oTable;
+        var idField = "BillId";
+        var path = "@Path";
+        var dataSource = path + "getDataSource";
+        var searchData = function (e) {
+            return {
+                startTime: $("#start").val(),
+                end: $("#end").val(),
+                key: $("#keyword").val(),
+                start: e.start,
+                length: e.length,
+                draw: e.draw
+            }
+        };
+        var isDetail = false;//不双击可看详情
+        var columns = [//绑定数据
+            {
+                data: idField,
+                createdCell: function (nTd, sData, oData, iRow, iCol) {
+                    $(nTd).html("<input type='checkbox' name='checkList' value='" + sData + "'>");
+                }
+            },
+            { data: 'ExpressName' },
+            { data: 'ExpressCode' },
+            { data: 'ProductName' },
+            { data: 'TotalPrice' },
+            { data: 'MemberCode' },
+            { data: 'NickName' },
+            { data: 'Mobile' },
+            { data: 'PostAddress' },         
+            { data: 'CreateTime' },
+            { data: 'SendTime' },
+            {
+                data: 'State',
+                createdCell: function (nTd, sData, oData, iRow, iCol) {
+                    if (oData.State == "已发货") {
+                        $(nTd).html("<span class=\"label label-sm label-warning\"> " + oData.State + " </span>")
+                    } else {
+                        $(nTd).html("<span class=\"label label-sm label-danger\"> " + oData.State + " </span>")
+                    }
+                }
+            }
+        ];
+        function searchList() {
+            oTable.ajax.reload(null,false);
+        }
+        $(function () {
+            $('#start').datetimepicker({
+                language: 'zh-CN',
+                format: 'yyyy-mm-dd',
+                autoclose: 1,
+                minView: 2
+            }).on('changeDate', function (ev) {
+                var start = $('#start').val();
+                $('#end').datetimepicker('setStartDate', start);
+                $('#start').datetimepicker('hide');
+            });
+            $('#end').datetimepicker({
+                language: 'zh-CN',
+                format: 'yyyy-mm-dd',
+                autoclose: 1,
+                minView: 2
+            }).on('changeDate', function (ev) {
+                var end = $('#end').val();
+                $('#start').datetimepicker('setEndDate', end);
+                $('#end').datetimepicker('hide');
+            });
+        });
+    </script>
+    <script src="~/assets/scripts/myListPage.js"></script>
+}

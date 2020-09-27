@@ -1,0 +1,117 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+      }
+
+<!-- BEGIN PAGE BAR -->
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="/SysManage/Home/Index">首页</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#">商城管理</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="@ViewBag.Path/Index"><span>大转盘</span></a>
+        </li>
+    </ul>
+</div>
+<!-- END PAGE BAR -->
+<div class="row">
+    <!-- BEGIN SAMPLE TABLE PORTLET-->
+    <div class="col-md-12">
+        <div class="portlet box green">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-database"></i>大转盘奖项设置
+                </div>
+                <div class="tools">
+                    @*<a style="color:white" onclick="ToExcel()" title="导出Excel"> <i class="fa fa-sign-out"></i>导出Excel </a>*@
+                </div>
+            </div>
+
+            <div class="portlet-body">
+                <div class="table-responsive">
+                    <div class="table-toolbar">
+                        <div class="btn-group">
+                            <a id="Edit" onclick="Save()" class="btn red">
+                                <i class="fa fa-floppy-o"></i> 保存                                
+                            </a>
+                            <a id="ddd" href="@(ViewBag.Path)/Index" class="btn green">
+                                <i class="fa fa-mail-reply"></i> 返回大转盘
+                            </a>
+                        </div>
+                    </div>
+                    <table id="datatable" class="table table-striped table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th style="width:5%">序号</th>
+                                <th>奖项名称</th>
+                                <th>奖项描述</th>
+                                <th>排序</th>
+                                <th>中奖概率(0-1之间)</th> 
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                    int i = 0;
+                                    foreach (var item in ViewBag.List as List<DataBase.ShopBigWheelDetail>)
+                                    {
+                                    i++;
+                                    <text>
+                                        <tr name="table_tr">
+                                            <td><input type="hidden" name="" id="ID" value="@item.ID">@i</td>
+                                            <td><input type="text" class="form-control" name="" id="Name" value="@item.Name" /></td>
+                                            <td><input type="text" class="form-control" name="" id="Desc" value="@item.Desc" /></td>
+                                            <td><input type="text" class="form-control" name="" id="Sort" value="@item.Sort" /></td>
+                                            <td><input type="text" class="form-control" name="" id="Probability" value="@item.Probability" /></td> 
+                                        </tr>
+                                    </text>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END SAMPLE TABLE PORTLET-->
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        function Save() {
+            var sub_tr = "";
+            $("tr[name='table_tr']").each(function () {
+                var tdArr = $(this).children();
+                var ID = tdArr.eq(0).find("input").val();//ID
+                var Name = tdArr.eq(1).find("input").val();//级别名称
+                var Desc = tdArr.eq(2).find("input").val();//  投资金额
+                var Sort = tdArr.eq(3).find("input").val();//ID
+                var Probability = tdArr.eq(4).find("input").val();//ID
+             
+                sub_tr += ID + "," + Name + "," + Desc + "," + Sort + "," + Probability + "&";
+            });
+            
+            //提交数据
+            $.ajax({
+                url: "@ViewBag.Path/SaveDetail",
+                data: { strList: sub_tr,bid:'@ViewBag.BID' },
+                type: "post",
+                success: function (backdata) {
+                    alert("成功提示", backdata.Msg);
+                }, error: function (error) {
+                    alert("失败提示", error);
+                    console.log(error);
+                }
+            });
+        }
+        function ToExcel() {
+            //var href = "/Admin_BasicSettings/MemberSet/ToExcel/会员级别";
+            //window.open(href);
+        }
+    </script>
+}

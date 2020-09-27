@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<fields>
+  <field>
+    <code>ProductName</code>
+    <name>商品名称</name>
+  </field>
+  <field>
+    <code>CategoryName</code>
+    <name>类别</name>
+  </field>
+  <field>
+    <code>ModelName</code>
+    <name>规格</name>
+  </field>
+  <field>
+    <code>OriginalPrice</code>
+    <name>市场价</name>
+  </field>
+  <field>
+    <code>SalePrice</code>
+    <name>零售价</name>
+  </field>
+  <field>
+    <code>StockQty</code>
+    <name>库存数量</name>
+  </field>
+  <field>
+    <code>PubTime</code>
+    <name>发布时间</name>
+  </field>
+  <field>
+    <code>State</code>
+    <name>状态</name>
+  </field> 
+</fields>

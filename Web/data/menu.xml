@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfMenuButtonData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <MenuButtonData>
+    <ID>1</ID>
+    <sub_button />
+    <name>微工具集2</name>
+    <type>view</type>
+    <url>http://www.gongjuji.net</url>
+  </MenuButtonData>
+  <MenuButtonData>
+    <ID>2</ID>
+    <sub_button />
+    <name>微工具集2</name>
+    <type>view</type>
+    <url>http://www.gongjuji.net</url>
+  </MenuButtonData>
+</ArrayOfMenuButtonData>

@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<fields>
+  <field>
+    <code>BasicDataName</code>
+    <name>银行名称</name>
+  </field>
+  <field>
+    <code>SortValue</code>
+    <name>排序</name>
+  </field> 
+</fields>

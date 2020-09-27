@@ -1,0 +1,19 @@
+﻿@using DataBase
+@model List<ShopProduct>
+
+<div class="Records">
+    <div class="title_name">@ViewBag.title</div>
+    <ul>
+        @foreach (var item in Model)
+        {
+            string url = Url_Shop.GetProduct(item);
+            <li>
+                <a href="@url">
+                    <p><img src="@Url_Shop.GetProductImg(item)" data-bd-imgshare-binded="1"></p>
+                    <p class="p_name">@item.Title</p>
+                </a>
+                <p><span class="p_Price">￥@item.PriceOriginal</span><b>@Url_Shop.GetProductPrice(item)</b></p>
+            </li>
+        }
+    </ul>
+</div>

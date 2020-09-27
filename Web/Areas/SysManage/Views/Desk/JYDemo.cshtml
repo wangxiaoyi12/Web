@@ -1,0 +1,292 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+}
+@section css{
+    <style>
+        .table1 {
+            line-height: 60px;
+        }
+
+        .table2, th {
+            line-height: 40px;
+            text-align: center
+        }
+
+        .table3 {
+            line-height: 35px;
+            text-align: center
+        }
+
+        table th {
+            background: #F0F0F0
+        }
+
+        .tdbg {
+            background: #F0F0F0
+        }
+
+        .tdleft {
+            /*background: #E1E5EC;*/
+            padding-right: 10px;
+            text-align: right;
+            /*height: 40px;*/
+        }
+
+        .tdtime {
+            color: red
+        }
+    </style>
+}
+<!-- BEGIN PAGE BAR -->
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="/SysManage/Desk/Index">首页</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#"><span>财务管理</span></a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#"><span>交易大厅</span></a>
+        </li>
+    </ul>
+</div>
+<!-- END PAGE BAR -->
+<!-- BEGIN PAGE CONTENT -->
+<div class="row">
+    <div class="col-md-8">
+        <div class="col-md-6">
+            <div class="portlet box green">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="fa fa-bold"></i> 买入
+                    </div>
+                    <div class="tools">
+                        <a href="javascript:;" class="collapse"> </a>
+                    </div>
+                </div>
+                <div class="portlet-body">
+                    <table class="table1 " style="width:100%">
+                        <tr>
+                            <td class="tdleft col-md-6">重购积分余额</td>
+                            <td>100</td>
+                        </tr>
+                        <tr>
+                            <td class="tdleft">购买总额</td>
+                            <td>
+                                <input type="text" name="name" class="form-control" style="width:60%" value="100" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="text-center">
+                                <a id="buy" href="/" class="btn green">
+                                    <i class="fa fa-bold"></i> 确定买入
+                                </a>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="portlet-body">
+                    <table class="table2 table-bordered table-hover table-striped" style="width:100%">
+                        <tr>
+                            <th>档位</th>
+                            <th>买入价</th>
+                            <th>买入量</th>
+                            <th>总额</th>
+                        </tr>
+                        <tr>
+                            <td class="tdbg">买1</td>
+                            <td>1.50</td>
+                            <td>100</td>
+                            <td>150.00</td>
+                        </tr>
+                        <tr>
+                            <td class="tdbg">买2</td>
+                            <td>1.50</td>
+                            <td>100</td>
+                            <td>150.00</td>
+                        </tr>
+                        <tr>
+                            <td class="tdbg">买3</td>
+                            <td>1.50</td>
+                            <td>100</td>
+                            <td>150.00</td>
+                        </tr>
+                        <tr>
+                            <td class="tdbg">买4</td>
+                            <td>1.50</td>
+                            <td>100</td>
+                            <td>150.00</td>
+                        </tr>
+                        <tr>
+                            <td class="tdbg">买5</td>
+                            <td>1.50</td>
+                            <td>100</td>
+                            <td>150.00</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="portlet box red">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="fa fa-usd"></i> 卖出
+                    </div>
+                    <div class="tools">
+                        <a href="javascript:;" class="collapse"> </a>
+                    </div>
+                </div>
+                <div class="portlet-body">
+                    <table class="table1 " style="width:100%">
+                        <tr>
+                            <td class="tdleft col-md-6">重购积分余额</td>
+                            <td>100</td>
+                        </tr>
+                        <tr>
+                            <td class="tdleft">购买总额</td>
+                            <td>
+                                <input type="text" name="name" class="form-control" style="width:60%" value="100" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="text-center">
+                                <a id="buy" href="/" class="btn red">
+                                    <i class="fa fa-usd"></i> 确定卖出
+                                </a>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="portlet-body">
+                    <table class="table2 table-bordered table-hover table-striped" style="width:100%">
+                        <tr>
+                            <th>档位</th>
+                            <th>卖出价</th>
+                            <th>卖出量</th>
+                            <th>总额</th>
+                        </tr>
+                        <tr>
+                            <td class="tdbg">卖1</td>
+                            <td>1.50</td>
+                            <td>100</td>
+                            <td>150.00</td>
+                        </tr>
+                        <tr>
+                            <td class="tdbg">卖2</td>
+                            <td>1.50</td>
+                            <td>100</td>
+                            <td>150.00</td>
+                        </tr>
+                        <tr>
+                            <td class="tdbg">卖3</td>
+                            <td>1.50</td>
+                            <td>100</td>
+                            <td>150.00</td>
+                        </tr>
+                        <tr>
+                            <td class="tdbg">卖4</td>
+                            <td>1.50</td>
+                            <td>100</td>
+                            <td>150.00</td>
+                        </tr>
+                        <tr>
+                            <td class="tdbg">卖5</td>
+                            <td>1.50</td>
+                            <td>100</td>
+                            <td>150.00</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="portlet box blue">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-gift"></i> 行情中心
+                </div>
+                <div class="tools">
+                    <a href="javascript:;" class="collapse"> </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <a class="dashboard-stat dashboard-stat-v2 green" href="#">
+                    <div class="visual">
+                        <i class="fa fa-rmb"></i>
+                    </div>
+                    <div class="details text-center">
+                        <div class="number" style="padding-right:30px;">
+                            1.50 元
+                        </div>
+                        <div class="desc" style="padding:10px 30px;"> 当前价格 </div>
+                    </div>
+                </a>
+            </div>
+            <div class="portlet-body">
+                <table class="table3 table-bordered table-hover table-striped" style="width:100%">
+                    <tr>
+                        <th>时间</th>
+                        <th>成交价</th>
+                        <th>成交量</th>
+                        <th>成交金额</th>
+                    </tr>
+                    <tr>
+                        <td class="tdtime">21:11:10</td>
+                        <td>1.50</td>
+                        <td>100</td>
+                        <td>150.00</td>
+                    </tr>
+                    <tr>
+                        <td class="tdtime">21:11:10</td>
+                        <td>1.50</td>
+                        <td>100</td>
+                        <td>150.00</td>
+                    </tr>
+                    <tr>
+                        <td class="tdtime">21:11:10</td>
+                        <td>1.50</td>
+                        <td>100</td>
+                        <td>150.00</td>
+                    </tr>
+                    <tr>
+                        <td class="tdtime">21:11:10</td>
+                        <td>1.50</td>
+                        <td>100</td>
+                        <td>150.00</td>
+                    </tr>
+                    <tr>
+                        <td class="tdtime">21:11:10</td>
+                        <td>1.50</td>
+                        <td>100</td>
+                        <td>150.00</td>
+                    </tr>
+                    <tr>
+                        <td class="tdtime">21:11:10</td>
+                        <td>1.50</td>
+                        <td>100</td>
+                        <td>150.00</td>
+                    </tr>
+                    <tr>
+                        <td class="tdtime">21:11:10</td>
+                        <td>1.50</td>
+                        <td>100</td>
+                        <td>150.00</td>
+                    </tr>
+                    <tr>
+                        <td class="tdtime">21:11:10</td>
+                        <td>1.50</td>
+                        <td>100</td>
+                        <td>150.00</td>
+                    </tr>
+
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END PAGE CONTENT -->

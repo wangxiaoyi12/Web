@@ -1,0 +1,129 @@
+﻿   .group_info {
+    }
+
+    .group_info .g-progress {
+        float: left;
+        width: 266px;
+        height: 48px;
+        margin: 7px 0;
+        overflow: hidden;
+    }
+
+    .group_info .m-progress {
+        width: 266px;
+        overflow: hidden;
+    }
+
+    .group_info dt {
+        width: 266px;
+        height: 6px;
+        background: #ddd;
+        margin-bottom: 5px;
+        overflow: hidden;
+    }
+
+        .group_info dt b {
+            height: 6px;
+            display: block;
+            filter: progid:DXImageTransform.Microsoft.Gradient(startColorStr='#ff934b',endColorStr='#ff6601',gradientType='1');
+            background: -moz-linear-gradient(0deg,#ff934b,#ff6601);
+            background: -webkit-gradient(linear,0% 0,100% 0,from(#ff934b),to(#ff6601));
+            background: -ms-linear-gradient(left,#ff934b 0,#ff6601 100%);
+            background: -o-linear-gradient(0deg,#ff934b,#ff6601);
+            transition: all 1.5s ease-in-out;
+        }
+
+    .group_info dd {
+        /*width: 306px;*/
+    }
+
+        .group_info dd span {
+            width: 33%;
+            height: 36px;
+            color: #bbb !important;
+            line-height: 16px;
+        }
+
+.g-progress dl.m-progress dd span em {
+    display: block;
+    font-size: 14px;
+}
+.g-progress dl.m-progress dd span.gray6 {
+    width: 34%;
+    text-align: center;
+    color: #bbb !important;
+}
+
+.g-progress dl.m-progress dd span.orange em {
+    color: #f60;
+}
+
+.g-progress dl.m-progress dd span.blue {
+    width: 33%;
+    text-align: right;
+}
+
+    .g-progress dl.m-progress dd span.blue em {
+        color: #2af;
+    }
+
+.group_buy .group_list li.group_name .buy_botton {
+    width: 100px;
+    height: 35px;
+    font-size: 16px;
+    line-height: 34px;
+}
+
+.group_buy .group_list li.group_name .group_Price {
+    font-size: 20px;
+    margin-bottom: 8px;
+}
+/**购买按钮等**/
+.btnDiv {
+    display: none;
+    animation: all ease 0.5s;
+}
+
+.btnDivShow {
+    display: block;
+}
+
+.btnDiv .yes-btn {
+    float: left;
+    height: 35px;
+    line-height: 35px;
+    background: #2af;
+    color: white;
+    padding: 0px 20px;
+    cursor: pointer;
+}
+
+    .btnDiv .yes-btn:hover {
+        background: #1C98EA;
+    }
+
+.choose-amount {
+    margin-top: 0px;
+}
+
+.group_buy .group_list li.group_name .choose-amount > a {
+    height: 18px;
+    line-height: 16px;
+    font-size: 15px;
+}
+
+    .group_buy .group_list li.group_name .choose-amount > a:hover {
+        color: red;
+        font-weight: bold;
+    }
+
+.group_buy .group_list li.group_name .graybtn {
+    width: 100px;
+    height: 35px;
+    line-height: 32px;
+    font-size: 16px;
+    display: block;
+    background: gray;
+    color: #FFF;
+    text-align: center;
+}

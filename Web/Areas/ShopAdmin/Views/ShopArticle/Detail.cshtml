@@ -1,0 +1,145 @@
+﻿@model DataBase.ShopArticle
+@{
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+}
+<!-- BEGIN PAGE BAR -->
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="/SysManage/Home/Index">首页</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#"><span>商城管理</span></a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#"><span>商城文章</span></a>
+        </li>
+    </ul>
+</div>
+<!-- END PAGE BAR -->
+<!-- BEGIN PAGE CONTENT -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet light bordered">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="font-green-sharp fa fa-user"></i>
+                    <span class="caption-subject font-green-sharp bold uppercase">@ViewBag.Title<span>商城文章</span></span>
+                </div>
+            </div>
+            <div class="portlet-body">
+                @using (Ajax.BeginForm("Save", null, new AjaxOptions()
+                {
+                    HttpMethod = "Post",
+                    OnBegin = "SubAjax.Loading",
+                    OnComplete = "SubAjax.Complate",
+                    OnFailure = "SubAjax.Failure",
+                    OnSuccess = "SubAjax.Success"
+                }, new { @class = "form-horizontal", @role = "form", @id = "commentForm" }))
+                {
+                    <div class="form-body">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red">*</span>文章标题：</label>
+                            <div class="col-md-6">
+                                <input type="hidden" name="ID" value="@Model.ID" />
+                                <input type="text" name="Title" value="@Model.Title" class="form-control" nullmsg="请输入商城文章" datatype="*1-100" errormsg="商城文章不正确">
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red">*</span>所属类别：</label>
+                            <div class="col-md-6">
+                                <select name="CategoryID" class="form-control select2" datatype="*">
+                                    <option value="">请选择...</option>
+                                    @{
+                                        foreach (KeyValuePair<int, string> item in ViewBag.List)
+                                        {
+                                            if (Model.CategoryID == item.Key)
+                                            {
+                                                <option value="@item.Key" selected="selected">@item.Value</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.Key">@item.Value</option>
+                                            }
+                                        }
+                                    }
+                                </select>
+                            </div>
+                            <span></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red"></span>作者：</label>
+                            <div class="col-md-6">
+                                <input type="text" name="Author" value="@Model.Author" class="form-control" nullmsg="请输入编号">
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red"></span>来源：</label>
+                            <div class="col-md-6">
+                                <input type="text" name="Source" value="@Model.Source" class="form-control" nullmsg="请输入来源" errormsg="来源不正确">
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red">*</span>点击量：</label>
+                            <div class="col-md-6">
+                                <input type="text" name="Clicks" value="@Model.Clicks" class="form-control" nullmsg="请输入点击量" datatype="n1-20" errormsg="点击量不正确">
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red"></span>是否显示：</label>
+                            <div class="col-md-6">
+                                <input type="checkbox" name="IsShow" value="True" @(Model.IsShow == true ? "checked=\"checked\")" : "")>
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red"></span>发布时间：</label>
+                            <div class="col-md-6">
+                                <input type="text" name="CreateTime" id="start" value="@Model.CreateTime.ToString("yyyy-MM-dd HH:mm")" class="form-control" nullmsg="请输入发布时间">
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red">*</span>内容：</label>
+                            <div class="col-md-6">
+                                <textarea style="height:400px; min-width:800px" id="Content" name="Content" placeholder="请输入内容">@Html.Raw(Model.Content)</textarea>
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-actions">
+                            <div class="row">
+                                <div class="col-md-offset-3 col-md-9">
+                                    <button type="submit" id="SubSave" class="btn green"><i class="fa fa-check"></i><span>保 存</span></button>
+                                    <button type="button" class="btn default" onclick="window.history.back()"><i class="fa fa-mail-reply"></i>返回</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                                        }
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END PAGE CONTENT -->
+@section scripts{
+    <script src="~/assets/global/plugins/UEditor/ueditor.config.js"></script>
+    <script src="~/assets/global/plugins/UEditor/ueditor.all.min.js"></script>
+    <script>
+        var ue = UE.getEditor('Content');
+        $(function () {
+            $('#start').datetimepicker({
+                language: 'zh-CN',
+                format: 'yyyy-mm-dd hh:ii',
+                autoclose: 1,
+                //minView: 2
+            })
+        });
+    </script>
+}

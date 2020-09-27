@@ -1,0 +1,175 @@
+﻿@using DataBase
+@using Business
+@model ShopProduct
+@{
+    ViewBag.Title = "产品详细页面";
+    Member_Info mModel = ViewBag.member;
+    //三级分类
+    ShopProductCategory classModel = Model.ShopProductCategory;
+    ShopProductCategory parent1 = null;
+    ShopProductCategory parent2 = null;
+    if (classModel.ShopProductCategoryParent != null)
+    {
+        parent1 = classModel.ShopProductCategoryParent;
+        if (parent1.ShopProductCategoryParent != null)
+        {
+            parent2 = parent1.ShopProductCategoryParent;
+        }
+    }
+}
+@section Head{
+    <script src="~/assets/shop/js/lrtk.js"></script>
+    <script src="~/assets/shop/js/jqzoom.js"></script>
+}
+@section Footer{
+
+}
+<!--产品详细页介绍-->
+<div class="Inside_pages">
+    <!--位置-->
+    <div class="Location_link">
+        <em></em>
+        <a href="@Url_Shop.GetProduct()">商品列表 &lt; </a>
+        @if (parent2 != null)
+        { <a href="@Url_Shop.GetProduct(parent2)">@parent2.Name</a> <text>&lt;</text> }
+        @if (parent1 != null)
+        {    <a href="@Url_Shop.GetProduct(parent1)">@parent1.Name</a> <text>&lt;</text> }
+        <a href="@Url_Shop.GetProduct(classModel)">@classModel.Name</a>
+    </div>
+    <!--产品详细介绍-->
+    <div class="Details_style clearfix" id="goodsInfo">
+        <div class="mod_picfold clearfix">
+            <div class="clearfix" id="detail_main_img">
+                <div class="layout_wrap preview">
+                    <div id="vertical" class="bigImg">
+                        <img src="" width="" height="" alt="" id="midimg" />
+                        <div style="display:none;" id="winSelector"></div>
+                    </div>
+                    <div class="smallImg">
+                        <div class="scrollbutton smallImgUp disabled">&lt;</div>
+                        <div id="imageMenu">
+                            <ul>
+                                @foreach (var item in Model.ShopProductImages)
+                                {
+                                    <li><img src="@Url_Shop.GetImg(item.ThumURL)" data-big="@Url_Shop.GetImg(item.URL)" width="68" height="68" alt="@Model.Title" /></li>
+                                }
+                            </ul>
+                        </div>
+                        <div class="scrollbutton smallImgDown">&gt;</div>
+                    </div><!--smallImg end-->
+                    <div id="bigView" style="display:none;"><div><img width="800" height="800" alt="" src="" /></div></div>
+                </div>
+            </div>
+            <div class="Sharing">
+                <div class="bdsharebuttonbox bdshare-button-style0-16" data-bd-bind="1455606466202"><a href="#" class="bds_more" data-cmd="more">分享到：</a><a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a><a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a><a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a><a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网"></a><a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a></div>
+                <script>
+                    window._bd_share_config = { "common": { "bdSnsKey": {}, "bdText": "", "bdMini": "2", "bdMiniList": false, "bdPic": "", "bdStyle": "0", "bdSize": "16" }, "share": { "bdSize": 16 }, "image": { "viewList": ["qzone", "tsina", "tqq", "renren", "weixin"], "viewText": "分享到：", "viewSize": "16" }, "selectShare": { "bdContainerClass": null, "bdSelectMiniList": ["qzone", "tsina", "tqq", "renren", "weixin"] } }; with (document) 0[(getElementsByTagName('head')[0] || body).appendChild(createElement('script')).src = 'http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion=' + ~(-new Date() / 36e5)];
+                </script>
+                <!--收藏-->
+                <div class="Collect collectBtn" data-id="@Model.ID"><a><em class="ico1"></em>@(User_Shop.IsCollect(Model.ID) ? "已收藏" : "收藏") （<span class="numCollect">@(DB.ShopCollectionProduct.GetCount(Model.ID))</span>）</a></div>
+            </div>
+        </div>
+        <!--信息样式-->
+        <div class="textInfo">
+            <form action="javascript:addToCart(97)" name="ECS_FORMBUY" id="ECS_FORMBUY">
+                <div class="title"><h1>@Model.Title</h1><p>@Model.SubTitle</p></div>
+                <div class="mod_detailInfo_priceSales">
+                    <div class="margins">
+
+                        @*@if (Model.PriceShopping > 0 && Model.PV > 0)
+                            {
+                                <div class="Activity clearfix"><label>原价</label><em><s>@Model.PriceOriginal</s></em></div>
+                                <div class="Activity clearfix"><label>零售价</label><span>@Model.PriceShopping</span></div>
+                                    <div class="Activity clearfix"><label>运费</label><span>@Model.Postage</span></div>
+                            }
+                            else if (Model.PriceShopping > 0)
+                            {*@
+                        @if (Model.CategoryID1 != 15 && Model.CategoryID1 != 16)
+                        {
+                            <div class="Activity clearfix"><label>原价</label><em><s>@Model.PriceOriginal</s></em></div>
+                            <div class="Activity clearfix"><label>零售价</label><span>@Model.PriceShopping</span></div>
+                        }
+                        else
+                        {
+                            <div class="Activity clearfix"><label>原价</label><em><s>@Model.PriceOriginal</s></em></div>
+                            <div class="Activity clearfix"><label>收益</label><span>@Model.PV</span></div>
+                            <div class="Activity clearfix"><label>配货价</label><span>@Model.PriceScore</span></div>
+                        }
+
+
+                        @*//if (Model.Postage > 0)
+                            //{*@
+                        <div class="Activity clearfix"><label>运费</label><span>@Model.Postage</span></div>
+                        @*}
+                            else
+                            {
+                                <label style="margin-left:10px;">免运费</label>
+                            }*@
+                        @*}*@
+
+                    </div>
+                </div>
+                <div class="buyinfo productItem" id="detail_buyinfo">
+                    <dl>
+                        <dt>数量</dt>
+                        <dd>
+                            <div class="choose-amount left">
+                                <a class="btn-reduce countSubBtn">-</a>
+                                <a class="btn-add countAddBtn">+</a>
+                                <input class="text car_ipt" id="buy-num"
+                                       value="1"
+                                       data-id="@Model.ID"
+                                       data-max="@Model.Inventory">
+                            </div>
+                            <div class="P_Quantity">剩余：@(Model.Inventory)件</div>
+                        </dd>
+                        <dd>
+                            <div class="wrap_btn">
+                                <a class="wrap_btn1 cartBtn" data-id="@Model.ID" title="加入购物车"></a>
+                                <a href="javascript:void(0)" class="wrap_btn2 buyNowBtn" data-id="@Model.ID" title="立即购买"></a>
+                            </div>
+                        </dd>
+                    </dl>
+                </div>
+            </form>
+        </div>
+        <!--产品推荐-->
+        @Html.Action("Recommend_Detail", new { classID = Model.CategoryID })
+    </div>
+    <!--信息内容-->
+    <div class="detailed_info clearfix">
+        <div class="left_style">
+            @Html.Action("History_Detail")
+        </div>
+        <!---->
+        <div class="right_style ">
+            @*同类销售商品排行榜*@
+            @Html.Action("Range_Detail", new { classID = Model.CategoryID })
+            <div class="inDetail_boxOut">
+                <div class="inDetail_box">
+                    <div class="fixed_out ">
+                        <ul class="inLeft_btn">
+                            <li><a id="property-id" href="#shangpsx" class="current">商品详细</a></li>
+                            @*<li><a id="detail-id" href="#shangpjs">规格与包装</a></li>*@
+                            @*<li><a id="shot-id" href="#miqsp">售后服务</a></li>*@
+                            @*<li><a id="coms1-id" href="#coms1">买家评论</a></li>*@
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!--信息-->
+            <div id="shangpsx" class="detailContent" style="min-height:400px;">
+                @{
+                    if (string.IsNullOrEmpty(Model.Content))
+                    {
+                        <div class="blank" style="height:300px;line-height:300px;">缺少商品描述</div>
+                    }
+                    else
+                    {
+                        @Html.Raw(Model.Content)
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>

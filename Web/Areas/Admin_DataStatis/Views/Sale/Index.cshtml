@@ -1,0 +1,142 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+
+    DateTime start = ReqHelper.GetDateTime("start")??DateTime.Now.Date;
+    DateTime end = ReqHelper.GetDateTime("end")??DateTime.Now.Date.AddDays(1);
+
+    //根据时间统计，订单
+    var query = DB.ShopOrder.Where(q => q.State >= 2 && q.SubmitTime >= start && q.SubmitTime < end);
+
+    //总现金
+    decimal allMoney = query.Where(q => q.PayWay == "3").Select(q => q.RealShopping)
+        .DefaultIfEmpty().Sum()
+        + query.Where(q => q.PayWay == "2").Select(q => q.RealCongXiao)
+        .DefaultIfEmpty().Sum();
+    //总购物币
+    decimal allShopCoins = query.Where(q => q.PayWay == "4").Select(q => q.RealCongXiao)
+     .DefaultIfEmpty().Sum()
+        + query.Where(q => q.PayWay == "1").Select(q => q.RealCongXiao)
+        .DefaultIfEmpty().Sum();
+    //总积分
+    decimal allScores = query.Where(q=>q.PayWay=="2"||q.PayWay=="1").Select(q=>q.RealScore).DefaultIfEmpty().Sum();
+    //总电子币
+    decimal allCoins = query.Where(q=>q.PayWay=="5").Select(q=>q.RealAmount).DefaultIfEmpty().Sum();
+
+}
+
+<!-- BEGIN PAGE BAR -->
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="/SysManage/Home/Index">首页</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#">数据统计</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="@(Url.Action("Index"))"><span>销售收入统计</span></a>
+        </li>
+    </ul>
+</div>
+<!-- END PAGE BAR -->
+<!-- BEGIN PAGE CONTENT -->
+<div class="row">
+    <!-- BEGIN SAMPLE TABLE PORTLET-->
+    <div class="col-md-12">
+        <div class="portlet box green">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-pie-chart"></i>销售收入统计
+                </div>
+
+            </div>
+            <div class="portlet-body">
+                <form class="form form-horizontal">
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><span style="color:red">*</span>查询时间：</label>
+                        <div class="col-md-4">
+                            <div class="input-group ">
+                                <input type="text" class="form-control" name="start" value="@start.ToString("yyyy-MM-dd")"  id="start"/>
+                                <div class="input-group-btn">
+                                    <span class="btn btn-default">
+                                        至
+                                    </span>
+                                </div>
+                                <input type="text" class="form-control"  name="end" value="@end.ToString("yyyy-MM-dd")" id="end"/>
+                                <div class="input-group-btn">
+                                    <button class="btn purple "  type="submit">
+                                        查询
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">现金收入：</label>
+                        <div class="col-md-4 text-left text-primary" style="padding-top:8px;">
+                            @allMoney
+                        </div>
+                        <span></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">购物币收入：</label>
+                        <div class="col-md-4 text-left text-primary" style="padding-top:8px;">
+                            @allShopCoins
+                        </div>
+                        <span></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">积分收入：</label>
+                        <div class="col-md-4 text-left text-primary" style="padding-top:8px;">
+                            @allScores
+                        </div>
+                        <span></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">电子币：</label>
+                        <div class="col-md-4 text-left text-primary" style="padding-top:8px;">
+                            @allCoins
+                        </div>
+                        <span></span>
+                    </div>
+                </form>
+
+
+
+  </div>
+
+        </div>
+    </div>
+    <!-- END SAMPLE TABLE PORTLET-->
+</div>
+
+@section scripts {
+    <script>
+          $(function () {
+            $('#start').datetimepicker({
+                language: 'zh-CN',
+                format: 'yyyy-mm-dd',
+                autoclose: 1,
+                minView: 2
+            }).on('changeDate', function (ev) {
+                var start = $('#start').val();
+                $('#end').datetimepicker('setStartDate', start);
+                $('#start').datetimepicker('hide');
+            });
+            $('#end').datetimepicker({
+                language: 'zh-CN',
+                format: 'yyyy-mm-dd',
+                autoclose: 1,
+                minView: 2
+            }).on('changeDate', function (ev) {
+                var end = $('#end').val();
+                $('#start').datetimepicker('setEndDate', end);
+                $('#end').datetimepicker('hide');
+            });
+        });
+    </script>
+}

@@ -1,0 +1,815 @@
+﻿@using DataBase
+@using Business
+@{
+
+    int id = ViewBag.id;
+    ShopProduct product = DB.ShopProduct.FindEntity(id);
+    Shop shopModel = DB.Shop.FindEntity(product.ShopID);
+    Member_Info curUser = User_Shop.GetMember_Info();
+    ViewBag.Title = product.Title;
+    var shop = DB.Shop.FindEntity(p => p.ID == product.ShopID);
+    string code = ReqHelper.GetString("code");
+    if (string.IsNullOrEmpty(code))
+    {
+        if (curUser == null)
+        {
+            code = "";
+        }
+        else
+        {
+            code = curUser.MemberId;
+        }
+    }
+    if (curUser != null)
+    {
+        code = curUser.MemberId;
+    }
+    bool flag = false;
+    var url = Request.Url.AbsoluteUri.ToString().Replace("?isPhone=true", "");
+    if (curUser != null)
+    {
+        flag = true;
+        if (url.IndexOf("code") != -1)
+        {
+            var li_Index = url.LastIndexOf("?code");//获得.的位置
+            url = url.Substring(0, li_Index) + "?code=" + Common.CryptHelper.DESCrypt.Encrypt(code);//获得目标字符串
+
+
+
+
+
+        }
+        else
+        {
+
+            url = url + "?code=" + Common.CryptHelper.DESCrypt.Encrypt(code);
+        }
+    }
+}
+@section Head{
+    <link href="~/assets/mobile/css/productDetail.css" rel="stylesheet" />
+    @*<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=mjUUXEctezVuNR7m01pKFnIRiGE2a7Ro"></script>
+        <script type="text/javascript" src="http://api.map.baidu.com/direction"></script>*@
+
+    <style>
+        .buy-btn-fix {
+            margin-top: 0px;
+            padding: 8px;
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
+
+
+
+        .weixin-tip {
+            display: none;
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            filter: alpha(opacity=80);
+            height: 100%;
+            width: 100%;
+            z-index: 100000000;
+        }
+        #img {
+            max-width: 100%;
+            height: auto;
+        }
+
+            .weixin-tip p {
+                text-align: center;
+                margin-top: 10%;
+                padding: 0 5%;
+            }
+
+
+
+    .fixed-foot {
+    height: 50px;
+    z-index: 999;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    }
+
+    #allmap {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    margin: 0;
+    font-family: "微软雅黑";
+    }
+
+    .tempWrap {
+    max-width: 100%;
+    }
+
+    .activity {
+    background: white;
+    color: red;
+    padding: 8px 10px;
+    margin-top: 10px;
+    margin-bottom: -10px;
+    }
+
+    .prop-area table,
+    .prop-area img {
+    width: 100% !important;
+    max-width: 100% !important;
+    }
+
+    .details_con ul li .score {
+    font-size: 20px;
+    color: #6a91ee;
+    }
+
+    .btn-Start {
+    background-color: #6a94e7;
+    border-color: #6a94e7;
+    color: #fff;
+    width: 150px;
+    }
+
+    .chima {
+    display: flex;
+    }
+
+    .chima p {
+    flex: 1;
+    }
+
+    .chima .size {
+    flex: 5;
+    /*display: flex;*/
+    }
+
+    .size .xuanze {
+    width: 40%;
+    float: left;
+    margin-right: 10px;
+    }
+
+    .chima .xuanze label {
+    margin-bottom: 1px;
+    margin-right: 5px;
+    width: 100%;
+    display: block;
+    text-align: center;
+    line-height: 30px;
+    font-size: 14px;
+    border: 1px solid red;
+    border-radius: 4px;
+    }
+
+    .chima .xuanze input {
+    display: none;
+    }
+
+    .size .xuanzhong {
+    background: red;
+    color: #fff;
+    }
+    </style>
+    <style>
+        .bill {
+            background: #fff;
+        }
+
+        .hbImg {
+            width: 100%;
+            display: block;
+            padding: 10px
+        }
+
+        .test {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .xinxi {
+            width: 60%;
+            display: flex;
+            align-items: self-start;
+            align-items: center;
+            /*bottom: 20px;*/
+            /*left: 20px;*/
+        }
+
+        .touxiang, .touxiangimage {
+            width: 65px;
+            height: 65px;
+            margin-right: 5px;
+            left: 20px;
+        }
+
+        .info {
+            color: black;
+            font-size: 18px;
+            width: 80px;
+            left: 20px;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            height: 80px;
+        }
+
+        .erweima {
+            background: white;
+            width: 120px;
+            height: 120px;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .bottom {
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 10px;
+            margin: 20px auto;
+        }
+    </style>
+    <script src="~/assets/mobile/js/TouchSlide.js"></script>
+    <script src="~/assets/mobile/js/prodDetail.js?ver=@Url_Mobile.GetVersion()"></script>
+}
+<script>
+    $(document).on("click", "#qrcodeBtn", function () {
+        if ('@flag'=='False') {
+            show('登录系统后才可以进行分享');
+        }
+        else {
+            $('#myModalmin').modal('show');
+        }
+    });
+</script>
+@section Footer{
+}
+@{
+
+}
+@if (curUser != null)
+{
+    <div class="modal fade" id="myModalmin" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="test" style="width: 100%;background-size: 100% 100%;position:relative;background-color:white">
+                    <div style="background-color:white">
+                        <div class="invitationEwm uploaderClick" style="width: 40px;
+    height: 40px;
+    position: fixed;
+    bottom: 200px;
+    right: 20px;background: rgba(0,0,0,.5);
+    /*opacity: 0.5;*/
+    border-radius: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;">
+                            <img class="xiazai" style="width: 30px;
+    height: 30px;" src="../../../../assets/pages/img/xiazai.png" />
+                        </div>
+                        <p style="margin-top:3%;" />
+                        <p style="color:black;margin-left:2%">发现一个好物，分享给你呀</p>
+
+                        <div style="width:95%;border-color:#C2C2C2;border-width:1px;border-style:solid;margin :auto">
+
+                            <img class="hbImg" src="@Url_Shop.GetProductImg(product,true)" />
+                            <p style="color:#989191;margin-left:2%">@product.Title</p>
+                            <p style="color:#989191;margin-left:2%">优惠价:￥@DB.ShopProduct.GetYouHuiPrice(product)</p>
+                        </div>
+                    </div>
+                    <div class="bottom">
+                        <!--头像和信息-->
+                        <div class="xinxi">
+                            <!--头像-->
+                            <div class="invitationEwm touxiang">
+                                <img class="touxiangimage" src="@Url_Mobile.GetImg(curUser.Pwd3)" />
+
+                            </div>
+                            <!--信息-->
+
+                            <div class="invitationEwm info">
+
+                                <p>@curUser.Code</p><p>@curUser.NickName</p>@*<p>@curUser.ZCName</p>*@
+
+
+                            </div>
+
+                        </div>
+
+                        <!--二维码-->
+                        <div class="invitationEwm erweima">
+                            <div id="qrcode"></div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<div id="imgDiv" style="position: absolute;display:none;">
+    <img class="imgDiv_img" src="" style="width: 100%;" />
+</div>
+
+<div class="weixin-tip">
+    <p>
+
+        <img id="img" src="~/assets/mobile/images/live_weixin.png" />
+    </p>
+</div>
+
+<script src="~/assets/global/scripts/qrcode.min.js"></script>
+<script src="~/assets/global/scripts/utf.js"></script>
+<script src="~/assets/pages/scripts/base64.js"></script>
+<script src="https://cdn.bootcss.com/html2canvas/0.5.0-beta4/html2canvas.js"></script>
+
+
+<script type="text/javascript">
+    $(window).on("load", function () {
+        var winHeight = $(window).height();
+        function is_weixin() {
+            var ua = navigator.userAgent.toLowerCase();
+            if (ua.match(/MicroMessenger/i) == "micromessenger") {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        var isWeixin = is_weixin();
+        if (isWeixin) {
+            $(".weixin-tip").css("height", winHeight);
+            $(".weixin-tip").show();
+        }
+    })
+</script>
+
+<script>
+    $(function () {
+        let winH = $(window).height();
+        console.log(winH);
+        if (winH<600) {
+            $('.erweima').css({"bottom":"0px"});
+            }
+            if (winH > 800) {
+            $('.erweima').css({ "bottom": "40px" });
+            $('.xinxi').css({ "bottom": "40px" });
+        }
+    })
+    $("#qrcode").qrcode({
+        render: "canvas", //设置渲染方式，有table和canvas
+        text: '@url', //扫描二维码后自动跳向该链接
+        width: "120", //二维码的宽度
+        height: "120", //二维码的高度
+        background: "white", //二维码的后景色
+        foreground: "#000000", //二维码的前景色
+        //src: 'images/logo.png', //二维码中间的图片
+    });
+
+    $(function () {
+        $('.xiazai').click(function () {
+            $('html,body').animate({ scrollTop: '0px' }, 800);
+            $('.uploaderClick').hide();
+            //setTimeout(() => {
+
+                const dom = document.querySelector(".test")
+                // 创建一个新的canvas
+                const Canvas = document.createElement('canvas');
+            const width = $('.test').width();  // 可见屏幕的宽
+            const height = $('.test').height();  // 可见屏幕的高
+                const scale = window.devicePixelRatio;  // 设备的devicePixelRatio
+                // 将Canvas画布放大scale倍，然后放在小的屏幕里，解决模糊问题
+                Canvas.width = width * scale;
+                Canvas.height = height * scale;
+                Canvas.getContext('2d').scale(scale/1.05 , scale/1.05 );
+                console.log(width, height, scale);
+                html2canvas(dom, {
+                    canvas: Canvas,
+                    scale,
+                    useCORS: true,
+                    logging: true,
+                    width: width + 'px',
+                    hegiht: height + 'px',
+                }).then(function (canvas) {
+                    var imgUri = canvas.toDataURL("../../../../assets/pages/img/png").replace("../../../../assets/pages/img/png",
+                        "../../../../assets/pages/img/octet-stream"); // 获取生成的图片的url
+                    $(".imgDiv_img").attr("src", imgUri)
+                    if ('@ViewBag.isPhone' == 'true') {
+
+                        //判断是否app下载
+                        let base64Img = imgUri;
+                        // 转成图片文件
+                        let imgFile = dataURLtoFile(base64Img);
+                        console.log(imgFile);
+
+                        var formData = new FormData();
+                        formData.append("File", imgFile);//需要上传的多个参数
+
+                        $.ajax({
+                            url: '@Url.Action("UpLoadTu")',
+                            data: formData,
+                            type: "post",
+                            //ajax2.0可以不用设置请求头，但是jq帮我们自动设置了，这样的话需要我们自己取消掉
+                            contentType: false,
+                            //取消帮我们格式化数据，是什么就是什么
+                            processData: false,
+                            success: function (data) {
+
+                                callNative.download(data);
+                                show('下载成功');
+                            }
+                        });
+                    } else {
+                        downloadFile("推广海报", imgUri);
+                        $('.uploaderClick').show();
+                    }
+                //})
+            }, 1000)
+        })
+        function dataURLtoFile(dataurl, filename = 'file') {
+            let arr = dataurl.split(',')
+            let mime = arr[0].match(/:(.*?);/)[1]
+            let suffix = mime.split('/')[1]
+            let bstr = atob(arr[1])
+            let n = bstr.length
+            let u8arr = new Uint8Array(n)
+            while (n--) {
+                u8arr[n] = bstr.charCodeAt(n)
+            }
+            return new File([u8arr], `${filename}.${suffix}`, {
+                type: mime
+            })
+        }
+        //下载
+        function downloadFile(fileName, content) {
+            let aLink = document.createElement('a');
+            let blob = base64ToBlob(content); //new Blob([content]);
+
+            let evt = document.createEvent("HTMLEvents");
+            evt.initEvent("click", true, true);//initEvent 不加后两个参数在FF下会报错  事件类型，是否冒泡，是否阻止浏览器的默认行为
+            aLink.download = fileName;
+            aLink.href = URL.createObjectURL(blob);
+
+            // aLink.dispatchEvent(evt);
+            aLink.click()
+        }
+        //base64转blob
+        function base64ToBlob(code) {
+            let parts = code.split(';base64,');
+            let contentType = parts[0].split(':')[1];
+            let raw = window.atob(parts[1]);
+            let rawLength = raw.length;
+
+            let uInt8Array = new Uint8Array(rawLength);
+
+            for (let i = 0; i < rawLength; ++i) {
+                uInt8Array[i] = raw.charCodeAt(i);
+            }
+            return new Blob([uInt8Array], { type: contentType });
+        }
+    });
+
+</script>
+
+<header class="header">
+    <div class="fix_nav">
+        <div style="max-width:768px;margin:0 auto;background:#000;position: relative;">
+            <a class="nav-left back-icon" href="@Url_Mobile.GetIndex()">返回</a>
+            <div class="tit">商品详细</div>
+            @*<a  href="@Url_Mobile.GetProduct(product)" style="position:absolute;top:5px;right:59px;" id="qrcodeBtn1" class="btn btn-danger pull-right">刷新</a>*@
+            <a style="position:absolute;top:5px;right:3px;" id="qrcodeBtn" class="btn btn-danger pull-right">分享</a>
+
+        </div>
+    </div>
+</header>
+<div class="container productDetail">
+    @if (product == null)
+    {
+        <div class="alert alert-danger text-center">您要查看的商品不存在或已经删除</div>
+    }
+    else
+    {
+        <input type="hidden" id="prodId" value="@product.ID" />
+        <input type="hidden" id="code" value="@code" />
+        <div class="row white-bg">
+            <div id="slide">
+                @{
+                    //获取图片列表
+                    List<ShopProductImage>
+                        imgList = DB.ShopProductImage.Where(q => q.ProductID == product.ID).OrderBy(q => q.Sort).ToList();
+                }
+                <div class="hd">
+                    <ul>
+                        @for (int i = 1; i <= imgList.Count; i++)
+                        {
+                            <li>@i</li>
+                        }
+                    </ul>
+                </div>
+                <div class="bd">
+                    <div class="tempWrap" style="overflow:hidden; position:relative;">
+                        <ul style="width: 3072px; position: relative; overflow: hidden; padding: 0px; margin: 0px; transition-duration: 200ms; transform: translateX(-768px);">
+                            @foreach (var item in imgList)
+                            {
+                                <li style="display: table-cell; vertical-align: middle; max-width: 768px;">
+                                    <a><img style="margin:auto;" src="@Url_Shop.GetImg(item.URL)"></a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row gary-bg">
+            <div class="white-bg p10 details_con">
+                <h1 class="item-name" id="prodName">@product.Title <br /> <span class="text-danger">@product.SubTitle</span></h1>
+                <ul>
+                    @if (product.CategoryID1 == DB.XmlConfig.XmlSite.Scores)
+                    {
+                        <li>
+                            <label>积分：</label>
+                            <div class="text-primary" id="LingShou" style="border:1px solid #337ab7;padding:1px 3px;border-radius:5px;display:inline-block;">
+                                @DB.ShopProduct.GetLingShouPrice(product)
+                            </div>
+                        </li>
+                    }
+                    else
+                    {
+                        <li>
+                            <label>零售价：</label>
+                            <div class="text-primary" id="LingShou" style="border:1px solid #337ab7;padding:1px 3px;border-radius:5px;display:inline-block;">
+                                @DB.ShopProduct.GetLingShouPrice(product)
+                            </div>
+                        </li>
+
+                        if (curUser == null)
+                        {
+
+                            <li>
+                                <label>优惠价：</label>
+                                <div class="text-primary" id="YouHui" style="border:1px solid #337ab7;padding:1px 3px;border-radius:5px;display:inline-block;">
+                                    @DB.ShopProduct.GetYouHuiPrice(product)
+                                </div>
+                            </li>
+                        }
+                        else
+                        {
+
+                            if (curUser.IsServiceCenter == "是")
+                            {
+                                <li>
+                                    <label>优惠价：</label>
+                                    <div class="text-primary" id="YouHui" style="border:1px solid #337ab7;padding:1px 3px;border-radius:5px;display:inline-block;">
+                                        @DB.ShopProduct.GetYouHuiPrice(product)
+                                    </div>
+                                </li>
+                                <li>
+                                    <label>配货价：</label>
+                                    <div class="text-primary" id="PeiHuo" style="border:1px solid #337ab7;padding:1px 3px;border-radius:5px;display:inline-block;">
+                                        @DB.ShopProduct.GetPeiHuoPrice(product)
+                                    </div>
+                                </li>
+                            }
+                            else
+                            {
+                                <li>
+                                    <label>优惠价：</label>
+                                    <div class="text-primary" id="YouHui" style="border:1px solid #337ab7;padding:1px 3px;border-radius:5px;display:inline-block;">
+                                        @DB.ShopProduct.GetYouHuiPrice(product)
+                                    </div>
+                                </li>
+                            }
+                        }
+
+                    }
+                    <li>
+                        <div>
+                            @{ <input id="guige" hidden />
+                                List<string> strlist = ViewBag.GG as List<string>;
+
+                                for (var i = 0; i < strlist.Count; i++)
+                                {
+                                    <div class="chima">
+                                        @{
+                                            string[] yearArray = strlist[i].Split('_');
+                                            <label>&nbsp;&nbsp;&nbsp;@(yearArray[1])</label>
+                                            <div class="size size@(yearArray[0])">
+                                                @{
+                                                    for (var c = 0; c < yearArray.Length; c++)
+                                                    {
+                                                        if (c > 1)
+                                                        {
+
+                                                            <div class="xuanze">
+                                                                <input type="radio" name="checkbox_@yearArray[0]" value="@(yearArray[c])" />
+                                                                <label for="@yearArray[c]" id="checkbox_@yearArray[c]" onclick="size('@yearArray[c]',@yearArray[0])">@( yearArray[c])</label>
+                                                            </div>
+
+                                                        }
+                                                    }
+
+                                                }
+                                            </div>
+                                        }
+                                    </div>
+
+
+                                }
+
+
+                            }
+                        </div>
+
+
+
+                    </li>
+                    <li>
+                        <label>数量：</label>
+                        <div class="count_div" style="height: 30px; width: 130px;">
+                            <a href="javascript:void(0);" class="minus"></a>
+                            <input type="text" class="count" value="1" id="buy-num" readonly="readonly" />
+                            <a href="javascript:void(0);" class="add"></a>
+                        </div>
+                        <div class="pull-right">
+                            <p class="mb0">
+                                <div class="pull-right text-success" id="KuCun" style="border:0px solid #337ab7;padding:1px 3px;border-radius:5px;">
+                                    库存：@DB.ShopProduct.GetKuCun(product)
+                                </div>
+                            </p>
+                        </div>
+                        <div class="clearfix"></div>
+                    </li>
+                </ul>
+                @*<hr />*@
+                @*<img style="height:20px;width:20px;" src="~/assets/mobile/img/1.png" /> <label>@shop.WeiZhi</label>*@
+                @*<div class="pull-right text-success" style="border:0px solid #337ab7;padding:1px 3px;border-radius:5px;">
+                        <a onclick="M_Detail()" class="btn btn-info btn-cart cartBtn">
+                            开始导航
+                        </a>
+                    </div>*@&nbsp;&nbsp;&nbsp;
+                @*<hr />*@
+                @*<img style="height:20px;width:20px;" src="~/assets/mobile/img/2.png" /> <label>@shop.Tel</label>*@
+                <hr />
+                @*<img style="height:20px;width:20px;" src="~/assets/mobile/img/2.png" />*@@*微信:<label>@shop.QQ</label>*@
+            </div>
+
+            @if (string.IsNullOrEmpty(product.Activity) == false)
+            {
+                <div class="activity">
+                    <i class="glyphicon glyphicon-fire"></i> @(product.Activity)
+                </div>
+            }
+            <div id="goodsContent" class="goods-content white-bg">
+                <div class="hd hd_fav">
+                    <ul>
+                        <li class="on">图文详情</li>
+                        <li class="">文字简介</li>
+                        <li class="">评价(@DB.ShopProduct.GetCommentCount(product.ID))</li>
+                    </ul>
+                </div>
+                <div class="tempWrap" style="overflow:hidden; position:relative;">
+                    <div style="position: relative; overflow: hidden; padding: 0px; margin: 0px; transition-duration: 200ms; transform: translateX(0px);" class="bd">
+                        <div style="display: table-cell; vertical-align: top; max-width: 768px;width: 100%;" class="property">
+                            <div class="prop-area" style="min-height:300px;overflow: hidden;">
+                                @Html.Raw(product.Content)
+                            </div>
+                        </div>
+                        <div class="txt-imgs" style="display: table-cell; vertical-align: top; max-width: 768px;width: 100%;">
+                            <div class="desc-area" style="padding: 15px 10px 0 10px;">
+                                @Html.Raw(product.Description)
+                            </div>
+                        </div>
+                        <div style="display: table-cell; vertical-align: top; max-width: 768px;width: 100%;" class="appraise" rel="1" status="1">
+                            @Html.Action("GetComment", new { id = product.ID })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<div class="fixed-foot">
+    <div class="fixed_inner">
+        @*<a class="cart-wrap" href="~/Mobile/SelfProduct/Index?ShopID=@shop.ID">
+                <span class="i-fav"></span>
+                <span>店铺</span>
+            </a>*@
+        <a class="btn-fav collectBtn" href="javascript:void(0);" data-id="@product.ID">
+            @if (User_Shop.IsCollect(product.ID))
+            {
+                <i class="i-fav i-fav-active"></i><span>已收藏</span>
+            }
+            else
+            {
+                <i class="i-fav"></i>
+                <span>收藏</span>
+            }
+        </a>
+        <a class="cart-wrap" href="@Url_Mobile.GetMyCart()">
+            <i class="i-cart"></i>
+            <span>购物车</span>
+            <span class="add-num" id="totalNum">@User_Shop.GetCartCount()</span>
+        </a>
+        <div class="buy-btn-fix">
+            <a class="btn btn-info btn-cart cartBtn" data-id="@product.ID" href="javascript:void(0);">加入购物车</a>
+            <a class="btn btn-danger btn-buy buyNowBtn" data-id="@product.ID" href="javascript:void(0);">立即购买</a>
+        </div>
+    </div>
+</div>
+<div class="clear"></div>
+
+@*<div class="modal fade" id="oneShareModal" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel" aria-hidden="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="pull-left">
+                        <img class="shopLogo" src="@shopModel.Logo" />
+                        <h4 class="modal-title">@shopModel.ShopName</h4>
+                    </div>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <img class="middleImg" src="@Url_Shop.GetProductImg(product,true)" />
+                    <div class="row">
+                        <div class="col-xs-4">
+                            <div class="qrCodeImg"></div>
+                        </div>
+                        <div class="col-xs-8">
+                            <h5>@product.Title</h5>
+                            <p>
+                                <span class="number"> @Url_Shop.GetProductPrice(product)</span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="row text-center">
+                        <small> 截屏保存分享给您的朋友</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>*@
+
+<div id="Detail" class="modal fade" tabindex="-1" aria-hidden="true">
+    @*<div style="height:25px">
+            <input type="text" id="txtKey" /><button id="btnSearch" onclick="AddressSearch()">搜索</button>
+        </div>*@
+    <div style="color:black;background-color:white;text-align:center">
+        <a style="font-size:20px;" href="javascript:history.go(-1)">关闭</a>
+    </div>
+    <div style="color:black;background-color:white;text-align:center">
+        <a onclick="AddressSearch()" class="btn btn-info btn-Start cartBtn">
+            导航
+        </a>
+    </div>
+    <div id="allmap"></div>
+
+</div>
+
+<script type="text/javascript">
+
+
+
+                function size(id1,id){
+                    $(".size"+id+" label").removeClass("xuanzhong");
+
+                    $("#checkbox_" +id1).addClass("xuanzhong");
+
+                    var str="";
+                    var list=   document.getElementsByClassName("xuanzhong")
+                    for(var i=0;i<list.length;i++){
+                        str+=list[i].getAttributeNode("for").value+"_";
+                    }
+                    var str = str.substr(0, str.length - 1);
+
+                    $.post("/Ajax/GetProPrice", { str: str,id:@product.ID }, function (d) {
+                        //alert(d);
+                        var yearArray = new Array();
+
+                        yearArray = d.split("_");
+                        $("#LingShou").html(yearArray[0]);
+                        $("#YouHui").html(yearArray[1]);
+                        $("#PeiHuo").html(yearArray[2]);
+                        $("#KuCun").html("@("库存"):"+yearArray[3]);
+                        $("#guige").val(str);
+                    })
+                    //alert(str);
+
+    }
+    $(document).on("click", ".sweet-overlay", function () {
+
+        $(".sweet-alert").hide();
+        $(".sweet-overlay").hide();
+
+    });
+</script>
+

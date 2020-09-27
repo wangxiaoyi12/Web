@@ -1,0 +1,56 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+}
+@section css{
+    <link href="~/assets/global/plugins/jstree/dist/themes/default/style.min.css" rel="stylesheet" />
+}
+<!-- BEGIN PAGE BAR -->
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="/SysManage/Desk/Index">首页</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#"><span>市场信息</span></a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="/Member_Market/Recommend/Index"><span>推荐结构</span></a>
+        </li>
+    </ul>
+</div>
+<!-- END PAGE BAR -->
+<!-- BEGIN PAGE CONTENT -->
+<div class="portlet-body">
+    <div id="jstree_div"></div>
+</div>
+<!-- END PAGE CONTENT -->
+
+@section scripts{
+    <script src="~/assets/global/plugins/jstree/dist/jstree.js"></script>
+    <script type="text/javascript">
+        var tree;
+        $(function () {
+            loadTree();
+            tree = jQuery.jstree.reference("#jstree_div");
+        });
+
+        function loadTree() {
+            $('#jstree_div').jstree({
+                'plugins': ["contextmenu", "dnd", "search", "state", "types", "wholerow"],
+                "themes": { "stripes": true },
+                'core': {
+                    'data': {
+                        'url': '/Member_Market/Recommend/getjsTreeData',  //异步加载jstree html格式的数据地址
+                        'dataType': 'json',
+                        'data': function (node) {
+                            return { 'id': node.id };
+                        }
+                    }
+                } 
+            });
+        }
+    </script>
+}

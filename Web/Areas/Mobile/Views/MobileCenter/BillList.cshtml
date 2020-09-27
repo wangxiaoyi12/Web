@@ -1,0 +1,83 @@
+﻿@using DataBase
+@model List<ShopOrder>
+
+@{
+    var member = User_Shop.GetMember_Info();
+}
+
+
+
+<div class="myOrderCtnAct">
+    <ul>
+        @{
+            foreach (var item in Model)
+            {
+                List<ShopOrderProduct> orderproducts = item.ShopOrderProducts.ToList();
+
+
+                <li class="verifyOrderProduct myOrderProduct">
+                    <div class="top">
+                        <div class="picBox"></div>
+                        @if (item.State == ShopEnum.OrderState.FaHuo.GetHashCode()) //待付款
+                        {
+                            <p class="state bsclr_org">已发货</p>
+                        }
+                        else if (item.State == ShopEnum.OrderState.Submit.GetHashCode()) //待付款
+                        {
+                            <p class="state bsclr_org">待付款</p>
+                        }
+                        else if (item.State == ShopEnum.OrderState.Pay.GetHashCode()) //待付款
+                        {
+                            <p class="state bsclr_org">待发货</p>
+                        }
+                    </div>
+                    <dl>
+                        @foreach (var orItem in orderproducts)
+                        {
+                            ShopProduct product = orItem.ShopProduct;
+                            string url = Url_Mobile.GetProduct(product);
+                            <dd>
+                                <div class="ctn">
+                                    <div class="picBox"><img src="@Url_Shop.GetProductImg(product)" onclick="window.location.href='@url'"></div>
+                                    <div class="txt">
+                                        <p>@product.Title</p>
+                                        <p class="bsclr_gay">@orItem.GuiGe</p>
+                                    </div>
+                                    <div class="price">
+                                        <p>¥@DB.ShopProduct.GetSPrice(product, orItem.GuiGe).YouHui</p>
+                                        <p class="bsclr_gay">×@orItem.Count</p>
+                                    </div>
+                                </div>
+                            </dd>
+                        }
+
+                    </dl>
+                    <div class="btm">
+                        <p class="sum">合计：<span>￥@item.RealAmount</span></p>
+                        @if (item.State == ShopEnum.OrderState.FaHuo.GetHashCode()) //待付款
+                        {
+                            <p class="specification">物流公司:@DB.ShopExpress.FindEntity(item.ExpressID).Name</p>
+                            <p class="specification">物流编号:@item.ExpressCode</p>
+                        }
+
+                        <div class="skipBox">
+                            @if (item.State == ShopEnum.OrderState.Submit.GetHashCode()) //待付款
+                            {
+                                <a class="btn btn-danger btn-xs cancelBtn" data-id="@item.GUID">取消</a>
+                                <a href="@Url.Action("payment", new { orderid = item.GUID }).ToLower()" class="btn btn-success btn-xs">确认付款</a>
+                            }
+                            @if (item.State == ShopEnum.OrderState.FaHuo.GetHashCode()) //待付款
+                            {
+                                @*<a class="btn btn-success btn-xs" href="http://www.kuaidi100.com/">物流查询</a>*@
+
+                                @*<a href="@Url.Action("TakeGoods",new { guid=item.GUID})" class="btn btn-success btn-xs">确认收货</a>*@
+                            }
+                            @*<a href="">评价</a>*@
+                        </div>
+                    </div>
+                </li>
+
+            }
+        }
+    </ul>
+</div>

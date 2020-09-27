@@ -1,0 +1,45 @@
+﻿@using DataBase
+@using Business
+@{
+    //@("获取分类")
+    List<ShopProductCategory> cate1List = DB.ShopProductCategory.GetListByParentID(null);
+}
+<div class="container classPage">
+    <div class="row" id="row_5">
+        @foreach (var item1 in cate1List)
+        {
+            //@("获取二级分类")
+            List<ShopProductCategory> cate2List = DB.ShopProductCategory.GetListByParentID(item1.ID);
+            <div class="mt10 white-bg">
+                <h4 class="sort-tit">@(item1.Name)</h4>
+                @foreach (var item2 in cate2List)
+                {
+                    //@("获取三级级分类")
+                    List<ShopProductCategory>
+                        cate3List = DB.ShopProductCategory.GetListByParentID(item2.ID);
+
+                    <div class="classTwo">
+                        <div class="lineTwo"></div>
+                        <div class="text" style="width:80px">
+                            @item2.Name
+                        </div>
+                    </div>
+                    <div class="sort-arat brand-areat">
+                        <ul>
+                            @foreach (var item3 in cate3List)
+                            {
+                                <li style="padding-top:0">
+                                    <a href="@Url_Mobile.GetProduct(item3)">
+                                        <img alt="@item3.Name" src="@Url_Shop.GetImg(item3.Logo)" style="height: 49px;" />
+                                        <br /> @item3.Name
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+
+
+                }
+            </div>}
+    </div>
+</div>

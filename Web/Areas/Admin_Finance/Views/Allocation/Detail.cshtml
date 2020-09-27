@@ -1,0 +1,172 @@
+﻿@model DataBase.Allocation_Info
+@{
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+}
+<!-- BEGIN PAGE BAR -->
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="/SysManage/Home/Index">首页</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#"><span>财务管理</span></a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="@(ViewBag.Path)/Index"><span>分红</span></a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+    </ul>
+</div>
+<!-- END PAGE BAR -->
+<!-- BEGIN PAGE CONTENT -->
+<div class="row">
+    <div class="col-xs-12">
+        <div class="portlet light bordered">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="font-green-sharp fa fa-user"></i>
+                    <span class="caption-subject font-green-sharp bold uppercase"><span>分红</span></span>
+                </div>
+            </div>
+            <div class="portlet-body">
+                @using (Ajax.BeginForm("Save", null, new AjaxOptions()
+                {
+                    HttpMethod = "Post",
+                    OnBegin = "SubAjax.Loading",
+                    OnComplete = "SubAjax.Complate",
+                    OnFailure = "SubAjax.Failure",
+                    OnSuccess = "SubAjax.Success"
+                }, new { @class = "form-horizontal", @role = "form", @id = "commentForm" }))
+                {
+                    <div class="form-body">
+                        <div class="form-group">
+                            <label class="col-xs-2 control-label"><span style="color:red">*</span>分红单号：</label>
+                            <div class="col-xs-4">
+                                <input type="hidden" name="Id" value="@Model.Id" />
+                                <input type="hidden" name="Code" value="@Model.Code" />
+                                <label class="control-label">@Model.Code</label>
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-xs-2 control-label"><span style="color:red"></span>上次分红日期：</label>
+                            <div class="col-xs-3">
+                                <input type="text" id="start" name="StartTime" readonly="readonly" value="@(Model.StartTime==null?"":Model.StartTime.Value.ToString("yyyy-MM-dd"))"  class="form-control" errormsg="">
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-xs-2 control-label"><span style="color:red">*</span>分红截止日期：</label>
+                            <div class="col-xs-3">
+                                <input type="text" id="end" name="EndTime" value="@(Model.EndTime==null?"":Model.EndTime.Value.ToString("yyyy-MM-dd"))"  class="form-control" errormsg="">
+
+                            </div>
+                            <div class="col-xs-1">
+                                <button type="button" class="btn green" onclick="JSFH()"><i class="fa fa-mail-reply"></i>计算分红</button>
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-xs-2 control-label"><span style="color:red">*</span>合计金额：</label>
+                            <div class="col-xs-4">
+                                <input type="text" id="TotalAmount" name="TotalAmount" value="@Model.TotalAmount" class="form-control">
+                            </div>
+                            <span></span>
+                        </div>
+                  
+                        <div class="form-group">
+                            <label class="col-xs-2 control-label"><span style="color:red"></span>会员数量：</label>
+                            <div class="col-xs-4">
+                                <input type="text" id="MemberCount" name="MemberCount" readonly="readonly" value="@Model.MemberCount" class="form-control">
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-xs-2 control-label"><span style="color:red"></span>应发金额：</label>
+                            <div class="col-xs-4">
+                                <input type="text" id="ShouldAmount" name="ShouldAmount" readonly="readonly" value="@Model.ShouldAmount" class="form-control">
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-xs-2 control-label"><span style="color:red">*</span>普卡实发金额：</label>
+                            <div class="col-xs-4">
+                                <input type="text" id="PerAmount" name="PerAmount" value="@Model.PerAmount" datatype="*" class="form-control">
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-xs-2 control-label"><span style="color:red">*</span>银卡实发金额：</label>
+                            <div class="col-xs-4">
+                                <input type="text" id="PerAmount2" name="PerAmount2" value="@Model.PerAmount2" datatype="*" class="form-control">
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-xs-2 control-label"><span style="color:red">*</span>钻卡实发金额：</label>
+                            <div class="col-xs-4">
+                                <input type="text" id="PerAmount3" name="PerAmount3" value="@Model.PerAmount3" datatype="*" class="form-control">
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-actions">
+                            <div class="row">
+                                <div class="col-md-offset-3 col-md-9">
+                                    <button type="submit" id="SubSave" class="btn green"><i class="fa fa-check"></i><span>保 存</span></button>
+                                    <button type="button" class="btn default" onclick="window.history.back()"><i class="fa fa-mail-reply"></i>返回</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END PAGE CONTENT -->
+@section scripts{
+    <script>
+        function JSFH() {
+            var end = $("#end").val();
+            if (end == '') {
+                alert("请填写分红截止日期");
+                return;
+            }
+            $.post("@(ViewBag.Path)/JSFH", { end: end }, function (d) {
+                //赋值
+                $("#TotalAmount").val(d.TotalAmount);
+                $("#AllocationAmount").val(d.AllocationAmount);
+                $("#MemberCount").val(d.MemberCount);
+                $("#ShouldAmount").val(d.ShouldAmount);
+                $("#PerAmount").val(d.ShouldAmount);
+                $("#PerAmount2").val(d.ShouldAmount);
+                $("#PerAmount3").val(d.ShouldAmount);
+            })
+        }
+        $(document).ready(function () {
+            //$('#start').datetimepicker({
+            //    language: 'zh-CN',
+            //    format: 'yyyy-mm-dd',
+            //    autoclose: 1,
+            //    minView: 2
+            //}).on('changeDate', function (ev) {
+            //    var start = $('#start').val();
+            //    $('#end').datetimepicker('setStartDate', start);
+            //    $('#start').datetimepicker('hide');
+            //});
+            $('#end').datetimepicker({
+                language: 'zh-CN',
+                format: 'yyyy-mm-dd hh:ii:ss',
+                autoclose: 1,
+             endDate: '@(DateTime.Now.Date.AddDays(1).ToString("yyyy-MM-dd HH:mm:ss"))', //只能分历史日期
+                minView: 2
+            }).on('changeDate', function (ev) {
+                //var end = $('#end').val();
+                //$('#start').datetimepicker('setEndDate', end);
+                //$('#end').datetimepicker('hide');
+            });
+        });
+    </script>
+}

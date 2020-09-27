@@ -1,0 +1,351 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{4F3287F9-1815-41C9-BE90-647466DC6066}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DataBase</RootNamespace>
+    <AssemblyName>DataBase</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+    <WebGreaseLibPath>..\packages\WebGrease.1.5.2\lib</WebGreaseLibPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Antlr3.Runtime, Version=3.4.1.9004, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.Extended">
+      <HintPath>..\packages\EntityFramework.Extended.6.1.0.168\lib\net45\EntityFramework.Extended.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Log4\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.5.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Optimization, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WebGrease, Version=1.5.2.14234, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Allocation_Info.cs">
+      <DependentUpon>MallEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Area_City.cs">
+      <DependentUpon>MallEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Area_County.cs">
+      <DependentUpon>MallEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Area_Province.cs">
+      <DependentUpon>MallEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Area_Town.cs">
+      <DependentUpon>MallEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Article_Info.cs">
+      <DependentUpon>MallEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Bill_Info.cs">
+      <DependentUpon>MallEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BNet_Info.cs">
+      <DependentUpon>MallEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entity\Xml_Shop.cs" />
+    <Compile Include="Extentions\Member_Info.cs" />
+    <Compile Include="Extentions\ScoreRecord.cs" />
+    <Compile Include="Extentions\SettleRecord.cs" />
+    <Compile Include="Extentions\ShopMyAddress.cs" />
+    <Compile Include="Extentions\ShopOrder.cs" />
+    <Compile Include="Extentions\ShopProduct.cs" />
+    <Compile Include="Fin_Convert.cs">
+      <DependentUpon>MallEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Fin_Draw.cs">
+      <DependentUpon>MallEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Fin_Info.cs">
+      <DependentUpon>MallEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Fin_LiuShui.cs">
+      <DependentUpon>MallEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Fin_Remit.cs">
+      <DependentUpon>MallEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Fin_ShiChangimp.cs">
+      <DependentUpon>MallEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Fin_Transfer.cs">
+      <DependentUpon>MallEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GuiGeName_Info.cs">
+      <DependentUpon>MallEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GuiGeProduct_Info.cs">
+      <DependentUpon>MallEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GuiGe_Info.cs">
+      <DependentUpon>MallEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Logs.cs">
+      <DependentUpon>MallEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MallEntity.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MallEntity.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MallEntity.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MallEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MallEntity.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MallEntity.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Member_Info.cs">
+      <DependentUpon>MallEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Member_Upgrade.cs">
+      <DependentUpon>MallEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="News_Info.cs">
+      <DependentUpon>MallEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PraiseRecord.cs">
+      <DependentUpon>MallEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Product_Info.cs">
+      <DependentUpon>MallEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entity\Account.cs" />
+    <Compile Include="Entity\Relation.cs" />
+    <Compile Include="Entity\Xml_Field.cs" />
+    <Compile Include="Entity\Xml_Site.cs" />
+    <Compile Include="MyConfig.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ScoreRecord.cs">
+      <DependentUpon>MallEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SettleRecord.cs">
+      <DependentUpon>MallEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Shop.cs">
+      <DependentUpon>MallEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ShopArticle.cs">
+      <DependentUpon>MallEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ShopArticleCategory.cs">
+      <DependentUpon>MallEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ShopAttention.cs">
+      <DependentUpon>MallEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ShopBigWheel.cs">
+      <DependentUpon>MallEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ShopBigWheelDetail.cs">
+      <DependentUpon>MallEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ShopBigWheelLog.cs">
+      <DependentUpon>MallEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ShopBrand.cs">
+      <DependentUpon>MallEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ShopBrowsingHistory.cs">
+      <DependentUpon>MallEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ShopCat.cs">
+      <DependentUpon>MallEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ShopCategoryPayWay.cs">
+      <DependentUpon>MallEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ShopCollectionProduct.cs">
+      <DependentUpon>MallEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ShopExpress.cs">
+      <DependentUpon>MallEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ShopMyAddress.cs">
+      <DependentUpon>MallEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ShopNavigation.cs">
+      <DependentUpon>MallEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ShopOneBuy.cs">
+      <DependentUpon>MallEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ShopOneBuyDetail.cs">
+      <DependentUpon>MallEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ShopOrder.cs">
+      <DependentUpon>MallEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ShopOrderComment.cs">
+      <DependentUpon>MallEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ShopOrderProduct.cs">
+      <DependentUpon>MallEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ShopOrderState.cs">
+      <DependentUpon>MallEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ShopPayWay.cs">
+      <DependentUpon>MallEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ShopProduct.cs">
+      <DependentUpon>MallEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ShopProductCategory.cs">
+      <DependentUpon>MallEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ShopProductImage.cs">
+      <DependentUpon>MallEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ShopProductPayway.cs">
+      <DependentUpon>MallEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ShopSlide.cs">
+      <DependentUpon>MallEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Sys_BasicData.cs">
+      <DependentUpon>MallEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Sys_BasicType.cs">
+      <DependentUpon>MallEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Sys_Employee.cs">
+      <DependentUpon>MallEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Sys_Level.cs">
+      <DependentUpon>MallEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Sys_Msg.cs">
+      <DependentUpon>MallEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Sys_Navigation.cs">
+      <DependentUpon>MallEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Sys_Role.cs">
+      <DependentUpon>MallEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Sys_Role_Nav.cs">
+      <DependentUpon>MallEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="VEmp.cs">
+      <DependentUpon>MallEntity.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EntityDeploy Include="MallEntity.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>MallEntity.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.Config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="GetSummery.ttinclude" />
+    <None Include="Log4Net.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MallEntity.edmx.diagram">
+      <DependentUpon>MallEntity.edmx</DependentUpon>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="MallEntity.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>MallEntity.edmx</DependentUpon>
+      <LastGenOutput>MallEntity.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="MallEntity.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>MallEntity.edmx</DependentUpon>
+      <LastGenOutput>MallEntity.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{f230ec8b-4f93-4866-8b04-93b43900b7a6}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

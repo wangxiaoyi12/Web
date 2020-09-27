@@ -1,0 +1,21 @@
+﻿@using DataBase
+@model List<ShopProduct>
+<div id="recommnad">
+    <dl class="recommnad explosion ">
+        <dt><i></i>同类销售商品排行榜</dt>
+        @for (int i = 0; i < Model.Count; i++)
+        {
+            var item = Model[i];
+            string url = Url_Shop.GetProduct(item);
+            <dd data-hover="hover" class="bordernone">
+                <span>
+                    <a href="@url" class="pic"><img src="@Url_Shop.GetProductImg(item)" width="130" height="130" data-bd-imgshare-binded="1"></a>
+                    <a href="@url" class="tit">@item.Title</a>
+                    <p>@Url_Shop.GetProductPrice(item)</p>
+                    <a  class="commandbtn cartBtn" data-id="@item.ID">加入购物车</a>
+                </span>
+                <div class="exp_ico one">@(i+1)</div>
+            </dd>
+        }
+    </dl>
+</div>

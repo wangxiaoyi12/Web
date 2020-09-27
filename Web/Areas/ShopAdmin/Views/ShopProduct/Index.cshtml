@@ -1,0 +1,261 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+    var Path = ViewBag.Path;
+}
+
+<!-- BEGIN PAGE BAR -->
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="/SysManage/Desk/Index">首页</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#"><span>商城管理</span></a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href=""><span>商品</span></a>
+        </li>
+    </ul>
+</div>
+
+<!-- END PAGE BAR -->
+
+<!-- BEGIN PAGE CONTENT -->
+<div class="row">
+    <!-- BEGIN SAMPLE TABLE PORTLET-->
+    <div class="col-md-12">
+        <div class="portlet box green">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-database"></i>商品数据列表
+                </div>
+                <div class="tools">
+                    <a href="javascript:;" class="collapse"> </a>
+                    <a href="javascript:;" class="reload"> </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="table-responsive">
+                    <div class="table-toolbar col-md-6">
+                        <div class="btn-group">
+                            <a id="add" href="@(Path)/Detail" class="btn green">
+                                <i class="fa fa-plus"></i> 新增
+                            </a>
+                            <a onclick="SetState(true)" class="btn red">
+                                <i class="fa fa-plus"></i> 上架
+                            </a>
+                            <a onclick="SetState(false)" class="btn blue">
+                                <i class="fa fa-plus"></i> 下架
+                            </a>
+                            @*<a id="add" onclick="onebuy()" class="btn green">
+                                <i class="fa fa-plus"></i> 一元购
+                            </a>*@
+                            <a id="delete" onclick="_deleteList()" class="btn red">
+                                <i class="fa fa-trash-o"></i> 删除
+                            </a>
+                        </div>
+                    </div>
+                    <form class="form form-horizontal form-inline">
+                        <fieldset>
+                            <div class="control-group">
+                                <div class="controls">
+                                    <style>
+                                        .controls .select2-container{
+                                            min-width:120px;
+                                            text-align:center;
+                                        }
+                                    </style>
+                                    <div class="text-right">
+                                        <select id="category" name="CategoryID1"  onchange="changeC1()" class="form-control select2 text-center" style="min-width:150px;" datatype="*">
+                                            <option value="0">=请选择=...</option>
+                                            @{
+                                                foreach (KeyValuePair<int, string> item in ViewBag.List1)
+                                                {
+                                                    if (ViewBag.C1 == item.Key)
+                                                    {
+                                                        <option value="@item.Key" selected="selected">@item.Value</option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value="@item.Key">@item.Value</option>
+                                                    }
+                                                }
+                                            }
+                                        </select>
+
+                                        <div class="input-group col-md-4">
+                                            <input type="text" class="form-control" placeholder="搜索关键字" id="keyword" />
+                                            <span class="input-group-btn">
+                                                <a class="btn btn-default" href="javascript:searchList();">
+                                                    <span class="glyphicon glyphicon-search"></span>
+                                                </a>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+                <div class="table-responsive">
+                    <table id="datatable" class="table table-striped table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th style="width:3%"><input type="checkbox" id='checkAll'></th>
+                                <th>标题</th>
+                                @*<th>商家</th>*@
+                                <th>商品类别</th>
+                                @*<th>类型</th>*@
+                                @*<th>原价</th>
+                                <th>零售价</th>
+                                <th>优惠价</th>
+                                <th>配货价</th>*@
+                                @*<th>购物币</th>
+                                <th>重消币</th>
+                                <th>积分</th>*@
+                                @*<th>库存</th>
+                                <th>销量</th>*@
+                                @*<th>品牌</th>*@
+                                <th>状态</th>
+                                @*<th>是否活动</th>
+                                <th>是否热点</th>*@
+                                <th>是否推荐</th>
+                                <th>添加时间</th>
+                                <th style="width:10%">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END SAMPLE TABLE PORTLET-->
+</div>
+
+@section scripts {
+    <script type="text/javascript">
+        var oTable;
+        var idField = "ID";
+        var path = "@Path";
+        var isDetail = false;
+        var dataSource = path + "/getDataSource";
+        var searchData = function (e) {
+            return {
+                //startTime: $("#start").val(),
+                //end: $("#end").val(),
+                key: $("#keyword").val(),
+                category:$('#category').val(),
+                start: e.start,
+                length: e.length,
+                draw: e.draw
+            }
+        };
+        var columns = [//绑定数据
+            {
+                data: idField,
+                createdCell: function (nTd, sData, oData, iRow, iCol) {
+                    $(nTd).html("<input type='checkbox' name='checkList' value='" + sData + "'>");
+                }
+            },
+            { data: 'Title' },
+            //{ data: 'ShopName' },
+            { data: 'CategoryID' },
+               //{ data: 'CategoryID1' },
+            //{ data: 'PriceOriginal' },
+            //{ data: 'PriceShopping' },
+            // { data: 'PV' },
+            // { data: 'PriceScore' },
+             
+            //{ data: 'PriceShopping' },
+            //{ data: 'PriceCongXiao' },
+            //{ data: 'PriceScore' },
+            //{ data: 'Inventory' },
+            //{ data: 'Sales' },
+            //{ data: 'BrandID' },
+             {
+                 data: 'IsEnable',
+                 createdCell: function (nTd, sData, oData, iRow, iCol) {
+                     if (oData.IsEnable == '上架') {
+                         $(nTd).html("<span class=\"label label-sm label-success\"> " + oData.IsEnable + " </span>")
+                     } else {
+                         $(nTd).html("<span class=\"label label-sm label-danger\"> " + oData.IsEnable + " </span>")
+                     }
+                 }
+             },
+            //{ data: 'IsNew' },
+            //{ data: 'IsHot' },
+            { data: 'IsRecommend' },
+            { data: 'UpdateTime' },
+            {
+                data: idField,
+                createdCell: function (nTd, sData, oData, iRow, iCol) {
+                    $(nTd).html("<a href='" + path + "/Detail/" + oData.ID + "') class='btn green btn-xs'><i class='fa fa-edit'></i> 编辑</a>&nbsp;")
+                }
+            }
+        ];
+        function SetState(state) {
+            var ids = getSelect();
+            if (ids != '') {
+                $.post("@ViewBag.Path/SetState", { id: ids, state: state }, function (d) {
+                    myAlert(d);
+                    oTable.ajax.reload(null, false);
+                });
+            }
+        }
+        function onebuy() {
+            var ids = getSelect();
+            if (ids != '') {
+                if (ids.indexOf(',')>-1) {
+                    alertError("错误提示", "只能选择一个商品");
+                } else {
+                    location.href = "/ShopAdmin/ShopOneBuy/Detail?pid=" + ids;
+                }
+            }
+        }
+        function searchList() {
+            oTable.ajax.reload(null, false);
+        }
+        function changeC1() {
+            searchList();
+        }
+        //$(function () {
+        //    $('#start').datetimepicker({
+        //        language: 'zh-CN',
+        //        format: 'yyyy-mm-dd',
+        //        autoclose: 1,
+        //        minView: 2
+        //    }).on('changeDate', function (ev) {
+        //        var start = $('#start').val();
+        //        $('#end').datetimepicker('setStartDate', start);
+        //        $('#start').datetimepicker('hide');
+        //    });
+        //    $('#end').datetimepicker({
+        //        language: 'zh-CN',
+        //        format: 'yyyy-mm-dd',
+        //        autoclose: 1,
+        //        minView: 2
+        //    }).on('changeDate', function (ev) {
+        //        var end = $('#end').val();
+        //        $('#start').datetimepicker('setEndDate', end);
+        //        $('#end').datetimepicker('hide');
+        //    });
+        //});
+        @*function toActive(id) {
+            confirm("激活提示!", "您确定要激活当前会员吗？", function () {
+                var url = "@(Path)ToActive";
+                $.post(url, { id: id }, function (d) {
+                    if (d.Status == "y") {
+                        alert("成功提示", "会员激活成功");
+                        oTable.ajax.reload(null, false);
+                    } else {
+                        alertError("错误提示", "会员激活失败：" + d.Msg);
+                    }
+                });
+            });
+        }*@
+    </script>
+    <script src="~/assets/scripts/myListPage.js"></script>
+} 

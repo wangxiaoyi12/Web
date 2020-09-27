@@ -1,0 +1,179 @@
+﻿@using DataBase
+@using Business
+
+@{
+    //获取大分类列表
+    //获取分类
+    List<ShopProductCategory> cate1List = DB.ShopProductCategory.GetListByParentID(null);
+    //2.获取精品推荐
+    List<ShopProduct> productList = DB.ShopProduct.Where(q => q.IsRecommend == true && q.IsEnable == true)
+        .Take(9)
+        .ToList();
+    //productList.AddRange(productList);
+    List<ShopSlide> slide = DB.ShopSlide.Where(p => p.Video != null).ToList();
+    Xml_Shop shopConfig = DB.XmlConfig.XmlShop;
+}
+<link href="~/assets/jQueryVideo.js6.2.8/css/video-js.css" rel="stylesheet" />
+<div class="row category"style="margin-top: -20px;">
+    @for (int i = 0; i < Math.Min(8, cate1List.Count); i++)
+    {
+        ShopProductCategory item = cate1List[i];
+        <a href="@Url_Mobile.GetProduct(item)" class="col-xs-3"style="width: 25%;">
+            <img class="img-responsive" style="height:39px" src="@Url_Mobile.GetImg(item.Logo)">
+            <h4>@item.Name</h4>
+        </a>
+    }
+    @*<a href="@Url_Mobile.GetProduct()?praise=1" class="col-xs-3">
+            <img class="img-responsive" src="~/assets/mobile/img/Hand-click.png">
+            <h4>点赞商品</h4>
+        </a>*@
+    @*<a href="@Url_Mobile.GetCategory()" class="col-xs-3">
+            <img class="img-responsive" src="~/assets/mobile/images/fenlei.png">
+            <h4>全部分类</h4>
+        </a>*@
+    @*<a href="@Url_Mobile.GetBrand()" class="col-xs-3">
+            <img class="img-responsive" src="/assets/mobile/images/liwu.png">
+            <h4>所有品牌</h4>
+        </a>*@
+</div>
+
+@*<div class="row countInfo text-center">
+    <div class="leftInfo">
+        <div id="gongao">
+            <div style="width:100%;height:30px;margin:0 auto;white-space: nowrap;overflow:hidden;" id="scroll_div" class="scroll_div">
+                <div id="scroll_begin">
+                    @(shopConfig.GDSummary)
+                </div>
+                <div id="scroll_end"></div>
+            </div>
+        </div>
+    </div>
+    <div class="count">
+        在线<em>@(shopConfig.GetOnlineCount())</em>人
+    </div>
+</div>*@
+@*<div class="row tuijian">
+    <div class="titleOne">
+        <div class="pull-left">
+            <img src="~/assets/mobile/img/icon_pp.png" style="width:24px;height:24px">
+            精彩展示
+        </div>
+        <div class="pull-right"></div>
+        <div class="clear"></div>
+    </div>
+    <div id="slideJP" class="slide">
+        <div class="hd">
+            <ul><li class="on">1</li><li class="on">2</li><li class="on">3</li></ul>
+        </div>
+        <div class="bd">
+            <div class="tempWrap" style="overflow:hidden; position:relative;">
+                <ul style="width: 3840px; position: relative; overflow: hidden; padding: 0px; margin: 0px; transition-duration: 200ms; transform: translateX(-768px);">
+                    @foreach (var item in slide)
+                    {
+                        <video id="example_video_1" class="video-js vjs-default-skin vjs-big-play-centered"
+                               controls preload="auto" width="640" height="264" data-setup='{"example_option":true}'>
+                            <source src="@item.Video"  type='video/mp4' />
+                        </video>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</div>*@
+
+<div class="row tuijian">
+        <div class="titleOne">
+            <div class="pull-left">
+                <img src="~/assets/mobile/img/icon_pp.png" style="width:24px;height:24px">
+                精品推荐
+            </div>
+            <div class="pull-right"></div>
+            <div class="clear"></div>
+        </div>
+        <div id="slideJP" class="slide">
+            <div class="hd">
+                <ul><li class="on">1</li><li class="on">2</li><li class="on">3</li></ul>
+            </div>
+            <div class="bd">
+                <div class="tempWrap" style="overflow:hidden; position:relative;">
+                    <ul style="width: 3840px; position: relative; overflow: hidden; padding: 0px; margin: 0px; transition-duration: 200ms; transform: translateX(-768px);">
+                        @for (int i = 0; i < productList.Count; i++)
+                        {
+                            ShopProduct item = productList[i];
+                            if (i % 3 == 0)
+                            {
+                                @:<li style="display: table-cell; vertical-align: top; width: 768px;">
+                                }
+                                <div class="inner col-xs-4">
+                                    <a class="" href="@Url_Mobile.GetProduct(item)">
+                                        <img class="tb_pic" _src="@Url_Shop.GetProductImg(item)">
+                                    </a>
+                                    <div class="title">@item.Title</div>
+                                    <div class="bottom">
+                                        <small class="text-danger  pull-left">
+                                        </small>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </div>
+                                if ((i + 1) % 3 == 0)
+                                {
+                                    @:</li>
+                            }
+                        }
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+<script src="~/assets/jQueryVideo.js6.2.8/js/video.min.js"></script>@*//自动播放*@
+<script>
+    TouchSlide({
+        slideCell: "#slideJP",
+        titCell: ".hd ul", //开启自动分页 autoPage:true ，此时设置 titCell 为导航元素包裹层
+        mainCell: ".bd ul",
+        effect: "left",
+        autoPlay: false,//自动播放
+        autoPage: true, //自动分页
+        switchLoad: "_src" //切换加载，真实图片路径为"_src"
+    });
+
+    (function () {
+        function ScrollImgLeft() {
+            var speed = 50;
+            var scroll_begin = document.getElementById("scroll_begin");
+            var scroll_end = document.getElementById("scroll_end");
+            var scroll_div = document.getElementById("scroll_div");
+            scroll_end.innerHTML = scroll_begin.innerHTML;
+            function Marquee() {
+                if (scroll_end.offsetWidth - scroll_div.scrollLeft <= 0) {
+                    scroll_div.scrollLeft -= scroll_begin.offsetWidth;
+                }
+                else
+                    scroll_div.scrollLeft++;
+            }
+            var MyMar = setInterval(Marquee, speed);
+            //scroll_div.onmouseover = function () { clearInterval(MyMar); }
+            //scroll_div.onmouseout = function () { MyMar = setInterval(Marquee, speed); }
+        }
+        ScrollImgLeft();
+
+        //刷新在线人数
+        setInterval(function () {
+            $.post('/ajax/getonlinecount', {}, function (data) {
+                $('.count em').text(data);
+            });
+        }, 5000);
+    })();
+
+    var myPlayer = videojs('example_video_1');
+    videojs("example_video_1").ready(function () {
+        var myPlayer = this;
+        myPlayer.play();
+
+    });
+
+</script>
+

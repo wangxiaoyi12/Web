@@ -1,0 +1,344 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+}
+@section css{
+    <link href="~/assets/global/myplugins/Uploader/Uploader6.0.min.css" rel="stylesheet" />
+}
+@model DataBase.Xml_Shop
+
+<!-- BEGIN PAGE BAR -->
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="/SysManage/Home/Index">首页</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#">商城管理</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="">商城参数设置</a>
+        </li>
+    </ul>
+</div>
+<!-- END PAGE BAR -->
+<!-- BEGIN PAGE CONTENT -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet light bordered">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="font-green-sharp fa fa-cogs"></i>
+                    <span class="caption-subject font-green-sharp bold uppercase">设置商城参数</span>
+                </div>
+            </div>
+            <div class="portlet-body">
+                @using (Ajax.BeginForm("Save", null, new AjaxOptions()
+                {
+                    HttpMethod = "Post",
+                    OnBegin = "SubAjax.Loading",
+                    OnComplete = "SubAjax.Complate",
+                    OnFailure = "SubAjax.Failure",
+                    OnSuccess = "SubAjax.Success"
+                }, new { @class = "form-horizontal", @role = "form", @id = "commentForm" }))
+                {
+                    <div class="form-body">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red">*</span>商城名称：</label>
+                            <div class="col-md-6">
+                                <input type="text" name="ShopName" value="@Model.ShopName" class="form-control" placeholder="请输入系统名称" datatype="*">
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red"></span><div class="uploader uploader-warning" id="uploadBtn2"></div></label>
+                            <div class="col-md-6">
+                                <input type="hidden" name="ShopLogo" id="ShopLogo" value="@Model.ShopLogo" class="form-control" placeholder="请输入商城Logo">
+
+                                <img id="imgLogo" src="@Model.ShopLogo" alt="" height="120" />
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red">*</span>公司名称：</label>
+                            <div class="col-md-6">
+                                <input type="text" name="ShopCompany" value="@Model.ShopCompany" class="form-control" placeholder="请输入公司名称" datatype="*">
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red">*</span>通讯地址：</label>
+                            <div class="col-md-6">
+                                <input type="text" name="ShopAddress" value="@Model.ShopAddress" class="form-control" placeholder="请输入通讯地址" datatype="*">
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red">*</span>联系电话：</label>
+                            <div class="col-md-6">
+                                <input type="text" name="ShopTel" value="@Model.ShopTel" class="form-control" placeholder="请输入联系电话" datatype="*">
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red">*</span>公司传真：</label>
+                            <div class="col-md-6">
+                                <input type="text" name="ShopFax" value="@Model.ShopFax" class="form-control" placeholder="请输入公司传真" datatype="*">
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red">*</span>公司邮箱：</label>
+                            <div class="col-md-6">
+                                <input type="text" name="ShopEmail" value="@Model.ShopEmail" class="form-control" placeholder="请输入公司邮箱" datatype="*">
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red">*</span>QQ：</label>
+                            <div class="col-md-6">
+                                <input type="text" name="QQ" value="@Model.QQ" class="form-control" placeholder="请输入QQ" datatype="*">
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red"></span><div class="uploader uploader-warning" id="uploadBtn3"></div></label>
+                            <div class="col-md-6">
+                                <input type="hidden" name="WeiXin" id="WeiXin" value="@Model.WeiXin" class="form-control" placeholder="请输入商城Logo">
+                                <img id="imgWeiXin" src="@Model.WeiXin" alt="" height="120" />
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red">*</span>ICP备案号：</label>
+                            <div class="col-md-6">
+                                <input type="text" name="ShopICP" value="@Model.ShopICP" class="form-control" placeholder="请输入公司名称" datatype="*">
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red">*</span>商城版权：</label>
+                            <div class="col-md-6">
+                                <input type="text" name="ShopCopyright" value="@Model.ShopCopyright" class="form-control" placeholder="请输入商城版权" datatype="*">
+                            </div>
+                            <span></span>
+                        </div>
+
+                        <hr />
+                        @*<div class="form-group">
+                                <label class="col-md-2 control-label"><span style="color:red">*</span>包邮订单金额：</label>
+                                <div class="col-md-6">
+                                    <input type="text" name="BaoYouAmount" value="@Model.BaoYouAmount" class="form-control" placeholder="" datatype="*">
+                                </div>
+                                <span></span>
+                            </div>*@
+                        @*<div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red">*</span>手机版头部背景：</label>
+                            <div class="col-md-6">
+                                <input type="text" name="TopBack" value="@Model.TopBack" class="form-control" placeholder="" datatype="*">
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red">*</span>手机版底部背景：</label>
+                            <div class="col-md-6">
+                                <input type="text" name="BottomBack" value="@Model.BottomBack" class="form-control" placeholder="" datatype="*">
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red">*</span>在线人倍数：</label>
+                            <div class="col-md-6">
+                                <input type="text" name="Multiple" value="@Model.Multiple" class="form-control" placeholder="" datatype="*">
+                            </div>
+                            <span></span>
+                        </div>*@
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red">*</span>首页滚动内容：</label>
+                            <div class="col-md-6">
+                                <textarea name="GDSummary" class="form-control" rows="3" placeholder="" datatype="*">@Model.GDSummary</textarea>
+                            </div>
+                            <span></span>
+                        </div>
+                        @*<p>
+                            首页板块图片上传：
+                        </p>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red"></span><div class="uploader uploader-warning" id="uploadBtn4"></div></label>
+                            <div class="col-md-6">
+                                <input type="hidden" name="Img_HY" id="Img_HY" value="@Model.Img_HY" class="form-control" placeholder="">
+                                <img id="imgImg_HY" src="@Model.Img_HY" alt="" height="30" />
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red"></span><div class="uploader uploader-warning" id="uploadBtn5"></div></label>
+                            <div class="col-md-6">
+                                <input type="hidden" name="Img_BK" id="Img_BK" value="@Model.Img_BK" class="form-control" placeholder="">
+                                <img id="imgImg_BK" src="@Model.Img_BK" alt="" height="30" />
+                            </div>
+                            <span></span>
+                        </div>*@
+                        @*<div class="form-group">
+                                <label class="col-md-2 control-label"><span style="color:red"></span><div class="uploader uploader-warning" id="uploadBtn6"></div></label>
+                                <div class="col-md-6">
+                                    <input type="hidden" name="Img_HD" id="Img_HD" value="@Model.Img_HD" class="form-control" placeholder="">
+                                    <img id="imgImg_HD" src="@Model.Img_HD" alt="" height="30" />
+                                </div>
+                                <span></span>
+                            </div>*@
+                        <hr />
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red">*</span>首页标题：</label>
+                            <div class="col-md-6">
+                                <input type="text" name="ShopIndexTitle" value="@Model.ShopIndexTitle" class="form-control" placeholder="请输入首页标题" datatype="*">
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red">*</span>首页关键词：</label>
+                            <div class="col-md-6">
+                                <input type="text" name="ShopIndexKeyword" value="@Model.ShopIndexKeyword" class="form-control" placeholder="请输入首页关键词" datatype="*">
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red">*</span>首页描述：</label>
+                            <div class="col-md-6">
+                                <textarea name="ShopIndexDescription" class="form-control" rows="3" placeholder="请输入首页描述" datatype="*">@Model.ShopIndexDescription</textarea>
+                            </div>
+                            <span></span>
+                        </div>
+
+
+                        <div class="form-group hidden">
+                            <label class="col-md-2 control-label"><span style="color:red">*</span>系统开关：</label>
+                            <div class="col-md-6">
+                                <div class="mt-radio-inline">
+                                    <label class="mt-radio">
+                                        <input type="radio" name="ShopIsRunning" checked="checked" value="True" @(Model.ShopIsRunning == true ? "checked" : "")> 开启
+                                        <span></span>
+                                    </label>
+                                    <label class="mt-radio">
+                                        <input type="radio" name="ShopIsRunning" value="False" @(Model.ShopIsRunning == false ? "checked" : "")> 关闭
+                                        <span></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group hidden">
+                            <label class="col-md-2 control-label"><span style="color:red">*</span>维护/关闭提示：</label>
+                            <div class="col-md-6">
+                                <textarea name="ShopCloseReason" class="form-control" rows="4" placeholder="请输入维护/关闭提示">@Model.ShopCloseReason</textarea>
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group hidden">
+                            <label class="col-md-2 control-label"><span style="color:red">*</span>统计代码：</label>
+                            <div class="col-md-6">
+                                <textarea name="ShopStatisticalCode" class="form-control" rows="8" placeholder="请输入统计代码">@Model.ShopStatisticalCode</textarea>
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-actions">
+                            <div class="row">
+                                <div class="col-md-offset-3 col-md-9">
+                                    <button type="submit" id="SubSave" class="btn green"><i class="fa fa-check"></i><span>保 存</span></button>
+                                    <button type="button" class="btn default" onclick="window.history.back()"><i class="fa fa-mail-reply"></i>返回</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END PAGE CONTENT -->
+@section scripts{
+    <script src="~/assets/global/myplugins/Uploader/Uploader6.0.min.js"></script>
+    <script src="~/assets/global/plugins/UEditor/ueditor.config.js"></script>
+    <script src="~/assets/global/plugins/UEditor/ueditor.all.min.js"></script>
+    <!-- 实例化编辑器 -->
+    <script type="text/javascript">
+        //var ue = UE.getEditor('container');
+
+        /**大小图片前台处理，后台简单处理模式，上传成功后显示图片**/
+        var uploader = $('#uploadBtn2').uploader({
+            url: 'ws://@(Request.Url.Host):@(Request.Url.Port)/ajax/upload',
+            text: '上传Logo',
+            fileExts: 'png;jpg;gif',
+            handleType: '0',
+            debug: false,
+            max: 1024 * 1204 * 10,
+            subfolder: 'upload/images',
+            onSuccess: function (data) {
+                var img1 = data.relativeName;// alert(img1);
+                $("#imgLogo").attr('src', img1);
+                $("#ShopLogo").val(img1);
+            }
+        });
+        $('#uploadBtn3').uploader({
+            url: 'ws://@(Request.Url.Host):@(Request.Url.Port)/ajax/upload',
+            text: '微信二维码',
+            fileExts: 'png;jpg;gif',
+            handleType: '0',
+            debug: false,
+            max: 1024 * 1204 * 10,
+            subfolder: 'upload/weixin',
+            onSuccess: function (data) {
+                var img1 = data.relativeName;// alert(img1);
+                $("#imgWeiXin").attr('src', img1);
+                $("#WeiXin").val(img1);
+            }
+        });
+
+        //会员商品，爆款商品，活动专区
+        $('#uploadBtn4').uploader({
+            url: 'ws://@(Request.Url.Host):@(Request.Url.Port)/ajax/upload',
+            text: '鑫鑫精品区',
+            fileExts: 'png;jpg;gif',
+            handleType: '0',
+            debug: false,
+            max: 1024 * 1204 * 10,
+            subfolder: 'upload/weixin',
+            onSuccess: function (data) {
+                var img1 = data.relativeName;// alert(img1);
+                $("#imgImg_HY").attr('src', img1);
+                $("#Img_HY").val(img1);
+            }
+        });
+        $('#uploadBtn5').uploader({
+            url: 'ws://@(Request.Url.Host):@(Request.Url.Port)/ajax/upload',
+            text: '鑫鑫品牌区',
+            fileExts: 'png;jpg;gif',
+            handleType: '0',
+            debug: false,
+            max: 1024 * 1204 * 10,
+            subfolder: 'upload/weixin',
+            onSuccess: function (data) {
+                var img1 = data.relativeName;// alert(img1);
+                $("#imgImg_BK").attr('src', img1);
+                $("#Img_BK").val(img1);
+            }
+        });
+        $('#uploadBtn6').uploader({
+            url: 'ws://@(Request.Url.Host):@(Request.Url.Port)/ajax/upload',
+            text: '活动专区',
+            fileExts: 'png;jpg;gif',
+            handleType: '0',
+            debug: false,
+            max: 1024 * 1204 * 10,
+            subfolder: 'upload/weixin',
+            onSuccess: function (data) {
+                var img1 = data.relativeName;// alert(img1);
+                $("#imgImg_HD").attr('src', img1);
+                $("#Img_HD").val(img1);
+            }
+        });
+    </script>
+}

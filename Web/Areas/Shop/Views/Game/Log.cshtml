@@ -1,0 +1,33 @@
+﻿
+<table style="width:100%;border:0">
+    <tr style="border-bottom:1px solid #DF115E">
+        <th style="width:25px">&nbsp;</th>
+        <th>抽奖号码</th>
+        <th>会员编号</th>
+        <th>抽奖时间</th>
+        <th>抽奖结果</th>
+        <th>IP</th>
+    </tr>
+    @{
+        int? id = ViewBag.ID;
+        var list = DB.ShopBigWheelLog.Where(a => a.BID == id).OrderByDescending(a => a.CreateTime).Take(100);
+        int i = 0;
+        foreach (var item in list)
+        {
+            var ip = item.IP;
+            if (ip.LastIndexOf('.') > 1)
+            {
+                ip = ip.Substring(0, ip.LastIndexOf('.')) + ".*";
+            }
+            i++;
+            <tr>
+                <td style="width:25px">@i .</td>
+                <td>@(item.ID+1000000)</td>
+                <td>@item.MemberCode</td>
+                <td>@item.CreateTime</td>
+                <td>@(string.IsNullOrEmpty(item.Result) ? "谢谢参与" : item.Result)</td>
+                <td>@ip</td>
+            </tr>
+        }
+    }
+</table>

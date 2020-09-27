@@ -1,0 +1,207 @@
+﻿@using DataBase
+@using Business
+@{
+    ViewBag.Title = ("转换记录");
+    var member = ViewBag.m as Member_Info;
+    string type = ViewBag.Type;
+    var leixing = ViewBag.LeiXing;
+    var list = DB.Fin_Convert.Where(q => (q.MemberId == member.MemberId )).OrderByDescending(q => q.CreateTime).ToList();
+    
+}
+
+<style>
+    .rowlist .list-group {
+        margin-top: 10px;
+    }
+
+    .badge-warning {
+        background: #FFFF33;
+        color: #111;
+    }
+
+    .badge-info {
+        background: #36c6d3;
+    }
+
+    .badge-success {
+        background: #09BB07;
+    }
+
+    .badge-danger {
+        background: #ec124a;
+    }
+
+    .score {
+        color: #6a91ee;
+        font-style: normal;
+        font-size: 18px;
+        margin-right: 5px;
+        vertical-align: top;
+        font-family: "Helvetica Neue";
+    }
+</style>
+
+    <div class="people people-group">
+    <div class="container top-container">
+        <div class="row">
+            <header class="header header_1">
+                <div class="fix_nav">
+                    <div class="nav_inner">
+                        <a class="nav-left back-icon" href="@Url_Mobile.GetUserCenter()">@("返回")</a>
+                        <div class="tit">@("转换记录")</div>
+                        <a style="float:right;margin:-43px 10px;" href="/mobile/mobilecenter/convert">
+                            <i style="color:white;font-size:15px;">@("转换")</i>
+                        </a>
+                        @*@if (type == "奖金积分" && leixing=="转入")
+                            {
+                                <div class="tit">@("转账记录")</div>
+                            }
+                            else if (type == "奖金积分" && leixing == "转出")
+                            {
+                                <div class="tit">@("奖金积分转出及转换")</div>
+                            }
+                            else
+                            {
+                            <div class="tit">@("转账记录")</div>
+                            }
+                            @if ((type != "奖金积分" || leixing != "转入") && type!="奖金积分")
+                            {
+                                <a style="float:right;margin:-38px 10px;" href="/Member_Member/Member/Transfer?type=@type">
+                                    <i style="color:white;font-size:15px;">@("转账")</i>
+                                </a>
+                            }*@
+                    </div>
+                </div>
+            </header>
+        </div>
+    </div>
+</div>
+
+    <div style='padding-bottom:0px;'>
+        <div class="top-category ">
+
+
+            @{
+                if (list.Count > 0)
+                {
+                    foreach (var item in list)
+                    {
+                        <ul class="list-group" style="margin-bottom:15px;">
+                            <li class="list-group-item ">
+                                <div class="pull-left text-primary">
+                                    &nbsp; &nbsp;
+                                    <span class="glyphicon glyphicon-user"></span>
+                                    @if (item.MemberId == member.MemberId)
+                                        {
+                                       <span>@item.MemberCode 【@item.NickName】</span>
+                                    }
+                                   
+
+                                </div>
+                           
+                                <div class="pull-right" style="margin-right:10px">
+                                    <small>
+                                        <span class="glyphicon glyphicon-time"></span>
+                                        @if (item.CreateTime != null)
+                                        {
+                                            @item.CreateTime.Value.ToString("yyyy-MM-dd HH:mm")
+                                        }
+                                    </small>
+                                </div>
+                                <div class="clearfix"></div>
+                            </li>
+                            <li class="list-group-item ">
+                               
+                                <div class="pull-left text-primary" >
+                                    &nbsp; &nbsp;
+                                    <small class="label label-primary">
+                                     @item.ConvertType
+                                        </small>
+</div>
+                                &nbsp; &nbsp;
+                                <small class="pull-left text-danger">
+                                    &nbsp; &nbsp;
+                                  
+                                        <span style="font-weight:bold">@item.Amount</span>
+                                   
+
+</small>                            <div class="pull-right  text-danger">
+
+                            </div>
+                            <div class="clearfix"></div>
+                        </li>
+                        </ul>
+
+
+                    }
+                }
+                else
+                {
+                    <p class="noData">@("暂时没有数据了")?</p>
+                }
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+         
+    </div>
+</div>
+
+
+
+<!--@("支付密码弹框")-->
+<script src="~/js/iconfont.js"></script>
+@*<script src="~/js/particles.min.js"></script>*@
+<script src="~/js/app.js"></script>
+<script>
+
+    $(function () {
+        //tab@("按钮点击")
+        var tabList = $('.top-category div');
+        tabList.click(function () {
+            var thisItem = $(this);
+            var id = thisItem.attr('data-id');
+            thisItem.addClass('active').siblings().removeClass('active');
+            //@("重置模板内容")
+            var index = tabList.index(thisItem);
+            var thisPanel = $('.list-panel').eq(index);
+            thisPanel.fadeIn('normal');
+            thisPanel.siblings().hide();
+        });
+
+        //@("子节点展开处理")
+        $('.list-group>.list-group-item').click(function () {
+            var thisItem = $(this);
+            thisItem.find('.fa').toggleClass('fa-caret-right').toggleClass('fa-caret-down');
+            thisItem.find('.list-group').slideToggle();
+        });
+
+
+    });
+
+
+</script>
+
+@Html.Partial("_Footer")

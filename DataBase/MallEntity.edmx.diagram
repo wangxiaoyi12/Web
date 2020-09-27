@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="ed82e10299eb46faabe3b3685ab60e2c" Name="Diagram1" ZoomLevel="82">
+        <EntityTypeShape EntityType="DbMallModel.Allocation_Info" Width="1.5" PointX="5.75" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DbMallModel.Area_City" Width="1.5" PointX="6.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DbMallModel.Area_County" Width="1.5" PointX="7.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DbMallModel.Area_Province" Width="1.5" PointX="8.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DbMallModel.Area_Town" Width="1.5" PointX="9.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DbMallModel.Article_Info" Width="1.5" PointX="10.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DbMallModel.Bill_Info" Width="1.5" PointX="12.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DbMallModel.Fin_Convert" Width="1.5" PointX="12.75" PointY="10.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DbMallModel.Fin_Draw" Width="1.5" PointX="14.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DbMallModel.Fin_Transfer" Width="1.5" PointX="16.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DbMallModel.Logs" Width="1.5" PointX="16.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DbMallModel.Member_Upgrade" Width="1.5" PointX="18.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DbMallModel.News_Info" Width="1.5" PointX="18.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DbMallModel.Product_Info" Width="1.5" PointX="19.75" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DbMallModel.Sys_BasicData" Width="1.5" PointX="13.75" PointY="19.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DbMallModel.Sys_BasicType" Width="1.5" PointX="19.75" PointY="14.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DbMallModel.Sys_Employee" Width="1.5" PointX="19.75" PointY="17.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DbMallModel.Sys_Level" Width="1.5" PointX="20.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DbMallModel.Sys_Msg" Width="1.5" PointX="10.75" PointY="20.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DbMallModel.Sys_Navigation" Width="1.5" PointX="21.75" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DbMallModel.Sys_Role" Width="1.5" PointX="21.75" PointY="10.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DbMallModel.Sys_Role_Nav" Width="1.5" PointX="21.75" PointY="13.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DbMallModel.VEmp" Width="1.5" PointX="21.75" PointY="16.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DbMallModel.ShopArticle" Width="2" PointX="3.375" PointY="1" />
+        <EntityTypeShape EntityType="DbMallModel.ShopArticleCategory" Width="1.875" PointX="0.75" PointY="1.125" />
+        <EntityTypeShape EntityType="DbMallModel.ShopAttention" Width="1.5" PointX="3" PointY="37.5" />
+        <EntityTypeShape EntityType="DbMallModel.ShopBrand" Width="1.5" PointX="3.75" PointY="6.375" />
+        <EntityTypeShape EntityType="DbMallModel.ShopBrowsingHistory" Width="1.5" PointX="8.25" PointY="15.125" />
+        <EntityTypeShape EntityType="DbMallModel.ShopCategoryPayWay" Width="1.5" PointX="11.25" PointY="7" />
+        <EntityTypeShape EntityType="DbMallModel.ShopCollectionProduct" Width="1.5" PointX="8.25" PointY="20.625" />
+        <EntityTypeShape EntityType="DbMallModel.ShopExpress" Width="1.5" PointX="0.75" PointY="11.5" />
+        <EntityTypeShape EntityType="DbMallModel.ShopNavigation" Width="1.5" PointX="22.75" PointY="0.75" />
+        <EntityTypeShape EntityType="DbMallModel.ShopOneBuy" Width="1.5" PointX="11.25" PointY="15.5" />
+        <EntityTypeShape EntityType="DbMallModel.ShopOneBuyDetail" Width="1.5" PointX="13.5" PointY="16.5" />
+        <EntityTypeShape EntityType="DbMallModel.ShopOrder" Width="1.5" PointX="3" PointY="13.875" />
+        <EntityTypeShape EntityType="DbMallModel.ShopOrderComment" Width="1.5" PointX="5.25" PointY="25.5" />
+        <EntityTypeShape EntityType="DbMallModel.ShopOrderProduct" Width="1.5" PointX="6" PointY="10" />
+        <EntityTypeShape EntityType="DbMallModel.ShopOrderState" Width="1.5" PointX="6.875" PointY="22.875" />
+        <EntityTypeShape EntityType="DbMallModel.ShopPayWay" Width="1.5" PointX="9" PointY="7.75" />
+        <EntityTypeShape EntityType="DbMallModel.ShopProductImage" Width="1.5" PointX="8.25" PointY="23.25" />
+        <EntityTypeShape EntityType="DbMallModel.ShopProductPayway" Width="1.5" PointX="8.25" PointY="11.75" />
+        <AssociationConnector Association="DbMallModel.FK_SHOPARTI_REFERENCE_SHOPARTI" />
+        <AssociationConnector Association="DbMallModel.FK_SHOPARTI_REFERENCE_SHOPARTI16" />
+        <AssociationConnector Association="DbMallModel.FK_SHOPCATE_REFERENCE_SHOPPAYW" />
+        <AssociationConnector Association="DbMallModel.FK_SHOPORDE_REFERENCE_SHOPEXPR2" />
+        <AssociationConnector Association="DbMallModel.FK_SHOPONEB_REFERENCE_SHOPONEB" />
+        <AssociationConnector Association="DbMallModel.FK_SHOPONEB_REFERENCE_SHOPORDE" />
+        <AssociationConnector Association="DbMallModel.FK_SHOPONEB_REFERENCE_SHOPPAYW" />
+        <AssociationConnector Association="DbMallModel.FK_SHOPORDE_REFERENCE_SHOPORDE1" />
+        <AssociationConnector Association="DbMallModel.FK_SHOPORDE_REFERENCE_SHOPORDE3" />
+        <AssociationConnector Association="DbMallModel.FK_SHOPORDE_REFERENCE_SHOPORDE4" />
+        <AssociationConnector Association="DbMallModel.FK_SHOPPROD_REFERENCE_SHOPPAYW" />
+        <EntityTypeShape EntityType="DbMallModel.Shop" Width="1.5" PointX="0.75" PointY="15.625" />
+        <AssociationConnector Association="DbMallModel.FK_SHOPATTE_REFERENCE_SHOP" />
+        <AssociationConnector Association="DbMallModel.FK_SHOPORDE_REFERENCE_SHOP" />
+        <EntityTypeShape EntityType="DbMallModel.BNet_Info" Width="1.5" PointX="13.75" PointY="6.75" />
+        <EntityTypeShape EntityType="DbMallModel.Fin_Info" Width="1.5" PointX="16.75" PointY="18.75" />
+        <EntityTypeShape EntityType="DbMallModel.ShopCat" Width="1.5" PointX="8.25" PointY="26.875" />
+        <EntityTypeShape EntityType="DbMallModel.ShopSlide" Width="1.5" PointX="5.375" PointY="14.75" />
+        <EntityTypeShape EntityType="DbMallModel.ShopBigWheel" Width="1.5" PointX="24.375" PointY="6.75" />
+        <EntityTypeShape EntityType="DbMallModel.ShopBigWheelDetail" Width="1.5" PointX="26.625" PointY="8.875" />
+        <EntityTypeShape EntityType="DbMallModel.ShopBigWheelLog" Width="1.5" PointX="26.625" PointY="5.125" />
+        <AssociationConnector Association="DbMallModel.FK_SHOPBIGW_REFERENCE_SHOPBIGW" />
+        <AssociationConnector Association="DbMallModel.FK_SHOPBIGW_REFERENCE_SHOPBIGW2" />
+        <EntityTypeShape EntityType="DbMallModel.SettleRecord" Width="1.5" PointX="16.375" PointY="8.75" />
+        <EntityTypeShape EntityType="DbMallModel.ScoreRecord" Width="1.5" PointX="5.375" PointY="18.75" />
+        <EntityTypeShape EntityType="DbMallModel.PraiseRecord" Width="1.5" PointX="0.75" PointY="23.75" />
+        <EntityTypeShape EntityType="DbMallModel.Fin_ShiChangimp" Width="1.5" PointX="15.375" PointY="24.75" />
+        <EntityTypeShape EntityType="DbMallModel.Fin_LiuShui" Width="1.5" PointX="17.375" PointY="24.75" />
+        <EntityTypeShape EntityType="DbMallModel.ShopMyAddress" Width="1.5" PointX="19.375" PointY="21.75" />
+        <EntityTypeShape EntityType="DbMallModel.GuiGe_Info" Width="1.5" PointX="23.375" PointY="21.75" />
+        <EntityTypeShape EntityType="DbMallModel.GuiGeName_Info" Width="1.5" PointX="24.375" PointY="12.75" />
+        <EntityTypeShape EntityType="DbMallModel.GuiGeProduct_Info" Width="1.5" PointX="21.375" PointY="24.75" />
+        <EntityTypeShape EntityType="DbMallModel.ShopProduct" Width="1.5" PointX="0.75" PointY="15" />
+        <AssociationConnector Association="DbMallModel.FK_SHOPBROW_REFERENCE_SHOPPROD10" />
+        <AssociationConnector Association="DbMallModel.FK_SHOPCAT_REFERENCE_SHOPPROD7" />
+        <AssociationConnector Association="DbMallModel.FK_SHOPCOLL_REFERENCE_SHOPPROD9" />
+        <AssociationConnector Association="DbMallModel.FK_SHOPONEB_REFERENCE_SHOPPROD8" />
+        <AssociationConnector Association="DbMallModel.FK_ShopOrderProduct_ShopProduct" />
+        <AssociationConnector Association="DbMallModel.FK_SHOPPROD_REFERENCE_SHOPPROD110" />
+        <AssociationConnector Association="DbMallModel.FK_SHOPPROD_REFERENCE_SHOPPROD5" />
+        <AssociationConnector Association="DbMallModel.FK_ShopProduct_ShopProduct" />
+        <EntityTypeShape EntityType="DbMallModel.ShopProductCategory" Width="1.5" PointX="0.75" PointY="27" />
+        <AssociationConnector Association="DbMallModel.FK_ShopProduct_ShopProductCategory" />
+        <AssociationConnector Association="DbMallModel.FK_ShopProduct_ShopProductCategory1" />
+        <AssociationConnector Association="DbMallModel.FK_SHOPPROD_REFERENCE_SHOPPROD15" />
+        <EntityTypeShape EntityType="DbMallModel.Member_Info" Width="1.5" PointX="23.375" PointY="24.75" />
+        <EntityTypeShape EntityType="DbMallModel.Fin_Remit" Width="1.5" PointX="0.75" PointY="4.75" />
+        </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

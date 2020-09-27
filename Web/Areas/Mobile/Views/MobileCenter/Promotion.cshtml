@@ -1,0 +1,125 @@
+﻿@using Business
+@using DataBase
+@model ShopOrder
+@{
+    ViewBag.Title = "我的订单";
+    //获取当前登录用户
+    Member_Info curUser = User_Shop.GetMember_Info();
+    Layout = "~/Views/Shared/_LayoutPageMy0915.cshtml";
+    ////获取数量
+    //int daifukuanCount = DB.ShopOrder.GetCount(curUser.MemberId, 1);
+    //int daifahuoCount = DB.ShopOrder.GetCount(curUser.MemberId, 2);
+    //int daishouhuoCount = DB.ShopOrder.GetCount(curUser.MemberId, 3);
+}
+<style>
+    body {
+        background: #F5F5F5 !important;
+    }
+    .picBox img {
+        max-width: 100%;
+        max-height: 100%;
+        height: 100%;
+        width: 100%;
+    }
+</style>
+<div class="container topBg">
+    <!-- 头部导航 -->
+    <div class="header productDetailHeader" style="box-shadow: 0 0 10px rgba(1, 73, 206,.2);">
+        <ul>
+            <li class="header-left" onclick="GetIndex()">
+                <i class="iconfont icon-fanhui"></i>
+            </li>
+            <li>
+                <dl class="prdtDtlTab" style="width:3.1rem">
+                    <dd class="prdtDtlTabAct">普通会员</dd>
+                    <dd>正式会员</dd>
+                </dl>
+            </li>
+            <li class="header-right">
+                <a href=""><img src="images/icon_fx.png" alt=""></a>
+            </li>
+        </ul>
+    </div>
+    <!-- tab内容 -->
+    <ul class="prdtDtlCtn">
+        <li class="prdtDtlCtnAct">
+
+            <!-- 商品属性 -->
+            <div class="productDetailArt" style="display:none;">
+
+
+
+                <div class="carNum">
+                    <span class="minus">-</span>
+                    <input class="inpNum" value="1" type="number" name="" id="" readonly>
+                    <span class="add">+</span>
+                </div>
+            </div>
+            <ul class="myTeamList">
+                @{
+                    var pt = DB.Member_Info.Where(a => a.RecommendId == curUser.MemberId && a.MemberLevelId==0).OrderByDescending(a => a.ActiveTime);
+                    foreach (var item in pt)
+                    {
+                        <li>
+                            <div class="picBox"><img src="@Url_Mobile.GetImg(item.AppellationLeveName)"></div>
+                            <p>用户 @item.Code</p>
+                            <i>@item.MemberLevelName</i>
+                        </li>
+                    }
+                }
+            </ul>
+           
+        </li>
+        <li>
+            <ul class="myTeamList">
+                @{
+                    var pt1 = DB.Member_Info.Where(a => a.RecommendId == curUser.MemberId && a.MemberLevelId >0).OrderByDescending(a => a.ActiveTime);
+                    foreach (var item in pt1)
+                    {
+                        <li>
+                            <div class="picBox"><img src="@Url_Mobile.GetImg(item.AppellationLeveName)"></div>
+                            <p>用户 @item.Code</p>
+                            <i>@item.MemberLevelName</i>
+                        </li>
+                    }
+                }
+            </ul>
+        </li>
+    </ul>
+
+    <!-- 底部 -->
+    <div class="pd_btm"></div>
+
+
+</div>
+
+<script>
+ 
+    // 单选切换
+    $(document).on("click", ".rdoList label", function () {
+        $(this).addClass('rdoAct')
+        $(this).parent().siblings().children().removeClass('rdoAct')
+    })
+    // 数量加减
+    numInput('.minus', '.add', '.inpNum');
+    // tab切换
+    tabs('.prdtDtlTab>dd', 'prdtDtlTabAct', '.prdtDtlCtn>li', 'prdtDtlCtnAct')
+    // banner
+    var mySwiper = new Swiper('.prdtDtl-swp .swiper-container', {
+        direction: 'horizontal', // 垂直切换选项
+        loop: true, // 循环模式选项
+        initialSlide: 1,
+        speed: 400,
+
+        autoplay: {
+            delay: 19000,
+            disableOnInteraction: false,
+        },
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+            type: 'fraction', //分页器样式
+        },
+        uniqueNavElements: false,
+    })
+</script>

@@ -1,0 +1,182 @@
+﻿@using DataBase
+@using Business
+@{
+
+    ViewBag.Title = ("提现记录");
+    var member = ViewBag.m as Member_Info;
+    var list = DB.Fin_Draw.Where(q => q.MemberId == member.MemberId).OrderByDescending(q => q.CreateTime).ToList();
+
+}
+<style>
+    .rowlist .list-group {
+        margin-top: 10px;
+    }
+
+    .badge-warning {
+        background: #FFFF33;
+        color: #111;
+    }
+
+    .badge-info {
+        background: #36c6d3;
+    }
+
+    .badge-success {
+        background: #09BB07;
+    }
+
+    .badge-danger {
+        background: #ec124a;
+    }
+
+    .score {
+        color: #6a91ee;
+        font-style: normal;
+        font-size: 18px;
+        margin-right: 5px;
+        vertical-align: top;
+        font-family: "Helvetica Neue";
+    }
+</style>
+
+<div class="people people-group">
+    <div class="container top-container">
+        <div class="row">
+            <header class="header header_1">
+                <div class="fix_nav">
+                    <div class="nav_inner">
+                        <a class="nav-left back-icon" href="@Url_Mobile.GetUserCenter()">@("返回")</a>
+                        <div class="tit">@("提现记录")</div>
+                        <a style="float:right;margin:-43px 10px;" href="/mobile/mobilecenter/Draw">
+                            <i style="color:white;font-size:15px;">@("提现")</i>
+                        </a>
+                    </div>
+                </div>
+            </header>
+        </div>
+    </div>
+
+
+
+
+
+
+
+    <div style='padding-bottom:0px;'>
+        <div class="top-category ">
+
+
+            @{
+                if (list.Count > 0)
+                {
+                    foreach (var item in list)
+                    {
+                        <ul class="list-group" style="margin-bottom:15px;">
+                            <li class="list-group-item ">
+                                <div class="pull-left text-primary">
+                                    &nbsp; &nbsp;
+                                    <span class="glyphicon glyphicon-user"></span>
+                                    @item.MemberCode 【@item.NickName】
+
+                                </div>
+
+                                <div class="pull-right" style="margin-right:10px">
+                                    <small>
+                                        <span class="glyphicon glyphicon-time"></span>
+                                        @if (item.CreateTime != null)
+                                        {
+                                            @item.CreateTime.Value.ToString("yyyy-MM-dd HH:mm")
+                                        }
+                                    </small>
+                                </div>
+                                <div class="clearfix"></div>
+                            </li>
+                            <li class="list-group-item ">
+
+                             
+                                &nbsp; &nbsp;
+                                <small class="pull-left text-danger">
+                                    &nbsp; &nbsp;
+                                    <span> @("提现金额"):<b>@item.DrawAmount</b>   &nbsp; &nbsp;@("手续费"):<b>@item.Poundage</b>  &nbsp; &nbsp; @("到账金额"):<b>@item.Amount</b></span>
+
+                                </small>                            <div class="pull-right  text-danger">
+                                                                        <small class="label label-primary">
+                                                                            @item.DrawState
+                                                                        </small>
+                                </div>
+                                <div class="clearfix"></div>
+                            </li>
+                
+                        </ul>
+
+
+                    }      <ul class="list-group" style="margin-bottom:40px;"><li class="list-group-item "></li></ul>
+                }
+                else
+                {
+                    <p class="noData">@("暂时没有数据了")?</p>
+                }
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </div>
+    </div>
+
+
+
+
+
+</div>
+
+
+
+<script>
+    function Isok1(image) {
+        alert("@("打款凭证")","<img style=\"width:250px;\" src=\"" + image + "\" class=\"jcrop-preview\" alt=\"\">");
+    }
+    @*$(function () {
+        //tab@("按钮点击")
+        var tabList = $('.top-category div');
+        tabList.click(function () {
+            var thisItem = $(this);
+            var id = thisItem.attr('data-id');
+            thisItem.addClass('active').siblings().removeClass('active');
+            //@("重置模板内容")
+            var index = tabList.index(thisItem);
+            var thisPanel = $('.list-panel').eq(index);
+            thisPanel.fadeIn('normal');
+            thisPanel.siblings().hide();
+        });
+
+    
+
+
+    });*@
+
+
+</script>
+@Html.Partial("_Footer")

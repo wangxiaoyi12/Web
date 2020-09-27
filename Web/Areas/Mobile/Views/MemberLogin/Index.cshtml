@@ -1,0 +1,90 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_LayoutPage0915.cshtml";
+}
+@{
+    if (ViewBag.webstatus == "维护" || ViewBag.webstatus == "关闭")
+    {
+        @:<p>@Html.Raw(DB.XmlConfig.XmlSite.webclosereason) </p>
+    }
+    else
+    {
+
+        using (Ajax.BeginForm("CheckUser", null, new AjaxOptions()
+        {
+
+            HttpMethod = "Post",
+            OnBegin = "dig.Loading",
+            OnSuccess = "dig.Success",
+            OnFailure = "dig.Failure",
+            OnComplete = "dig.Complete"
+        }, new { @class = "login-form", autocomplete = "off" }))
+        {
+            <div class="container loginContainer">
+                <div class="loginBox">
+                    <ul class="loginList">
+                        <li>
+                            <i class="iconfont icon-yonghu"></i>
+                            <input type="text" name="UserName" id="UserName" value="" placeholder="请输入账号" />
+                        </li>
+                        <li>
+                            <i class="iconfont icon-mima"></i>
+                            <input type="password" name="Password" id="Password" value="" placeholder="请输入密码" />
+                        </li>
+                    </ul>
+                    <div class="btnbox">
+                        <button class="btn_org" id="btnLogin">登录</button>
+                    </div>
+                    <div class="loginTitle">
+                        <div></div>
+                        <p>没有账号？</p>
+                        <div></div>
+                    </div>
+                    <div class="btnbox">
+                        <a href="/mobile/memberlogin/register" class="btn_gay">去注册</a>
+                    </div>
+                </div>
+            </div>
+            <div class="loginBg"></div>
+            <div class="bgColor"></div>
+        }
+    }
+}
+
+<script>
+    layui.use(['form', 'layedit', 'laydate'], function () {
+        var form = layui.form,
+            laydate = layui.laydate;
+    });
+</script>
+<script type="text/javascript">
+    
+        var dig = {
+            Loading: function () {
+                $("#btnLogin").attr("disabled", true).find("span").html("@("正在登录中")...");
+            },
+            Success: function (result) {
+                if (result.status == 1) {
+                    showurl(result.msg,  "/mobile/mindex/index");
+                } else {
+                    show(result.msg);
+                    ////alert(result.msg);
+                    //swal({
+                    //    title: "错误提示",
+                    //    text: result.Msg,
+                    //    type: "error"
+                    //})
+                    ////$("#eMsg").show().html(result.Msg);
+                    dig.Complete();
+                }
+            },
+            Failure: function () {
+                $("#eMsg").show().html(result.msg);
+                dig.Complete();
+            },
+            Complete: function () {
+                $("#btnLogin").attr("disabled", false).find("span").html(" @("登") @("录") ");
+            }
+        };
+
+</script>

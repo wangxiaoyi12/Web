@@ -1,0 +1,21 @@
+﻿
+@{
+    ViewBag.Title = "自营商城品牌";
+}
+@section Head{
+}
+@section Footer{
+
+}
+<header class="header">
+    <div class="fix_nav">
+        <div class="nav_inner">
+            <a class="nav-left back-icon" href="javascript:history.go(-1);">返回</a>
+            <div class="tit">所有品牌</div>
+        </div>
+    </div>
+</header>
+<div class="brandList container">
+    @Html.Action("GetBrand")
+</div>
+  

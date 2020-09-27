@@ -1,0 +1,395 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+}
+@model DataBase.GuiGeName_Info
+<style>
+    .dataTables_filter {
+        display: none;
+    }
+</style>
+<!-- BEGIN PAGE BAR -->
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="/SysManage/Home/Index">首页</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#">商城管理</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="/shopadmin/shopproductcategory/cindex"><span>商品规格</span></a>
+        </li>
+    </ul>
+</div>
+<!-- END PAGE BAR -->
+
+<div class="row">
+    <!-- BEGIN SAMPLE TABLE PORTLET-->
+    <div class="col-md-12">
+        <div class="portlet box green">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-database"></i>商品规格列表
+                </div>
+
+            </div>
+            <div class="portlet-body">
+                <div class="table-responsive">
+                    <div class="table-toolbar">
+                        <div class="btn-group">
+
+                            <a id="delete" onclick="_deleteLists()" class="btn red">
+                                <i class="fa fa-trash-o"></i> 删除
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+                <!--增加界面-->
+                <div class="table-responsive">
+                    <div class="form-body">
+                        <div class="form-horizontal form-group" style="margin-top:10px">
+                            <label class="col-md-3 control-label"><span style="color:red">*</span>商品类别：</label>
+                            <div class="col-md-4">
+                                <select id="CName" class="form-control select2" datatype="*">
+                                    <option value="">请选择...</option>
+                                    @{
+                                        foreach (var item in ViewBag.List1)
+                                        {
+
+                                            <option value="@item">@item</option>
+
+                                        }
+                                    }
+                                </select>
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-horizontal form-group" style="margin-top:10px">
+                            <label class="col-md-3 control-label"><span style="color:red">*</span>规格名称：</label>
+                            <div class="col-md-4">
+                                <input type="text" name="GName" id="GName" value="" class="form-control" nullmsg="请输入规格名称" datatype="*1-10000" errormsg="规格名称不正确">
+                            </div>
+                            <span></span>
+                        </div>
+                        
+                        <div class="form-horizontal form-group" style="margin-top:10px">
+                            <label class="col-md-3 control-label"><span style="color:red">*</span>规格项(多个规格项用下划线 _ 输入)：</label>
+                            <div class="col-md-4">
+                                <textarea name="GInfoName" id="GInfoName" value="" class="form-control" nullmsg="请输入规格项" datatype="*1-10000" errormsg="规格名称不正确"></textarea>
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="col-md-offset-3 col-md-9" style="margin-top:10px">
+                            <button type="button" onclick="FuTou1()" class="btn green"><i class="fa fa-floppy-o"></i><span>保 存</span></button>
+                          
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive" style="margin-top:10px">
+                    <table id="datatable" class="table table-striped table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th style="width:3%"><input type="checkbox" id='checkAll'></th>
+                                <th>分类名称</th>
+                                <th style="width:10%">商品规格</th>
+                                <th style="width:50%">规格项</th>
+                                <th style="width:10%">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>
+    <div id="Detail" class="modal fade" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog" style="width:30%;">
+            @using (Ajax.BeginForm("GSave", null, new AjaxOptions()
+            {
+                HttpMethod = "Post",
+                OnBegin = "SubAjax.Loading",
+                OnComplete = "SubAjax.Complate",
+                OnFailure = "SubAjax.Failure",
+                OnSuccess = "Success"
+            }, new { @class = "form-horizontal", @role = "form", @id = "commentForm" }))
+            {
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                        <h4 class="modal-title">规格信息</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-body">
+                            <div class="form-group">
+                                <label class="col-md-3 control-label"><span style="color:red">*</span>分类名称：</label>
+                                <div class="col-md-6">
+                                    <input type="hidden" name="GId" value="@Model.GId" />
+                                    <input type="text" name="CName" value="@Model.CName" class="form-control" placeholder="请输入分类名称" datatype="*" nullmsg="">
+                                </div>
+                                <span></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label"><span style="color:red">*</span>规格名称：</label>
+                                <div class="col-md-6">
+                                    <input type="text" name="GName" value="@Model.GName" class="form-control" placeholder="请输入规格名称" datatype="*" nullmsg="">
+                                </div>
+                                <span></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label"><span style="color:red">*</span>规格项(多个规格项用下划线 _ 输入)：</label>
+                                <div class="col-md-6">
+                                    <textarea name="GInfoName" id="GInfoName" value="@Model.GInfoName" class="form-control" nullmsg="请输入规格项" datatype="*1-10000" errormsg="规格名称不正确"></textarea>
+                                </div>
+                                <span></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="col-md-12">
+                            <div class="form-actions">
+                                <div class="row">
+                                    <div class="col-md-offset-3 col-md-9">
+                                        <button type="submit" id="SubSave" class="btn green"><i class="fa fa-floppy-o"></i><span>保 存</span></button>
+                                        <button type="button" data-dismiss="modal" class="btn default"><i class="fa fa-times"></i>关 闭</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <!-- END SAMPLE TABLE PORTLET-->
+</div>
+@section scripts {
+    <script type="text/javascript">
+        function _deleteFuns(id) {
+          
+            url = "/shopadmin/shopproductCategory/GGDelete";
+            confirm("删除确认!", "删除记录后不可恢复，您确定吗？", function () {
+                $.ajax({
+                    url: url,
+                    data: { idList: id },
+                    type: "post",
+                    success: function (backdata) {
+                        alert("成功提示", backdata.Msg)
+                        $("#checkAll").prop("checked", false);
+                        location.href = '/shopadmin/shopproductCategory/cindex';
+                    }, error: function (error) {
+                        console.log(error);
+                    }
+                });
+            })
+        }
+
+        /**
+        * 批量删除（可复制）
+        * param id list
+        * private
+        */
+        function _deleteLists() {
+            var str = "";
+            $("input[name='chkName']:checked").each(function (i, o) {
+                str += $(this).val();
+                str += ",";
+            });
+            if (str.length > 0) {
+                var IDS = str.substr(0, str.length - 1);
+                _deleteFuns(IDS);
+                oTable.ajax.reload()
+            } else {
+                alert("操作提示", "至少选择一条记录操作");
+            }
+        }
+        function FuTou1() {
+            confirm("确认!", "确定要此操作吗", function () {
+                var CName = $("#CName").val();
+                var GName = $("#GName").val();
+                var GInfoName = $("#GInfoName").val();
+                if (CName == "")
+                {
+                    alert("操作提示", "请选择分类名称");
+                    return;
+                }
+                if (GName == "") {
+                    alert("操作提示", "请填写规格名称");
+                    return;
+                }
+                if (GInfoName == "") {
+                    alert("操作提示", "请填写规格项");
+                    return;
+                }
+                $.ajax({
+                    url: "/shopadmin/shopproductCategory/addguigeinfo",
+                    data: { CName: CName, GName: GName, GInfoName: GInfoName },
+                    type: "post",
+                    @*data: { Id: @Model.MemberId},*@
+                    success: function (backdata) {
+                        if (backdata.IsSuccess == true) {
+                            alert("操作提示", "增加成功", function () {
+                                location.href = '/shopadmin/shopproductCategory/cindex';
+                            })
+                        } else {
+                            alert("操作提示",backdata.Msg, function () {
+                                location.href = '/shopadmin/shopproductCategory/cindex';
+                            })
+                        }
+
+                    }, error: function (error) {
+                        console.log(error);
+                    }
+                });
+            });
+        }
+
+        var oTable;
+        $(document).ready(function () {
+            oTable = initTable();
+        });
+        function Success(result) {
+            SubAjax.Complete();
+            if (result.Status == "y") {
+                alert("操作提示", result.Msg, function () {
+                    //关闭弹出窗口
+                    $('#Detail').modal('hide');
+                });
+                if (typeof oTable != 'undefined') {
+                    oTable.ajax.reload()
+                }
+            } else {
+                alertError("错误提示", result.Msg);
+            }
+        }
+        /**
+        * 表格初始化
+        * returns {*|jQuery}
+        */
+        function initTable() {
+            var table = $("#datatable").DataTable({
+                dom: '<f<t>lip>',
+                ordering: false,
+                language: {
+                    url: '/assets/global/plugins/DataTables-1.10.12/zh-CN.json'//汉化
+                },
+                ajax: '/ShopAdmin/ShopProductCategory/getDataSource',//异步加载数据
+                columnDefs: [
+                   { "searchable": false, "targets": 0 },//第一列禁用搜索
+                   { "orderable": false, "targets": 0 }, //第一列禁用排序
+                   { "searchable": false, "targets": 3 },//第四列禁用搜索
+                   { "orderable": false, "targets": 3 }, //第四列禁用排序
+
+                ],
+                columns: [//绑定数据
+                   {
+                       data: "GId",
+                       createdCell: function (nTd, sData, oData, iRow, iCol) {
+                           $(nTd).html("<input type='checkbox' name='chkName' value='" + sData + "'>");
+                       }
+                   },
+                   { data: 'CName' },
+                   { data: 'GName' },
+                   { data: 'GInfoName' },
+                   {
+                       data: 'GId',
+                       createdCell: function (nTd, sData, oData, iRow, iCol) {
+                           $(nTd).html("<a onclick=\"M_Detail('" + oData.GId + "')\" name='Edit' class='btn green btn-xs redd'><i class='fa fa-edit'></i> 编辑</a>&nbsp;")
+                       }
+                   }
+                ],
+                initComplete: function (settings, json) {
+                    $("a[name='Edit']").css("visibility", $("#IsEdit").val());
+                }
+            });
+            return table;
+        }
+        /**
+       * 弹出编辑窗口
+       * param id
+       * private
+       */
+        function M_Detail(id) {
+            if (id != null) {
+                $.ajax({
+                    url: "/ShopAdmin/ShopProductCategory/getGuiGe",
+                    data: { id: id },
+                    type: "post",
+                    success: function (backdata) {
+                        var data = eval("(" + backdata + ")");
+                        $("input[name='CName']").val(data.CName);
+                        $("input[name='GName']").val(data.GName);
+                        $("textarea[name='GInfoName']").val(data.GInfoName);
+                        $("input[name='GId']").val(data.GId);
+                    }, error: function (error) {
+                        console.log(error);
+                    }
+                });
+            } else {
+                $("input[name='CName']").val("");
+                $("input[name='GName']").val("");
+                $("textarea[name='GInfoName']").val("");
+                $("input[name='GId']").val("");
+            }
+            $('#Detail').modal('show');
+        }
+        /**
+        * 删除（可复制）
+        * param id
+        * private
+        */
+        function _deleteFun(id) {
+            var url = window.location.href.split("?")[0].toLowerCase();
+            if (url.lastIndexOf("/index") > 0) {
+                url = url.substring(0, url.indexOf("/index"));
+            }
+            url = url + "/Delete";
+            confirm("删除确认!", "删除记录后不可恢复，您确定吗？", function () {
+                $.ajax({
+                    url: url,
+                    data: { idList: id },
+                    type: "post",
+                    success: function (backdata) {
+                        alert("成功提示", backdata.Msg)
+                        $("#checkAll").prop("checked", false);
+                        oTable.ajax.reload()
+                    }, error: function (error) {
+                        console.log(error);
+                    }
+                });
+            })
+        }
+
+        /**
+        * 批量删除（可复制）
+        * param id list
+        * private
+        */
+        function _deleteList() {
+            var str = "";
+            $("input[name='checkList']:checked").each(function (i, o) {
+                str += $(this).val();
+                str += ",";
+            });
+            if (str.length > 0) {
+                var IDS = str.substr(0, str.length - 1);
+                _deleteFun(IDS);
+                oTable.ajax.reload()
+            } else {
+                alert("操作提示", "至少选择一条记录操作");
+            }
+        }
+        function ToExcel() {
+            var href = "/Admin_BasicSettings/Department/ToExcel/部门列表";
+            window.open(href);
+        }
+        $("#datatable_filter").hide();
+    </script>
+}

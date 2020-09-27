@@ -1,0 +1,105 @@
+﻿@using DataBase
+@using Business
+@{
+    Member_Info curUser = User_Shop.GetMember_Info();}
+<div class="row">
+    <!--@("产品块")-->
+    @{
+        //isSelf = null;
+        //1.@("获取所有的大分类和大分类下的")3@("个产品")
+        List<ShopProductCategory> cateList = DB.ShopProductCategory.GetListByParentID(null);
+        foreach (var parentItem in cateList)
+        {
+            //2.@("获取大类下的商品")
+            List<int> ids = DB.ShopProductCategory.GetChildIDList(parentItem);
+            ids.Add(parentItem.ID);
+            List<ShopProduct> productList = DB.ShopProduct.Where(q => ids.Contains(q.CategoryID ?? 0) && q.IsNew == false && q.IsEnable == true)
+                .OrderBy(q => q.Sort)
+                .Take(4)
+                .ToList();
+            if (productList.Count == 0) { continue; }
+            <div class="tb_box">
+                <h2 class="tab_tit">
+                    <a class="more" href="@Url_Mobile.GetProduct(parentItem)">@("更多")</a>
+                    @parentItem.Name
+                </h2>
+                <div class="tb_type tb_type_even clearfix">
+                    @{
+                        for (int i = 0; i < productList.Count; i++)
+                        {
+                            ShopProduct item = productList[i];
+                            string url = Url_Mobile.GetProduct(item);
+                            <div class="col-xs-6 item item@(i%2)">
+                                <div class="inner">
+                                    <a class="" href="@url">
+                                        <img class="tb_pic" _src="@Url_Shop.GetProductImg(item)">
+                                    </a>
+                                    <div class="title">
+                                        @item.Title
+                                    </div>
+                                    <div class="bottom">
+                                        <span class="text-danger  pull-left">
+                                            @if (item.CategoryID1!=DB.XmlConfig.XmlSite.Scores)
+                                            {
+                                                if (curUser == null)
+                                                {
+                                                    <span>
+                                                        零售价: ￥@DB.ShopProduct.GetLingShouPrice(item)
+
+                                                    </span><br />
+                                                    <span>
+                                                        优惠价: ￥@DB.ShopProduct.GetYouHuiPrice(item)
+
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    if (curUser.IsServiceCenter == "是")
+                                                    {
+                                                        <span>
+                                                            零售价: ￥@DB.ShopProduct.GetLingShouPrice(item)
+
+                                                        </span><br />
+                                                        <span>
+                                                            配货价: ￥@DB.ShopProduct.GetPeiHuoPrice(item)
+
+                                                        </span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span>
+                                                            零售价: ￥@DB.ShopProduct.GetLingShouPrice(item)
+
+                                                        </span><br />
+                                                        <span>
+                                                            优惠价: ￥@DB.ShopProduct.GetYouHuiPrice(item)
+
+                                                        </span>
+                                                    }
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <span>
+                                                    积分: ￥@DB.ShopProduct.GetLingShouPrice(item)
+
+                                                </span><br />
+                                            }
+                                        </span>
+                                        @*<span class="pull-right">
+                                                <span class="text-danger">@(item.Sales)</span>@("人已购买")
+                                            </span>*@
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    @*<div class="encourage @(item.IsScores?"encourage2":"")">
+                                            <div class="text">@item.BuyTypeName</div>
+                                        </div>*@
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+                        }
+    }
+</div>

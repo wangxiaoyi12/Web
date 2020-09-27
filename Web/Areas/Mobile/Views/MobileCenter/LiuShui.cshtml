@@ -1,0 +1,83 @@
+﻿@using Business
+@using DataBase
+@model ShopOrder
+@{
+    ViewBag.Title = "我的订单";
+    //获取当前登录用户
+    Member_Info curUser = User_Shop.GetMember_Info();
+    Layout = "~/Views/Shared/_LayoutPageMy0915.cshtml";
+    string type = "";
+    var id= ViewBag.id;
+    decimal amount = 0m;
+    if(id==1)
+    {
+        type = "余额";
+        amount = curUser.Commission.Value;
+    }else if (id == 2)
+    {
+        type = "团队业绩";
+        amount = curUser.ActiveAmount.Value+curUser.RAmount.Value;
+    }
+    else if (id == 3)
+    {
+        type = "分红业绩";
+        amount = curUser.FHSum.Value;
+    }
+    else if (id == 4)
+    {
+        type = "团队业绩";
+        amount = curUser.LAmount.Value;
+    }
+    else if (id == 5)
+    {
+        type = "我的业绩";
+        amount = curUser.LAmount.Value;
+    }
+    ////获取数量
+    //int daifukuanCount = DB.ShopOrder.GetCount(curUser.MemberId, 1);
+    //int daifahuoCount = DB.ShopOrder.GetCount(curUser.MemberId, 2);
+    //int daishouhuoCount = DB.ShopOrder.GetCount(curUser.MemberId, 3);
+}
+<div class="container topBg">
+    <!-- 头部导航 -->
+    <div class="header" style="box-shadow: 0 0 10px rgba(1, 73, 206,.2);">
+        <ul>
+            <li class="header-left" onclick="history.back(-1)">
+                <i class="iconfont icon-fanhui"></i>
+            </li>
+            <li>@type</li>
+            <li class="header-right">
+
+            </li>
+        </ul>
+    </div>
+    <div class="eWalletTop">
+        <div>
+            <p>@type</p>
+            <p>@amount</p>
+        </div>
+    </div>
+    <ul class="eWalletList">
+        @{
+            var liushui = DB.Fin_LiuShui.Where(a => a.MemberId == curUser.MemberId && a.Type=="货币流水").OrderByDescending(a => a.id).Take(40);
+        }
+        @if (id == 1)
+        {
+            foreach (var item in liushui)
+            {
+                <li>
+                    <div>
+                        <p>@item.Comment</p>
+                        <p class="bsclr_gay">@item.CreateTime</p>
+                    </div>
+                    <p>@item.Amount</p>
+                </li>
+            }
+
+        }
+
+
+        </ul>
+
+    <div class="bgColor"></div>
+</div>

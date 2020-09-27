@@ -1,0 +1,146 @@
+﻿
+@{
+    ViewBag.Title = "Detail";
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+}
+@model DataBase.Bill_Info
+    <!-- BEGIN PAGE BAR -->
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="/SysManage/Home/Index">首页</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <a href="#">商城管理</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li >
+                <a href="/Admin_MallManage/Order/Detail">查看发货信息</a>
+            </li>
+        </ul>
+    </div>
+    <!-- END PAGE BAR -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet light bordered">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="font-green-sharp fa fa-edit"></i>
+                        <span class="caption-subject font-green-sharp bold uppercase"><span>查看发货信息</span></span>
+                    </div>
+                </div>
+                <div class="portlet-body">
+                    @using (Ajax.BeginForm("Save", null, new AjaxOptions()
+                    {
+                        HttpMethod = "Post",
+                        OnBegin = "SubAjax.Loading",
+                        OnComplete = "SubAjax.Complate",
+                        OnFailure = "SubAjax.Failure",
+                        OnSuccess = "SubAjax.Success"
+                    }, new { @class = "form-horizontal", @role = "form", @id = "commentForm" }))
+                    {
+                        <div class="form-body">
+                            <div class="form-group">
+                                <label class="col-md-2 control-label"><span style="color:red"></span>商品名称：</label>
+                                <div class="col-md-4">
+                                    <input type="hidden" id="BillId" name="BillId" value="@Model.BillId" />
+                                    <input type="text" name="ProductName" value="@Model.ProductName" class="form-control" disabled="disabled" placeholder="商品名称" nullmsg="">
+                                </div>
+                                <span></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label"><span style="color:red">*</span>订单金额：</label>
+                                <div class="col-md-4">
+                                   
+                                    <input type="text" name="TotalPrice" value="@Model.TotalPrice" class="form-control" disabled="disabled" placeholder="订单金额" datatype="*" nullmsg="">
+                                </div>
+                                <span></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label"><span style="color:red">*</span>快递公司：</label>
+                                <div class="col-md-4">
+                                   
+                                    <input type="text" name="ExpressName" value="@Model.ExpressName" class="form-control" placeholder="请输入快递公司" datatype="*" nullmsg="">
+                                </div>
+                                <span></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label"><span style="color:red">*</span>快递单号：</label>
+                                <div class="col-md-4">
+                                   
+                                    <input type="text" name="ExpressCode" value="@Model.ExpressCode" class="form-control" placeholder="请输入快递单号" datatype="*" nullmsg="">
+                                </div>
+                                <span></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label"><span style="color:red">*</span>发货日期：</label>
+                                <div class="col-md-4">
+                                    <div class="input-group input-medium date date-picker">
+                                        <input id="SendTime" name="SendTime" value="@Model.SendTime" data-date="@Model.SendTime" class="form-control" type="text"  datatype="*"  data-date-format="yyyy-mm-dd">
+                                        <span class="input-group-btn">
+                                            <button class="btn default" type="button">
+                                                <i class="fa fa-calendar"></i>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                                <span></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label"><span style="color:red">*</span>会员编号：</label>
+                                <div class="col-md-4">
+                                   
+                                    <input type="text" name="MemberCode" value="@Model.MemberCode" class="form-control" disabled="disabled" placeholder="会员编号" datatype="*" nullmsg="">
+                                </div>
+                                <span></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label"><span style="color:red">*</span>收件人：</label>
+                                <div class="col-md-4">
+                                   
+                                    <input type="text" name="NickName" value="@Model.NickName" class="form-control" placeholder="收件人" datatype="*" nullmsg="">
+                                </div>
+                                <span></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label"><span style="color:red">*</span>联系电话：</label>
+                                <div class="col-md-4">
+                                   
+                                    <input type="text" name="Mobile" value="@Model.Mobile" class="form-control"  placeholder="联系电话" datatype="*" nullmsg="">
+                                </div>
+                                <span></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label"><span style="color:red">*</span>收件地址：</label>
+                                <div class="col-md-4">
+                                    <input type="text" name="PostAddress" value="@Model.PostAddress" class="form-control"  placeholder="收件地址" datatype="*" nullmsg="">
+                                </div>
+                                <span></span>
+                            </div>
+                            <div class="form-actions">
+                                <div class="row">
+                                    <div class="col-md-offset-3 col-md-9">
+                                        <button type="submit" id="SubSave" class="btn green"><i class="fa fa-floppy-o"></i><span>保 存</span></button>
+                                        <button type="button" class="btn default" onclick="window.history.back()"><i class="fa fa-mail-reply"></i>返回</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+@section scripts{
+    <script type="text/javascript">
+        $(function () {
+            $('#SendTime').datetimepicker({
+                language: 'zh-CN',
+                format: 'yyyy-mm-dd',
+                autoclose: 1,
+                minView: 2
+            });
+        });
+    </script>
+}

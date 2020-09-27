@@ -1,0 +1,21 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - @(DB.XmlConfig.XmlShop.ShopName)</title>
+    @Html.Partial("_Css")
+    @RenderSection("Head", required: false)
+</head>
+<body>
+    <!--顶部图层-->
+    @Html.Partial("_Top")
+    @RenderBody()
+    <!--底部图层-->
+    @Html.Partial("_Bottom")
+    <!--右侧菜单栏购物车样式-->
+    @Html.Partial("_RightBar")
+    @Html.Partial("_Js")
+    @RenderSection("Footer", required: false)
+</body>
+</html>

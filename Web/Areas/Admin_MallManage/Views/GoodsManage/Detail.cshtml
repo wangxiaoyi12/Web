@@ -1,0 +1,261 @@
+﻿
+@{
+    ViewBag.Title = "Detail";
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+}
+@model DataBase.Product_Info
+@section css{
+    <link href="~/assets/global/plugins/diyUpload/css/webuploader.css" rel="stylesheet" />
+}
+<!-- BEGIN PAGE BAR -->
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="/SysManage/Home/Index">首页</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#">商城管理</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="/Admin_MallManage/GoodsManage/Detail">添加商品</a>
+        </li>
+    </ul>
+</div>
+<!-- END PAGE BAR -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet light bordered">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="font-green-sharp fa fa-edit"></i>
+                    <span class="caption-subject font-green-sharp bold uppercase"><span>编辑商品</span></span>
+                </div>
+            </div>
+            <div class="portlet-body">
+                @using (Ajax.BeginForm("Save", null, new AjaxOptions()
+                {
+                    HttpMethod = "Post",
+                    OnBegin = "SubAjax.Loading",
+                    OnComplete = "SubAjax.Complate",
+                    OnFailure = "SubAjax.Failure",
+                    OnSuccess = "SubAjax.Success"
+                }, new { @class = "form-horizontal", @role = "form", @id = "commentForm" }))
+                {
+                    <div class="form-body">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red">*</span>商品名称：</label>
+                            <div class="col-md-4">
+                                <input type="hidden" id="ProductId" name="ProductId" value="@Model.ProductId" />
+                                <input type="text" name="ProductName" value="@Model.ProductName" class="form-control" placeholder="请输入商品名称" datatype="*" nullmsg="">
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red">*</span>商品类别：</label>
+                            <div class="col-md-4">
+                                <select name="CategoryId" class="form-control select2" datatype="*" nullmsg="">
+                                    <option value="">请选择所属商品类别...</option>
+                                    @{
+                                        foreach (var item in ViewData["GoodsType"] as dynamic)
+                                        {
+                                            if (Model.CategoryId == item.Id)
+                                            {
+                                                <option value="@item.Id" selected="selected">@item.BasicDataName</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.Id">@item.BasicDataName</option>
+                                            }
+                                        }
+                                    }
+                                </select>
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">型号规格：</label>
+                            <div class="col-md-4">
+                                <input type="text" name="ModelName" value="@Model.ModelName" class="form-control" placeholder="请输入型号规格">
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">图片：</label>
+                            <div class="col-md-4">
+                                <input type="hidden" id="ImgUrl" name="ImgUrl" value="@Model.ImgUrl" />
+                                <div id="GoodsImage"></div>
+                                @{
+                                    if (Model.ImgUrl != null)
+                                    {
+                                        foreach (var item in Model.ImgUrl.TrimEnd('&').Split('&'))
+                                        {
+                                            <text>
+                                                <div class="col-md-4 responsive-1024">
+                                                    <div id="preview-pane">
+                                                        <div class="preview-container">
+                                                            <img width="110" height="110" src="@item.ToString()" class="jcrop-preview" alt="Preview">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </text>
+                                        }
+                                    }
+                                }
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">市场价：</label>
+                            <div class="col-md-4">
+                                <input type="text" name="OriginalPrice" value="@Model.OriginalPrice" class="form-control" placeholder="请输入市场价">
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">零售价：</label>
+                            <div class="col-md-4">
+                                <input type="text" name="SalePrice" value="@Model.SalePrice" class="form-control" placeholder="请输入零售价">
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">折扣：</label>
+                            <div class="col-md-4">
+                                <input type="text" name="Discount" value="@Model.Discount" class="form-control" placeholder="请输入折扣">
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">库存数量：</label>
+                            <div class="col-md-4">
+                                <input type="text" name="StockQty" value="@Model.StockQty" class="form-control" placeholder="请输入库存数量">
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">已售数量：</label>
+                            <div class="col-md-4">
+                                <input type="text" name="SaledQty" value="@Model.SaledQty" class="form-control" placeholder="请输入已售数量">
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">显示顺序：</label>
+                            <div class="col-md-4">
+                                <input type="text" name="SortValue" value="@Model.SortValue" class="form-control" placeholder="请输入显示顺序">
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">状态：</label>
+                            <div class="col-md-4">
+                                <div class="mt-radio-inline">
+                                    <label class="mt-radio">
+                                        <input type="radio" name="State" checked="checked" value="在售" @(Model.State == "在售" ? "checked" : "")> 在售
+                                        <span></span>
+                                    </label>
+                                    <label class="mt-radio">
+                                        <input type="radio" name="State" value="停售" @(Model.State == "停售" ? "checked" : "")> 停售
+                                        <span></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">发布时间：</label>
+                            <div class="col-md-4">
+                                <div class="input-group input-medium date date-picker">
+                                    <input id="PubTime" name="PubTime" value="@Model.PubTime" data-date="@Model.PubTime" class="form-control" type="text" data-date-format="yyyy-mm-dd">
+                                    <span class="input-group-btn">
+                                        <button class="btn default" type="button">
+                                            <i class="fa fa-calendar"></i>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">商品详情：</label>
+                            <div class="col-md-8">
+                                <textarea style="height:500px" id="ProductComment" name="ProductComment" placeholder="请输入详情">@Model.ProductComment</textarea>
+                            </div>
+                            <span></span>
+                        </div>
+
+                        <div class="form-actions">
+                            <div class="row">
+                                <div class="col-md-offset-3 col-md-9">
+                                    <button type="submit" id="SubSave" class="btn green"><i class="fa fa-floppy-o"></i><span>保 存</span></button>
+                                    <button type="button" class="btn default" onclick="window.history.back()"><i class="fa fa-mail-reply"></i>返回</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                                    }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section scripts{
+    <script src="~/assets/global/plugins/UEditor/ueditor.config.js"></script>
+    <script src="~/assets/global/plugins/UEditor/ueditor.all.min.js"></script>
+    <script src="~/assets/global/plugins/diyUpload/js/webuploader.html5only.min.js"></script>
+    <script src="~/assets/global/plugins/diyUpload/js/diyUpload.js"></script>
+    <!-- 实例化编辑器 -->
+    <script type="text/javascript">
+        var ue = UE.getEditor('ProductComment');
+        $(function () {
+            $('#PubTime').datetimepicker({
+                language: 'zh-CN',
+                format: 'yyyy-mm-dd',
+                autoclose: 1,
+                startDate: '2010-01-01',
+                minView: 2
+            });
+            //头像上传
+            $("#GoodsImage").diyUpload({
+                url: "/Admin_MallManage/GoodsManage/SaveImage",
+                auto: true,//是否默认上传
+                title: "Images",
+                extensions: "gif,jpg,jpeg,bmp,png",
+                mimeTypes: "image/*",
+                fileNumLimit: 1,
+                thumb: {
+                    width: 110,
+                    height: 110,
+
+                    // 图片质量，只有type为`image/jpeg`的时候才有效。
+                    quality: 70,
+
+                    // 是否允许放大，如果想要生成小图的时候不失真，此选项应该设置为false.
+                    allowMagnify: false,
+
+                    // 是否允许裁剪。
+                    crop: true,                 
+                    // 为空的话则保留原有图片格式。
+                    // 否则强制转换成指定的类型。
+                    type: "image/jpeg"
+                },
+                success: function (data) {
+                    var url = $("#ImgUrl").val();
+                    //$("#ImgUrl").val(url + data._raw + "&");
+                    $("#ImgUrl").val(data._raw); 
+                    console.info(data);
+                },
+                error: function (err) {
+                    console.info(err);
+                }
+            });
+        });
+
+    </script>
+}
+
+

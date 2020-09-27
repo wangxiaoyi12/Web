@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<fields>
+  <field>
+    <code>Title</code>
+    <name>标题</name>
+  </field>
+  <field>
+    <code>LastEditTime</code>
+    <name>最后编辑时间</name>
+  </field>
+  <field>
+    <code>ReadNum</code>
+    <name>浏览次数</name>
+  </field>
+</fields>

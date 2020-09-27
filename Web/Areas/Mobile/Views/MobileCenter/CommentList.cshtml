@@ -1,0 +1,91 @@
+﻿@using DataBase
+@model List<ShopOrderComment>
+@{
+    Member_Info curUser = User_Shop.GetMember_Info();
+}
+
+@{
+    //Member_Info curUser = User_Shop.GetMember_Info();
+    foreach (var item in Model)
+    {
+        ShopProduct product = DB.ShopProduct.FindEntity(item.ProductID);
+        string url = Url_Mobile.GetProduct(product);
+        <ul class="list-group productItem">
+            <li class="list-group-item">
+                <div class="pull-left  text-primary">
+                    <span class="glyphicon glyphicon-user "></span>
+                    @curUser.Code
+                </div>
+                <div class="pull-right">
+                    <small>
+                        <span class="glyphicon glyphicon-time"></span>
+                        @item.CreateTime.ToString("yyyy-MM-dd HH:mm")
+                    </small>
+                </div>
+                <div class="clearfix"></div>
+            </li>
+            <li class="list-group-item hproduct clearfix">
+                <p>
+                    @for (int i = 0; i < 5; i++)
+                    {
+                        if (i < item.Score)
+                        {
+                            <span class="glyphicon glyphicon-star text-warning"></span>
+                        }
+                        else
+                        {
+                            <span class="glyphicon glyphicon-star-empty"></span>
+                        }
+                    }
+                </p>
+                <p>
+                    @item.Description
+                </p>
+                <div class="container" style="background:#eee;padding:0px;">
+                    <div class="p-pic">
+                        <a href="@url"><img class="img-responsive" src="@Url_Shop.GetProductImg(product)"></a>
+                    </div>
+                    <div class="p-info">
+                        <a href="@url"><p class="p-title">@product.Title</p></a>
+                        <p class="p-origin">
+                            @if (curUser.IsServiceCenter == "是")
+                            {
+                                <span>
+                                    零售价: ￥@DB.ShopProduct.GetLingShouPrice(product)
+
+                                </span><br />
+                                <span>
+                                    配货价: ￥@DB.ShopProduct.GetPeiHuoPrice(product)
+
+                                </span>
+                            }
+                            else
+                            {
+                                <span>
+                                    零售价: ￥@DB.ShopProduct.GetLingShouPrice(product)
+
+                                </span><br />
+                                <span>
+                                    优惠价: ￥@DB.ShopProduct.GetYouHuiPrice(product)
+
+                                </span>
+                            }
+                        </p>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    }
+    if (ViewBag.skipCount < ViewBag.recordCount)
+    {
+        <div class="btn btn-primary btn-block viewMore" data-skip="@ViewBag.skipCount">加载更多>></div>
+    }
+    else
+    {
+        <p class="noData">暂时没有数据了?</p>
+    }
+}
+
+
+
+

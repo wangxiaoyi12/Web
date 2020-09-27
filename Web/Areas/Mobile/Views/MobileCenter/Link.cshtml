@@ -1,0 +1,59 @@
+﻿@using Business
+@using DataBase
+
+@{
+    ViewBag.Title = "推广中心";
+    //获取当前登录用户
+    Member_Info curUser = User_Shop.GetMember_Info();
+    Layout = "~/Views/Shared/_LayoutPageMy0915.cshtml";
+    var url = Request.Url.AbsoluteUri.ToString().Replace("mobile/mobilecenter/link", "") + "mobile/memberlogin/register/" + curUser.Pwd3;
+}
+<div class="container topBg">
+    <!-- 头部导航 -->
+    <div class="header" style="box-shadow: 0 0 10px rgba(1, 73, 206,.2);">
+        <ul>
+            <li class="header-left" onclick="history.back(-1)">
+                <i class="iconfont icon-fanhui"></i>
+            </li>
+            <li>推广中心</li>
+            <li class="header-right">
+
+            </li>
+        </ul>
+    </div>
+    <div class="invitationBg">
+        <div class="invitationBox">
+            <p class="top">你的专属邀请码</p>
+            <div id="invitationQrcode"></div>
+            <p class="hr"></p>
+            <p class="copyTop">推广链接</p>
+            <p class="copy_content">@url</p>
+            <div class="btnbox">
+                <a class="copyM btn_org" data-clipboard-action="copy" data-clipboard-target=".copy_content">复制</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="bgColor"></div>
+</div>
+
+
+<script src="~/assets/jnwz200915/js/qrcode.min.js"></script>
+<script src="~/assets/jnwz200915/js/clipboard.min.js"></script>
+<script src="~/assets/jnwz200915/js/utf.js"></script>
+<script>
+    $("#invitationQrcode").qrcode({
+        render: "canvas", //设置渲染方式，有table和canvas
+        text: '@url', //扫描二维码后自动跳向该链接
+        width: "120", //二维码的宽度
+        height: "120", //二维码的高度
+        background: "#ffffff", //二维码的后景色
+        foreground: "#000000", //二维码的前景色
+        //src: 'images/logo.png', //二维码中间的图片
+    });
+
+    $('.copyM').click(function () {
+        var clipboard = new ClipboardJS('.copyM');
+        layer.msg('复制成功');
+    })
+</script>

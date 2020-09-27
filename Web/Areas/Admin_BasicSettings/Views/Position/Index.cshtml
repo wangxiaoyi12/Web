@@ -1,0 +1,259 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+}
+@model DataBase.Sys_BasicData
+<!-- BEGIN PAGE BAR -->
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="/SysManage/Home/Index">首页</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#">基础设置</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="/Admin_BasicSettings/Position/Index"><span>岗位管理</span></a>
+        </li>
+    </ul>
+</div>
+<!-- END PAGE BAR -->
+
+<div class="row">
+    <!-- BEGIN SAMPLE TABLE PORTLET-->
+    <div class="col-md-12">
+        <div class="portlet box green">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-database"></i>岗位数据列表
+                </div>
+                <div class="tools">
+                    <a style="color:white" onclick="ToExcel()" title="导出Excel"> <i class="fa fa-sign-out"></i>导出Excel </a>    
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="table-responsive">
+                    <div class="table-toolbar">
+                        <div class="btn-group">
+                            <a id="add" onclick="M_Detail()" class="btn green">
+                                <i class="fa fa-plus"></i> 新建
+                            </a>
+                            <a id="delete" onclick="_deleteList()" class="btn red">
+                                <i class="fa fa-trash-o"></i> 删除
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table id="datatable" class="table table-striped table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th style="width:3%"><input type="checkbox" id='checkAll'></th>
+                                <th>岗位名称</th>
+                                <th style="width:10%">排序顺序</th>
+                                <th style="width:10%">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="Detail" class="modal fade" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog" style="width:30%;">
+            @using (Ajax.BeginForm("Save", null, new AjaxOptions()
+            {
+                HttpMethod = "Post",
+                OnBegin = "SubAjax.Loading",
+                OnComplete = "SubAjax.Complate",
+                OnFailure = "SubAjax.Failure",
+                OnSuccess = "Success"
+            }, new { @class = "form-horizontal", @role = "form", @id = "commentForm" }))
+            {
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                        <h4 class="modal-title">岗位信息</h4>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="form-body">
+                            <div class="form-group">
+                                <label class="col-md-3 control-label"><span style="color:red">*</span>岗位名称：</label>
+                                <div class="col-md-6">
+                                    <input type="hidden" name="Id" value="@Model.Id" />
+                                    <input type="text" name="BasicDataName" value="@Model.BasicDataName" class="form-control" placeholder="请输入部门名称" datatype="*" nullmsg="">
+                                </div>
+                                <span></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label"><span style="color:red">*</span>排序号：</label>
+                                <div class="col-md-6">
+                                    <input type="text" name="SortValue" value="@Model.SortValue" class="form-control" placeholder="请输入排序号" datatype="*" nullmsg="">
+                                </div>
+                                <span></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="col-md-12">
+                            <div class="form-actions">
+                                <div class="row">
+                                    <div class="col-md-offset-3 col-md-9">
+                                        <button type="submit" id="SubSave" class="btn green"><i class="fa fa-floppy-o"></i><span>保 存</span></button>
+                                        <button type="button" data-dismiss="modal" class="btn default"><i class="fa fa-times"></i>关 闭</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <!-- END SAMPLE TABLE PORTLET-->
+</div>
+@section scripts {
+    <script type="text/javascript">
+        var oTable;
+        $(document).ready(function () {
+            oTable = initTable();
+        });
+        function Success(result) {
+            SubAjax.Complete();
+            if (result.Status == "y") {
+                alert("操作提示", result.Msg, function () {
+                    //关闭弹出窗口
+                    $('#Detail').modal('hide');
+                });
+                if (typeof oTable != 'undefined') {
+                    oTable.ajax.reload()
+                }
+            } else {
+                alertError("错误提示", result.Msg);
+            }
+        }
+        /**
+        * 表格初始化
+        * returns {*|jQuery}
+        */
+        function initTable() {
+            var table = $("#datatable").DataTable({
+                dom: '<f<t>lip>',
+                ordering: false,
+                language: {
+                    url: '/assets/global/plugins/DataTables-1.10.12/zh-CN.json'//汉化
+                },
+                ajax: '/Admin_BasicSettings/Position/getDataSource',//异步加载数据
+                columnDefs: [
+                   { "searchable": false, "targets": 0 },//第一列禁用搜索
+                   { "orderable": false, "targets": 0 }, //第一列禁用排序
+                   { "searchable": false, "targets": 3 },//第四列禁用搜索
+                   { "orderable": false, "targets": 3 }, //第四列禁用排序
+
+                ],
+                columns: [//绑定数据
+                   {
+                       data: "Id",
+                       createdCell: function (nTd, sData, oData, iRow, iCol) {
+                           $(nTd).html("<input type='checkbox' name='checkList' value='" + sData + "'>");
+                       }
+                   },
+                   { data: 'BasicDataName' },
+                   { data: 'SortValue' },
+                   {
+                       data: 'Id',
+                       createdCell: function (nTd, sData, oData, iRow, iCol) {
+                           $(nTd).html("<a onclick=\"M_Detail('" + oData.Id + "')\" name='Edit' class='btn green btn-xs redd'><i class='fa fa-edit'></i> 编辑</a>&nbsp;")
+                       }
+                   }
+                ],
+                initComplete: function (settings, json) {
+                    $("a[name='Edit']").css("visibility", $("#IsEdit").val());
+                }
+            });
+            return table;
+        }
+        /**
+       * 弹出编辑窗口
+       * param id
+       * private
+       */
+        function M_Detail(id) {
+            if (id != null) {
+                $.ajax({
+                    url: "/Admin_BasicSettings/Position/getBasicDataById",
+                    data: { id: id },
+                    type: "post",
+                    success: function (backdata) {
+                        var data = eval("(" + backdata + ")");
+                        $("input[name='BasicDataName']").val(data.BasicDataName);
+                        $("input[name='SortValue']").val(data.SortValue);
+                        $("input[name='Id']").val(data.Id);
+                    }, error: function (error) {
+                        console.log(error);
+                    }
+                });
+            } else {
+                $("input[name='BasicDataName']").val("");
+                $("input[name='SortValue']").val("");
+                $("input[name='Id']").val("");
+            }
+            $('#Detail').modal('show');
+        }
+        /**
+        * 删除（可复制）
+        * param id
+        * private
+        */
+        function _deleteFun(id) {
+            var url = window.location.href.split("?")[0].toLowerCase();
+            if (url.lastIndexOf("/index") > 0) {
+                url = url.substring(0, url.indexOf("/index"));
+            }
+            url = url + "/Delete";
+            confirm("删除确认!", "删除记录后不可恢复，您确定吗？", function () {
+                $.ajax({
+                    url: url,
+                    data: { idList: id },
+                    type: "post",
+                    success: function (backdata) {
+                        alert("成功提示", backdata.Msg)
+                        $("#checkAll").prop("checked", false);
+                        oTable.ajax.reload()
+                    }, error: function (error) {
+                        console.log(error);
+                    }
+                });
+            })
+        }
+
+        /**
+        * 批量删除（可复制）
+        * param id list
+        * private
+        */
+        function _deleteList() {
+            var str = "";
+            $("input[name='checkList']:checked").each(function (i, o) {
+                str += $(this).val();
+                str += ",";
+            });
+            if (str.length > 0) {
+                var IDS = str.substr(0, str.length - 1);
+                _deleteFun(IDS);
+                oTable.ajax.reload()
+            } else {
+                alert("操作提示", "至少选择一条记录操作");
+            }
+        }
+        function ToExcel() {
+            var href = "/Admin_BasicSettings/Position/ToExcel/岗位列表";
+            window.open(href);
+        }
+    </script>
+}

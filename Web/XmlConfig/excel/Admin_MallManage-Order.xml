@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<fields>
+  <field>
+    <code>ExpressName</code>
+    <name>物流公司</name>
+  </field>
+  <field>
+    <code>ExpressCode</code>
+    <name>物流编号</name>
+  </field>
+  <field>
+    <code>ProductName</code>
+    <name>商品名称</name>
+  </field>
+  <field>
+    <code>TotalPrice</code>
+    <name>订单金额</name>
+  </field>
+  <field>
+    <code>MemberCode</code>
+    <name>会员编号</name>
+  </field>
+  <field>
+    <code>NickName</code>
+    <name>会员姓名</name>
+  </field>
+  <field>
+    <code>Mobile</code>
+    <name>联系电话</name>
+  </field>
+  <field>
+    <code>PostAddress</code>
+    <name>收件地址</name>
+  </field>
+  <field>
+    <code>CreateTime</code>
+    <name>下单时间</name>
+  </field>
+  <field>
+    <code>SendTime</code>
+    <name>发货时间</name>
+  </field>
+  <field>
+    <code>State</code>
+    <name>状态</name>
+  </field>
+</fields>

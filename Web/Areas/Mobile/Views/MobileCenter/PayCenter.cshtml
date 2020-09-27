@@ -1,0 +1,55 @@
+﻿@using Business
+@using DataBase
+@model ShopOrder
+@{
+    ViewBag.Title = "测试页面";
+
+}
+@section Head{
+<style>
+    .infoPage input {
+        border: 0px;
+        text-align: right;
+    }
+
+    .qrCodeImg {
+        margin: auto;
+        margin-top: 2em;
+        width: 60%;
+        max-width: 400px;
+    }
+
+        .qrCodeImg canvas {
+            width: 100%;
+        }
+
+    .infoPage .list-group-item:first-child {
+        /*line-height: 50px;*/
+    }
+</style>
+}
+
+@section Footer{
+
+}
+<div class="page page1">
+    <header class="header">
+        <div class="fix_nav">
+            <div class="nav_inner">
+                <a class="nav-left back-icon" href="javascript:history.go(-1)">返回</a>
+                <div class="tit">测试支付中间页</div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container itemdetail mini-innner ">
+        <p>微信公众号支付：</p>
+        <a href="@ViewBag.wx">@ViewBag.wx</a>
+        <br /><br /><br />
+        <p>pc支付：</p>
+        <a href="@ViewBag.pc">@ViewBag.pc</a>
+    </div>
+
+</div>
+
+

@@ -1,0 +1,186 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+    var Path = "/Admin_MallManage/Order/";
+}
+
+<!-- BEGIN PAGE BAR -->
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="/SysManage/Home/Index">首页</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#">商城管理</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li >
+            <a href="/Admin_MallManage/Order/Index"><span>订单管理</span></a>
+        </li>
+    </ul>
+</div>
+<!-- END PAGE BAR -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet box green">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-newspaper-o"></i> 订单数据列表
+                </div>
+                <div class="tools">
+                    <a style="color:white" onclick="ToExcel()" title="导出Excel"> <i class="fa fa-sign-out"></i>导出Excel </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="table-responsive">
+                    <div class="table-toolbar col-md-3">
+                        <div class="control-group ">
+                            <div class="controls">
+                                <div class="btn-group ">
+                                    <a id="delete" onclick="_deleteList()" class="btn red">
+                                        <i class="fa fa-trash-o"></i> 删除
+                                    </a>
+                                </div>
+
+                            </div>
+                        </div>                      
+                    </div>
+                    <form class="form form-horizontal form-inline">
+                        <fieldset>                           
+                            <div class="text-right">
+                                <div class="input-group col-md-6">
+                                    <input type="text" value="" id="start" placeholder="时间起" class="form-control ">
+                                    <span class="input-group-addon"> to </span>
+                                    <input type="text" value="" id="end" placeholder="时间至" class="form-control ">
+                                </div>
+                                <div class="input-group col-md-3">
+                                    <input type="text" class="form-control" placeholder="搜索关键字" id="keyword" />
+                                    <span class="input-group-btn">
+                                        <a class="btn btn-default" href="javascript:searchList();">
+                                            <span class="glyphicon glyphicon-search"></span>
+                                        </a>
+                                    </span>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                    
+                </div>
+                <div class="table-responsive">
+                    <table id="datatable" style="width:100%" class="table table-striped table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th style="width:3%"><input type="checkbox" id='checkAll'></th>
+                                <th>物流公司</th>
+                                <th>物流编号</th>
+                                <th>商品名称</th>
+                                <th>订单金额</th>
+                                <th>会员编号</th>
+                                <th>会员姓名</th>
+                                <th>联系电话</th>
+                                <th>收件地址</th>
+                                <th>下单时间</th>
+                                <th>发货时间</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+        </div>
+    </div>
+</div>
+</div>
+
+
+@section scripts {
+    <script type="text/javascript">
+        var oTable;
+        var idField = "BillId";
+        var path = "@Path";
+        var dataSource = path + "getDataSource";
+        var searchData = function (e) {
+            return {
+                startTime: $("#start").val(),
+                end: $("#end").val(),
+                key: $("#keyword").val(),
+                start: e.start,
+                length: e.length,
+                draw: e.draw
+            }
+        };
+        var isDetail = false;//不双击可看详情
+        var columns = [//绑定数据
+                   {
+                       data: "BillId",
+                       createdCell: function (nTd, sData, oData, iRow, iCol) {
+                           $(nTd).html("<input type='checkbox' name='checkList' value='" + sData + "'>");
+                       }
+                   },
+                   { data: 'ExpressName' },
+                   { data: 'ExpressCode' },
+                   { data: 'ProductName' },
+                   { data: 'TotalPrice' },
+                   { data: 'MemberCode' },
+                   { data: 'NickName' },
+                   { data: 'Mobile' },
+                   { data: 'PostAddress' },
+                   { data: 'CreateTime' },
+                   { data: 'SendTime' },
+                   {
+                       data: 'State',
+                       createdCell: function (nTd, sData, oData, iRow, iCol) {
+                           if (oData.State == "已发货") {
+                               $(nTd).html("<span class=\"label label-sm label-warning\"> " + oData.State + " </span>")
+                           } else {
+                               $(nTd).html("<span class=\"label label-sm label-danger\"> " + oData.State + " </span>")
+                           }
+
+                       }
+                   },
+                   {
+                       data: 'BillId',
+                       createdCell: function (nTd, sData, oData, iRow, iCol) {
+                           if (oData.State == "未发货") {
+                               $(nTd).html("<a href='/Admin_MallManage/Order/Detail/" + oData.BillId + "' name='Edit' class='btn green btn-xs redd'><i class='fa  fa-send'></i> 发货</a>&nbsp;")
+                           } else {
+                               $(nTd).html(" ");
+                           }
+                       }
+                   }
+        ];
+        function searchList() {
+            oTable.ajax.reload(null, false);
+        }
+        $(function () {
+            $('#start').datetimepicker({
+                language: 'zh-CN',
+                format: 'yyyy-mm-dd',
+                autoclose: 1,
+                minView: 2
+            }).on('changeDate', function (ev) {
+                var start = $('#start').val();
+                $('#end').datetimepicker('setStartDate', start);
+                $('#start').datetimepicker('hide');
+            });
+            $('#end').datetimepicker({
+                language: 'zh-CN',
+                format: 'yyyy-mm-dd',
+                autoclose: 1,
+                minView: 2
+            }).on('changeDate', function (ev) {
+                var end = $('#end').val();
+                $('#start').datetimepicker('setEndDate', end);
+                $('#end').datetimepicker('hide');
+            });
+        });
+        function ToExcel() {
+            var href = "/Admin_MallManage/Order/ToExcel/订单列表?startTime=" + $("#start").val() + "&end=" + $("#end").val() + "&key=" + $("#keyword").val();
+            window.open(href);
+        }
+    </script>
+    <script src="~/assets/scripts/myListPage.js"></script>
+}

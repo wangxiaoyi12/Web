@@ -1,0 +1,51 @@
+﻿@using DataBase
+@using Business
+@{ 
+    //获取品牌分类
+    //国际大品牌
+    List<ShopBrand> brand1 = DB.ShopBrand.Where(q => q.IsWorld).OrderByDescending(q => q.Sort).Take(12).ToList();
+    //推荐品牌
+    List<ShopBrand> brand2 = DB.ShopBrand.Where(q => q.IsRecommend).OrderByDescending(q => q.IsRecommend).Take(12).ToList();
+    //国货精品
+    List<ShopBrand> brand3 = DB.ShopBrand.Where(q => q.IsWorld==false).OrderByDescending(q => q.IsWorld==false).Take(12).ToList();
+}
+@*<div class="Brand_Show" id="Brand_Show">
+    <div class="parHd  Toggle">
+        <ul>
+            <li>国际大牌<em></em></li>
+            <li>推荐品牌<em></em></li>
+            <li>国货精品<em></em></li>
+        </ul>
+    </div>
+    <div class="parBd list">
+        <div class="parBdIn" style="min-height:172px;">
+            <ul>
+                <li class="brand_list" >
+                    @foreach (var item in brand1)
+                    {
+                    <a href="@Url_Shop.GetProduct(item)" class="brand_logo"><img src="@Url_Shop.GetImg(item.Logo)" width="160" height="80" alt="@item.Name" /><span>@item.Name</span></a>
+                    }
+                </li>
+            </ul>
+            <ul>
+                <li class="brand_list">
+                    @foreach (var item in brand2)
+                    {
+                    <a href="@Url_Shop.GetProduct(item)" class="brand_logo"><img src="@Url_Shop.GetImg(item.Logo)" width="160" height="80" alt="@item.Name" /><span>@item.Name</span></a>
+                    }
+                </li>
+            </ul>
+            <ul>
+                <li class="brand_list">
+                    @foreach (var item in brand3)
+                    {
+                    <a href="@Url_Shop.GetProduct(item)" class="brand_logo"><img src="@Url_Shop.GetImg(item.Logo)" width="160" height="80" alt="@item.Name" /><span>@item.Name</span></a>
+                    }
+                </li>
+            </ul>
+        </div>
+    </div>
+    <a class="prev" href="javascript:void(0)"><em class="iconfont icon-left"></em></a>
+    <a class="next" href="javascript:void(0)"><em class="iconfont icon-right"></em></a>
+</div>*@
+<script type="text/javascript">jQuery("#Brand_Show").slide({ titCell: ".parHd li", mainCell: ".parBdIn", trigger: "click" });</script>

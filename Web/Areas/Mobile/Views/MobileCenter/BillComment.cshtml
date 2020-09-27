@@ -1,0 +1,273 @@
+﻿@using Business
+@using DataBase
+@{
+    ViewBag.Title = "订单评论";
+    //获取当前登录用户
+    Member_Info curUser = User_Shop.GetMember_Info();
+    string guid = ReqHelper.GetString("guid");
+    ShopOrder orderModel = DB.ShopOrder.FindEntity(guid);
+    List<int> productIDs = DB.ShopOrderProduct.Where(q=>q.OrderID==guid).Select(q => q.ProductID).ToList();
+    List<ShopProduct> products = new List<ShopProduct>();
+    foreach (var item in productIDs)
+    {
+        //判断是否已经评论
+        if (DB.ShopOrderComment.Any(q => q.OrderID == guid && q.ProductID == item))
+        {
+
+        }
+        else
+        {
+            ShopProduct proTemp = DB.ShopProduct.FindEntity(item);
+            if (proTemp != null)
+            {
+                products.Add(proTemp);
+            }
+        }
+    }
+
+}
+@section Head{
+<style>
+    .infoPage input {
+        border: 0px;
+        text-align: right;
+    }
+
+    .infoPage .list-group-item:first-child {
+        /*line-height: 50px;*/
+    }
+
+    .starList {
+        font-size: 20px;
+    }
+
+    .glyphicon-star {
+        color: #ef5f18 ;
+    }
+
+    .starList .glyphicon {
+        margin-right: 3px;
+    }
+</style>
+
+}
+
+@section Footer{
+
+}
+
+<div class="page page1">
+    <header class="header">
+        <div class="fix_nav">
+            <div class="nav_inner">
+                <a class="nav-left back-icon" href="@Url_Mobile.GetUserCenter()">返回</a>
+                <div class="tit">订单评论</div>
+            </div>
+        </div>
+    </header>
+    <div class="container itemdetail mini-innner ">
+        <div class="row">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title"><span class="glyphicon glyphicon-comment text-warning"></span> 订单评论</h4>
+                </div>
+                <div class="panel-body">
+                    @foreach (var item in products)
+                    {
+                        <ul class="list-group infoPage" style="margin-bottom:30px;" data-guid="@orderModel.GUID" data-pro="@item.ID">
+                            <li class="list-group-item">
+                                <div class="pull-left ">
+                                    交易单号：
+                                </div>
+                                <div class="pull-left">
+                                    @orderModel.OrderCode
+                                </div>
+                                <div class="pull-right"></div>
+                                <div class="clearfix"></div>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="pull-left ">
+                                    创建时间：
+                                </div>
+                                <div class="pull-left">
+                                    @orderModel.SubmitTime.ToString("yyyy-MM-dd HH:mm")
+                                </div>
+                                <div class="pull-right"></div>
+                                <div class="clearfix"></div>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="pull-left ">
+                                    商品信息：
+                                    <br />
+                                    <img src="@Url_Shop.GetProductImg(item)" width="60" />
+                                </div>
+                                <div style="margin-left:72px;color:black;padding-top:20px;">
+                                    @item.Title
+                                </div>
+                                <div class="pull-right">
+                                </div>
+                                <div class="clearfix"></div>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="pull-left">
+                                    星级评分：
+                                </div>
+                                <div style="margin-left:72px;" class="starList">
+                                    <span class="glyphicon glyphicon-star-empty "></span>
+                                    <span class="glyphicon glyphicon-star-empty"></span>
+                                    <span class="glyphicon glyphicon-star-empty"></span>
+                                    <span class="glyphicon glyphicon-star-empty"></span>
+                                    <span class="glyphicon glyphicon-star-empty"></span>
+                                </div>
+                                <div class="clearfix"></div>
+                                <br /><br />
+                            </li>
+                            <li class="list-group-item">
+                                <div class="pull-left">
+                                    文字评价：
+                                </div>
+                                <div style="margin-left:72px;">
+                                    <textarea id="Remark" placeholder="不能少于5个字" style="width:100%;" class="form-control" rows="3"></textarea>
+                                </div>
+                                <div class="clearfix"></div>
+                                <br /><br />
+                            </li>
+                            <li>
+                                <button class="btn btn-primary btn-block commentBtn">
+                                    提交评论
+                                </button>
+                            </li>
+                        </ul>
+                    }
+                    @if (products.Count == 0)
+                    {
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <a class="btn btn-success btn-block " href="@Url.Action("Bill")">返回我的订单</a>
+                            </div>
+                            <div class="col-xs-6">
+                                <a class="btn btn-success btn-block" href="@Url_Mobile.GetUserCenter()">返回个人中心</a>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(function () {
+        $('.commentBtn').click(function () {
+            var thisItem = $(this).parents('.infoPage');
+            //评分
+            var score = thisItem.find('.glyphicon-star').length;
+            if (score <= 0) {
+                show('请打分后提交');
+                return;
+            }
+            //内容
+            var summary = thisItem.find('#Remark').val();
+            if (summary.length < 5) {
+                show('评论内容不能少于5个字哦');
+                return;
+            }
+
+            $.post('@Url.Action("DoComment")', {
+                score: score,
+                description: summary,
+                guid: thisItem.attr('data-guid'),
+                productid: thisItem.attr('data-pro')
+            }, function (data) {
+                if (data.status == 1) {
+                    show('提交成功');
+                    location.reload();
+                } else {
+                    alert(data.msg);
+                }
+            });
+
+        });
+
+        $('#loginModal .btn').click(function () {
+            showDialog();
+            return false;
+        });
+
+        //评分
+        var starList = $('.starList .glyphicon');
+        starList.click(function () {
+            var thisItem = $(this);
+            var index = starList.index(thisItem);
+            var itemList = thisItem.parents('.starList').find('.glyphicon');
+            itemList.each(function (i) {
+                if (i <= index) {
+                    $(this).addClass('glyphicon-star').removeClass('glyphicon-star-empty');
+                } else {
+                    $(this).removeClass('glyphicon-star').addClass('glyphicon-star-empty');
+                }
+            });
+        });
+
+    });
+
+    function showDialog() {
+        var dialog = $('#loginModal');
+        dialog.modal('show');
+        var type = dialog.attr('data-type');
+        if (type == 1) {
+            dialog.find('.modal-title').text('修改登录密码');
+        } else {
+            dialog.find('.modal-title').text('修改支付密码');
+        }
+        var OldPwd = $('#OldPwd');
+        var oldpwd = OldPwd.val();
+        if (oldpwd.length <= 0) {
+            OldPwd.focus();
+            return;
+        }
+        var Pwd = $('#Pwd');
+        var pwd = Pwd.val();
+        if (pwd.length <= 0) {
+            Pwd.focus();
+            return;
+        }
+        var PwdC = $('#PwdC');
+        var pwdc = PwdC.val();
+        if (pwdc.length <= 0) {
+            PwdC.focus();
+            return;
+        }
+        else if (pwdc != pwd) {
+            Pwd.val('');
+            PwdC.val('');
+            Pwd.focus();
+            alert('两次输入密码不一致');
+            return;
+        }
+        //提交保存
+        $.post('@Url.Action("UpdatePwd")', {
+            oldpwd: oldpwd,
+            pwd: pwd,
+            type: type
+        }, function (data) {
+            if (data.Status == 'y') {
+                alert(data.Msg);
+                dialog.modal('hide');
+                setTimeout(function () {
+                    //跳转登录页面
+                    if (type == 1) {
+                        Cookies.remove('_token_');
+                        location.href = '/mobile/mobilelogin';
+                    }
+                }, 800);
+            } else {
+                alert(data.Msg);
+            }
+        });
+    }
+</script>
+
+
+

@@ -1,0 +1,41 @@
+﻿@using Business
+@using DataBase
+@{
+    //获取当前登录用户
+    Member_Info curUser = User_Shop.GetMember_Info();
+    News_Info newsModel = DB.News_Info.FindEntity(ViewBag.id);
+    ViewBag.Title = newsModel.Title;
+    Layout = "~/Views/Shared/_LayoutPageMy0915.cshtml";
+}
+
+<style>
+    .systemGgIlsBox-text img {
+        border: none;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+</style>
+
+    <div class="container topBg">
+        <!-- 头部导航 -->
+        <div class="header" style="box-shadow: 0 0 10px rgba(1, 73, 206,.2);">
+            <ul>
+                <li class="header-left" onclick="history.back(-1)">
+                    <i class="iconfont icon-fanhui"></i>
+                </li>
+                <li>公告详情</li>
+                <li class="header-right">
+
+                </li>
+            </ul>
+        </div>
+        <div class="systemGgIlsBox">
+            <p class="systemGgIlsBox-bt">@newsModel.Title</p>
+            <p class="systemGgIlsBox-time">@newsModel.LastEditTime</p>
+            <div class="systemGgIlsBox-text">
+                @Html.Raw(newsModel.Comment)
+            </div>
+        </div>
+
+        <div class="bgColor"></div>
+    </div>

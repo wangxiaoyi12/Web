@@ -1,0 +1,253 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+}
+<style>
+
+</style>
+<!-- BEGIN PAGE BAR -->
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="/SysManage/Home/Index">首页</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#">财务管理</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="/Admin_Finance/Remit/Index"><span>充值管理</span></a>
+        </li>
+    </ul>
+</div>
+<!-- END PAGE BAR -->
+<!-- BEGIN PAGE CONTENT -->
+<div class="row">
+    <!-- BEGIN SAMPLE TABLE PORTLET-->
+    <div class="col-md-12">
+        <div class="portlet box green">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-database"></i>充值管理列表
+                </div>
+                <div class="tools">
+                    <a style="color: white " onclick="ToExcel()" title="导出Excel"> <i class="fa fa-sign-out"></i>导出Excel </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="table-responsive">
+                    <div class="table-toolbar col-md-3">
+                        <div class="btn-group">
+                            <a id="delete" onclick="_deleteList()" class="btn red">
+                                <i class="fa fa-trash-o"></i> 删除
+                            </a>
+                        </div>
+                    </div>
+                    <form class="form form-horizontal form-inline">
+                        <fieldset>
+                            <div class="control-group">
+                                <div class="controls">
+                                    <div class="col-md-3">
+                                    </div>
+                                    <div class="col-md-9 text-right">
+                                        <div class="input-group col-md-6">
+                                            <input type="text" value="" id="start" placeholder="起始时间" class="form-control ">
+                                            <span class="input-group-addon"> to </span>
+                                            <input type="text" value="" id="end" placeholder="结束时间" class="form-control ">
+                                        </div>
+                                        <div class="input-group col-md-3">
+                                            <input type="text" class="form-control" placeholder="搜索关键字" id="keyword" />
+                                            <span class="input-group-btn">
+                                                <a class="btn btn-default" href="javascript:searchList();">
+                                                    <span class="glyphicon glyphicon-search"></span>
+                                                </a>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+
+                </div>
+                <div class="table-responsive">
+                    <table id="datatable" class="table table-striped table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th style="width:2%"><input type="checkbox" id='checkAll'></th>
+                                <th style="padding:10px">编号</th>
+                                <th style="padding:10px">姓名</th>
+                                @*<th style="padding:10px">汇款日期</th>*@
+                                <th style="padding:10px">金额</th>
+                                <th style="padding:10px">打款图片</th>
+                                @*@*<th>银行</th>
+        <th>帐号</th>
+        <th style="padding:10px">汇款人</th>*@
+                                @*<th style="padding:10px">说明</th>*@
+                                <th style="padding:10px">状态</th>
+                                <th style="padding:10px">提交日期</th>
+                                <th style="padding:10px">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END SAMPLE TABLE PORTLET-->
+</div>
+
+@section scripts {
+    <script type="text/javascript">
+        var oTable;
+
+        $(document).ready(function () {
+            oTable = initTable();
+            $('#start').datetimepicker({
+                language: 'zh-CN',
+                format: 'yyyy-mm-dd',
+                autoclose: 1,
+                minView: 2
+            }).on('changeDate', function (ev) {
+                var start = $('#start').val();
+                $('#end').datetimepicker('setStartDate', start);
+                $('#start').datetimepicker('hide');
+            });
+            $('#end').datetimepicker({
+                language: 'zh-CN',
+                format: 'yyyy-mm-dd',
+                autoclose: 1,
+                minView: 2
+            }).on('changeDate', function (ev) {
+                var end = $('#end').val();
+                $('#start').datetimepicker('setEndDate', end);
+                $('#end').datetimepicker('hide');
+            });
+
+        });
+        function searchList() {
+            oTable.ajax.reload()
+        }
+        /**
+        * 表格初始化
+        * returns {*|jQuery}
+        */
+        function initTable() {
+            var table = $("#datatable").DataTable({
+                dom: '<f<t>lip>',
+                "searching": false,
+                "order": [[7, "desc"]],
+                ordering: false,
+                serverSide: true,
+                language: {
+                    url: '/assets/global/plugins/DataTables-1.10.12/zh-CN.json'//汉化
+                },
+                ajax: {
+                    url: "/Admin_Finance/Remit/getDataSource",
+                    type: "POST",
+                    data: function (e) {
+                        return {
+                            startTime: $("#start").val(),
+                            end: $("#end").val(),
+                            key: $("#keyword").val(),
+                            start: e.start,
+                            length: e.length,
+                            draw: e.draw
+                        }
+                    }
+                },
+                columnDefs: [
+                    { "searchable": false, "targets": 0 },//第一列禁用搜索
+                    { "orderable": false, "targets": 0 }, //第一列禁用排序
+                    { "searchable": false, "targets": 7 },//第一列禁用搜索
+                    { "orderable": false, "targets": 7 }, //第一列禁用排序
+                ],
+                columns: [//绑定数据
+                    {
+                        data: 'RemitId',
+                        createdCell: function (nTd, sData, oData, iRow, iCol) {
+
+                            $(nTd).html("<input type='checkbox' name='checkList' value='" + sData + "'>");
+                        }
+                    },
+                    { data: 'MemberCode' },
+                    { data: 'NickName' },
+                    //{ data: 'RemitTime' },
+                    { data: 'Amount' },
+                    {
+                        data: 'Image',
+                        createdCell: function (nTd, sData, oData, iRow, iCol) {
+                            if (oData.Image != null && oData.Image != "") {
+                                $(nTd).html("<a onclick=\"Isok1('" + oData.Image + "')\" name='Edit' class='btn green btn-xs'><i class='fa fa-check'></i>查看图片</a>&nbsp;")
+                            }
+                        }
+                    },
+                        //{ data: 'BankName' },
+                        //{ data: 'BankCode' },
+                        //{ data: 'BankAccount' },
+                        //{ data: 'Comment' },
+                    {
+                        data: 'RemitState',
+                        createdCell: function (nTd, sData, oData, iRow, iCol) {
+                            if (oData.RemitState == "申请中") {
+                                $(nTd).html("<span class=\"label label-sm label-info\"> " + oData.RemitState + " </span>")
+                            } else if (oData.RemitState == "已驳回") {
+                                $(nTd).html("<span class=\"label label-sm label-danger\"> " + oData.RemitState + " </span>")
+                            } else if (oData.RemitState == "已通过") {
+                                $(nTd).html("<span class=\"label label-sm label-warning\"> " + oData.RemitState + " </span>")
+                            }
+                        }
+                    },
+                    { data: 'CreateTime' },
+                    {
+                        data: 'RemitId',
+                        createdCell: function (nTd, sData, oData, iRow, iCol) {
+                            if (oData.RemitState == "申请中") {
+                                $(nTd).html("<a onclick=\"Isok(" + oData.RemitId + ",1)\" name='Edit' class='btn green btn-xs'><i class='fa fa-check'></i>通过</a>&nbsp;")
+                                    .append("<a onclick=\"Isok(" + oData.RemitId + ",2)\" name='Edit' class='btn red btn-xs'><i class='fa fa-mail-reply'></i>驳回</a>")
+                            } else {
+                                if (oData.RemitState == "已驳回") {
+                                    $(nTd).html("<span class=\"label label-sm label-danger\"><i class='fa fa-times'></i> " + oData.RemitState + " </span>")
+                                } else {
+                                    $(nTd).html("<span class=\"label label-sm label-warning\"><i class='fa fa-check'></i> " + oData.RemitState + " </span>")
+                                }
+                            }
+                        }
+                    }
+                ]
+            });
+            return table;
+        }
+        function Isok1(image) {
+            //$(".swal2-icon").hide();
+            alert("<img style=\"width:450px;\" src=\"" + image + "\" class=\"jcrop-preview\" alt=\"\">");
+        }
+        /**
+        * 操作处理
+        * returns {*|jQuery}
+        */
+        function Isok(id, type) {
+            confirm("确认执行此操作吗？", "数据更改后不可恢复，您确定吗？", function () {
+                //提交数据
+                $.ajax({
+                    url: "/Admin_Finance/Remit/Isok",
+                    data: { id: id, type: type },
+                    type: "post",
+                    success: function (result) {
+                        alert("成功提示", result.Msg);
+                        oTable.ajax.reload()
+                    }, error: function (error) {
+                        console.log(error);
+                    }
+                });
+            });
+        }
+        function ToExcel() {
+            var href = "/Admin_Finance/Remit/ToExcel/转换记录列表?startTime=" + $("#start").val() + "&end=" + $("#end").val() + "&key=" + $("#keyword").val();
+            window.open(href);
+        }
+    </script>
+}

@@ -1,0 +1,182 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+    var Path = "/Admin_BasicSettings/DataBaseManage/";
+    var title = "数据管理";
+}
+
+<!-- BEGIN PAGE BAR -->
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="/SysManage/Home/Index">首页</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#">基础设置</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="/Admin_BasicSettings/DataBaseManage/Index"><span>@title</span></a>
+        </li>
+    </ul>
+</div>
+<!-- END PAGE BAR -->
+<!-- BEGIN PAGE CONTENT -->
+<div class="row">
+    <!-- BEGIN SAMPLE TABLE PORTLET-->
+    <div class="col-md-12">
+        <div class="portlet box green">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-database"></i>数据库备份
+                </div>
+                <div class="tools">
+                    <a href="javascript:;" class="collapse"> </a>
+                    <a href="javascript:;" class="reload"> </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="table-responsive">
+                    <div class="table-toolbar">
+                        <div class="btn-group">
+                            <a id="backup" onclick="_backup()" class="btn green">
+                                <i class="fa fa-plus"></i> 创建备份
+                            </a>
+                            <a id="delete" onclick="_deleteList()" class="btn red" style="margin-left:10px">
+                                <i class="fa fa-trash-o"></i> 删除
+                            </a>
+                            <a id="clear" onclick="_clear()" class="btn yellow"style="margin-left:10px">
+                                <i class="fa fa-trash-o"></i> 清空数据
+                            </a>
+                            <a id="delete" onclick="_fenhong()" class="btn red"style="margin-left:10px">
+                                发放分红奖
+                            </a>
+                            <a id="clear" onclick="_tuchugongxian()" class="btn yellow"style="margin-left:10px">
+                                发放突出贡献奖
+                            </a>
+                            <a id="delete" onclick="_fafang()" class="btn red"style="margin-left:10px">
+                                奖金发放
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table id="datatable" class="table table-striped table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th style="width:3%"><input type="checkbox" id='checkAll'></th>
+                                <th>备份名称</th>
+                                <th>备份时间</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END SAMPLE TABLE PORTLET-->
+</div>
+
+@section scripts {
+    <script type="text/javascript">
+        var oTable;
+        var idField = "Name";
+        var path = "@Path";
+        var dataSource = path + "getDataSource";
+        var serverSide = false;
+        var searchData = function () {
+            return {};
+        }
+        var columns = [//绑定数据
+            {
+                data: "Name",
+                createdCell: function (nTd, sData, oData, iRow, iCol) {
+                    $(nTd).html("<input type='checkbox' name='checkList' value='" + sData + "'>");
+                }
+            },
+            { data: 'Name' },
+            { data: 'CreationTime' },
+             {
+                 data: 'Name',
+                 createdCell: function (nTd, sData, oData, iRow, iCol) {
+                     $(nTd).html("<a onclick=\"Restore('" + oData.Name + "')\" name='Restore' class='btn green btn-xs'><i class='fa fa-edit'></i> 还原</a>&nbsp;")
+                 }
+             }
+        ];
+
+        function Restore(name) {
+            confirm("数据库还原提示!", "您确定要还原这个数据库备份吗？", function () {
+                $.post(path + "RestoreDataBase", { name: name }, function (msg) {
+                    if (msg.Status == "y") {
+                        alert("成功提示", msg.Msg);
+                    } else {
+                        alertError("错误提示", msg.Msg);
+                    }
+                });
+            })
+        }
+        function _backup() {
+            confirm("数据库备份提示!", "您确定要备份当前数据库吗？", function () {
+                $.post(path + "BackupDataBase", {}, function (msg) {
+                    if (msg.Status == "y") {
+                        alert("成功提示", msg.Msg);
+                        oTable.ajax.reload(null, false);
+                    } else {
+                        alertError("错误提示", msg.Msg);
+                    }
+                });
+            });
+        }
+        function _clear() {
+            confirm("清空数据提示", "你确定要清空数据吗？", function () {
+                $.post(path + "ClearDataBase", {}, function (msg) {
+                    if (msg.Status == "y") {
+                        alert("成功提示", msg.Msg);
+                        oTable.ajax.reload(null, false);
+                    } else {
+                        alertError("错误提示", msg.Msg);
+                    }
+                });
+            });
+        }
+        function _fenhong() {
+            confirm("发放提示", "确定要发放分红奖吗？", function () {
+                $.post(path + "FenHong", {}, function (msg) {
+                    if (msg.Status == "y") {
+                        alert("成功提示", msg.Msg);
+                        oTable.ajax.reload(null, false);
+                    } else {
+                        alertError("错误提示", msg.Msg);
+                    }
+                });
+            });
+        }
+        function _tuchugongxian() {
+            confirm("发放提示", "确定要发放突出贡献奖吗？", function () {
+                $.post(path + "TuChu", {}, function (msg) {
+                    if (msg.Status == "y") {
+                        alert("成功提示", msg.Msg);
+                        oTable.ajax.reload(null, false);
+                    } else {
+                        alertError("错误提示", msg.Msg);
+                    }
+                });
+            });
+        }
+        function _fafang() {
+            confirm("发放提示", "确定要奖金发放吗？", function () {
+                $.post(path + "FaFang", {}, function (msg) {
+                    if (msg.Status == "y") {
+                        alert("成功提示", msg.Msg);
+                        oTable.ajax.reload(null, false);
+                    } else {
+                        alertError("错误提示", msg.Msg);
+                    }
+                });
+            });
+        }
+    </script>
+    <script src="~/assets/scripts/myListPage.js"></script>
+}

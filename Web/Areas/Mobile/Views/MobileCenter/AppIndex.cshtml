@@ -1,0 +1,166 @@
+﻿@using Business
+@using DataBase
+@{
+    ViewBag.Title = "我的订单";
+    //获取当前登录用户
+    Member_Info curUser = User_Shop.GetMember_Info();
+    Layout = "~/Views/Shared/_LayoutPageMy0915.cshtml";
+    ////获取数量
+    //int daifukuanCount = DB.ShopOrder.GetCount(curUser.MemberId, 1);
+    //int daifahuoCount = DB.ShopOrder.GetCount(curUser.MemberId, 2);
+    //int daishouhuoCount = DB.ShopOrder.GetCount(curUser.MemberId, 3);
+    var collect = DB.ShopCollectionProduct.Where(a => a.MemberID == curUser.MemberId);
+}
+<div class="container topBg">
+    <!-- 头部导航 -->
+    <div class="header" style="box-shadow: 0 0 10px rgba(1, 73, 206,.2);">
+        <ul>
+            <li class="header-left" onclick="history.back(-1)">
+                <i class="iconfont icon-fanhui"></i>
+            </li>
+            <li>我的店铺</li>
+            <li class="header-right">
+
+            </li>
+        </ul>
+    </div>
+    <!-- 列表 -->
+    <form id="form1">
+        <ul class="baseIlsList">
+
+            <li class="headLi">
+                <span>店铺图片</span>
+                <div class="layui-upload">
+                    <div class="layui-upload-list">
+                        <input type="hidden" id="ShopImage" name="ShopImage" value="@curUser.ShopImage" />
+                        <input type="hidden" id="MemberId" name="MemberId" value="@curUser.MemberId" />
+                        <img class="layui-upload-img" src="@Url_Mobile.GetImg(curUser.ShopImage)" id="previewBox">
+
+                        <p id="demoText"></p>
+                    </div>
+                </div>
+                <i class="iconfont icon-jiufuqianbaoicon07"></i>
+            </li>
+
+            <li>
+                <span>店铺名称</span>
+                <input type="text" name="ShopName" value="@curUser.ShopName" placeholder="请输入店铺名称" id="ShopName">
+            </li>
+            <li>
+                <span>经度</span>
+                <input type="text" name="JingDu" value="@curUser.JingDu"placeholder="请输入数字经度" id="JingDu">
+            </li>
+            <li>
+                <span>纬度</span>
+                <input type="text" name="WeiDu" value="@curUser.WeiDu" placeholder="请输入数字纬度" id="WeiDu">
+            </li>
+            <li>
+                <span>详细地址</span>
+                <input type="text" name="DiZhi" value="@curUser.DiZhi" placeholder="请输入详细地址" id="DiZhi">
+            </li>
+
+        </ul>
+
+        <div class="btnbox">
+            @if (curUser.IsServiceCenter == "是")
+            {
+                <a  onclick="showDialog()" class="btn_org">保存</a>
+            }
+            else if (curUser.IsServiceCenter == "否")
+            {
+                <a onclick="showDialog()" class="btn_org">申请</a>
+            }
+            else
+            {
+
+            }
+        </div>
+        <ul class="headSelect">
+            <li>相机</li>
+            <li id="photo-btn">选择图片</li>
+            <li class="cancel">取消</li>
+        </ul>
+        <div class="productDetailArtBg"></div>
+        <div class="bgColor"></div>
+    </form>
+</div>
+
+<script>
+    function showDialog() {
+
+        var isHasEmpty = false;
+        var form = $("#form1");
+        var isHasEmpty = false;
+        form.find('input[type="text"]').each(function () {
+            var thisBox = $(this);
+            if (thisBox.val().length <= 0) {
+                thisBox.focus();
+                isHasEmpty = true;
+                return false;
+            }
+        });
+
+        if (isHasEmpty == false) {
+            $(".btn_org").hide();
+            //提交保存
+            $.post('/mobile/mobilecenter/SaveDL', form.serialize(), function (data) {
+                if (data.status == 1) {
+                    show(data.msg);
+
+                    setTimeout(function () {
+                        //跳转登录页面
+                        window.location.href = '@Url_Mobile.GetUserCenter()';
+                    }, 2000);
+                } else {
+                    show(data.msg); $(".btn_org").show();
+                }
+            });
+        }
+
+
+    }
+    $('.headLi').click(function () {
+        $('.productDetailArtBg').show();
+        $('.headSelect').slideDown(200);
+    })
+    $('.cancel,.productDetailArtBg').click(function () {
+        $('.headSelect').slideUp(200);
+        $('.productDetailArtBg').hide();
+    })
+    layui.use('upload', function () {
+        var $ = layui.jquery,
+            upload = layui.upload;
+        //普通图片上传
+        var uploadInst = upload.render({
+            elem: '#photo-btn' //绑定元素
+            , url: "/mobile/mobilecenter/SaveImage"
+            , exts: 'jpg|png|gif|bmp|jpeg'
+            , number: 1
+            , before: function (obj) {
+                //预读本地文件，需要IE9及以上版本
+                obj.preview(function (index, file, result) {
+                    $('#previewBox').attr('src', result); //图片链接（base64）
+                    $('.headSelect').slideUp(200);
+                    $('.productDetailArtBg').hide();
+                });
+            }
+            //, acceptMime: 'image/jpg, image/png'
+            , done: function (data) {
+                //如果上传失败
+                if (data.Code != 0) {
+                    return layer.msg(data.Message);
+                }
+                //上传成功
+                else {
+                    //设置图片地址
+                    $("#ShopImage").val(data.Data.src);
+                    return layer.msg("图片上传成功");
+                }
+            }
+            , error: function (err) {
+                console.info(err);
+            }
+        });
+
+    });
+</script>

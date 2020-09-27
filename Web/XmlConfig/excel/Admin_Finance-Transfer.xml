@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<fields>
+  <field>
+    <code>FromMemberCode</code>
+    <name>转出会员</name>
+  </field>
+  <field>
+    <code>FromNickName</code>
+    <name>转出姓名</name>
+  </field>
+  <field>
+    <code>TransferType</code>
+    <name>转账类型</name>
+  </field>
+  <field>
+    <code>Amount</code>
+    <name>转账金额</name>
+  </field>
+  <field>
+    <code>ToMemberCode</code>
+    <name>转入会员</name>
+  </field>
+  <field>
+    <code>ToNickName</code>
+    <name>转入姓名</name>
+  </field>
+  <field>
+    <code>CreateTime</code>
+    <name>转账时间</name>
+  </field>
+</fields>

@@ -1,0 +1,60 @@
+﻿
+.CateName { position: fixed; top: 0px; left: -100%; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 10000; }
+.CateName2 { position: fixed; top: 0px; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 10000; }
+.Select { position: absolute; top: 20px; right: 20px; bottom: 20px; left: 0px; overflow: auto; font-size: 1.4rem; background-color: rgba(255,255,255,0.9); border-radius: 3px; box-shadow: 0 2px 3px rgba(0,0,0,0.1); }
+    .Select li { padding: 8px 0px 8px 0px; border-bottom: 1px #D9D9D9 dotted; font-size: 1.5rem; }
+    .Select .current { background: #6DB248; color: #FFFFFF !important; border-bottom: 1px #629F41 solid !important; border-radius: 3px; box-shadow: inset 0 0 0.5rem #629F41; text-indent: 10px; list-style-type: square !important; }
+    .Select .Level0 li { text-indent: 15px; color: #333333; }
+    .Select .Level1 li { text-indent: 30px; color: #666666; }
+    .Select .Level2 li { text-indent: 45px; color: #999999; }
+    .Select .Level3 li { text-indent: 60px; }
+.Select1 { width: 100%; height: 100%; position: relative; }
+.Select1_Top { position: absolute; top: 10px; left: 10px; right: 10px; bottom: 80px; overflow: auto; }
+.Btn { position: absolute; bottom: 0px; left: 0px; right: 0px; background: #FFFFFF; height: 60px; border-radius: 3px; overflow: hidden; z-index: 10010; }
+    .Btn div { height: 100%; width: 100%; position: relative; }
+    .Btn .left { position: absolute; display: block; height: 35px; bottom: 10px; left: 10px; width: 120px; text-align: center; line-height: 35px; background: #F03791; border-radius: 3px; overflow: hidden; }
+    .Btn .right { position: absolute; display: block; height: 35px; bottom: 10px; right: 10px; width: 120px; text-align: center; line-height: 35px; background: #6DB248; border-radius: 3px; overflow: hidden; }
+
+.animation { -webkit-animation: fadeOutRightBig 1s .2s ease both; -moz-animation: fadeOutRightBig 1s .2s ease both; }
+
+@-webkit-keyframes fadeOutRightBig {
+    0% { opacity: 1; -webkit-transform: translateX(0); }
+    100% { opacity: 1; -webkit-transform: translateX(100%); }
+}
+
+@-moz-keyframes fadeOutRightBig {
+    0% { opacity: 1; -moz-transform: translateX(0); }
+    100% { opacity: 1; -moz-transform: translateX(100%); }
+}
+
+.animation2 { -webkit-animation: fadeOutLeftBig 1s .2s ease both; -moz-animation: fadeOutLeftBig 1s .2s ease both; }
+
+@-webkit-keyframes fadeOutLeftBig {
+    0% { opacity: 1; -webkit-transform: translateX(0); }
+    100% { opacity: 0; -webkit-transform: translateX(-100%); }
+}
+
+@-moz-keyframes fadeOutLeftBig {
+    0% { opacity: 1; -moz-transform: translateX(0); }
+    100% { opacity: 0; -moz-transform: translateX(-100%); }
+}
+
+#EntranceBottom { position: fixed; bottom: 0px; left: 0px; width: 100%; }
+
+#SearchBottom { position: fixed; bottom: 75px; left: 0px; right: 0px; background: #E0E0E0; padding: 0px 5px 5px 5px; border-top: 1px #F2F2F2 solid; }
+/*100239*/
+.Animals { background: #fff; width: 100%; height: 100%; }
+    .Animals li a { padding: 5px 0 5px; display: block; width: 96%; margin-left: auto; margin-right: auto; }
+    .Animals li { float: left; width: 33%; position: relative; border-left: 1px solid #D6D6D6; border-bottom: 1px solid #D6D6D6; }
+        .Animals li img { width: 100%; display: block; height: 100px; }
+.AnimalSpan1 { color: #FF6600; font-size: 1.4rem; margin-top: 2px; }
+.AnimalSpan2 { width: 20px; height: 20px; display: block; border-radius: 50%; overflow: hidden; margin-top: 2px; } 
+.Animals li .AnimalSpan2 img { display: block; width: 100%; height: inherit; }
+.Animalsnow { display: block; margin-top: 3px; }
+/*商城订单轮播*/
+.hreedLc { width: 100%; height: 30px; left: 0; top: 0; background: #78CDF8; overflow: hidden; margin-bottom: 1px; }
+.hreedsLc { color: #fff; width: 100%; height: 40px; position: absolute; left: 0; }
+.guanb { position: absolute; z-index: 9999; right: 5px; top: 5px; }
+
+ul#marquee { display: block; line-height: 1; position: relative; width: 100%; overflow: hidden; height: 30px; }
+    ul#marquee li { position: absolute; top: -999em; left: 0; display: block; white-space: nowrap; line-height: 30px; font-size: 14px; width: 100%; }

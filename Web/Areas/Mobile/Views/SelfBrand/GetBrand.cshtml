@@ -1,0 +1,55 @@
+﻿@using DataBase
+<div class="mt12 white-bg row">
+    <h4 class="sort-tit">推荐品牌</h4>
+    <div class="sort-arat brand-areat">
+        <ul>
+            @{
+                    foreach (var item in ViewBag.brand2 as List<ShopBrand>)
+                    {
+                <li>
+                    <a href="@Url_Mobile.GetProduct(item)">
+                        <img alt="@item.Name" src="@Url_Shop.GetImg(item.Logo)" style="height: 39px;" />
+                        <div class="title">@item.Name</div>
+                    </a>
+                </li>
+                    }
+            }
+        </ul>
+    </div>
+</div>
+<div class="mt12 white-bg row">
+    <h4 class="sort-tit">国货精品</h4>
+    <div class="sort-arat brand-areat">
+        <ul>
+            @{
+                    foreach (var item in ViewBag.brand3 as List<ShopBrand>)
+                    {
+                <li>
+                    <a href="@Url_Mobile.GetProduct(item)">
+                        <img alt="@item.Name" src="@Url_Shop.GetImg(item.Logo)" style="height: 39px;" />
+                        <div class="title">@item.Name</div>
+                    </a>
+                </li>
+                    }
+            }
+        </ul>
+    </div>
+</div>
+<div class="mt12 white-bg row">
+    <h4 class="sort-tit">国际大牌</h4>
+    <div class="sort-arat brand-areat">
+        <ul>
+            @{
+                foreach (var item in ViewBag.brand1 as List<ShopBrand>)
+                {
+                    <li>
+                        <a href="@Url_Mobile.GetProduct(item)">
+                            <img alt="@item.Name" src="@Url_Shop.GetImg(item.Logo)" style="height: 39px;" />
+                            <div class="title">@item.Name</div>
+                        </a>
+                    </li>
+                }
+            }
+        </ul>
+    </div>
+</div>

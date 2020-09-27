@@ -1,0 +1,222 @@
+﻿
+@{
+    ViewBag.Title = "NewIndex";
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+}
+@section css{
+    <style>
+        .activemember {
+            padding: 8px 5px;
+            font-weight: 600;
+            margin: 0;
+            background-color: #ff99ee;
+        }
+
+        .activedmember {
+            padding: 8px 5px;
+            margin: 0;
+            font-weight: 600;
+            background-color: #D53A35;
+        }
+
+        .regmember {
+            padding: 8px 5px;
+            margin: 0;
+            font-weight: 600;
+            background-color: #36C6D3;
+        }
+    </style>
+}
+<!-- BEGIN PAGE BAR -->
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="/SysManage/Home/Index">首页</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#"><span>会员管理</span></a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href=""><span>网络图</span></a>
+        </li>
+    </ul>
+</div>
+<!-- END PAGE BAR -->
+<!-- BEGIN PAGE CONTENT -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet light bordered">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="font-green-sharp fa fa-sitemap"></i>
+                    <span class="caption-subject font-green-sharp bold uppercase"> <span>网络结构</span></span>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="row">
+                    @*<div class="col-md-4" style="height:26pt">
+                        <label class="label activedmember">正式会员</label><label class="label activemember">未激活</label><label class="label regmember">未注册</label>
+                    </div>*@
+                    <div class="col-md-offset-1 col-md-7 text-left" style="height:28pt">
+                        <div class="col-md-offset-1 col-md-6 col-sm-5" style="padding-left:0;margin-bottom:5pt">
+                            <a onclick="test('@(ViewBag.TopCode)')" class="btn green">
+                                返回顶层
+                            </a>
+                            <a href="javascript:ToUp()" class="btn green">
+                                返回上一层
+                            </a>
+                        </div>
+                        <div class="input-group input-medium col-md-3 col-sm-5">
+                            <input class="form-control" id="keyword" type="text" placeholder="请输入会员编号">
+                            <span class="input-group-btn">
+                                <button class="btn green" onclick="searchList()" type="button">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div id="Relation" style="height:650px;min-width:1024px"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts {
+    <script src="~/assets/echart/echarts.min.js"></script>
+    <script type="text/javascript">
+        var curCode = '';
+        var netType =2; //轨数
+        var layer =3;  //显示层数
+        $(document).ready(function () {
+            test("@ViewBag.TopCode");
+        });
+        function ToUp() {
+            if (curCode != '') {
+                $.post("/Ajax/getUpCode/", {id:curCode}, function (d) {
+                    if (d != '') {
+                        test(d);
+                    } else {
+                        alert("已经到最顶层了")
+                    }
+                })
+            }
+        }
+        function test(code) {
+            curCode = code;
+            var Relation = echarts.init(document.getElementById("Relation"));
+
+            var option = {
+                title: {
+                    text: ''
+                },
+                tooltip: {
+                    show: true,
+                    alwaysShowContent: true,
+                    enterable: true,
+                    triggerOn: "click",
+                    formatter: function (params, ticket, callback) {
+                        $.post("/Ajax/getTooltip?position=" + params.data.id + "&code=" + params.name + "&type="+netType+"&isAdmin=true", function (content) {
+                            var x = content.split('-');
+                            if (x[0] == "reg") {
+                                location.href = x[1];
+                            } else {
+                                callback(ticket, content);
+                            }
+                        });
+                    }
+                },
+                animationDurationUpdate: 1500,
+                animationEasingUpdate: 'quinticInOut',
+                animation: false,
+                series: [
+                    {
+                        type: 'graph',
+                        layout: 'none',
+                        symbol: "roundRect",
+                        symbolSize: 80,
+                        focusNodeAdjacency: false,
+                        roam: true,
+                        label: {
+                            normal: {
+                                show: true,
+                                textStyle: {
+                                    // color: "blue"
+                                }
+                            }
+                        },
+                        edgeSymbol: ['circle', 'arrow'],
+                        edgeSymbolSize: [4, 10],
+                        edgeLabel: {
+                            normal: {
+                                show: false,
+                            }
+                        },
+                        data: [],
+                        // links: [],
+                        links: [],
+                        lineStyle: {
+                            normal: {
+                                show: true,
+                                opacity: 0.9,
+                                width: 2,
+                                curveness: 0
+                            }
+                        }
+                    }
+                ]
+            };
+            Relation.showLoading({
+                text: "数据加载中，请您耐心等待..."
+            });
+            $.ajax({
+                url: "/Ajax/Relasition",// 跳转到 action
+                data: { x: 800, y: 100, code: code, type: netType ,layer:layer},
+                type: "post",
+                cache: false,
+                dataType: "json",
+                success: function (data) {
+                    $.ajax({
+                        url: "/Ajax/guanxi",// 跳转到 action
+                        data: { code: code, type: netType,layer:layer },
+                        type: "post",
+                        cache: false,
+                        dataType: "json",
+                        success: function (links) {
+                            option.series[0].data = data;
+                            option.series[0].links = links;
+                            Relation.setOption(option);
+                            Relation.hideLoading();
+                        }
+                    });
+
+                }
+            });
+
+        }
+
+        function searchList() {
+            var keyword = $("#keyword").val();
+            $.ajax({
+                url: "/Ajax/IsExistMemberByCode",// 跳转到 action
+                data: { code: keyword },
+                type: "post",
+                cache: false,
+                dataType: "json",
+                success: function (data) {
+                    if (data.status == "n") {
+                        alertError("错误提示",data.msg);
+                        //$("#keyword").val("");
+                    } else {
+                        test(keyword);
+                    }
+                }
+            });
+        }
+    </script>
+}

@@ -1,0 +1,47 @@
+﻿@model DataBase.News_Info
+@{
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+}
+<!-- BEGIN PAGE BAR -->
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="/SysManage/Desk/Index">首页</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#"><span>信息管理</span></a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="/Member_Infos/NewsInfo/Index"><span>商城公告</span></a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#"><span>公告详情</span></a>
+        </li>
+    </ul>
+</div>
+<!-- END PAGE BAR -->
+<!-- BEGIN PAGE CONTENT -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet light bordered">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="font-green-sharp fa fa-user"></i>
+                    <span class="caption-subject font-green-sharp bold uppercase">@ViewBag.Title<span> 商城公告</span></span>
+                </div>
+            </div>
+            <div class="portlet-body" style="line-height:2em; overflow:auto">
+                <div style="padding:5px;font-size:12pt;font-weight:800;text-align:center">
+                    @Model.Title
+                </div>
+                <div style="word-break:break-all">
+                    @Html.Raw(Model.Comment)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END PAGE CONTENT -->

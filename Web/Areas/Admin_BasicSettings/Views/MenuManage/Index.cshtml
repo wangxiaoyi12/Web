@@ -1,0 +1,341 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+}
+ 
+@model DataBase.Sys_Navigation
+@section css{
+    <link href="~/assets/global/plugins/jstree/dist/themes/default/style.min.css" rel="stylesheet" />
+}
+<!-- BEGIN PAGE BAR -->
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="/SysManage/Home/Index">首页</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#">基础设置</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="/Admin_BasicSettings/MenuManage/Index"><span>菜单管理</span></a>
+        </li>
+    </ul>
+</div>
+<!-- END PAGE BAR -->
+<!-- BEGIN PAGE CONTENT -->
+<div class="row">
+    <div class="col-md-4">
+        <div class="portlet light bordered">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="font-green-sharp fa fa-tree"></i>
+                    <span class="caption-subject font-green-sharp bold uppercase"><span>菜单树</span></span>
+                </div>
+                <div class="actions">
+                    <a class="btn btn-circle btn-default btn-sm" onclick="Add()" style="color:red" href="javascript:;">
+                        <i class="fa fa-plus"></i> 新建
+                    </a>
+                    <a class="btn btn-circle btn-default btn-sm" onclick="_deleteMenu()" style="color:red" href="javascript:;">
+                        <i class="fa fa-trash"></i> 删除
+                    </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div id="jstree_div"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div class="portlet light bordered">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="font-green-sharp fa fa-edit"></i>
+                    <span class="caption-subject font-green-sharp bold uppercase"><span>编辑菜单信息</span></span>
+                </div>
+            </div>
+            <div class="portlet-body">
+                @using (Ajax.BeginForm("Save", null, new AjaxOptions()
+                {
+                    HttpMethod = "Post",
+                    OnBegin = "Menu_SubAjax.Loading",
+                    OnComplete = "Menu_SubAjax.Complate",
+                    OnFailure = "Menu_SubAjax.Failure",
+                    OnSuccess = "Menu_SubAjax.Success"
+                }, new { @class = "form-horizontal", @role = "form", @id = "commentForm" }))
+                {
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><span style="color:red">*</span>父级菜单：</label>
+                        <div class="col-md-4">
+                            <input type="hidden" name="id" value="@Model.id" />
+                            <select name="parent_id" id="parent_id" class="form-control select2">
+                                <option value="">请选择所属角色...</option>
+                                @{
+                                    foreach (var item in ViewData["ParentMenu"] as List<DataBase.Sys_Navigation>)
+                                    {
+                                        if (Model.parent_id == item.id)
+                                        {
+                                            <option value="@item.id" selected="selected">@item.title</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@item.id">@item.title</option>
+                                        }
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <span></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><span style="color:red">*</span>排序数字：</label>
+                        <div class="col-md-4">
+                            <input type="text" name="sort_id" value="@Model.sort_id" datatype="*" class="form-control" placeholder="请输入排序数字">
+                        </div>
+                        <span></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><span style="color:red">*</span>是否隐藏：</label>
+                        <div class="col-md-4">
+                            <div class="mt-radio-inline">
+                                <label class="mt-radio">
+                                    <input type="radio" name="is_lock" checked="checked" value="0" @(Model.is_lock == 0 ? "checked" : "")> 显示
+                                    <span></span>
+                                </label>
+                                <label class="mt-radio">
+                                    <input type="radio" name="is_lock" value="1" @(Model.is_lock == 1 ? "checked" : "")> 隐藏
+                                    <span></span>
+                                </label>
+                            </div>
+                        </div>
+                        <span></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><span style="color:red">*</span>调用别名：</label>
+                        <div class="col-md-4">
+                            <input type="text" name="name" value="@Model.name" datatype="*" class="form-control" placeholder="请输入调用别名">
+                        </div>
+                        <span></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><span style="color:red">*</span>导航标题：</label>
+                        <div class="col-md-4">
+                            <input type="text" name="title" value="@Model.title" datatype="*" class="form-control" placeholder="请输入导航标题">
+                        </div>
+                        <span></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">副标题：</label>
+                        <div class="col-md-4">
+                            <input type="text" name="sub_title" value="@Model.sub_title" class="form-control" placeholder="请输入副标题">
+                        </div>
+                        <span></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">链接地址：</label>
+                        <div class="col-md-4">
+                            <input type="text" name="link_url" value="@Model.link_url" class="form-control" placeholder="请输入链接地址">
+                        </div>
+                        <span></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">备注说明：</label>
+                        <div class="col-md-4">
+                            <textarea class="form-control" id="remark" name="remark" rows="3" placeholder="请输入备注">@Model.remark</textarea>
+                        </div>
+                        <span></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><span style="color:red">*</span>权限资源：</label>
+                        <div class="col-md-10">
+                            <input type="hidden" id="action_type" name="action_type" value="@Model.action_type" />
+                            <div class="mt-checkbox-inline">
+                                @{
+                                    foreach (var item in Common.SysDictionary.PermissionsType)
+                                    {
+                                        @Html.Raw("<label class=\"mt-checkbox\">");
+                                        @Html.Raw("<input type=\"checkbox\" id=\"" + item.Key + "\" name=\"actiontype\" value=\"" + item.Key + "\">" + item.Value + "");
+                                        @Html.Raw("<span></span>");
+                                        @Html.Raw("</label>");
+                                    }
+                                }
+                            </div>
+                        </div>
+                        <span></span>
+                    </div>
+                    <div class="form-actions">
+                        <div class="row">
+                            <div class="col-md-offset-3 col-md-9">
+                                <button type="submit" id="SubSave" class="btn green"><i class="fa fa-check"></i><span>保 存</span></button>
+                                <button type="button" class="btn default" onclick="window.history.back()"><i class="fa fa-mail-reply"></i>返回</button>
+                            </div>
+                        </div>
+                    </div>
+                                    }
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- END PAGE CONTENT -->
+@section scripts{
+    <script src="~/assets/global/plugins/jstree/dist/jstree.js"></script>
+    <script type="text/javascript">
+        var tree;
+        $(function () {
+            loadTree();
+            $("input[name='actiontype']").on("click", function () {
+                var actiontype = "";
+                $("input[name='actiontype']:checked").each(function (i, o) {
+                    actiontype += $(this).val();
+                    actiontype += ",";
+                });
+                $("#action_type").val(actiontype)
+            });
+            tree = jQuery.jstree.reference("#jstree_div");
+        });
+
+        function loadTree() {
+
+            $('#jstree_div').jstree({
+                'plugins': ["wholerow", "checkbox", "types"],
+                'core': {
+                    'data': {
+                        'url': '/Admin_BasicSettings/MenuManage/getjsTreeData',  //异步加载jstree html格式的数据地址
+                        'dataType': 'json',
+                        'data': function (node) {
+                            return { 'id': node.id };
+                        }
+                    }
+                }
+            }).bind('select_node.jstree', function (event, data) {  //绑定的点击事件
+                //alert(data.node.id)
+                $.ajax({
+                    url: "/Admin_BasicSettings/MenuManage/getMenuById",
+                    data: { id: data.node.id },
+                    type: "post",
+                    success: function (backdata) {
+                        var pid = '';                        
+                        var data = eval("(" + backdata + ")");
+                        if (data.parent_id != null) {
+                            pid = data.parent_id.toString();
+                        }
+                        $("input[name='id']").val(data.id);
+                        $("#parent_id").select2("val", [pid]);
+                        $("input[name='sort_id']").val(data.sort_id);
+                        $("input[name='is_lock'][value='" + data.is_lock + "']").prop("checked", true);
+                        $("input[name='name']").val(data.name);
+                        $("input[name='title']").val(data.title);
+                        $("input[name='sub_title']").val(data.sub_title);
+                        $("input[name='link_url']").val(data.link_url);
+                        $("#remark").val(data.remark);
+                        $("input[name='action_type']").val(data.action_type);
+                        if (data.action_type != "") {
+                            $("input[name='actiontype']").prop("checked", false);
+                            var type = data.action_type.split(',');
+                            for (var i = 0; i < type.length; i++) {
+                                $("#" + type[i] + "").prop("checked", true)
+                            }
+                        }
+                    }, error: function (error) {
+                        console.log(error);
+                    }
+                });
+            });
+        }
+
+        //新建清空数据
+        function Add() {
+            $("input[name='id']").val("");
+            $("#parent_id").select2("val", "0");
+            $("input[name='sort_id']").val("");
+            $("input[name='is_lock'][value='0']").prop("checked", true);
+            $("input[name='name']").val("");
+            $("input[name='title']").val("");
+            $("input[name='sub_title']").val("");
+            $("input[name='link_url']").val("");
+            $("#remark").val("");
+            $("input[name='action_type']").val("");
+            $("input[name='actiontype']").prop("checked", false);
+        }
+
+        //增删改提交ajax
+        var Menu_SubAjax = {
+            Loading: function () {
+                $("#SubSave").attr("disabled", true).find("span").html("正在保存中...")
+            },
+            Success: function (result) {
+                if (result.Status == "y") {
+                    alert("成功提示", result.Msg);
+                    tree.refresh();
+                } else {
+                    alertError("错误提示", result.Msg);
+                }
+                Menu_SubAjax.Complete();
+            },
+            SuccessBack: function (result) {
+                if (result.Status == "y") {
+                    alert("提示", result.Msg, function () {
+                        history.go(-1);
+                    });
+                } else {
+                    alertError("错误提示", result.Msg);
+                    Menu_SubAjax.Complete();
+                }
+            },
+            Failure: function () {
+                alertError("错误提示", "网络超时,请稍后再试...");
+                Menu_SubAjax.Complete();
+            },
+            Complete: function () {
+                $("#SubSave").attr("disabled", false).find("span").html("保 存")
+            }
+        };
+
+        /**
+       * 删除（可复制）
+       * param id
+       * private
+       */
+        function _delete(id) {
+            var url = window.location.href.split("?")[0].toLowerCase();
+            if (url.lastIndexOf("/index") > 0) {
+                url = url.substring(0, url.indexOf("/index"));
+            }
+            url = url + "/Delete";
+            confirm("删除确认!", "删除记录后不可恢复，您确定吗？", function () {
+                $.ajax({
+                    url: url,
+                    data: { idList: id },
+                    type: "post",
+                    success: function (backdata) {
+                        alert("成功提示", backdata.Msg);
+                        tree.refresh();
+                    }, error: function (error) {
+                        console.log(error);
+                    }
+                });
+            })
+        }
+        /**
+      * 批量删除（可复制）
+      * param id list
+      * private
+      */
+        function _deleteMenu() {
+            var str = "";
+            var nodes = $("#jstree_div").jstree("get_checked"); //使用get_checked方法
+            for (var i = 0; i < nodes.length; i++) {
+                str += nodes[i] + ",";
+            }
+            if (str.length > 0) {
+                var IDS = str.substr(0, str.length - 1);
+                _delete(IDS);
+
+            } else {
+                alert("操作提示", "至少选择一个菜单");
+            }
+        }
+    </script>
+}

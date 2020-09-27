@@ -1,0 +1,90 @@
+﻿@using DataBase
+@using Business
+@{
+    ViewBag.Title = "首页";
+}
+@section Head{
+
+}
+@section Footer{
+  
+}
+
+<!--幻灯片样式-->
+<div id="slideBox" class="slideBox">
+    <div class="hd">
+        <ul class="smallUl"></ul>
+    </div>
+    <div class="bd">
+        <ul>
+            @{
+                //1.获取图片数据
+                List<ShopSlide> slideList = DB.ShopSlide.Where(q=>q.Type==1).OrderBy(q => q.Sort).ToList();
+                foreach (var item in slideList)
+                {
+                    <li>
+                        <a href="@item.Link" target="_blank" title="@item.Title">
+                            <div style="background:url(@item.Img) no-repeat; background-position:center; width:100%; height:460px;"></div>
+                        </a>
+                    </li>
+                }
+            }
+        </ul>
+    </div>
+    <!-- 下面是前/后按钮代码，如果不需要删除即可 -->
+    <a class="prev" href="javascript:void(0)"></a>
+    <a class="next" href="javascript:void(0)"></a>
+</div>
+<script type="text/javascript">
+    jQuery(".slideBox").slide({ titCell: ".hd ul", mainCell: ".bd ul", autoPlay: true, autoPage: true });
+</script>
+<div class="index_style clearfix">
+    <!--广告-->
+    @*<div class="p_Deals">
+        <div class="Deals_title"><div class="title_name"><h1>美妆特卖</h1><h2>-大牌火热热卖中-</h2></div><img src="/assets/shop/images/AD-bg1_10.png" /></div>
+        <div class="Deals_list">
+            <ul class="products">
+                <li><a href="#"><img src="/assets/shop/images/AD-p-1.jpg" /><img src="/assets/shop/images/title_img_13.png" class="title" /></a></li>
+                <li><a href="#"><img src="/assets/shop/images/AD-p-2.jpg" /><img src="/assets/shop/images/title_img_14.png" class="title" /></a></li>
+                <li><a href="#"><img src="/assets/shop/images/AD-p-3.jpg" /><img src="/assets/shop/images/title_img_15.png" class="title" /></a></li>
+                <li><a href="#"><img src="/assets/shop/images/AD-p-4.jpg" /><img src="/assets/shop/images/title_img_16.png" class="title" /></a></li>
+            </ul>
+        </div>
+    </div>*@
+    <!--限时特卖-->
+    @*<div class="Limit_p">
+        <div class="Limit_title">
+            <img src="/assets/shop/images/Limit_img_20.png" />
+            <div class="title_name"><h1>一元抢购</h1><h2>LIMIT BUY</h2><h3>品牌限量优惠促销</h3></div>
+        </div>
+        <div class="Limit_list">
+            <ul class="p_t_list">
+                @{
+                    //获取完成的一元购
+                    var query = DB.ShopOneBuy.Where(q => q.IsEnable);
+                    int recordCount = query.Count();
+                    query = query.OrderBy(q => q.IsFinish)
+                        .ThenByDescending(q => q.CreateTime);
+                    List<ShopOneBuy> oneList = query
+                        .Take(8)
+                        .ToList();
+                    foreach (var item in oneList)
+                    {
+                        <li>
+                            <a href="@Url_Shop.GetOnebuy()#@(item.ID)"><span>@item.ShopProduct.Title</span>
+                            <img src="@Url_Shop.GetProductImg(item.ShopProduct)" width="180" height="170" /><div class="time">
+                                <em class="iconfont icon-time"></em>剩余人数：@(item.TotalCount-item.Count)人</div></a>
+                        </li>
+                    }
+                }
+            </ul>
+        </div>
+    </div>*@
+    <!--品牌展示-->
+    @*@Html.Action("Brand")*@
+    <!--产品版块-->
+    @Html.Action("Plate")
+    <br />
+    <!--猜你喜欢样式-->
+    @Html.Action("GuessLike")
+</div>

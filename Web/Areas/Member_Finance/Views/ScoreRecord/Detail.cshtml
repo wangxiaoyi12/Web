@@ -1,0 +1,211 @@
+﻿@using Business
+@using DataBase
+@using Wechat
+@{
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+    int timestamp = AccessTokenManage.TimeStamp;
+    string sig = AccessTokenManage.GetSignture(timestamp, Request.Url.AbsoluteUri);
+    ScoreRecord record = DB.ScoreRecord.FindEntity(ViewBag.id);
+}
+<!-- BEGIN PAGE BAR -->
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="/SysManage/Desk/Index">首页</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#"><span>财务管理</span></a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="@Url.Action("Index")"><span>充值积分</span></a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#"><span>充值</span></a>
+        </li>
+    </ul>
+</div>
+<!-- END PAGE BAR -->
+<!-- BEGIN PAGE CONTENT -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet light bordered">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="font-green-sharp fa fa-user"></i>
+                    <span class="caption-subject font-green-sharp bold uppercase">@ViewBag.Title<span>充值积分</span></span>
+                </div>
+            </div>
+            <div class="portlet-body">
+                @using (Ajax.BeginForm("Save", null, new AjaxOptions()
+                {
+                    HttpMethod = "Get",
+                }, new { @class = "form-horizontal" }))
+                {
+                    <div class="form-body">
+                        @if (record == null)
+                        {
+                            <div class="form-group">
+                                <label class="col-md-2 control-label"><span style="color:red">*</span>积分数量：</label>
+                                <div class="col-md-4">
+                                    <input type="text" id="Scores" name="Scores" datatype="n1-10"
+                                           data-multi="@DB.XmlConfig.XmlSite.Remit_Score"
+                                           class="form-control" errormsg="请输入整数" placeholder="请输入100的倍数">
+                                </div>
+                                <span></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label"><span style="color:red">*</span>支付金额：</label>
+                                <div class="col-md-4">
+                                    <input type="text" id="Amount" name="Amount" class="form-control" readonly>
+                                </div>
+                                <span></span>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="form-group">
+                                <label class="col-md-2 control-label"><span style="color:red">*</span>积分数量：</label>
+                                <div class="col-md-4">
+                                    <input type="text" id="Scores" name="Scores" datatype="n1-10"
+                                           data-multi="@DB.XmlConfig.XmlSite.Remit_Score" readonly value="@record.Scores"
+                                           class="form-control" errormsg="请输入整数" placeholder="请输入100的倍数">
+                                </div>
+                                <span></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label"><span style="color:red">*</span>支付金额：</label>
+                                <div class="col-md-4">
+                                    <input type="text" id="Amount" name="Amount" class="form-control" readonly value="@record.Amount">
+                                </div>
+                                <span></span>
+                            </div>
+                        }
+
+                        @*<div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red"></span>备注：</label>
+                            <div class="col-md-4">
+                                <textarea type="text" name="Comment" rows="5" class="form-control">@Model.Comment</textarea>
+                            </div>
+                            <span></span>
+                        </div>*@
+                        <div class="form-actions">
+                            <div class="row">
+                                <div class="col-md-offset-3 col-md-9">
+                                    <button type="submit" id="SubSave" class="btn green"><i class="fa fa-check"></i><span>保 存</span></button>
+                                    <button type="button" class="btn default" onclick="window.history.back()"><i class="fa fa-mail-reply"></i>返回</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                                        }
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END PAGE CONTENT -->
+
+@section scripts{
+<script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script>
+        $(function () {
+            //失去焦点
+            $('#Scores').change(function () {
+                var number = parseInt($(this).val());
+                var multi = parseInt($(this).attr('data-multi'));
+                var result = number / multi;
+                if (isNaN(result))
+                    result = 0;
+                $('#Amount').val(result);
+            });
+            //提交验证
+            $('#SubSave').click(function () {
+                //判断是否是100 的倍数
+                var score = parseInt($('#Scores').val())
+                if (score <= 0) {
+                    alert('充值金额不能小于0');
+                    return false;
+                } else if (score % 100 != 0) {
+                    alert('充值金额需要是100 的倍数');
+                    return false;
+                }
+                //判断是否是微信端，支付
+                @if (Url_Mobile.IsWechat()) {
+                    <text>
+                //提交处理
+                $.post('@Url.Action("Save")', {
+                    scores: score,
+                    amount: $('#Amount').val(),
+                    remark: $('#Remark').val(),
+                    id:'@ViewBag.id'
+                }, function (data) {
+                    if (data.Status == 'y') {
+                        var result = data.Data;
+                        //执行付款
+                        function onBridgeReady() {
+                            WeixinJSBridge.invoke(
+                                'getBrandWCPayRequest',
+                                result,
+                                function (res) {
+                                    // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
+                                    if (res.err_msg == "get_brand_wcpay_request:ok") {
+                                        //操作成功
+                                        window.history.back();
+                                    } else {
+                                        //alert(res.err_msg);
+                                        //alert(res.err_code + res.err_desc + res.err_msg);
+                                        alert('支付失败');
+                                    }
+                                }
+                            );
+                        }
+                        if (typeof WeixinJSBridge == "undefined") {
+                            if (document.addEventListener) {
+                                document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+                            } else if (document.attachEvent) {
+                                document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+                                document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+                            }
+                        } else {
+                            onBridgeReady();
+                        }
+                    } else {
+                        alert(data.Msg);
+                    }
+                });
+                </text>
+                }
+                else
+                {
+                    <text>
+                window.open('@Url.Action("Save")?scores=' + score + '&id=@ViewBag.id&amount=' + $('#Amount').val(), '_blank');
+                $('#SubSave').attr('disabled', true);
+                setTimeout(function () {
+                    window.history.back();
+                }, 1000 * 60);
+                </text>
+                }
+
+
+                return false;
+            });
+
+            @if (Url_Mobile.IsWechat())
+            {
+            <text>
+            /**特别说明，appId，nonceStr等字面变量区分大小写***/
+            wx.config({
+                debug: false,
+                appId: '@AccessTokenManage.AppID',
+                timestamp: '@timestamp',
+                nonceStr: '@timestamp',
+                signature: '@Common.SecurityHelper.SHA1(sig)',
+                jsApiList: ['chooseImage', 'chooseWXPay', 'getBrandWCPayRequest']
+            });
+        </text>
+            }
+             });
+    </script>
+}

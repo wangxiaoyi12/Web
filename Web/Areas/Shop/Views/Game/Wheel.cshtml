@@ -1,0 +1,278 @@
+﻿@using DataBase
+@using Business
+@{
+    ViewBag.Title = "产品详细页面";
+    ViewBag.Path = "/Shop/Game";
+    //大转盘
+    var model = DB.ShopBigWheel.FindEntity(a => a.IsEnable == true && a.IsDel != true);
+
+}
+@section Head{
+    <script src="~/assets/shop/js/lrtk.js"></script>
+    @*<script src="~/assets/shop/js/jqzoom.js"></script>*@
+
+    <style type="text/css">
+        .spanRed {
+            color: red;
+            font-weight: bolder;
+        }
+
+        .tab-content dl dd {
+            margin-left: 70px;
+        }
+
+        .tab-content dl dt {
+            display: block;
+            float: left;
+            width: 50px;
+            text-align: right;
+            color: #333;
+        }
+
+
+        .hpanel .panel-body {
+            background: #fff;
+            border: 1px solid #e4e5e7;
+            border-radius: 2px;
+            padding: 20px;
+            position: relative;
+        }
+
+        .panel-collapse .panel-body {
+            border: none;
+        }
+
+        .text-center {
+            text-align: center;
+            color: white;
+            font-size: 18px;
+            line-height: 45px;
+        }
+
+        .btn-lg {
+            height: 105px;
+            width: 300px;
+            padding-top: 60px;
+            vertical-align: middle;
+            font-size: 36px;
+            border-radius: 5px;
+            -webkit-box-shadow: 0 0 10px #0CC;
+            -moz-box-shadow: 0 0 10px #0CC;
+            box-shadow: 0 0 10px #0CC;
+        }
+
+        .boxes {
+            margin-bottom: 10px;
+            margin-top: 10px;
+        }
+
+            .boxes .box1 {
+                float: left;
+                padding: 20px 20px;
+                /*background: #33b5e5;*/
+                background: #0044ff;
+                /*color: #fff;*/
+                font-size: 16px;
+                border-radius: 10px;
+                text-align: right;
+                line-height: 10px;
+                margin: 0 7px;
+            }
+
+        #dowebok {
+            position: relative;
+            margin: 0 auto;
+            min-width: 440px;
+            padding: 20px;
+            background: url(/assets/shop/images/prize/ly-plate-c.gif) 20px 20px no-repeat;
+        }
+
+
+        .plate {
+            position: relative;
+            height: 440px;
+            background-image: url(/assets/shop/images/prize/lyplate.png);
+            background-repeat: no-repeat;
+        }
+
+        #plateBtn {
+            position: absolute;
+            left: 88px;
+            top: 88px;
+            width: 214px;
+            height: 214px;
+            background-image: url(/assets/shop/images/prize/rotate-static.png);
+            text-indent: -9999px;
+            overflow: hidden;
+        }
+
+        #result {
+            display: none;
+            position: absolute;
+            left: 65px;
+            top: 155px;
+            width: 300px;
+            height: 120px;
+            background-color: rgba(0,0,0,0.75);
+            filter: alpha(opacity=90);
+        }
+
+        #resultTxt {
+            padding: 45px 15px 0;
+            font: 16px "Microsoft Yahei";
+            color: #fff;
+            text-align: center;
+        }
+
+            #resultTxt em {
+                color: #ffea76;
+                font-style: normal;
+            }
+
+        #resultBtn {
+            position: absolute;
+            right: 5px;
+            top: 5px;
+            width: 25px;
+            height: 25px;
+            text-indent: -100px;
+            background-image: url(/assets/shop/images/prize/close.png);
+            overflow: hidden;
+        }
+    </style>
+}
+@section Footer{
+    <script src="~/assets/scripts/jquery-2.0.3.min.js"></script>
+    <script src="~/assets/shop/js/jquery.rotate.min.js"></script>
+    <script>
+
+        $(function () {
+            $('#plateBtn').click(function () {
+                lottery();
+                @*$.post("@ViewBag.Path/ValidWheel", {id:'@(model.ID)'},function(e){
+                    if (e.status==1) {
+                        lottery(e.msg);
+                    } else {
+                        alert(e.msg);
+                    }
+                 })*@
+            });
+            $('#resultBtn').click(function () {
+                $('#result').hide();
+            });
+        });
+
+        function lottery() {
+                $.ajax({
+                    type: 'post',
+                    url: '@ViewBag.Path/ToWheel/@(model.ID)',
+                    async: true,
+                    cache: false,
+                    error: function (data) {
+                        var re = data;
+                        alert(re.d);
+                        return false;
+                    },
+                    success: function (r) {
+                        if (r.status == 1) {
+                            var data = r.msg;
+                            var str = data.split(",");
+                            var a = str[0]; //角度
+                            var p = str[1]; //奖项
+                            $('#plateBtn').unbind('click').css("cursor", "default");
+                            $('#plateBtn').rotate({
+                                angle: 0,
+                                duration: 8000,
+                                animateTo: parseInt(a), //转动角度
+                                callback: function () {
+                                    $('#resultTxt').html(p);
+                                    $('#result').show();
+                                       //重新加载 抽奖记录
+                                    $("#divlog").load("/Shop/Game/Log?id=@(model.ID)");
+                                    $('#plateBtn').click(function () {
+                                        lottery();
+                                    }).css("cursor", "pointer");
+                                    return false;
+                                }
+                            });
+                        } else {
+                            alert(r.msg);
+                        }
+                    }
+                });
+            }
+    </script>
+}
+<!--产品详细页介绍-->
+<div class="Inside_pages">
+    <!--位置-->
+    <div class="Location_link">
+        <em></em>
+        <a href="@Url_Shop.GetIndex()">首页 &lt; </a>
+        <a href="~/Shop/Game/Wheel">大转盘 &lt;</a>
+        <a href="javascript:void(0)">@(model.Title)</a>
+    </div>
+    <!--产品详细介绍-->
+    <div class="Details_style clearfix" id="goodsInfo">
+        <div class="span12" id="dowebok" style="float:left;width:500px">
+            <div class="span5 plate">
+                <a id="plateBtn" href="javascript:" title="开始抽奖">开始抽奖</a>
+            </div>
+            <div class="span6">
+                <div class="row-fluid">
+                    <div id="result">
+                        <p id="resultTxt"></p>
+                        <a id="resultBtn" href="javascript:" title="关闭">关闭</a>
+                    </div>
+                </div>
+                @*<div class="row-fluid">
+                        <div style="width: 100%; height: 260px; background: #52A152; padding-top: 4px; padding-left: 4px; padding-right: 4px; margin-top: 10px; margin-right: 20px; min-width: 360px;">
+                            <span style="font-size: x-large; color: white;">奖项设置：</span>
+                            <div style="margin: 4px 2px 0px 2px; background-color: white;">
+                                <marquee onmouseover="this.stop()" onmouseout="this.start()" scrollamount="1" scrolldelay="60" direction="up" align="middle" height="236">
+                                    <%=roolnews %>
+                                </marquee>
+                            </div>
+                        </div>
+                    </div>*@
+            </div>
+            <div style="float:left; border:0px solid #ccc;width:500px;line-height:3em">
+                @*<div>
+
+                    </div>*@
+                <div style="padding:20px;">
+                    <p style="font-size:20px;color:#DF115E"><strong>活动规则：</strong></p>
+                    <p style="font-size:16px">
+                        1. 每天每个会员有三次免费抽奖机会。
+                    </p>
+                    <p>
+                        @*2. 每天每个会员有一次免费抽奖机会。*@
+                    </p>
+                </div>
+                <div style="background:#FDE5E0;padding:20px">
+                    <div style="font-size:20px;color:#DF115E">
+                        <strong> 奖项设置：</strong>
+                    </div>
+                    @{
+                        foreach (var item in model.ShopBigWheelDetails.OrderBy(a => a.Sort))
+                        {
+                            <div class="Price" style="font-size:14px">
+                                @item.Name :  @item.Desc
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+        <div style="float:right;padding:10px; border:0px solid #d8d8d8;width:630px;line-height:2em;">
+            <div style="font-size:16px;padding-left:0px;color: #DF115E; ">
+                <span style="font-weight:800">|</span> <strong> 抽奖记录</strong>
+            </div>
+            <div id="divlog" style="padding:10px;overflow:auto;height:735px;border:1px solid #ccc">
+                @Html.Action("Log", new { id = model.ID })                
+            </div>
+        </div>
+
+    </div>
+
+</div>

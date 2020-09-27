@@ -1,0 +1,302 @@
+﻿@{
+    #region 权限控制
+    var account = ViewData["CurrentUser"] as DataBase.Account;
+    bool isMember = account.LoginType == Enums.LoginType.member.ToString();
+    #endregion
+}
+<!DOCTYPE html>
+<html lang="en">
+<!--<![endif]-->
+<!-- BEGIN HEAD -->
+<head>
+    <meta charset="utf-8" />
+    <title>@DB.XmlConfig.XmlSite.webname</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <meta content="" name="description" />
+    <meta content="" name="author" />
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+    @Html.Partial("_CssLink")
+    @RenderSection("css", required: false)
+    <style>
+        @@media(max-width:768px){
+            #ShopLink {
+                position:absolute;
+            }
+        }
+
+    </style>
+</head>
+<!-- END HEAD -->
+<body class="page-header-fixed page-sidebar-closed-hide-logo">
+    <!-- BEGIN HEADER -->
+    <div class="page-header navbar navbar-fixed-top">
+        <!-- BEGIN HEADER INNER -->
+        <div class="page-header-inner ">
+            <!-- BEGIN LOGO -->
+            <div class="page-logo">
+                <h4 class="logo-default" alt="logo"> <span style="color:red">M</span><span style="color:white">embers</span><span style="color:red">S</span><span style="color:white">ystem</span></h4>
+                <div class="menu-toggler sidebar-toggler">
+                    <span></span>
+                </div>
+            </div>
+            <!-- END LOGO -->
+            <!-- BEGIN RESPONSIVE MENU TOGGLER -->
+            <a href="javascript:;" class="menu-toggler responsive-toggler" style="    color: #ddd;" data-toggle="collapse" data-target=".navbar-collapse">
+                菜单选择
+            </a>
+            <!-- END RESPONSIVE MENU TOGGLER -->
+            <!-- BEGIN TOP NAVIGATION MENU -->
+            <div class="top-menu">
+                <ul class="nav navbar-nav pull-right">
+                    @*<!-- BEGIN NOTIFICATION DROPDOWN -->
+                        <!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
+                        <!-- END NOTIFICATION DROPDOWN -->
+                        <!-- BEGIN INBOX DROPDOWN -->
+                        <!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->*@
+                    @if (isMember)
+                    {
+                    <li class="dropdown dropdown-extended dropdown-inbox" id="header_inbox_bar">
+                        <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                            <i class="icon-envelope-open"></i>
+                            <span class="badge badge-default" id="lab_MyMsg_Count1">0</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="external">
+                                <h3>你有<span class="bold" id="lab_MyMsg_Count2">0</span>条新信息</h3>
+                                <a href="/Member_Infos/MyMsg/Index">查看所有</a>
+                            </li>
+                            <li>
+                                <ul id="ul_MyMsg" class="dropdown-menu-list scroller" style="height: 275px;" data-handle-color="#637283"></ul>
+                            </li>
+                        </ul>
+                    </li>
+                    }
+                    @*<!-- END INBOX DROPDOWN -->
+                        <!-- BEGIN TODO DROPDOWN -->
+                        <!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
+                        <!-- END TODO DROPDOWN -->
+                        <!-- BEGIN USER LOGIN DROPDOWN -->
+                        <!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->*@
+                    <li class="dropdown dropdown-user">
+                        <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                            <img alt="" class="img-circle" src="/assets/layouts/layout/img/avatar3_small.jpg" />
+                            <span class="username username-hide-on-mobile">
+                                @(account.Name)(@account.LoginName)
+                            </span>
+                            <i class="fa fa-angle-down"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-default">
+                            @if (isMember)
+                            {
+                            <li>
+                                <a href="/Member_Member/Member/Index">
+                                    <i class="icon-user"></i> 个人信息设置
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/Member_Member/Password/Index">
+                                    <i class="fa fa-key"></i>修改密码
+                                </a>
+                            </li>                           
+                            }
+                            else
+                            {
+                            @*<li>
+                                <a href="/Admin_BasicSettings/UserManage/Detail/@account.Id">
+                                    <i class="icon-user"></i> 个人信息设置
+                                </a>
+                            </li>*@
+                            <li>
+                                <a data-toggle="modal" data-target="#UpdatePassWordModal" href="/Admin_BasicSettings/EditePwd/Index">
+                                    <i class="fa fa-key"></i>修改密码
+                                </a>
+                            </li>
+                            <li class="divider"> </li>
+                            <li>
+                                <a onclick="refreshcache()">
+                                    <i class="fa fa-refresh"></i>刷新缓存
+                                </a>
+                            </li>
+                            @*<li>
+                                <a onclick="FinToSettlement()">
+                                    <i class="fa fa-refresh"></i>收益结算
+                                </a>
+                            </li>*@
+                            } 
+                        </ul>
+                    </li>
+                    <!-- END USER LOGIN DROPDOWN -->
+                    <!-- BEGIN QUICK SIDEBAR TOGGLER -->
+                    <!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
+                    <li class="dropdown dropdown-quick-sidebar-toggler">
+                        <a href="/SysManage/Account/Signout/@(account.LoginType)" title="退出系统" class="dropdown-toggle">
+                            <i class="icon-logout"></i>
+                        </a>
+                    </li>
+                    <!-- END QUICK SIDEBAR TOGGLER -->
+                </ul>
+            </div>
+            <div class="top-menu" id="ShopLink" style="padding:10px;color:white;font-weight:800;font-size:20px;border-right:1px solid #aaa">
+                <a href="/Shop"><span style="color:#ddd">外部商城</span></a>
+            </div>
+            <!-- END TOP NAVIGATION MENU -->
+        </div>
+        <!-- END HEADER INNER -->
+    </div>
+    <!-- END HEADER -->
+    <!-- BEGIN HEADER & CONTENT DIVIDER -->
+    <div class="clearfix"> </div>
+    <!-- END HEADER & CONTENT DIVIDER -->
+    <!-- BEGIN CONTAINER -->
+    <div class="page-container">
+        <!-- BEGIN SIDEBAR -->
+        @Html.Action("Menu", "Part", new { area = "", id = string.Format("{0}_{1}_{2}", account.LoginType, account.RoleID, DB.CacheRoleId.ToString()) })
+        <!--END SIDEBAR-->
+        <!--BEGIN CONTENT-->
+        <div class="page-content-wrapper">
+            <!-- BEGIN CONTENT BODY -->
+            <div class="page-content">
+                <!-- BEGIN PAGE HEADER-->
+                <!-- BEGIN THEME PANEL -->
+                <div class="theme-panel hidden-xs hidden-sm" style="display:none">
+                    <div class="toggler"> </div>
+                    <div class="toggler-close"> </div>
+                    <div class="theme-options">
+                        <div class="theme-option theme-colors clearfix">
+                            <span> 主题颜色</span>
+                            <ul>
+                                <li class="color-default current tooltips" data-style="default" data-container="body" data-original-title="Default"> </li>
+                                <li class="color-darkblue tooltips" data-style="darkblue" data-container="body" data-original-title="Dark Blue"> </li>
+                                <li class="color-blue tooltips" data-style="blue" data-container="body" data-original-title="Blue"> </li>
+                                <li class="color-grey tooltips" data-style="grey" data-container="body" data-original-title="Grey"> </li>
+                                <li class="color-light tooltips" data-style="light" data-container="body" data-original-title="Light"> </li>
+                                <li class="color-light2 tooltips" data-style="light2" data-container="body" data-html="true" data-original-title="Light 2"> </li>
+                            </ul>
+                        </div>
+                        <div class="theme-option">
+                            <span> 主题风格</span>
+                            <select class="layout-style-option form-control input-sm">
+                                <option value="square" selected="selected">方角</option>
+                                <option value="rounded">
+                                    圆角
+                                </option>
+                            </select>
+                        </div>
+                        <div class="theme-option">
+                            <span> 布局</span>
+                            <select class="layout-option form-control input-sm">
+                                <option value="fluid" selected="selected">铺满屏幕</option>
+                                <option value="boxed">
+                                    盒子
+                                </option>
+                            </select>
+                        </div>
+                        <div class="theme-option">
+                            <span> 头部</span>
+                            <select class="page-header-option form-control input-sm">
+                                <option value="fixed" selected="selected">固定</option>
+                                <option value="default">
+                                    默认
+                                </option>
+                            </select>
+                        </div>
+                        <div class="theme-option">
+                            <span> 顶部菜单下拉</span>
+                            <select class="page-header-top-dropdown-style-option form-control input-sm">
+                                <option value="light" selected="selected">亮色</option>
+                                <option value="dark">
+                                    暗色
+                                </option>
+                            </select>
+                        </div>
+                        <div class="theme-option">
+                            <span> 侧边栏</span>
+                            <select class="sidebar-option form-control input-sm">
+                                <option value="fixed">
+                                    固定
+                                </option>
+                                <option value="default" selected="selected">
+                                    默认
+                                </option>
+                            </select>
+                        </div>
+                        <div class="theme-option">
+                            <span> 工具栏菜单</span>
+                            <select class="sidebar-menu-option form-control input-sm">
+                                <option value="accordion" selected="selected">手风琴</option>
+                                <option value="hover">
+                                    悬停展开
+                                </option>
+                            </select>
+                        </div>
+                        <div class="theme-option">
+                            <span> 侧边柆样式</span>
+                            <select class="sidebar-style-option form-control input-sm">
+                                <option value="default" selected="selected">默认</option>
+                                <option value="light">
+                                    高亮
+                                </option>
+                            </select>
+                        </div>
+                        <div class="theme-option">
+                            <span> 边栏位置</span>
+                            <select class="sidebar-pos-option form-control input-sm">
+                                <option value="left" selected="selected">左侧</option>
+                                <option value="right">
+                                    右侧
+                                </option>
+                            </select>
+                        </div>
+                        <div class="theme-option">
+                            <span> 底部</span>
+                            <select class="page-footer-option form-control input-sm">
+                                <option value="fixed">
+                                    固定
+                                </option>
+                                <option value="default" selected="selected">
+                                    默认
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <!-- END THEME PANEL -->
+                @RenderBody()
+            </div>
+            <!-- END CONTENT BODY -->
+        </div>
+        <!-- END CONTENT -->
+    </div>
+    <!-- END CONTAINER -->
+    <!-- BEGIN FOOTER -->
+    @*<div class="page-footer">
+        <div class="page-footer-inner">
+            <!--
+            2016 &copy; 智距网络会员系统模板.
+                <a href="#" title="山东智距网络科技有限公司" target="_blank">山东智距网络科技有限公司</a>
+                -->
+            </div>
+            <div class="scroll-to-top">
+                <i class="icon-arrow-up"></i>
+            </div>
+        </div>*@
+    <!--发布时可关闭监视-->
+    @StackExchange.Profiling.MiniProfiler.RenderIncludes()
+    <div id="UpdatePassWordModal" class="modal fade" tabindex="-1" data-focus-on="input:first">
+        <div class="modal-dialog" style="width:30%">
+            <div class="modal-content">
+            </div>
+        </div>
+    </div>
+    <!-- END FOOTER -->
+    <script>
+        var url = "@ViewBag.Path";
+        var ismember = '@isMember';
+        var id = '@account.Id';
+        var roleid='@account.RoleID';
+    </script>
+    @Html.Partial("_JsLink")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

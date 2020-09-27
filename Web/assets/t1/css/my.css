@@ -1,0 +1,345 @@
+body{
+	margin: 0;
+	padding: 0;
+	background: #e5e5e5;
+}
+p{
+	margin: 0 ;
+	padding: 0;
+}
+.clearfix{
+	clear: both;
+}
+img{
+	display: block;
+}
+a{
+	text-decoration: none;
+}
+body header{
+	padding:20px 20px;
+	background-color: #cb393a;
+}
+.top{
+	width: 100%;
+	background-color: #cb393a;
+}
+.top .headleft{
+	width: 70%;
+	background-color: #cb393a;
+}
+.top .headleft .touxiang{
+	background-color: #cb393a;
+	float: left;
+	width: 30%;
+	border-radius: 100%;
+}
+.top .headleft .id{
+	float: left;
+	padding-left:15px ;
+	padding-top: 8px;
+}
+.top .headleft .id .name{
+	font-size: 20px;
+	color: #fff;
+}
+.top .headleft .id .chengzhang{
+	color:#fff;
+}
+.top .headleft .id .chengzhang span{
+	padding-left: 10px;
+}
+.top .erweima{
+	float: right;
+	width: 30%;
+}
+.top .erweima img{
+	width: 40%;
+	margin: 0 auto;
+	margin-top: 15%;
+}
+header .bottom{
+	padding-top: 30px;
+	padding-bottom: 10px;
+	display: flex;
+}
+.bottom .lxb{
+	flex: 1;
+}
+.bottom .lxb p{
+	color: #fff;
+	text-align: center;
+	line-height: 14px;
+}
+.bottom .lxb p span{
+	display: block;
+	text-align: center;
+}
+
+
+.alldingdan{
+	display: flex;
+	margin-top: 1px;
+	background: #fff;
+}
+.alldingdan .daifukuan{
+	padding-top: 15px;
+	flex: 1;
+}
+.alldingdan .daifukuan img{
+	width: 45%;
+	margin: 0 auto;
+	}
+.alldingdan p{
+	color: #333;
+	text-align: center;
+	line-height: 48px;
+}
+
+.shequ{
+	background: #fff;
+	margin-top: 10px;
+}
+.shequ .biaoti{
+	padding:0 10px;
+	line-height: 44px;
+	border-bottom: 1px solid #E2E2E2;
+}
+.shequ .biaoti a{
+	float: right;
+	padding-right: 10px;
+}
+.shequ .neirong{
+	display: flex;
+}
+.shequ .neirong .tiezi{
+	padding-top: 20px;
+	flex: 1;
+}
+.shequ .neirong .tiezi img{
+	width: 40%;
+	margin: 0 auto;
+}
+.shequ .neirong .tiezi p{
+	text-align: center;
+	line-height: 42px;
+	font-size: 14px;
+}
+
+
+.list-group {
+    margin-bottom: 20px;
+    padding-left: 0;
+}
+
+.list-group-item {
+    position: relative;
+    display: block;
+    padding: 15px 15px;
+    margin-bottom: -1px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+}
+
+    .list-group-item:first-child {
+        border-top-right-radius: 4px;
+        border-top-left-radius: 4px;
+    }
+
+    .list-group-item:last-child {
+        margin-bottom: 0;
+        border-bottom-right-radius: 4px;
+        border-bottom-left-radius: 4px;
+    }
+
+a.list-group-item,
+button.list-group-item {
+    color: #555;
+}
+
+    a.list-group-item .list-group-item-heading,
+    button.list-group-item .list-group-item-heading {
+        color: #333;
+    }
+
+    a.list-group-item:hover, a.list-group-item:focus,
+    button.list-group-item:hover,
+    button.list-group-item:focus {
+        text-decoration: none;
+        color: #555;
+        background-color: #f5f5f5;
+    }
+
+button.list-group-item {
+    width: 100%;
+    text-align: left;
+}
+
+.list-group-item.disabled, .list-group-item.disabled:hover, .list-group-item.disabled:focus {
+    background-color: #f1f4f7;
+    color: #b1b7bd;
+    cursor: not-allowed;
+}
+
+    .list-group-item.disabled .list-group-item-heading, .list-group-item.disabled:hover .list-group-item-heading, .list-group-item.disabled:focus .list-group-item-heading {
+        color: inherit;
+    }
+
+    .list-group-item.disabled .list-group-item-text, .list-group-item.disabled:hover .list-group-item-text, .list-group-item.disabled:focus .list-group-item-text {
+        color: #b1b7bd;
+    }
+
+.list-group-item.active, .list-group-item.active:hover, .list-group-item.active:focus {
+    z-index: 2;
+    color: #fff;
+    background-color: #337ab7;
+    border-color: #337ab7;
+}
+
+    .list-group-item.active .list-group-item-heading,
+    .list-group-item.active .list-group-item-heading > small,
+    .list-group-item.active .list-group-item-heading > .small, .list-group-item.active:hover .list-group-item-heading,
+    .list-group-item.active:hover .list-group-item-heading > small,
+    .list-group-item.active:hover .list-group-item-heading > .small, .list-group-item.active:focus .list-group-item-heading,
+    .list-group-item.active:focus .list-group-item-heading > small,
+    .list-group-item.active:focus .list-group-item-heading > .small {
+        color: inherit;
+    }
+
+    .list-group-item.active .list-group-item-text, .list-group-item.active:hover .list-group-item-text, .list-group-item.active:focus .list-group-item-text {
+        color: #c7ddef;
+    }
+
+.list-group-item-success {
+    color: #27a4b0;
+    background-color: #abe7ed;
+}
+
+a.list-group-item-success,
+button.list-group-item-success {
+    color: #27a4b0;
+}
+
+    a.list-group-item-success .list-group-item-heading,
+    button.list-group-item-success .list-group-item-heading {
+        color: inherit;
+    }
+
+    a.list-group-item-success:hover, a.list-group-item-success:focus,
+    button.list-group-item-success:hover,
+    button.list-group-item-success:focus {
+        color: #27a4b0;
+        background-color: #96e1e8;
+    }
+
+    a.list-group-item-success.active, a.list-group-item-success.active:hover, a.list-group-item-success.active:focus,
+    button.list-group-item-success.active,
+    button.list-group-item-success.active:hover,
+    button.list-group-item-success.active:focus {
+        color: #fff;
+        background-color: #27a4b0;
+        border-color: #27a4b0;
+    }
+
+.list-group-item-info {
+    color: #327ad5;
+    background-color: #e0ebf9;
+}
+
+a.list-group-item-info,
+button.list-group-item-info {
+    color: #327ad5;
+}
+
+    a.list-group-item-info .list-group-item-heading,
+    button.list-group-item-info .list-group-item-heading {
+        color: inherit;
+    }
+
+    a.list-group-item-info:hover, a.list-group-item-info:focus,
+    button.list-group-item-info:hover,
+    button.list-group-item-info:focus {
+        color: #327ad5;
+        background-color: #caddf4;
+    }
+
+    a.list-group-item-info.active, a.list-group-item-info.active:hover, a.list-group-item-info.active:focus,
+    button.list-group-item-info.active,
+    button.list-group-item-info.active:hover,
+    button.list-group-item-info.active:focus {
+        color: #fff;
+        background-color: #327ad5;
+        border-color: #327ad5;
+    }
+
+.list-group-item-warning {
+    color: #c29d0b;
+    background-color: #f9e491;
+}
+
+a.list-group-item-warning,
+button.list-group-item-warning {
+    color: #c29d0b;
+}
+
+    a.list-group-item-warning .list-group-item-heading,
+    button.list-group-item-warning .list-group-item-heading {
+        color: inherit;
+    }
+
+    a.list-group-item-warning:hover, a.list-group-item-warning:focus,
+    button.list-group-item-warning:hover,
+    button.list-group-item-warning:focus {
+        color: #c29d0b;
+        background-color: #f7de79;
+    }
+
+    a.list-group-item-warning.active, a.list-group-item-warning.active:hover, a.list-group-item-warning.active:focus,
+    button.list-group-item-warning.active,
+    button.list-group-item-warning.active:hover,
+    button.list-group-item-warning.active:focus {
+        color: #fff;
+        background-color: #c29d0b;
+        border-color: #c29d0b;
+    }
+
+.list-group-item-danger {
+    color: #e73d4a;
+    background-color: #fbe1e3;
+}
+
+a.list-group-item-danger,
+button.list-group-item-danger {
+    color: #e73d4a;
+}
+
+    a.list-group-item-danger .list-group-item-heading,
+    button.list-group-item-danger .list-group-item-heading {
+        color: inherit;
+    }
+
+    a.list-group-item-danger:hover, a.list-group-item-danger:focus,
+    button.list-group-item-danger:hover,
+    button.list-group-item-danger:focus {
+        color: #e73d4a;
+        background-color: #f8cace;
+    }
+
+    a.list-group-item-danger.active, a.list-group-item-danger.active:hover, a.list-group-item-danger.active:focus,
+    button.list-group-item-danger.active,
+    button.list-group-item-danger.active:hover,
+    button.list-group-item-danger.active:focus {
+        color: #fff;
+        background-color: #e73d4a;
+        border-color: #e73d4a;
+    }
+
+.list-group-item-heading {
+    margin-top: 0;
+    margin-bottom: 5px;
+}
+
+.list-group-item-text {
+    margin-bottom: 0;
+    line-height: 1.3;
+} 

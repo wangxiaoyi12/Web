@@ -1,0 +1,266 @@
+﻿@using DataBase
+@using Common
+
+@{
+    ViewBag.Title = "首页";
+    Layout = "~/Views/Shared/_LayoutPageIndex0915.cshtml";
+
+    var newlist = DB.News_Info.ToList();
+    var banner = DB.ShopSlide.ToList();
+    var shopproductrecommend = DB.ShopProduct.Where(a=>a.IsRecommend && a.IsEnable == true && a.IsNew == false).ToList();
+    string keywords = ReqHelper.GetString("keywords");
+    var category1 = DB.ShopProductCategory.Where(a => a.Layer == 1).OrderBy(a=>a.Sort).Take(4).ToList();
+}
+
+<div class="container">
+    <div class="indexHeader">
+        <div class="searchBox">
+            <form action="/mobile/selfproduct/index" method="get" id="searchform" name="searchform">
+                
+                    <input placeholder="请输入您要搜索的商品名称" type="text" value="@keywords" name="keywords" id="keywords" >
+
+                    <i class="iconfont icon-hricon33"  onclick="searchproduct();" ></i>
+           
+                </form>
+        </div>
+    </div>
+    <!-- 轮播 -->
+    <div class="index-sw">
+        <div class="swiper-container">
+            <div class="swiper-wrapper">
+                @foreach (var item in banner)
+                {
+                    <div class="swiper-slide">
+                        <a><img class="indexLImg" src="@item.Img" alt=""></a>
+                    </div>
+                }
+
+            </div>
+        </div>
+        <div class="swiper-paginationBox">
+            <div class="swiper-pagination"></div>
+        </div>
+    </div>
+    <!-- 四个选项 -->
+    <ul class="OptList4">
+        <li class="OptListli">
+            <a href="/mobile/mobilecenter/cash">
+                <div class="picBox"><img src="~/assets/jnwz200915/images/indexList1_1.png"></div>
+                <p>附近店</p>
+            </a>
+        </li>
+        <li class="OptListli">
+            <a href="/mobile/mobilecenter/liushui/1">
+                <div class="picBox"><img src="~/assets/jnwz200915/images/indexList1_2.png"></div>
+                <p>我的余额</p>
+            </a>
+        </li>
+        <li class="OptListli">
+            <a  href="/mobile/mobilecenter/link">
+                <div class="picBox"><img src="~/assets/jnwz200915/images/indexList1_3.png"></div>
+                <p>我要分享</p>
+            </a>
+        </li>
+        <li class="OptListli">
+            <a href="/mobile/mobilecenter/appindex">
+                <div class="picBox"><img src="~/assets/jnwz200915/images/indexList1_4.png"></div>
+                <p>申请代理</p>
+            </a>
+        </li>
+        @for(int i = 0; i < category1.Count; i++)
+        {
+            <li class="OptListli">
+                <a href="@Url_Mobile.GetProduct(category1[i])">
+                    <div class="picBox"><img src="~/assets/jnwz200915/images/indexList1_@(i+5).png"></div>
+                    <p>@category1[i].Name</p>
+                </a>
+            </li>
+        }
+
+    
+       
+    </ul>
+    <!-- 两个专区和公告 -->
+    <div class="indexListBox">
+        <!-- 快报 -->
+        <div class="newsSwiper">
+            <div class="newsSwiperImg"><img src="~/assets/jnwz200915/images/img_indexbKx.png" alt=""></div>
+            <div class="cont">
+                <div class="swiper-container">
+                    <div class="swiper-wrapper">
+                        @foreach (var item in newlist)
+                        {
+                            <div class="swiper-slide">
+                                <a href="/Mobile/mobilecenter/Newsdetail/@item.NewsId">
+                                    <p>@item.Title</p>
+                                </a>
+                            </div>
+                        }
+                       
+                    </div>
+                </div>
+            </div>
+        </div>
+        @*<ul class="OptList2">
+            <li class="OptListli OptList2-leftSwiper">
+                <div class="swiper-container">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <div class="picBox"><img src="~/assets/jnwz200915/images/indexList2_2.png"></div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="picBox"><img src="~/assets/jnwz200915/images/indexList2_1.png"></div>
+                        </div>
+                    </div>
+                    <div class="swiper-pagination swiper-paginationLeft"></div>
+                </div>
+            </li>
+            <li class="OptListli OptList2-rightSwiper">
+                <div class="swiper-container">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <div class="picBox"><img src="~/assets/jnwz200915/images/indexList2_1.png"></div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="picBox"><img src="~/assets/jnwz200915/images/indexList2_2.png"></div>
+                        </div>
+                    </div>
+                    <div class="swiper-pagination swiper-paginationRight"></div>
+                </div>
+            </li>
+        </ul>*@
+        <!-- <ul class="OptList2">
+            <li class="OptListli">
+                <a href="">
+                    <div>
+                        <p>批购专区</p>
+                        <button>抢购中</button>
+                    </div>
+                </a>
+            </li>
+            <li class="OptListli">
+                <a href="">
+                    <div>
+                        <p>优选专区</p>
+                        <button>立即购买</button>
+                    </div>
+                </a>
+            </li>
+        </ul> -->
+
+    </div>
+    <ul class="indexList">
+        @foreach (var item in shopproductrecommend)
+        {
+            <li class="indexListLi">
+                <a href="@Url_Mobile.GetProduct(item)">
+                    <div class="picBox"><img src="@item.Image"></div>
+                    <div class="txt">
+                        <p class="top">@item.Title</p>
+                        <p class="ctn">￥<span>@DB.ShopProduct.GetYouHuiPrice(item)</span><span>会员价</span></p>
+                        <p class="btm">零售价:@DB.ShopProduct.GetLingShouPrice(item)</p>
+                    </div>
+                </a>
+            </li>
+        }
+
+      
+    </ul>
+    @*<p class="indexListJJJ">加载更多</p>*@
+
+    <!-- 底部 -->
+    <div class="pd_btm"></div>
+
+</div>
+<div class="bgColor"></div>
+<script>
+    const oldList = [1, 2, 3, 4, 5, 6, 7]
+
+    // 使用reduce函数接受一个初始值{ 0: [], 1: [], length: 2 },
+    // 初始值包含两个空数组，和一个数组长度(Array.from方法要求将对象转数组时对象内要有这个属性)
+    // 在reduce函数内根据索引做余2判断，因为分两列，余0的加入第一个数组，余1的加入第二个数组
+    // 最后reduce返回遍历完的对象 {0:[1,3,5,7],1:[2,4,6],length:2}
+    // 使用Array.from({0:[1,3,5,7],1:[2,4,6],length:2}) 得到 数组 [[1,3,5,7],[2,4,6]]
+    // 解构数组 使用concat合并，完事
+    const newList = [].concat(...(Array.from(oldList.reduce((total, cur, index) => {
+        total[index % 2].push(cur)
+        return total
+    }, {
+        0: [],
+        1: [],
+        length: 2
+    }))))
+    console.log(newList)
+
+
+    // banner
+    var swiper = new Swiper('.index-sw .swiper-container', {
+        slidesPerView: 1.1,
+        spaceBetween: 0,
+        centeredSlides: true,
+        loop: true, // 无限循环
+        autoplay: {
+            delay: 25000000000000000,
+            disableOnInteraction: false,
+        },
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+        },
+    });
+
+    var leftSwiper = new Swiper('.OptList2-leftSwiper .swiper-container', {
+        slidesPerView: 1,
+        spaceBetween: 0,
+        loop: true, // 无限循环
+        autoplay: {
+            delay: 25000000000000000,
+            disableOnInteraction: false,
+        },
+        pagination: {
+            el: '.swiper-paginationLeft',
+            clickable: true,
+        },
+    });
+
+    var rightSwiper = new Swiper('.OptList2-rightSwiper .swiper-container', {
+        slidesPerView: 1,
+        spaceBetween: 0,
+        loop: true, // 无限循环
+        autoplay: {
+            delay: 25000000000000000,
+            disableOnInteraction: false,
+        },
+        pagination: {
+            el: '.swiper-paginationRight',
+            clickable: true,
+        },
+    });
+
+    // news
+    var swiper2 = new Swiper('.cont .swiper-container', {
+        spaceBetween: 0,
+        centeredSlides: true,
+        loop: true, // 无限循环
+        autoplay: {
+            delay: 10000000000, //设置时间
+            disableOnInteraction: false,
+        },
+        direction: 'vertical',
+        pagination: {
+            el: '.cont .swiper-pagination',
+            paginationClickable: true,
+            spaceBetween: 20
+        },
+
+    });
+ 
+    function searchproduct() {
+        var keyword = document.getElementById("keywords").value;
+        if (keyword == undefined || keyword == null || keyword == "") {
+            show("请输入搜索关键字！");
+            return false;
+        }
+        document.getElementById("searchform").submit();
+    }
+</script>

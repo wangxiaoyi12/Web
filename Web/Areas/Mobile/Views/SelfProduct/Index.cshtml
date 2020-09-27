@@ -1,0 +1,206 @@
+﻿@using DataBase
+@using Business
+@using Common
+@{
+
+    string Title = "产品列表";
+    //获取参数
+    //1.关键词
+    string keywords = ReqHelper.GetString("keywords");
+    //2.分类
+    int? classid = ReqHelper.GetInt("classid");
+    //商家ID
+    int? ShopID = ReqHelper.GetInt("ShopID");
+    ShopProductCategory classModel = classid == null ? null : DB.ShopProductCategory.FindEntity(classid);
+    //3.品牌
+    int? brandID = ReqHelper.GetInt("brandid");
+    ShopBrand brandModel = brandID == null ? null : DB.ShopBrand.FindEntity(brandID);
+    //3.1 点赞商品
+    //int? praise = ReqHelper.GetInt("praise");
+    //4.排序
+    int order = ReqHelper.GetInt("order", 0);
+    int? orderType = ReqHelper.GetInt("ordertype");
+
+    //分类列表
+    List<ShopProductCategory> showCateList = null;
+    ShopProductCategory parentClassModel = null;
+    if (classid == null)
+    {
+        showCateList = DB.ShopProductCategory.GetListByParentID(null);
+    }
+    else
+    {
+        int parentID = classModel.Layer == 3 ? classModel.PID.Value : classModel.ID;
+        if (classModel.PID != null)
+        {
+            parentClassModel = DB.ShopProductCategory.FindEntity(classModel.PID.Value);
+        }
+
+        showCateList = DB.ShopProductCategory.GetListByParentID(parentID);
+    }
+
+    if (brandModel != null)
+    {
+        Title = brandModel.Name + "-" + Title;
+    }
+    if (classModel != null)
+    {
+        Title = classModel.Name + "-" + Title;
+    }
+    ViewBag.Title = Title;
+}
+
+@section Footer{
+    <script src="~/assets/mobile/js/product.js?ver=@Url_Mobile.GetVersion()"></script>
+}
+<style>
+    .sousuo {
+    height: 44px;
+    line-height: 44px;
+    position: absolute;
+    right: 15px;
+    top: 9px;
+    /* left: 20px; */
+    color: #fff;
+    font-size: 13px;
+    cursor: pointer;
+}
+    .nav_inner, .order_top {
+    background: #ec124a !important;
+}
+    .order_sou input {
+        border-radius: 7px;
+        width: 80%;
+        color: #999;
+        font-size: 16px;
+        padding-left: 10px;
+        line-height: 32px;
+        height: 32px;
+        -webkit-appearance: none;
+        margin-left: 10px;
+    }
+</style>
+<header class="header">
+    <div class="fix_nav">
+        <div class="nav_inner">
+            <a class="nav-left back-icon" href="@Url_Mobile.GetIndex()">返回</a>
+            <div class="tit">产品列表</div>
+            <div class="sousuo" id="sousou"><img src="/assets/mobile/images/sou.png"></div>
+        </div>
+    </div>
+</header>
+<div style="overflow: hidden;position: fixed;width: 100%;z-index: 10000;top:0px;">
+    <div class="order_top_count" style="display:@(string.IsNullOrEmpty(keywords)?"none":"block");">
+        <div class="order_top" style="background:#ec124a">
+            <div class="order_a_l">
+                <div id="nav-left_ll"><img src="/assets/mobile/images/order_top_l.png"></div>
+            </div>
+            <div class="order_sou">
+                <form action="/m_search/list" method="get" id="searchform" name="searchform">
+                    <input name="keyword" id="keyword" placeholder="搜索商品" data-brand="@brandID" type="text" value="@keywords">
+                    <span class="pro_sou" style="cursor: pointer;"><img src="~/assets/mobile/images/sou.png"></span>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@*<input type="hidden" id="praise" name="name" value="@(praise)" />*@
+
+<div class="container productList" id="container2">
+    <input type="hidden" id="hidShopID" value="@ShopID" />
+    <div class="row"style="margin-top: 10px;">
+        <ul class="mod-filter clearfix">
+            <div class="white-bg_2 bb1" data-order="@order" data-type="@orderType">
+                @{
+                    Dictionary<int, string> dicList = new Dictionary<int, string>();
+                    dicList.Add(0, "默认");
+                    dicList.Add(1, "销量");
+                    dicList.Add(2, "价格");
+                    foreach (var item in dicList)
+                    {
+                        if (item.Key == order)
+                        {
+                            <li class="active" data-id="@item.Key">
+                                <a href="javascript:void(0);">
+                                    @item.Value
+                                    @if (orderType == null && item.Key > 0)
+                                    {
+                                        <i class='icon_sort'></i>
+                                    }
+                                    else if (orderType == 0)
+                                    {
+                                        <i class='icon_sort_down' data-type="0"></i>
+                                    }
+                                    else if (orderType == 1)
+                                    {
+                                        <i class='icon_sort_up' data-type="1"></i>
+                                    }
+                                </a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="@(item.Key==order?"active":"")" data-id="@item.Key">
+                                <a href="javascript:void(0);">@item.Value<i class='icon_sort'></i></a>
+                            </li>
+                        }
+                    }
+                }
+                <li id="classList">
+                    <a title="点击按评论数从高到低排序"
+                       href="javascript:void(0);">
+                        <img src="~/assets/mobile/images/member_img16.png" style="width:25px;position:absolute;margin-top:-0px;top:8px;" />
+                    </a>
+                </li>
+            </div>
+        </ul>
+        <div class="sou_count" style="margin-top:0px;" data-id="@classid">
+            @if (parentClassModel != null)
+            {
+                if (classModel.Layer == 2)
+                {
+                    <a href="javascript:void(0);" class="col-sm-4 col-xs-4 @(classModel.ID==classid?"active ":"")" data-id="@(parentClassModel.ID)">
+                        <div class="sou_cou_h sou_cou_h1 sou_cou_h1">@( classModel.Name)：</div>
+                    </a>
+                }
+                else
+                {
+                    <a href="javascript:void(0);" class="col-sm-4 col-xs-4 @(parentClassModel.ID==classid?"active ":"")" data-id="@(parentClassModel.ID)">
+                        <div class="sou_cou_h sou_cou_h1">@( parentClassModel.Name)：</div>
+                    </a>
+                }
+            }
+            else
+            {
+                if (classModel != null)
+                {
+                    <a href="javascript:void(0);" class="col-sm-4 col-xs-4 " data-id="0"><div class="sou_cou_h sou_cou_h1">@(classModel.Name)：</div>  </a>
+                }
+                else
+                {
+                    <a href="javascript:void(0);" class="col-sm-4 col-xs-4 " data-id="0"><div class="sou_cou_h">所有分类：</div>  </a>
+                }
+            }
+
+
+
+
+            @for (int i = 0; i < showCateList.Count; i++)
+            {
+                ShopProductCategory item = showCateList[i];
+                <a href="javascript:void(0);" class="col-sm-4 col-xs-4 @(item.ID==classid?"active ":"")" data-id="@item.ID">
+                    <div class="@(item.ID==classid?"sou_cou_h1 ":"") sou_cou_h">@item.Name</div>
+                </a>
+            }
+            <div class="clearfix"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="item-list" id="containerList" rel="2" status="0">
+            @*@Html.Action("List")*@
+            <p class="text-center text-danger" id="ajax_loading">正在加载...</p>
+        </div>
+    </div>
+
+</div>
+<div class="clear"></div>

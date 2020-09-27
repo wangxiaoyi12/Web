@@ -1,0 +1,266 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+    var Path = "/Member_Statistics/MemberBonusSummary/";
+    var title = "收益总表";
+    var timeFlag = "时间";
+}
+
+<!-- BEGIN PAGE BAR -->
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="/SysManage/Desk/Index">首页</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#"><span>收益业绩</span></a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="/Member_Statistics/MemberBonusSummary/Index"><span>收益总表</span></a>
+        </li>
+    </ul>
+</div>
+<!-- END PAGE BAR -->
+<!-- BEGIN PAGE CONTENT -->
+<div class="row">
+    <!-- BEGIN SAMPLE TABLE PORTLET-->
+    <div class="col-md-12">
+        <div class="portlet box green">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-database"></i>@(title)列表
+                </div>
+                <div class="tools">
+                    <a href="javascript:;" class="collapse"> </a>
+                    <a href="javascript:;" class="reload"> </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="table-responsive">
+                    <form class="form form-horizontal form-inline">
+                        <fieldset>
+                            <div class="control-group">
+                                <div class="controls">
+                                    <div class="col-md-3">
+                                        @*<a id="add" href="@(Path)Detail" class="btn green">
+                                            <i class="fa fa-plus"></i> 新增
+                                        </a>
+                                        <a id="delete" onclick="_deleteList()" class="btn red">
+                                            <i class="fa fa-trash-o"></i> 删除
+                                        </a>*@
+                                    </div>
+                                    <div class="col-md-9 text-right">
+                                        <div class="input-group col-md-6">
+                                            <input type="text" value="" id="start" placeholder="@(timeFlag)起" class="form-control ">
+                                            <span class="input-group-addon"> to </span>
+                                            <input type="text" value="" id="end" placeholder="@(timeFlag)至" class="form-control ">
+                                        </div>
+                                        <div class="input-group col-md-3">
+                                            <input type="text" class="form-control" placeholder="搜索关键字" id="keyword" />
+                                            <span class="input-group-btn">
+                                                <a class="btn btn-default" href="javascript:searchList();">
+                                                    <span class="glyphicon glyphicon-search"></span>
+                                                </a>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                    
+                </div>
+                <div class="table-responsive">
+                    <table id="datatable" class="table table-striped table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th style="width:5%"><input type="checkbox" id='checkAll'></th>
+                                <th>日期</th>
+                                <th>会员编号</th>
+                                <th>姓名</th>
+                                <th>推广奖</th>
+                                <th>平级奖</th>
+                                <th>拓展奖</th>
+                                <th>服务奖</th>
+                                <th>报单补助</th>
+                                <th>分红</th>
+                                <th>每日返利</th>
+                                <th>领导奖</th>
+                                <th>购物返利</th>
+                                @*<th>委托奖励积分</th>*@
+                                <th>委托奖励收益</th>
+                                <th>分享消费奖</th>
+                                <th>辅导奖</th>
+                                <th>小计</th>
+                                <th>税</th>
+                                <th>重消</th>
+                                <th>实际金额</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                        <tfoot>
+                            <tr>
+                                <th colspan="4" class="text-center">合  计</th>    
+                                <th>0</th>
+                                <th>0</th>
+                                <th>0</th>
+                                <th>0</th>
+                                <th>0</th>
+                                <th>0</th>
+                                <th>0</th>
+                                <th>0</th>
+                                <th>0</th>
+                                <th>0</th>
+                                <th>0</th>
+                                <th>0</th>
+                                <th>0</th>
+                                <th>0</th>
+                                <th>0</th>
+                                <th>0</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END SAMPLE TABLE PORTLET-->
+</div>
+
+@section scripts {
+    <script type="text/javascript">
+        var isDetail = false;
+
+        var oTable;
+        var idField = "MemberId";
+        var path = "@Path";
+        var dataSource = path + "getDataSource";
+        var searchData = function (e) {
+            return {
+                startTime: $("#start").val(),
+                end: $("#end").val(),
+                key: $("#keyword").val(),
+                start: e.start,
+                length: e.length,
+                draw: e.draw
+            }
+        };
+        var columns = [//绑定数据
+            {
+                data: idField,
+                createdCell: function (nTd, sData, oData, iRow, iCol) {
+                    $(nTd).html("<input type='checkbox' name='checkList' value='" + sData + "'>");
+                }
+            },
+            { data: 'GroupDate' },
+            { data: 'MemberCode' },
+            { data: 'NickName' },
+            { data: '推广奖' },
+            { data: '平级奖' },
+            { data: '拓展奖' },
+            { data: '服务奖' },
+            { data: '报单补助' },
+            { data: '分红' },
+               { data: '每日返利' },
+                  { data: '领导奖' },
+                     { data: '购物返利' },
+                        //{ data: '委托奖励积分' },
+                                     { data: '委托奖励收益' },
+                                         { data: '分享消费奖' },
+                                       { data: '辅导奖' },
+            { data: '小计' },
+                 { data: '税' },
+                       { data: '重消' },
+            { data: '实际金额' },
+        ];
+        function searchList() {          
+            oTable.ajax.reload(null,false);
+        }
+        $(function () {
+            $('#start').datetimepicker({
+                language: 'zh-CN',
+                format: 'yyyy-mm-dd',
+                autoclose: 1,
+                minView: 2
+            }).on('changeDate', function (ev) {
+                var start = $('#start').val();
+                $('#end').datetimepicker('setStartDate', start);
+                $('#start').datetimepicker('hide');
+            });
+            $('#end').datetimepicker({
+                language: 'zh-CN',
+                format: 'yyyy-mm-dd',
+                autoclose: 1,
+                minView: 2
+            }).on('changeDate', function (ev) {
+                var end = $('#end').val();
+                $('#start').datetimepicker('setEndDate', end);
+                $('#end').datetimepicker('hide');
+            });
+        });
+        $(document).ready(function () {
+            oTable = initTable();
+        });
+
+        /**
+        * 表格初始化
+        * returns {*|jQuery}
+        */
+        function initTable() {
+            var table = $("#datatable").DataTable({
+                bFilter: false,
+                dom: '<f<t>lip>',
+                ordering: false,
+                serverSide: true,
+                language: {
+                    url: '/assets/global/plugins/DataTables-1.10.12/zh-CN.json'//汉化
+                },
+                ajax: {
+                    url: dataSource,
+                    type: 'post',
+                    data: searchData
+                },   //异步加载数据
+                columnDefs: [
+            { "searchable": false, "targets": 0 },//第一列禁用搜索
+            { "orderable": false, "targets": 0 }, //第一列禁用排序
+                ],
+                columns: columns,
+                initComplete: function (settings, json) {
+                    $("a[name='Restore']").css("visibility", $("#IsRestore").val());
+                },
+                footerCallback: function (tfoot, data, start, end, display) {
+                    $.ajax({
+                        url: "/Ajax/getFootTotal",// 跳转到 action
+                        data: { startTime: $("#start").val(), end: $("#end").val() ,id:'@ViewBag.ID'},
+                        type: "post",
+                        cache: false,
+                        dataType: "json",
+                        success: function (entity) { 
+                            $(tfoot).find('th').eq(1).html(entity.推广奖).css("color", "red");
+                            $(tfoot).find('th').eq(2).html(entity.平级奖).css("color", "red");
+                            $(tfoot).find('th').eq(3).html(entity.拓展奖).css("color", "red");
+                            $(tfoot).find('th').eq(4).html(entity.服务奖).css("color", "red");
+                            $(tfoot).find('th').eq(5).html(entity.报单补助).css("color", "red");
+                            $(tfoot).find('th').eq(6).html(entity.分红).css("color", "red");
+                            $(tfoot).find('th').eq(7).html(entity.每日返利).css("color", "red");
+                            $(tfoot).find('th').eq(8).html(entity.领导奖).css("color", "red");
+                            $(tfoot).find('th').eq(9).html(entity.购物返利).css("color", "red");
+                            //$(tfoot).find('th').eq(10).html(entity.委托奖励积分).css("color", "red");
+                            $(tfoot).find('th').eq(10).html(entity.委托奖励收益).css("color", "red");
+                            $(tfoot).find('th').eq(11).html(entity.分享消费奖).css("color", "red");
+                            $(tfoot).find('th').eq(12).html(entity.辅导奖).css("color", "red");
+                            $(tfoot).find('th').eq(13).html(entity.小计).css("color", "red");
+                            $(tfoot).find('th').eq(14).html(entity.税).css("color", "red");
+                            $(tfoot).find('th').eq(15).html(entity.重消).css("color", "red");
+                            $(tfoot).find('th').eq(16).html(entity.实际金额).css("color", "red");
+                        }
+                    });
+                }
+            });
+            return table;
+        }
+    </script>
+  
+}

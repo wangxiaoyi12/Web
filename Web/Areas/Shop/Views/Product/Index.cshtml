@@ -1,0 +1,328 @@
+﻿@using DataBase
+@using Business
+@using System.Linq.Expressions
+@{
+    ViewBag.Title = "产品列表";
+    //获取查询参数
+    //1.分类
+    int? classID = ReqHelper.GetIntQuery("ClassID");
+    ShopProductCategory classModel = null;
+    if (classID != null)
+    {
+        classModel = DB.ShopProductCategory.FindEntity(q => q.ID == classID.Value);
+    }
+    //三级分类
+    ShopProductCategory parent1 = null;
+    ShopProductCategory parent2 = null;
+    //2.品牌
+    int? brandID = ReqHelper.GetIntQuery("BrandID");
+    ShopBrand brandModel = null;
+    if (brandID != null)
+    {
+        brandModel = DB.ShopBrand.FindEntity(q => q.ID == brandID.Value);
+    }
+    //3.价格区间
+    int? rangeID = ReqHelper.GetIntQuery("RangeID");
+    PriceRange.Range rangeModel = null;
+    if (rangeID != null)
+    {
+        rangeModel = PriceRange.GetRange(rangeID.Value);
+    }
+    //4.排序
+    int order = ReqHelper.GetInt("order",0);
+    int orderType = ReqHelper.GetInt("orderType",0);
+    //5.分页参数
+    int pageIndex = ReqHelper.GetInt("pageindex",1);
+    int pageSize = 16; //默认16
+    //6.关键词
+    string key = ReqHelper.GetString("key");
+}
+@section Head{
+    <script src="~/assets/shop/js/lrtk.js"></script>
+}
+@section Footer{
+    <script src="~/assets/shop/js/product.js"></script>
+}
+<!--内容样式-->
+<div class="Inside_pages">
+    <!--位置-->
+    <div class="Location_link">
+        <em></em>
+        @if (classModel == null)
+        {
+            <a href="@Url_Shop.GetIndex()">进首页</a>  <text>&lt;</text>   <a>所有产品</a>
+        }
+        else
+        {
+            if (classModel.ShopProductCategoryParent != null)
+            {
+                parent1 = classModel.ShopProductCategoryParent;
+                if (parent1.ShopProductCategoryParent != null)
+                {
+                    parent2 = parent1.ShopProductCategoryParent;
+                }
+            }
+            <a href="@Url_Shop.GetProduct()">所有产品 &lt; </a>
+            if (parent2 != null)
+            { <a href="@Url_Shop.GetProduct(parent2)">@parent2.Name</a> <text>&lt;</text> }
+          if (parent1 != null) {    <a href="@Url_Shop.GetProduct(parent1)">@parent1.Name</a> <text>&lt;</text> }
+              <a href="@Url_Shop.GetProduct(classModel)">@classModel.Name</a>
+}
+    </div>
+    <!--筛选样式-->
+    <div id="Filter_style">
+        <div class="Filter">
+            @{
+                List<ShopProductCategory> classList = DB.ShopProductCategory.GetListByParent(classModel);
+                if (classList.Count > 0)
+                {
+                    <div class="Filter_list clearfix">
+                        <div class="Filter_title"><span>分类：</span></div>
+                        <div class="Filter_Entire"><a>全部</a></div>
+                        <div class="p_f_name classContainer">
+                            @foreach (var item in classList)
+                            {
+                                <a data-id="@item.ID">@item.Name</a>
+                            }
+                        </div>
+                    </div>
+                }
+            }
+            <div class="Filter_list clearfix">
+                <div class="Filter_title"><span>品牌：</span></div>
+                <div class="Filter_Entire"><a >全部</a></div>
+                <div class="p_f_name infonav_hidden brandContainer">
+                    @{
+                        //1.获取说有的品牌
+                       List<ShopBrand> brandList = DB.ShopBrand.Where().ToList();
+                        for (int i = 0; i < brandList.Count; i++)
+                        {
+                            ShopBrand item = brandList[i];
+                            if (i % 8 == 0)
+                            { <text><p> </text>
+                            }
+                            <a class="@(brandID==item.ID?"active":"")" data-id="@item.ID" title="@item.Name">@item.Name</a>
+                            if (i % 8 == 7)
+                            { @:</p> 
+                            }
+                        }
+                    }
+                </div>
+                <p class="infonav_more"><a href="#" class="more" onclick="infonav_more_down(0);return false;">更多<em class="pullup"></em></a></p>
+            </div>
+            <div class="Filter_list clearfix">
+                <div class="Filter_title"><span>价格：</span></div>
+                <div class="Filter_Entire"><a>全部</a></div>
+                <div class="p_f_name rangeContainer">
+                    @{
+                        var priceList = PriceRange.GetList();
+                        foreach (var item in priceList)
+                        {
+                            if (item.Max == int.MaxValue)
+                            {
+                                <a class="@(rangeID==item.ID?"active":"")" data-id="@item.ID">@(item.Min)以上</a>
+                            }
+                            else
+                            {
+                                <a class="@(rangeID==item.ID?"active":"")" data-id="@item.ID">@(item.Min)-@(item.Max)</a>
+                            }
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--样式-->
+    <div class="scrollsidebar side_green clearfix" id="scrollsidebar">
+        <div class="show_btn" id="rightArrow"><span></span></div>
+        <div class="page_left_style side_content">
+            <!--浏览记录-->
+            <div class="side_title"><a title="隐藏" class="close_btn"><span></span></a></div>
+            <div class="side_list">
+                @Html.Action("History")
+                <!--销售排行-->
+                @Html.Action("Rank")
+                <script type="text/javascript">
+	            jQuery("#tabRank li").hover(function(){ jQuery(this).addClass("on").siblings().removeClass("on")},function(){ });
+                jQuery("#tabRank").slide({ titCell:"dt h3",autoPlay:false,effect:"left",delayTime:300 });	</script>
+            </div>
+        </div>
+        <div class="page_right_style">
+            <!--排序样式-->
+            <div id="Sorted" class="">
+                <div class="Sorted">
+                    <div class="Sorted_style">
+                        @{
+                            Dictionary<int, string> orderList = new Dictionary<int, string>() { };
+                            orderList.Add(0, "综合");
+                            orderList.Add(1, "销量");
+                            orderList.Add(2, "价格");
+                            orderList.Add(3, "新品");
+                            foreach (var item in orderList)
+                            {
+                                <a  data-id="@item.Key" class="@(item.Key==order?"on":"")">@item.Value<i class="iconfont icon-@(orderType==0?"unfold":"fold")"></i></a>
+                            }
+                        }
+                    </div>
+                    <!--产品搜索-->
+                    <div class="product_search">
+                        <input name="" placeholder="请输入产品名称" type="text" class="search_text" value="@key" ><input name="" type="submit" value="" class="search_btn">
+                    </div>
+                    @{ 
+                        //获取分页数据
+                        var query = DB.ShopProduct.Where();
+                        //分类
+                        if (classID != null)
+                        {
+                            List<int> classIDs = new List<int>();
+                            if (parent2 != null)
+                            {
+                                query = query.Where(q => q.CategoryID == classID.Value);
+                            }
+                            else if (parent1 != null)
+                            {
+                                classIDs = DB.ShopProductCategory.Where(q => q.PID == classID.Value).Select(q => q.ID).ToList();
+                                classIDs.Add(classID.Value);
+                                query = query.Where(q => classIDs.Contains(q.CategoryID??0));
+                            }
+                            else
+                            {
+                                //向下找两层
+                                classIDs.Add(classID.Value);
+                                var idlist1 = DB.ShopProductCategory.Where(q => q.PID == classID.Value).Select(q => q.ID).ToList();
+                                var idlist2 = DB.ShopProductCategory.Where(q => idlist1.Contains(q.PID.Value)).Select(q => q.ID).ToList();
+                                classIDs.Add(classID.Value);
+                                classIDs.AddRange(idlist1);
+                                classIDs.AddRange(idlist2);
+                                query = query.Where(q => classIDs.Contains(q.CategoryID??0));
+                            }
+                        }
+                        //品牌
+                        if (brandID != null)
+                        {
+                            query = query.Where(q => q.BrandID == brandID.Value);
+                        }
+                        //价格
+                        if (rangeModel != null)
+                        {
+                            query = query.Where(q => q.PriceShopping >= rangeModel.Min && q.PriceShopping < rangeModel.Max);
+                        }
+                        //关键词
+                        if (string.IsNullOrEmpty(key)==false)
+                        {
+                            query = query.Where(q => q.Title.Contains(key));
+                        }
+                        query = query.Where(q=>q.IsEnable==true);
+                        //排序
+                        int total = query.Count();
+                        if (order == 0)
+                        {
+                            if (orderType == 0)
+                            {
+                                query = query.OrderByDescending(q => q.IsHot).OrderByDescending(q => q.Sales);
+                            }
+                            else
+                            {
+                                query = query.OrderBy(q => q.IsHot).OrderBy(q => q.Sales);
+                            }
+                        }
+                        else if (order == 1) { //销量
+                            if (orderType == 0)
+                            {
+                                query = query.OrderByDescending(q => q.Sales);
+                            }
+                            else {
+                                query = query.OrderBy(q => q.Sales);
+                            }
+                        }
+                        else if (order == 2)//价格
+                        {
+                            if (orderType == 0)
+                            {
+                                query = query.OrderByDescending(q => q.PriceShopping);
+                            }
+                            else
+                            {
+                                query = query.OrderBy(q => q.PriceShopping);
+                            }
+                        }
+                        else if (order == 3)//新品
+                        {
+                            if (orderType == 0)
+                            {
+                                query = query.OrderByDescending(q => q.IsNew);
+                            }
+                            else
+                            {
+                                query = query.OrderBy(q => q.IsNew);
+                            }
+                        }
+                        //分页
+                        List<ShopProduct> resultList=  query.Skip((pageIndex - 1) * pageSize)
+                                .Take(pageSize)
+                                .ToList();
+                    }
+                    <!--页数-->
+                    <div class="s_Paging">
+                        <span> @(pageIndex)/@(total/pageSize+1)</span>
+                        <a  id="prevBtn" class="on">&lt;</a>
+                        <a id="nextBtn" >&gt;</a>
+                    </div>
+                </div>
+            </div>
+            <!--结束-->
+            <!--产品列表样式-->
+            <div class="p_list  clearfix">
+                <ul>
+                    @{
+                        if (resultList.Count > 0)
+                        {
+                            foreach (var item in resultList)
+                            {
+                                string url = Url_Shop.GetProduct(item);
+                                <li class="gl-item">
+                                    <div class="Borders">
+                                        <div class="img"><a href="@url"><img src="@Url_Shop.GetProductImg(item)" style="width:220px;height:220px"></a></div>
+                                        <div class="Price"><b>@(Url_Shop.GetProductPriceYuan(item))</b></div>
+                                        <div class="name"><a href="@url">@(item.Title)</a></div>
+                                        @*<div class="Review">已有<a href="#">@(DB.ShopBrowsingHistory.GetCount(item.ID))</a>人浏览</div>*@
+                                        <div class="Review">已售出<a href="#">@(item.Sales)</a>件</div>
+                                        <div class="p-operate">
+                                            <a class="p-o-btn Collect collectBtn" data-id="@item.ID"><em></em>@(User_Shop.IsCollect(item.ID)?"已收藏": "收藏")</a>
+                                            <a class="p-o-btn shop_cart cartBtn" data-id="@item.ID"><em></em>加入购物车</a>
+                                        </div>
+                                    </div>
+                                </li>
+                            }
+                        }
+                        else
+                        {
+                            <div class="blank" style="height:300px;line-height:300px;">暂时没有数据了~</div>
+                        }
+                    }
+                </ul>
+                <div id="pageOne" class="pageBar"></div>
+                <script>
+                    var pageOne = $('#pageOne').pageBar({
+                        pageIndex: @(pageIndex),
+                        pageSize: @(pageSize),
+                        showType:'default',
+                        recordCount: @(total),
+                        submitEvent: function (index) {
+                            goProduct(index);
+                        }
+                    });
+                    //绑定上一一页下一页
+                    $('#prevBtn').click(function(){
+                        pageOne.goToLeft();
+                    });
+                    $('#nextBtn').click(function(){
+                        pageOne.goToRight();
+                    });
+                </script>
+            </div>
+        </div>
+    </div>
+    @Html.Action("Today")
+</div>
+

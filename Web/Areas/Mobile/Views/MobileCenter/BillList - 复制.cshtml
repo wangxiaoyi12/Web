@@ -1,0 +1,492 @@
+﻿@using DataBase
+@model List<ShopOrder>
+
+@{ 
+    var member = User_Shop.GetMember_Info();
+}
+<style>
+    .rowlist .list-group {
+        margin-top: 10px;
+    }
+
+    .badge-warning {
+        background: #FFFF33;
+        color: #111;
+    }
+
+    .badge-info {
+        background: #36c6d3;
+    }
+
+    .badge-success {
+        background: #09BB07;
+    }
+
+    .badge-danger {
+        background: #ec124a;
+    }
+
+    .score {
+        color: #6a91ee;
+        font-style: normal;
+        font-size: 18px;
+        margin-right: 5px;
+        vertical-align: top;
+        font-family: "Helvetica Neue";
+    }
+</style>
+
+@{
+    foreach (var item in Model)
+    {
+        List<ShopOrderProduct> orderproducts = item.ShopOrderProducts.ToList();
+
+        if (item.State == ShopEnum.OrderState.Submit.GetHashCode()) //待付款
+        {
+            <ul class="list-group productItem">
+                <li class="list-group-item text-primary">
+                    <div class="pull-left">
+                        订单编号:@item.OrderCode
+                    </div>
+                    <div class="pull-right">
+                        <span class="badge badge-danger">待付款</span>
+                    </div>
+                    <div class="clearfix"></div>
+                </li>
+                @foreach (var orItem in orderproducts)
+                {
+                    ShopProduct product = orItem.ShopProduct;
+                    string url = Url_Mobile.GetProduct(product);
+                    <li class="list-group-item hproduct clearfix">
+                        <div class="p-pic">
+                            <a href="@url"><img class="img-responsive" src="@Url_Shop.GetProductImg(product)"></a>
+                        </div>
+                        <div class="p-info">
+                            <a href="@url"><p class="p-title">@product.Title</p></a>
+                            @if (product.CategoryID1 == DB.XmlConfig.XmlSite.Scores)
+                            {
+
+                                <p class="p-origin">
+                                    <em>@Html.Raw(Url_Shop.GetProductShopping(orItem, product))</em>
+
+                                </p>
+                            }
+                            else
+                            {
+                                if (member.IsServiceCenter == "是")
+                                {
+                                    <p class="p-origin">
+                                        <em>@Html.Raw(Url_Shop.GetProductPriceStr1(orItem, product))</em>
+                                        @*<em>@Html.Raw(Url_Shop.GetProductPriceStrJiF(product))</em>*@
+                                    </p>
+                                }
+                                else
+                                {
+                                    <p class="p-origin">
+                                        <em>@Html.Raw(Url_Shop.GetProductXianJin1(orItem, product))</em>
+
+                                    </p>
+                                }
+                            }
+
+
+                            <div class="count">
+                                数量<br />
+                                @orItem.Count
+                            </div>
+                        </div>
+                    </li>
+                }
+                <li class="list-group-item">
+                    <div class="pull-left">
+                        <span class="glyphicon glyphicon-time"></span>
+                        @item.SubmitTime.ToString("yyyy-MM-dd HH:mm")
+                    </div>
+                    <div class="pull-right">
+                        <a class="btn btn-danger btn-xs cancelBtn" data-id="@item.GUID">取消</a>
+                        <a href="@Url.Action("payment", new { orderid = item.GUID }).ToLower()" class="btn btn-success btn-xs">确认付款</a>
+                    </div>
+                    <div class="clearfix"></div>
+                </li>
+            </ul>
+        }
+        else if (item.State == ShopEnum.OrderState.Chu.GetHashCode()) //待处理
+        {
+            <ul class="list-group productItem">
+                <li class="list-group-item text-primary">
+                    <div class="pull-left">
+                        订单编号:@item.OrderCode
+                    </div>
+                    <div class="pull-right">
+                        <span class="badge badge-warning">待处理</span>
+                    </div>
+                    <div class="clearfix"></div>
+                </li>
+                @foreach (var orItem in orderproducts)
+                {
+                    ShopProduct product = orItem.ShopProduct;
+                    string url = Url_Mobile.GetProduct(product);
+                    <li class="list-group-item hproduct clearfix">
+                        <div class="p-pic">
+                            <a href="@url"><img class="img-responsive" src="@Url_Shop.GetProductImg(product)"></a>
+                        </div>
+                        <div class="p-info">
+                            <a href="@url"><p class="p-title">@product.Title</p></a>
+                            @if (product.CategoryID1 == DB.XmlConfig.XmlSite.Scores)
+                            {
+
+                                <p class="p-origin">
+                                    <em>@Html.Raw(Url_Shop.GetProductShopping(orItem, product))</em>
+
+                                </p>
+                            }
+                            else
+                            {
+                                if (member.IsServiceCenter == "是")
+                                {
+                                    <p class="p-origin">
+                                        <em>@Html.Raw(Url_Shop.GetProductPriceStr1(orItem, product))</em>
+                                        @*<em>@Html.Raw(Url_Shop.GetProductPriceStrJiF(product))</em>*@
+                                    </p>
+                                }
+                                else
+                                {
+                                    <p class="p-origin">
+                                        <em>@Html.Raw(Url_Shop.GetProductXianJin1(orItem, product))</em>
+
+                                    </p>
+                                }
+                            }
+                        </div>
+                        <div class="count">
+                            数量<br />
+                            @orItem.Count
+                        </div>
+                    </li>
+                }
+                <li class="list-group-item">
+                    <div class="pull-left">
+                            <span class="glyphicon glyphicon-time"></span>
+                            @item.SubmitTime.ToString("yyyy-MM-dd HH:mm")
+                        </div>
+                    @*<div class="pull-left">
+                        <span class="glyphicon glyphicon-time"></span>
+                        倒计时:<div id="DjTimeDiv" style="margin-top: -19px;margin-left: 80px;"> </div>
+                        <input type="hidden" value="@((item.SubmitTime.AddHours(48)))" i id="hidTime">
+                    </div>*@
+                    @*@if ((int)Math.Floor((DateTime.Now - item.SubmitTime).TotalHours) >= 24)
+                        {*@
+                    <div class="pull-right">
+                        <a href="@Url.Action("TiHuo", new { guid = item.GUID }).ToLower()" class="btn btn-danger btn-xs">提货</a>
+                        <a href="@Url.Action("WeiTuo", new { guid = item.GUID }).ToLower()" class="btn btn-success btn-xs">挂卖</a>
+                    </div>
+                    @*}*@
+                    <div class="clearfix"></div>
+                </li>
+            </ul>
+        }
+        else if (item.State == ShopEnum.OrderState.Pay.GetHashCode()) //待发货
+        {
+            <ul class="list-group productItem">
+                <li class="list-group-item text-primary">
+                    <div class="pull-left">
+                        订单编号:@item.OrderCode
+                    </div>
+                    <div class="pull-right">
+                        <span class="badge badge-warning">待发货</span>
+                    </div>
+                    <div class="clearfix"></div>
+                </li>
+                @foreach (var orItem in orderproducts)
+                {
+                    ShopProduct product = orItem.ShopProduct;
+                    string url = Url_Mobile.GetProduct(product);
+                    <li class="list-group-item hproduct clearfix">
+                        <div class="p-pic">
+                            <a href="@url"><img class="img-responsive" src="@Url_Shop.GetProductImg(product)"></a>
+                        </div>
+                        <div class="p-info">
+                            <a href="@url"><p class="p-title">@product.Title</p></a>
+                            @if (product.CategoryID1 == DB.XmlConfig.XmlSite.Scores)
+                            {
+
+                                <p class="p-origin">
+                                    <em>@Html.Raw(Url_Shop.GetProductShopping(orItem, product))</em>
+
+                                </p>
+                            }
+                            else
+                            {
+                                if (member.IsServiceCenter == "是")
+                                {
+                                    <p class="p-origin">
+                                        <em>@Html.Raw(Url_Shop.GetProductPriceStr1(orItem, product))</em>
+                                        @*<em>@Html.Raw(Url_Shop.GetProductPriceStrJiF(product))</em>*@
+                                    </p>
+                                }
+                                else
+                                {
+                                    <p class="p-origin">
+                                        <em>@Html.Raw(Url_Shop.GetProductXianJin1(orItem, product))</em>
+
+                                    </p>
+                                }
+                            }
+                        </div>
+                        <div class="count">
+                            数量<br />
+                            @orItem.Count
+                        </div>
+                    </li>
+                }
+            <li class="list-group-item">
+                <div class="pull-left">
+                    <span class="glyphicon glyphicon-time"></span>
+                    @item.SubmitTime.ToString("yyyy-MM-dd HH:mm")
+                </div>
+                <div class="pull-right">
+                 
+                    <a class="btn btn-danger btn-xs cancelBtnTH" data-id="@item.GUID">我要退货</a>
+                
+                </div>
+                <div class="clearfix"></div>
+            </li>
+            </ul>
+        }
+        @*else if (item.State == ShopEnum.OrderState.WeiTuo.GetHashCode()) //委托
+            {
+                <ul class="list-group productItem">
+                    <li class="list-group-item text-primary">
+                        <div class="pull-left">
+                            订单编号:@item.OrderCode
+                        </div>
+                        <div class="pull-right">
+                            <span class="badge badge-warning">委托中</span>
+                        </div>
+                        <div class="clearfix"></div>
+                    </li>
+                    @foreach (var orItem in orderproducts)
+                    {
+                        ShopProduct product = orItem.ShopProduct;
+                        string url = Url_Mobile.GetProduct(product);
+                        <li class="list-group-item hproduct clearfix">
+                            <div class="p-pic">
+                                <a href="@url"><img class="img-responsive" src="@Url_Shop.GetProductImg(product)"></a>
+                            </div>
+                            <div class="p-info">
+                                <a href="@url"><p class="p-title">@product.Title</p></a>
+                                @if (product.CategoryID1 != 15 && product.CategoryID1 != 16)
+                                {
+                                    <p class="p-origin">
+                                        <em>@Html.Raw(Url_Shop.GetProductPriceStr(product))</em>
+                                    </p>
+                                }
+                                else
+                                {
+                                    <p class="p-origin">
+                                        <em>@Html.Raw(Url_Shop.GetProductXianJin(product))</em>
+                                        <em>@Html.Raw(Url_Shop.GetProductGouWuJ(product))</em>
+                                    </p>
+                                }
+                            </div>
+                            <div class="count">
+                                数量<br />
+                                @orItem.Count
+                            </div>
+                        </li>
+                    }
+                    <li class="list-group-item">
+                        <div class="pull-left">
+                            <span class="glyphicon glyphicon-time"></span>
+                            倒计时:<div id="DjTimeDiv" style="margin-top: -19px;margin-left: 80px;"> </div>
+                            <input type="hidden" value="@((item.SubmitTime.AddHours(48)))" i id="hidTime">
+                        </div>
+                        <div class="clearfix"></div>
+                    </li>
+                </ul>
+            }*@
+
+else if (item.State == ShopEnum.OrderState.FaHuo.GetHashCode()) //待收货
+{
+    <ul class="list-group productItem">
+        <li class="list-group-item text-primary">
+            <div class="pull-left">
+                订单编号:@item.OrderCode
+            </div>
+            <div class="pull-right">
+                <span class="badge badge-warning">待收货</span>
+            </div>
+            <div class="clearfix"></div>
+        </li>
+        @foreach (var orItem in orderproducts)
+                {
+                    ShopProduct product = orItem.ShopProduct;
+                    string url = Url_Mobile.GetProduct(product);
+                <li class="list-group-item hproduct clearfix">
+                    <div class="p-pic">
+                        <a href="@url"><img class="img-responsive" src="@Url_Shop.GetProductImg(product)"></a>
+                    </div>
+                    <div class="p-info">
+                        <a href="@url"><p class="p-title">@product.Title</p></a>
+                        @if (product.CategoryID1 == DB.XmlConfig.XmlSite.Scores)
+                        {
+
+                            <p class="p-origin">
+                                <em>@Html.Raw(Url_Shop.GetProductShopping(orItem, product))</em>
+
+                            </p>
+                        }
+                        else
+                        {
+                            if (member.IsServiceCenter == "是")
+                            {
+                                <p class="p-origin">
+                                    <em>@Html.Raw(Url_Shop.GetProductPriceStr1(orItem, product))</em>
+                                    @*<em>@Html.Raw(Url_Shop.GetProductPriceStrJiF(product))</em>*@
+                                </p>
+                            }
+                            else
+                            {
+                                <p class="p-origin">
+                                    <em>@Html.Raw(Url_Shop.GetProductXianJin1(orItem, product))</em>
+
+                                </p>
+                            }
+                        }
+                    </div>
+                    <div class="count">
+                        数量<br />
+                        @orItem.Count
+                    </div>
+                </li>
+                }
+        <li class="list-group-item">
+         
+            <p class="specification">物流公司:@DB.ShopExpress.FindEntity(item.ExpressID).Name</p>
+            <p class="specification">物流编号:@item.ExpressCode</p>
+            <div class="pull-left">
+                <span class="glyphicon glyphicon-time"></span>
+                @item.SubmitTime.ToString("yyyy-MM-dd HH:mm")
+            </div>
+            <div class="pull-right">
+                <a class="btn btn-success btn-xs" href="http://www.kuaidi100.com/">物流查询</a>
+                <a class="btn btn-danger btn-xs cancelBtnTH" data-id="@item.GUID">我要退货</a>
+                <a href="@Url.Action("TakeGoods",new { guid=item.GUID})" class="btn btn-success btn-xs">确认收货</a>
+            </div>
+            <div class="clearfix"></div>
+        </li>
+    </ul>
+}
+else if (item.State == ShopEnum.OrderState.Finish.GetHashCode()) //已完成
+{
+    <ul class="list-group productItem">
+        <li class="list-group-item text-primary">
+            <div class="pull-left">
+                订单编号:@item.OrderCode
+            </div>
+            <div class="pull-right">
+                <span class="badge badge-success">已完成</span>
+            </div>
+            <div class="clearfix"></div>
+        </li>
+        @foreach (var orItem in orderproducts)
+                {
+                    ShopProduct product = orItem.ShopProduct;
+                    string url = Url_Mobile.GetProduct(product);
+                <li class="list-group-item hproduct clearfix">
+                    <div class="p-pic">
+                        <a href="@url"><img class="img-responsive" src="@Url_Shop.GetProductImg(product)"></a>
+                    </div>
+                    <div class="p-info">
+                        <a href="@url"><p class="p-title">@product.Title</p></a>
+                        @if (product.CategoryID1 == DB.XmlConfig.XmlSite.Scores)
+                        {
+
+                            <p class="p-origin">
+                                <em>@Html.Raw(Url_Shop.GetProductShopping(orItem, product))</em>
+
+                            </p>
+                        }
+                        else
+                        {
+                            if (member.IsServiceCenter == "是")
+                            {
+                                <p class="p-origin">
+                                    <em>@Html.Raw(Url_Shop.GetProductPriceStr1(orItem, product))</em>
+                                    @*<em>@Html.Raw(Url_Shop.GetProductPriceStrJiF(product))</em>*@
+                                </p>
+                            }
+                            else
+                            {
+                                <p class="p-origin">
+                                    <em>@Html.Raw(Url_Shop.GetProductXianJin1(orItem, product))</em>
+
+                                </p>
+                            }
+                        }
+                    </div>
+                    <div class="count">
+                        数量<br />
+                        @orItem.Count
+                    </div>
+                </li>
+                }
+        <li class="list-group-item">
+            <div class="pull-left">
+                <span class="glyphicon glyphicon-time"></span>
+                @item.SubmitTime.ToString("yyyy-MM-dd HH:mm")
+            </div>
+            <div class="pull-right">
+                @{
+                            //判断当前订单是否评论过
+                            if (DB.ShopOrderComment.Any(q => q.OrderID == item.GUID))
+                            {
+
+                            }
+                            else
+                            {
+                        <a href="@Url.Action("BillComment",new { guid=item.GUID})" class="btn btn-info btn-xs">评论</a>
+                            }
+                }
+            </div>
+            <div class="clearfix"></div>
+        </li>
+    </ul>
+                        }
+                    }
+
+                    if (ViewBag.skipCount < ViewBag.recordCount)
+                    {
+                        <div class="btn btn-primary btn-block viewMore" data-skip="@ViewBag.skipCount">加载更多>></div>
+                    }
+                    else
+                    {
+                        <p class="noData">暂时没有数据了?</p>
+                    }
+}
+<script language="javascript" type="text/javascript">
+
+    var time;
+    var minutes;
+    var seconds;
+    var str;
+
+
+    var starttime = new Date($("#hidTime").val());
+    //alert(starttime.toLocaleString());
+    setInterval(function () {
+        var nowtime = new Date();
+        var time = starttime - nowtime;
+        var day = parseInt(time / 1000 / 60 / 60 / 24);
+        var hour = parseInt(time / 1000 / 60 / 60 % 24);
+        var minute = parseInt(time / 1000 / 60 % 60);
+        var seconds = parseInt(time / 1000 % 60);
+        if (minute < 0) {
+            $('#DjTimeDiv').html("<a>挂卖失败</a>");
+        } else {
+            $('#DjTimeDiv').html(day + "天" + hour + "时" + minute + "分" + seconds + "秒");
+        }
+
+    }, 1000);
+
+</script>

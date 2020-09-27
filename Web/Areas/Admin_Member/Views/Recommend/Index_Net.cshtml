@@ -1,0 +1,165 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+}
+@section css{
+    @*<link href="~/assets/global/plugins/jstree/dist/themes/default/style.min.css" rel="stylesheet" />*@
+}
+<!-- BEGIN PAGE BAR -->
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="/SysManage/Home/Index">首页</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#">会员管理</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="/Admin_Member/Recommend/Index_Net"><span>接点树</span></a>
+        </li>
+    </ul>
+</div>
+<!-- END PAGE BAR -->
+<!-- BEGIN PAGE CONTENT -->
+<div class="portlet-body">
+    <div class="portlet box green">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="fa fa-comments"></i>接点树图表
+            </div>
+            <div class="tools">
+                <a href="javascript:;" class="collapse" data-original-title="" title=""> </a>
+            </div>
+        </div>
+        <div class="portlet-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="col-xs-8">
+                        <input type="text" class="form-control" id="memcode" value="@ViewBag.MemberCode" placeholder="请输入完整会员编号" datatype="*" nullmsg="" />
+                    </div>
+                    <div class="col-xs-4">
+                        <button class="btn btn-info" onclick="searchtree();">查询</button>
+                    </div>
+                </div>
+            </div>
+            <div class="table-scrollable">
+                <table id="treetable" class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>会员编号</th>
+                            <th>会员姓名</th>
+                            <th>会员级别</th>
+                            <th>伞下总人数</th>
+                            <th>新增业绩(周)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="mytbody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    @*<div id="jstree_div"></div>*@
+</div>
+<!-- END PAGE CONTENT -->
+
+@section scripts{
+    @*<script src="~/assets/global/plugins/jstree/dist/jstree.js"></script>*@
+    <script src="~/assets/global/plugins/treeTable/jquery.treeTable.js"></script>
+    <script type="text/javascript">
+        var memberCode = "@ViewBag.MemberCode";
+        var option = {
+            //theme: 'vsStyle',
+            expandLevel: @ViewBag.expandLevel,
+            beforeExpand: function ($treeTable, id) {
+                //判断id是否已经有了孩子节点，如果有了就不再加载，这样就可以起到缓存的作用
+                if ($('.' + id, $treeTable).length) { return; }
+                //这里的html可以是ajax请求
+                $.ajax({
+                    url: "/Admin_Member/Recommend/GetChildsNodeNet",
+                    data: { id: id },
+                    type: "post",
+                    success: function (d) {
+                        if (d.IsSuccess) {
+                            $treeTable.addChilds(d.Msg);
+                        } else {
+                            alertError("错误提示", d.Msg);
+                        }
+                    }, error: function (error) {
+                        alertError("错误提示", error.d);
+                    }
+                });
+            },
+            onSelect: function ($treeTable, id) {
+                window.console && console.log('onSelect:' + id);
+            }
+        };
+        //初始化
+        $(function () {
+            $.ajax({
+                url: "/Admin_Member/Recommend/SearchNodeNet",
+                data: { memberCode: memberCode },
+                type: "post",
+                success: function (d) {
+                    if (d.IsSuccess) {
+                        $("#mytbody").html(d.Msg);
+                        $('#treetable').treeTable(option);
+                    } else {
+                        alertError("错误提示", d.Msg);
+                    }
+                }, error: function (error) {
+                    alertError("错误提示", error.d);
+                }
+            });
+        });
+        function searchtree() {
+            memberCode = $("#memcode").val(); 
+            $.ajax({
+                url: "/Admin_Member/Recommend/SearchNet",
+                data: { memberCode: memberCode },
+                type: "post",
+                success: function (d) {
+                    if (d.IsSuccess) {
+                        location.href = d.ReUrl;
+                    } else {
+                        alertError("错误提示", d.Msg);
+                    }
+                }, error: function (error) {
+                    alertError("错误提示", error.d);
+                }
+            });
+        }
+        //var tree;
+        //var memberCode;
+        //$(function () {
+        //    loadTree();
+        //    tree = jQuery.jstree.reference("#jstree_div");
+        //});
+
+        //function loadTree() {
+        //    $('#jstree_div').jstree({
+        //        'plugins': ["contextmenu", "dnd", "search", "state", "types", "wholerow"],
+        //        "themes": { "stripes": true },
+        //        'core': {
+        //            'data': {
+        //                'url': '/Admin_Member/Recommend/getjsTreeData_Net',  //异步加载jstree html格式的数据地址
+        //                'dataType': 'json',
+        //                'data': function (node) {
+        //                    return { 'id': node.id, code: memberCode };
+        //                }
+        //            }
+        //        }
+        //    });
+        //}
+        //function searchtree() {
+        //    //$("#jstree_div").empty();
+        //    var code = $('#memcode').val();
+        //    code = $.trim(code);
+        //    if (code.length > 0) {
+        //        memberCode = code;
+        //        tree.refresh();
+        //    }
+        //}
+    </script>
+}

@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<fields>
+  <field>
+    <code>GUID</code>
+    <name>编号</name>
+  </field>
+  <field>
+    <code>ProductName</code>
+    <name>商品名称</name>
+  </field>
+
+  <field>
+    <code>PayWay</code>
+    <name>支付方式</name>
+  </field>
+  <field>
+    <code>PayAmount</code>
+    <name>支付金额</name>
+  </field>
+  <field>
+    <code>MemberCode</code>
+    <name>收货人编号</name>
+  </field>
+  <field>
+    <code>Reciver</code>
+    <name>收货人</name>
+  </field>
+  <field>
+    <code>Tel</code>
+    <name>联系方式</name>
+  </field>
+  <field>
+    <code>PostAddress</code>
+    <name>收货地址</name>
+  </field>
+
+  <field>
+    <code>SubmitTime</code>
+    <name>下单时间</name>
+  </field>
+  
+  <field>
+    <code>ExpressName</code>
+    <name>物流公司</name>
+  </field>
+  <field>
+    <code>ExpressCode</code>
+    <name>快递单号</name>
+  </field>
+  <field>
+    <code>StoreCode</code>
+    <name>社区店编号</name>
+  </field>
+  <field>
+    <code>OperateCode</code>
+    <name>发货人编号</name>
+  </field>
+</fields>

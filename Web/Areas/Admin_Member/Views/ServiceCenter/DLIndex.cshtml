@@ -1,0 +1,220 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+    var Path = "/Admin_Member/ServiceCenter/";
+    var timeFlag = "注册时间";
+}
+
+<!-- BEGIN PAGE BAR -->
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="/SysManage/Home/Index">首页</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#">会员管理</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="/Admin_Member/ServiceCenter/Index"><span>代理列表</span></a>
+        </li>
+    </ul>
+</div>
+<!-- END PAGE BAR -->
+<!-- BEGIN PAGE CONTENT -->
+<div class="row">
+    <!-- BEGIN SAMPLE TABLE PORTLET-->
+    <div class="col-md-12">
+        <div class="portlet box green">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-database"></i>代理列表
+                </div>
+                <div class="tools">
+                    <a style="color:white" onclick="ToExcel()" title="导出Excel"> <i class="fa fa-sign-out"></i>导出Excel </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="table-responsive">
+                    <div class="table-toolbar col-md-3">
+                      
+                    </div>
+                    <form class="form form-horizontal form-inline">
+                        <fieldset>
+                            <div class="control-group">
+                                <div class="controls">
+                                    <div class=" text-right">
+                                        <div class="input-group col-md-6">
+                                            <input type="text" value="" id="start" placeholder="@(timeFlag)起" class="form-control ">
+                                            <span class="input-group-addon"> to </span>
+                                            <input type="text" value="" id="end" placeholder="@(timeFlag)至" class="form-control ">
+                                        </div>
+                                        <div class="input-group col-md-3">
+                                            <input type="text" class="form-control" placeholder="搜索关键字" id="keyword" />
+                                            <span class="input-group-btn">
+                                                <a class="btn btn-default" href="javascript:searchList();">
+                                                    <span class="glyphicon glyphicon-search"></span>
+                                                </a>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+
+                </div>
+                <div class="table-responsive">
+                    <table id="datatable" class="table table-striped table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th style="width:2%"><input type="checkbox" id='checkAll'></th>
+                                <th>会员编号</th>
+                                <th>姓名</th>
+                                <th>手机</th>
+                                <th>注册时间</th>
+                                <th>代理级别</th>
+                                <th>省</th>
+                                <th>市</th>
+                                <th>区</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END SAMPLE TABLE PORTLET-->
+</div>
+<!-- END PAGE CONTENT -->
+@section scripts {
+    <script type="text/javascript">
+        var oTable;
+        var isDetail = false;
+        var idField = "MemberId";
+        var path = "@Path";
+        var dataSource = path + "getDataSourceDL";
+        var searchData = function (e) {
+            return {
+                startTime: $("#start").val(),
+                end: $("#end").val(),
+                key: $("#keyword").val(),
+                start: e.start,
+                length: e.length,
+                draw: e.draw
+            }
+        };
+        var columns = [//绑定数据
+            {
+                data: idField,
+                createdCell: function (nTd, sData, oData, iRow, iCol) {
+                    $(nTd).html("<input type='checkbox' name='checkList' value='" + sData + "'>");
+                }
+            },
+             { data: 'Code' },
+            { data: 'NickName' },
+            { data: 'Mobile' },
+            { data: 'CreateTime' },
+            { data: 'DLName' },
+            { data: 'Sheng' },
+            { data: 'Shi' },
+            { data: 'Xian' },
+            {
+                data: 'MemberId',
+                createdCell: function (nTd, sData, oData, iRow, iCol) {
+                    if (oData.IsDL == "审核中") {
+                        $(nTd).html("<a onclick=\"IsokDL('" + oData.MemberId + "','是')\" name='Edit' class='btn green btn-xs'><i class='fa fa-check'></i>通过</a>&nbsp;")
+                            .append("<a onclick=\"IsokDL('" + oData.MemberId + "','否')\" name='Edit' class='btn red btn-xs'><i class='fa fa-mail-reply'></i>驳回</a>")
+                    } else {
+                        //$(nTd).html("<a  href=javascript:saveData('" + oData.MemberId + "'," + iRow + ") class='btn green btn-xs'>保存</a> <a  onclick=cancelCenter('" + oData.MemberId + "') class='btn red btn-xs'>取消代理</a>")
+                        $(nTd).html("<a  onclick=cancelCenterDL('" + oData.MemberId + "') class='btn red btn-xs'>取消代理</a>")
+                    }
+                }
+            },
+        ];
+        function searchList() {
+            oTable.ajax.reload(null, false);
+        }
+        $(function () {
+            $('#start').datetimepicker({
+                language: 'zh-CN',
+                format: 'yyyy-mm-dd',
+                autoclose: 1,
+                minView: 2
+            }).on('changeDate', function (ev) {
+                var start = $('#start').val();
+                $('#end').datetimepicker('setStartDate', start);
+                $('#start').datetimepicker('hide');
+            });
+            $('#end').datetimepicker({
+                language: 'zh-CN',
+                format: 'yyyy-mm-dd',
+                autoclose: 1,
+                minView: 2
+            }).on('changeDate', function (ev) {
+                var end = $('#end').val();
+                $('#start').datetimepicker('setEndDate', end);
+                $('#end').datetimepicker('hide');
+            });
+        });
+        function saveData(id, row) {
+            var Commission = $("#Commission" + row).val();
+            var Coins = $("#Coins" + row).val();
+            $.post("/Admin_Member/ServiceCenter/SaveData", { id: id, Commission: Commission, Coins: Coins }, function (result) {
+                if (result.Status == "y") {
+                    alert("成功提示", result.Msg, function () {
+                    });
+                    oTable.ajax.reload(null, false);
+                } else {
+                    alertError("错误提示", result.Msg);
+                }
+            });
+        }
+        function cancelCenterDL(id) {
+            confirm("确认执行此操作吗？", "是否要取消此代理，您确定吗？", function () {
+                //提交数据
+                $.ajax({
+                    url: path + "CancelCenterDL",
+                    data: { id: id },
+                    type: "post",
+                    success: function (result) {
+                        if (result.Status == "y") {
+                            alert("成功提示", result.Msg);
+                            oTable.ajax.reload(null, false);
+                        } else {
+                            alertError("错误提示", result.Msg);
+                        }
+                    }, error: function (error) {
+
+                        console.log(error);
+                    }
+                });
+
+            });
+        }
+        function ToExcel() {
+            var href = "/Admin_Member/ServiceCenter/ToExcel/代理数据列表?startTime=" + $("#start").val() + "&end=" + $("#end").val() + "&key=" + $("#keyword").val();
+            window.open(href);
+        }
+        function IsokDL(id, type) {
+            confirm("确认执行此操作吗？", "数据提交后不可恢复，您确定吗？", function () {
+                //提交数据
+                $.ajax({
+                    url: "/Admin_Member/ServiceCenter/IsokDL",
+                    data: { id: id, type: type },
+                    type: "post",
+                    success: function (result) {
+                        alert("成功提示", result.Msg);
+                        oTable.ajax.reload()
+                    }, error: function (error) {
+                        console.log(error);
+                    }
+                });
+            });
+        }
+    </script>
+    <script src="~/assets/scripts/myListPage.js"></script>
+}

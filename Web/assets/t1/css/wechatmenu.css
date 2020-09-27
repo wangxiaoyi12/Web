@@ -1,0 +1,154 @@
+.iconfont_w {
+  font-family: "iconfont_menu" !important;
+  font-size: 20px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-stroke-width: 0.2px;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/*@font-face {
+  font-family: "footer-iconfont";
+  src: url("../../static/font/iconfont.eot");
+   IE9
+  src: url("../../static/font/iconfont.eot") format("embedded-opentype"), url("../../static/font/iconfont.woff") format("woff"), url("../../static/font/iconfont.ttf") format("truetype"), url("../../static/font/iconfont.svg") format("svg");
+}
+
+.footer-iconfont {
+  font-family: "footer-iconfont" !important;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-fenlei:before {
+  content: "\e86e";
+  font-size: 18px;
+  vertical-align: bottom;
+}
+
+.icon-gouwu:before {
+  content: "\e603";
+  font-size: 22px;
+  vertical-align: bottom;
+}
+
+.icon-shequ:before {
+  content: "\e648";
+  font-size: 18px;
+  vertical-align: bottom;
+}
+
+.icon-me-copy:before {
+  content: "\e600";
+  font-size: 19px;
+  vertical-align: bottom;
+}
+
+.icon-gouwu1:before {
+  content: "\e604";
+  font-size: 18px;
+  vertical-align: bottom;
+}*/
+@font-face {
+	font-family: "footer-iconfont";
+  font-weight: normal;
+  font-style: normal;
+  src:url('../font/iconfont.ttf') format('truetype'); 
+}
+
+.footer-iconfont {
+  font-family:"footer-iconfont" !important;
+  font-style:normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.icon-fenlei:before { content: "\e600";font-size:.36rem}
+
+.icon-gouwu:before { content: "\e609"; font-size:.36rem}
+
+.icon-shequ:before { content: "\e733"; font-size:.36rem}
+
+.icon-me-copy:before { content: "\e60a"; font-size:.40rem}
+
+.icon-gouwu1:before { content: "\e79b";font-size:.36rem }
+
+.icon-chazhao:before { content: "\e601"; }
+
+.icon-lingsheng:before { content: "\e602"; }
+
+
+
+.icon-tongzhi1:before { content: "\e617"; }
+
+
+/* line 4, ../sass/weChatMenubar.scss */
+body {
+  padding-bottom: 50px;
+}
+
+/* line 5, ../sass/weChatMenubar.scss */
+a {
+  text-decoration: none;
+}
+
+/* line 6, ../sass/weChatMenubar.scss */
+#wechatMenu {
+  box-sizing: border-box;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 998;
+  width: 100%;
+  height: 50px;
+  border-top: 1px solid  #dcdcdc;
+  background-color: #F9F9F9;
+}
+
+#wechatMenu ul {
+  display: -moz-box;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+#wechatMenu ul .menuitem {
+  flex: 1;
+  height: 100%;
+}
+
+#wechatMenu ul .menuitem a {
+  font-family: "microsoft yahei",Verdana, Arial, Helvetica, sans-serif;
+  box-sizing: border-box;
+  padding-top: 6px;
+  display: block;
+  width: 100%;
+  height: 100%;
+  color: #666666;
+  font-size: 12px;
+  text-align: center;
+}
+
+#wechatMenu ul .menuitem a i{
+	line-height: 20px;
+  vertical-align: bottom;
+}
+
+#wechatMenu ul .menuitem a p {
+  margin-top: 4px;
+  line-height: 12px;
+}
+
+#wechatMenu ul .menuitem:nth-child(4) a p {
+  margin-top: 5px;
+}
+
+#wechatMenu ul .curr a {
+  color: #e3393c;
+}
+#wechatMenu .menuitem .tab-active{
+		color:#ce3d3e;
+	}

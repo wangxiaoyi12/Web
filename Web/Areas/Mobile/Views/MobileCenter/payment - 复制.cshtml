@@ -1,0 +1,781 @@
+﻿@using Business
+@using DataBase
+@using Wechat
+@model ShopOrder
+@{
+    ViewBag.Title = "确认支付";
+    //获取当前登录用户
+    Member_Info curUser = User_Shop.GetMember_Info();
+
+
+    //ShopOrderProduct orderPro = DB.ShopOrderProduct.Where(q => q.OrderID == Model.GUID).First();
+    //var isBao = DB.ShopOrderProduct.Any(a => a.OrderID == Model.GUID && a.ShopProduct.CategoryID1 == 219);
+    //ShopProduct product = orderPro.ShopProduct;
+
+    int timestamp = AccessTokenManage.TimeStamp;
+    string sig = AccessTokenManage.GetSignture(timestamp, Request.Url.AbsoluteUri.Replace(Model.GUID, Model.TraceNo));
+
+    Xml_Shop shopConfig = DB.XmlConfig.XmlShop;
+    //app的
+    var isapp = Request.Url.AbsoluteUri.ToString().IndexOf("isPhone") != -1;
+    //1.获取最近的店编号
+    //string dianCode = DB.Member_Info.GetDianCode(curUser);
+
+    //var yf = Model.GetPostStr(shopConfig, isBao);
+    var money = shopConfig.GetTotal_YouFei(Model);
+    var XianJin = shopConfig.GetTotal_XianJin(Model);
+    var GouWu = shopConfig.GetTotal_GouWu(Model);
+
+    bool flag = false;
+    string agent = HttpContext.Current.Request.UserAgent;
+    string[] keywords = { "Android", "iPod", "iPad", "Windows Phone", "MQQBrowser" };
+    //排除 Windows 桌面系统
+    if (!agent.Contains("Windows NT") || (agent.Contains("Windows NT") && agent.Contains("compatible; MSIE 9.0;")))
+    {
+        //排除 苹果桌面系统
+        if (!agent.Contains("Windows NT") && !agent.Contains("Macintosh"))
+        {
+            foreach (string item in keywords)
+            {
+                if (agent.Contains(item))
+                {
+                    flag = true;
+                    break;
+                }
+            }
+        }
+
+    }
+
+}
+@section Head{
+    <style>
+        /*#page1 { pointer-events: none; }*/
+        .infoPage input {
+            border: 0px;
+            text-align: right;
+        }
+
+        .qrCodeImg {
+            margin: auto;
+            margin-top: 2em;
+            width: 60%;
+            max-width: 400px;
+        }
+
+            .qrCodeImg canvas {
+                width: 100%;
+            }
+
+        .infoPage .list-group-item:first-child {
+            /*line-height: 50px;*/
+        }
+
+        .selectArea {
+            margin: 20px 0px;
+        }
+
+            .selectArea .col-xs-4 {
+                padding-left: 5px;
+                padding-right: 5px;
+            }
+
+        .intro {
+            pointer-events: none
+        }
+        /*.page1 { pointer-events:all; }*/
+        .c-float-popWrap {
+            position: fixed;
+            top: 260px !important;
+        }
+    </style>
+}
+
+@section Footer{
+
+}
+<div class="page page1" id="page1">
+    <header class="header">
+        <div class="fix_nav">
+            <div class="nav_inner">
+                <a class="nav-left back-icon" href="javascript:history.go(-1)">返回</a>
+                <div class="tit">确认支付</div>
+            </div>
+        </div>
+    </header>
+    <div class="container itemdetail mini-innner ">
+        <div class="row">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="pull-left">
+                        <h4 class="panel-title"><span class="glyphicon glyphicon-user text-warning"></span> 收货信息</h4>
+                    </div>
+                    <div class="pull-right">
+                        <a href="@Url.Action("Address",new {redirecturl="/mobile/mobilecenter/payment?q=t" })" class=" text-danger">
+                            编辑
+                        </a>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="panel-body">
+                    <ul class="list-group addressPage">
+                        @{
+                            //获取默认地址
+                            ShopMyAddress defaultAddress = DB.ShopMyAddress.GetDefault(curUser);
+                            if (defaultAddress != null)
+                            {
+                                <li class="list-group-item" data-id="@defaultAddress.ID">
+                                    <div class="pull-left">
+                                        姓名: @defaultAddress.Name
+                                    </div>
+                                    <div class="pull-right">
+                                        邮编:@defaultAddress.PostCode
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </li>
+                                <li class="list-group-item">
+                                    电话:@defaultAddress.Tel
+                                </li>
+                                <li class="list-group-item">
+                                    地址：@defaultAddress.ShowAddressName
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="list-group-item tip" data-id="0">
+                                    <a href="@Url.Action("Address",new {redirecturl="/mobile/mobilecenter/payment?q=t" })" class="btn-block">新增收货信息</a>
+                                </li>
+                            }
+                        }
+                    </ul>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title"><span class="glyphicon glyphicon-shopping-cart text-warning"></span> 订单信息</h4>
+                </div>
+                <div class="panel-body">
+                    <ul class="list-group infoPage">
+                        <li class="list-group-item">
+                            商品数量：@DB.ShopOrderProduct.Where(q => q.OrderID == Model.GUID).Select(q => q.Count).DefaultIfEmpty().Sum()
+                        </li>
+                        @*@if (curUser.IsServiceCenter=="是")
+                            {
+                                <li class="list-group-item">
+                                    零售价：@(Model.RealShopping)
+                                </li>
+                                <li class="list-group-item">
+                                    优惠价：@(Model.RealScore)
+                                </li>
+                                <li class="list-group-item">
+                                    配货价：@(Model.RealCongXiao)
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="list-group-item">
+                                    零售价：@(Model.RealShopping)
+                                </li>
+                                <li class="list-group-item">
+                                    优惠价：@(Model.RealScore)
+                                </li>
+                            }*@
+
+                        @*<li class="list-group-item">
+                                积分：@(Model.RealScore)
+                            </li>*@
+                        <li class="list-group-item">
+                            总价：@(Model.RealAmount)
+                        </li>
+                        <li class="list-group-item">
+                            运费：@(Model.Postage)
+                        </li>
+                        @*<li class="list-group-item">
+                                是否自提：
+                                 <input type="checkbox" id="IsZiTi" name="IsZiTi" value="true"/>
+                                (注：自提)
+                            </li>*@
+
+                        <li class="list-group-item">
+                            <div class="pull-left">
+                                应付款:
+                                <span id="spanMoney">@(Model.RealAmount + Model.Postage)</span>
+                            </div>
+                            <div class="pull-right">
+                            </div>
+                            <div class="clearfix"></div>
+                        </li>
+                        @if (flag)
+                        {
+                            <li class="list-group-item">
+                                <div class="pull-left">
+                                    支付方式
+
+
+                                    @if (Model.OrderType == "积分优惠价")
+                                    {
+                                        <input style="position:relative;top:3px;" onchange="click()" type="radio" name="paytype" value="积分" />
+                                        <span>积分</span>
+                                    }
+                                    else
+                                    { 
+                                    
+                                        <input style="position:relative;top:3px;" onchange="click()" type="radio" checked name="paytype" value="支付宝" />
+                                        <span>支付宝</span>
+    <input style="position:relative;top:3px;" onchange="click()" type="radio" name="paytype"  value="微信" />
+                                        <span>微信</span>
+                                        <input style="position:relative;top:3px;" onchange="click()" type="radio" name="paytype" value="推广奖" />
+
+                                        <span>推广奖</span>
+                                    }
+
+                                </div>
+
+
+                                <div class="pull-right">
+                                </div>
+                                <div class="clearfix"></div>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="list-group-item">
+                                <div class="pull-left">
+                                    支付方式
+                                    @*<input style="position:relative;top:3px;" onchange="click()" type="radio" name="paytype" checked value="微信" />
+        微信*@
+
+
+                                    @if (Model.OrderType == "积分优惠价")
+                                    {
+                                        <input style="position:relative;top:3px;" onchange="click()" type="radio" name="paytype" value="积分" />
+
+                                        <span>积分</span>
+                                    }
+                                    else
+                                    { <input style="position:relative;top:3px;" onchange="click()" checked type="radio" name="paytype" value="支付宝" />
+                                        <span>支付宝</span>
+                                        <input style="position:relative;top:3px;" onchange="click()" type="radio" name="paytype" value="推广奖" />
+
+                                        <span>推广奖</span>
+                                    }
+
+
+                                </div>
+                                <div class="pull-right">
+                                </div>
+                                <div class="clearfix"></div>
+                            </li>
+                        }
+
+                        @*<li class="list-group-item">
+                                订单运费：
+                                <span id="spanziti"> @(yf)</span>
+                            </li>*@
+
+
+
+                        <li class="list-group-item" id="pwd" style="display:none">
+                            <div class="pull-left">
+                                @("支付密码")：
+                            </div>
+                            <div class="pull-right">
+                                <input name='payPwd' type="password" id="txtpayPwd" placeholder="请输入支付密码">
+                            </div>
+                            <div class="clearfix"></div>
+                        </li>
+                        <li class="list-group-item">
+                            <div class="pull-left">
+                                备注信息：
+                            </div>
+                            <div class="pull-right" style="width:70%">
+                                <textarea id="Remark" class="form-control" rows="3"></textarea>
+                            </div>
+                            <div class="clearfix"></div>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+            @*<div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title"><span class="glyphicon glyphicon-usd text-warning"></span> 账户</h4>
+                    </div>
+                    <div class="panel-body">
+                        <p><small>&nbsp;&nbsp;收益:@(curUser.Commission)&nbsp;&nbsp;&nbsp;&nbsp;推广奖:@(curUser.ShopCoins)</small></p>
+                    </div>
+                </div>*@
+            @*<div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title"><span class="glyphicon glyphicon-usd text-warning"></span> 支付方式</h4>
+                    </div>
+                    <div class="panel-body">
+                        <p><small>（账户：电子币:@(curUser.Coins)）</small></p>
+                        <ul class="list-group infoPage">
+                            <li class="list-group-item">
+                                <div class="pull-left radio">
+                                    <label>
+                                        <input style="position:relative;top:3px;" type="radio" name="paytype" checked value="5" />
+                                        电子币
+                                    </label>
+                                </div>
+                                <div class="pull-right">
+                                </div>
+                                <div class="clearfix"></div>
+                            </li>
+
+
+                        </ul>
+                    </div>
+                </div>*@
+
+            @*<div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title"><span class="glyphicon glyphicon-open-file text-warning"></span> 社区店编号</h4>
+                    </div>
+                    <div class="panel-body">
+                        <ul class="list-group ">
+                            <li class="list-group-item">
+                                <input class="form-control" placeholder="如需公司发货，请填写admin" id="StoreCode" />
+                                <div class="clearfix"></div>
+                            </li>
+                            <li class="list-group-item" id="zuijinDian">
+                                最近的店：<a>@(dianCode)</a>
+                            </li>
+                            <a class="list-group-item" id="DianCodeBtn">
+                                选择其他
+                                <span class="pull-right">
+                                    <span class="glyphicon glyphicon-chevron-right"></span>
+                                </span>
+                            </a>
+                        </ul>
+                    </div>
+                </div>*@
+
+        </div>
+        <br /><br /><br />
+        <div class="fixed-foot" style="background:white;height:40px;">
+            <div class="fixed_inner">
+                <div class="pay-point">
+                    @* <p>合计：<em class="red f22">¥<span id="totalPrice">@(Convert.ToDecimal(ViewBag.total) + Convert.ToDecimal(ViewBag.total2))</span></em></p>*@
+                </div>
+                <div class="buy-btn-fix" style="margin-top:-5px">
+                    <a id="payBtn" class="btn btn-danger btn-buy">确认支付</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="page page2" style="display:none">
+    <header class="header">
+        <div class="fix_nav">
+            <div class="nav_inner">
+                <a class="nav-left back-icon" href="@Url_Mobile.GetUserCenter()">返回</a>
+                <div class="tit">支付成功</div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="row">
+            <p></p>
+            <div class="alert alert-success">
+                <p class="text-center">恭喜您，支付成功</p>
+                <p></p>
+                <div class="qrCodeImg"></div>
+            </div>
+            <a class="btn btn-primary btn-block col-xs-6" href="@Url_Mobile.GetIndex()">返回商城首页</a>
+            <a class="btn btn-success btn-block col-xs-6" href="@Url.Action("Bill")">返回我的订单</a>
+            <a id="xiazai" style="display:none" class="btn btn-success btn-block col-xs-6" href="https://app.zhwlh.com">下载APP</a>
+        </div>
+    </div>
+</div>
+
+
+<div class="page page3" id="page3" style="display:none;position:fixed; left:20%; top:30%; background:#ec124a; width:200px; height:100px">
+    <div class="tit" style="color: white;
+    font-weight: normal;
+    padding-top: 10px;
+    text-align: center;
+    height: 5px;
+    font-size: 15px;">在线支付</div>
+    @*<header class="header" style="background:white">
+            <div class="fix_nav">
+                <div class="nav_inner">
+                    <a class="nav-left back-icon" href="@Url_Mobile.GetUserCenter()">返回</a>
+                    <div class="tit">在线支付</div>
+                </div>
+            </div>
+        </header>*@
+
+    <div class="container" style="background:white">
+        <div class="row" style="border-left: 1px solid black;border-right: 1px solid black;height: 106px">
+            <p></p>
+            <div class="alert alert-success" style="background:white;border-color:white;">
+                <p class="text-center" style="color:black">是否支付成功？</p>
+                <p></p>
+                <div class="qrCodeImg"></div>
+            </div>
+            <a class="btn btn-primary btn-block col-xs-6" style="width:50%;margin-top:-33px;margin-left: -1px;" onclick="chenggong()">支付成功</a>
+            <a class="btn btn-success btn-block col-xs-6" style="width:50%;margin-top:-33px;margin-left:100px" onclick="shibai()">支付失败</a>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="myModalmin" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form class="form-horizontal" role="form" data-method="formAjax">
+                <div class="modal-header member_tc_top">
+                    <button type="button" class="close member_tc_xx" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title" id="myModalLabel">&nbsp;&nbsp;</h4>
+                </div>
+                <div style="overflow:hidden;width: 100%;padding-top: 20px;">
+                    <div style="">
+                        <div class="member_mp_t_tit">等待付款中....</div>
+                    </div>
+                </div>
+                <div style="height:60px;"></div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+@*<div class="modal fade" id="Dian" tabindex="-1" role="dialog"
+         aria-hidden="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form class="form-horizontal" role="form">
+                    <div class="modal-header ">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title">
+                            选择社区店
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row selectArea">
+                            <div class="col-xs-4">
+                                <select id="ProvId" name="ProvId" class="form-control select2" datatype="*" errormsg="请选择省" onchange="changeProv();   refresh();">
+                                    <option value="">=省=</option>
+                                    @{
+                                        foreach (var item in DB.Area_Province.ToList())
+                                        {
+                                    <option value="@item.id">@item.name</option>
+                                        }
+                                    }
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-xs-4">
+                                <select id="CityId" name="CityId" class="form-control select2" datatype="*" errormsg="请选择市" onchange="changeCity();   refresh();">
+                                    <option value="">=市=</option>
+                                </select>
+                            </div>
+                            <div class="col-xs-4">
+                                <select id="CountyId" name="CountyId" class="form-control select2" errormsg="请选择区" onchange="changeCounty();">
+                                    <option value="">=地区=</option>
+                                </select>
+                            </div>
+                        </div>
+
+
+                        <div id="containerList" class="list-group">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>*@
+
+
+<script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script src="~/assets/scripts/jquery.qrcode.min.js"></script>
+<script>
+    @*alert('@agent');*@
+    @*var yf = '@yf.Replace("元","")';*@
+    var money =@money ;
+    //function changezt() {
+    //    var x1 = $("#IsZiTi").is(":checked");
+    //    if (x1 == true) {
+    //        $("#spanziti").html("免运费");
+    //        //if (isNumber(yf)) {
+    //        var newmoney = money;
+    //        //alert(newmoney)
+    //        $("#spanMoney").html(newmoney);
+    //        //}
+
+    //    } else {
+    //        //$("#spanziti").html(yf);
+    //        $("#spanMoney").html(money);
+    //    }
+    //}
+
+    $("input:radio[name='paytype']").change(function (){
+        //alert("11");
+        var a=  $('input:radio:checked').val();
+        //alert(a);
+        if(a=="推广奖" || a=="积分")
+        {
+            $('#pwd').show();
+        }else{
+
+            $('#pwd').hide();
+        }
+    });
+    function isNumber(value) {
+        var patrn = /^(-)?\d+(\.\d+)?$/;
+        if (patrn.exec(value) == null || value == "") {
+            return false
+        } else {
+            return true
+        }
+    }
+    //$(function () {
+    //    //选择店
+    //    $('#DianCodeBtn').click(function () {
+    //        $('#Dian').modal('show');
+    //    });
+    //});
+    function changeProv() {
+        var id = $("#ProvId").val();
+        $('#CityId').empty();
+        $.post("/Ajax/GetCity", { id: id }, function (data) {
+            $("#CityId").empty();
+            $("#CityId").append('<option value="">=市=</option>');
+            for (var i = 0; i < data.length; i++) {
+                var item = data[i];
+                $("#CityId").append('<option value="' + item.id + '">' + item.text + '</option>');
+            }
+            changeCity();
+        })
+    }
+    function changeCity() {
+        var id = $("#CityId").val();
+        $('#CountyId').empty();
+        $.post("/Ajax/GetCounty", { id: id }, function (data) {
+            $("#CountyId").empty();
+            $("#CountyId").append('<option value="">=地区=</option>');
+            for (var i = 0; i < data.length; i++) {
+                var item = data[i];
+                $("#CountyId").append('<option value="' + item.id + '">' + item.text + '</option>');
+            }
+        })
+    }
+    function changeCounty() {
+        refresh();
+    }
+    refresh();
+    function refresh() {
+        $('#containerList').empty();
+        $.post('/ajax/GetDian', {
+            provid: $("#ProvId").val(),
+            cityid: $('#CityId').val(),
+            countyID: $("#CountyId").val()
+        }, function (data) {
+            var list = JSON.parse(data);
+            for (var i = 0; i < list.length; i++) {
+                var item = list[i];
+                $('#containerList').append('<a class="list-group-item" data-code="' + item.code + '">' + item.code + '【' + item.name + '】' + '</a>');
+            }
+        });
+    }
+
+    function shibai()
+    {
+        $.post('/mobile/mobilecenter/IsFu', {
+            orderid: '@(Model.GUID)'
+        },function (data) {
+            if(data.msg=="2")
+            {
+                window.location.href="/mobile/mobilecenter/bill";
+            }else{
+                show('您未支付成功');
+                $('.page').fadeIn('fast');
+                $("#page1").removeClass("intro");
+                $('.page3').hide();
+                $('.page2').hide();
+            }
+        });
+        //$('.page').fadeIn('fast');
+        //$('.page3').hide();
+        //$('.page2').hide();
+    }
+    function chenggong()
+    {
+        $.post('/mobile/mobilecenter/IsFu', {
+            orderid: '@(Model.GUID)'
+            },function (data) {
+                if(data.msg=="2")
+                {
+                    window.location.href="/mobile/mobilecenter/bill";
+                }else{
+                    show('您未支付成功');
+                    $('.page').fadeIn('fast');
+                    $("#page1").removeClass("intro");
+                    $('.page3').hide();
+                    $('.page2').hide();
+                }
+            });
+    }
+    $(function () {
+        //$('#Dian').modal('show');
+        //选择社区店编号
+        //var StoreCode = $('#StoreCode');
+        //$('#zuijinDian').click(function () {
+        //    var code = $(this).find('a').text();
+        //    if (code != '空') {
+        //        StoreCode.val(code);
+        //    }
+        //});
+        //$('#containerList').on({
+        //    click: function () {
+        //        var code = $(this).attr('data-code');
+        //        StoreCode.val(code);
+        //        $('#Dian').modal('hide');
+        //    }
+        //}, 'a');
+
+
+
+        //修改密码
+        $('.pull-right .btn').click(function () {
+            var dialog = $('#loginModal');
+            dialog.modal('show');
+            dialog.attr('data-type', $(this).attr('data-type'));
+            return false;
+        });
+        $('#loginModal .btn').click(function () {
+            showDialog();
+            return false;
+        });
+        //确认支付按钮
+        $('#payBtn').click(function () {
+            //收货信息
+            var addressid = $('.addressPage li:first').attr('data-id');
+            if (addressid <= 0) {
+                show('请完善收货信息');
+                return;
+            }
+            var paytype = $('input[name="paytype"]:checked').val();
+
+            //var storecode = $('#StoreCode').val();
+            //if (storecode.length <= 0) {
+            //    show('请填写社区店编号');
+            //    return;
+            //}
+            //提交处理
+            var isziti1 = $("#IsZiTi").is(":checked");
+            $.post('@Url.Action("DoPay")', {
+                addressid: addressid,
+                paytype: paytype,
+                isziti:false,
+                remark: $('#Remark').val(),
+                payPwd: $('#txtpayPwd').val()
+                //storecode: storecode
+            }, function (data) {
+                if (data.Status == 'y') {
+                    var result = data.Data;
+                    //alert(paytype);
+                    if (paytype =="微信" ) {
+                        //执行付款
+                        show('操作成功');
+                        //$('.page').hide();
+                        //$('.f').fadeIn('fast');
+                        //$('.page').hide();
+                        $('.page3').fadeIn('fast');
+                        //.page1 { pointer-events: none; }
+
+                        $("#page1").addClass("intro");
+
+                        setTimeout(function () {
+                            location.href = data.ReUrl;
+                        }, 500);
+                    }
+                    else if (paytype =="支付宝" ) {
+                        show('操作成功');
+                        //$('.page').hide();
+                        //$('.f').fadeIn('fast');
+                        //$('.page').hide();
+                        //$('.page3').fadeIn('fast');
+                        ////.page1 { pointer-events: none; }
+
+                        //document.getElementById("page1").setAttribute("pointer-events", "none");
+                        setTimeout(function () {
+                            location.href = data.ReUrl;
+                        }, 500);
+                    }
+                    else {
+                        if ('@isapp' == 'False') {
+                            $('#xiazai').show();
+                        }
+                        //操作成功
+                        $('.page').hide();
+                        $('.page2').fadeIn('fast');
+
+                    }
+                } else {
+                    show(data.Msg);
+                }
+            });
+
+        });
+
+
+        /**特别说明，appId，nonceStr等字面变量区分大小写***/
+        wx.config({
+            debug: false,
+            appId: '@AccessTokenManage.AppID',
+            timestamp: '@timestamp',
+            nonceStr: '@timestamp',
+            signature: '@Common.SecurityHelper.SHA1(sig)',
+            jsApiList: ['chooseImage', 'chooseWXPay', 'getBrandWCPayRequest']
+        });
+    });
+</script>
+
+
+
+
+
+@*//如果是现金类，执行跳转
+    var paytype = $('input[name="paytype"]:checked').val();
+    if (paytype == 2 || paytype == 3) {
+        var url = '@Url.Action("paycenter")?orderid=@(orderPro.OrderID)&addressid=' + addressid + '&paytype=' + paytype + '&remark=' + $('#Remark').val()
+        $('#myModalmin').modal('show');
+        //付款成功，跳转到我的订单页面
+        setInterval(function () {
+            $.post('/ajax/checkorder', { orderid: '@(orderPro.OrderID)' }, function (data) {
+                if (data == 1) {
+                    //操作成功
+                    $('.page').hide();
+                    $('.page2').fadeIn('fast');
+                    $('#myModalmin').modal('hide');
+                }
+            });
+        }, 1000);
+        console.info(url);
+        window.open(url, '_blank');
+    } else {
+        //提交处理
+        $.post('@Url.Action("DoPay")', {
+            addressid: addressid,
+            paytype: paytype,
+            remark: $('#Remark').val()
+        }, function (data) {
+            if (data.Status == 'y') {
+                var result = data.Data;
+                //操作成功
+                $('.page').hide();
+                $('.page2').fadeIn('fast');
+            } else {
+                alert(data.Msg);
+            }
+        });
+    }*@
+

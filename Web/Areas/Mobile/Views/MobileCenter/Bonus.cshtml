@@ -1,0 +1,46 @@
+﻿
+@using Business
+@using DataBase
+
+@{
+    ViewBag.Title = "奖金明细";
+    //获取当前登录用户
+    Member_Info curUser = User_Shop.GetMember_Info();
+    Layout = "~/Views/Shared/_LayoutPageMy0915.cshtml";
+    var remit = DB.Fin_Info.Where(a => a.MemberId == curUser.MemberId && a.IsSettlement==true).OrderByDescending(a => a.FinId);
+}
+<div class="container topBg">
+    <!-- 头部导航 -->
+    <div class="header" style="box-shadow: 0 0 10px rgba(1, 73, 206,.2);">
+        <ul>
+            <li class="header-left" onclick="GetIndex()">
+                <i class="iconfont icon-fanhui"></i>
+            </li>
+            <li>奖金明细</li>
+            <li class="header-right">
+
+            </li>
+        </ul>
+    </div>
+    <ul class="withdrawDepositJlList">
+        @foreach (var item in remit)
+        {
+        <li>
+            <div>
+                <p class="bsft_bold">@item.CreateTime.Value.ToString("MM-dd HH:mm")</p>
+                <p class="bsclr_gay"></p>
+                <p class="bsclr_red">@item.TypeName</p>
+            </div>
+            <div>
+                <p class="bsclr_gay data">应发:@item.Amount</p>
+                <p class="bsclr_red procedure">手续费:@item.Poundage</p>
+                <p class=" bsclr_green">实发:@item.RealAmount</p>
+            </div>
+        </li>
+
+        }
+
+    </ul>
+
+    <div class="bgColor"></div>
+</div>

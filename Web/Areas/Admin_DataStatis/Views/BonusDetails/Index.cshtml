@@ -1,0 +1,191 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+}
+
+<!-- BEGIN PAGE BAR -->
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="/SysManage/Home/Index">首页</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#">数据统计</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="/Admin_DataStatis/BonusDetails/Index"><span>收益明细</span></a>
+        </li>
+    </ul>
+</div>
+<!-- END PAGE BAR -->
+<!-- BEGIN PAGE CONTENT -->
+<div class="row">
+    <!-- BEGIN SAMPLE TABLE PORTLET-->
+    <div class="col-md-12">
+        <div class="portlet box green">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-database"></i>收益明细列表
+                </div>
+                <div class="tools">
+                    <a style="color:white" onclick="ToExcel()" title="导出Excel"> <i class="fa fa-sign-out"></i>导出Excel </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="table-responsive">
+                    <form class="form form-horizontal form-inline">
+                        <fieldset>
+                            <div class="control-group">
+                                <div class="controls">
+                                    <div class="col-md-3">
+                                    </div>
+                                    <div class="col-md-9 text-right">
+                                        <div class="input-group col-md-6">
+                                            <input type="hidden" name="code" id="code" value="@ViewBag.Code" />
+                                            <input type="text" value="@ViewBag.Date" id="start" placeholder="起始时间" class="form-control ">
+                                            <span class="input-group-addon"> to </span>
+                                            <input type="text" value="@ViewBag.Date" id="end" placeholder="结束时间" class="form-control ">
+                                        </div>
+                                        <div class="input-group col-md-3">
+                                            <input type="text" class="form-control" placeholder="搜索关键字" id="keyword" />
+                                            <span class="input-group-btn">
+                                                <a class="btn btn-default" href="javascript:searchList();">
+                                                    <span class="glyphicon glyphicon-search"></span>
+                                                </a>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+
+                </div>
+                <div class="table-responsive">
+                    <table id="datatable" class="table table-striped table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th style="width:3%"><input type="checkbox" id='checkAll'></th>
+                                <th>日期</th>
+                                <th>会员编号</th>
+                                <th>姓名</th>
+                                <th>类型</th>
+                                <th>摘要</th>
+                                <th>相关会员编号</th>
+                                <th>相关会员姓名</th>
+                                <th>金额</th>
+                                @*<th>实际金额</th>*@
+                                @*<th>购物币</th>*@
+                                @*<th>收益</th>*@
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END SAMPLE TABLE PORTLET-->
+</div>
+
+@section scripts {
+    <script type="text/javascript">
+        var oTable;
+
+        $(document).ready(function () {
+            oTable = initTable();
+        });
+        function searchList() {
+
+            oTable.ajax.reload()
+        }
+        /**
+        * 表格初始化
+        * returns {*|jQuery}
+        */
+        function initTable() {
+            var table = $("#datatable").DataTable({
+                dom: '<f<t>lip>',
+                "searching": false,
+                ordering: false,
+                serverSide: true,
+                language: {
+                    url: '/assets/global/plugins/DataTables-1.10.12/zh-CN.json'//汉化
+                },
+                ajax: {
+                    url: "/Admin_DataStatis/BonusDetails/getDataSource",
+                    type: "POST",
+                    data: function (e) {
+                        return {
+                            code: $("#code").val(),
+                            startTime: $("#start").val(),
+                            end: $("#end").val(),
+                            key: $("#keyword").val(),
+                            start: e.start,
+                            length: e.length,
+                            draw: e.draw
+                        }
+                    }
+                },
+                columnDefs: [
+                   { "searchable": false, "targets": 0 },//第一列禁用搜索
+                   { "orderable": false, "targets": 0 }, //第一列禁用排序
+                   { "searchable": false, "targets": 3 },//第四列禁用搜索
+                   { "orderable": false, "targets": 3 }, //第四列禁用排序
+                ],
+                columns: [//绑定数据
+                    {
+                        data: 'FinId',
+                        createdCell: function (nTd, sData, oData, iRow, iCol) {
+                            $(nTd).html("<input type='checkbox' name='checkList' value='" + sData + "'>");
+                        }
+                    },
+                    { data: 'CreateTime' },
+                    { data: 'MemberCode' },
+                    { data: 'NickName' },
+                    { data: 'TypeName' },
+                    { data: 'Comment' },
+                    { data: 'RefMemberCode' },
+                    { data: 'RefNickName' },
+                    //{ data: 'Amount' },
+                    //{ data: 'Poundage' },
+                    { data: 'Amount' }
+                ]
+            });
+            return table;
+        }
+
+        $(function () {
+            $('#start').datetimepicker({
+                language: 'zh-CN',
+                format: 'yyyy-mm-dd',
+                autoclose: 1,
+                minView: 2
+            }).on('changeDate', function (ev) {
+                var start = $('#start').val();
+                $('#end').datetimepicker('setStartDate', start);
+                $('#start').datetimepicker('hide');
+            });
+            $('#end').datetimepicker({
+                language: 'zh-CN',
+                format: 'yyyy-mm-dd',
+                autoclose: 1,
+                minView: 2
+            }).on('changeDate', function (ev) {
+                var end = $('#end').val();
+                $('#start').datetimepicker('setEndDate', end);
+                $('#end').datetimepicker('hide');
+            });
+        });
+        function searchList() {
+            oTable.ajax.reload(null, false);
+        }
+        function ToExcel() {
+            var href = "/Admin_DataStatis/BonusDetails/ToExcel/收益明细?code=" + $("#code").val() + "&startTime=" + $("#start").val() + "&end=" + $("#end").val() + "&key=" + $("#keyword").val();
+            window.open(href);
+        }
+    </script>
+}

@@ -1,0 +1,67 @@
+﻿@using DataBase
+@model List<ShopProduct>
+
+@{
+    Member_Info curUser = User_Shop.GetMember_Info();
+    //Model.AddRange(Model);
+}
+<style>
+    .line-limit-length {
+overflow: hidden;
+text-overflow: ellipsis;
+white-space: nowrap; 
+}
+    span{
+        font-size:8px;
+    }
+</style>
+
+@foreach (var item in Model)
+{
+    <div class="col-xs-6 item item1" style="margin-bottom:10px">
+        <div class="inner">
+            <a class="" href="@Url_Mobile.GetProduct(item)">
+                <img class="tb_pic" style="margin-left:1%"   height="150px" width="100%"  src="@Url_Shop.GetProductImg(item)">
+            </a>
+            <div class="title" style="margin-left:1%" >
+                <p class="line-limit-length">@item.Title</p>
+         
+            </div>
+            <div class="bottom" style="margin-left:1%">
+                <span class="text-danger  pull-left">
+                    <span>
+                        零售价: ￥@DB.ShopProduct.GetLingShouPrice(item)
+
+                    </span><br />
+                    <span>
+                        会员价: ￥@DB.ShopProduct.GetYouHuiPrice(item)
+
+                    </span>
+                </span>
+                @*<span class="pull-right">
+                        <span class="text-danger">@(item.Sales)</span>@("人已购买")
+                    </span>*@
+                <div class="clearfix"></div>
+            </div>
+            @*<div class="encourage @(item.IsScores?"encourage2":"")">
+                    <div class="text">@item.BuyTypeName</div>
+                </div>*@
+        </div>
+    </div>
+}
+
+@*分页条*@
+@if (ViewBag.allCount > ViewBag.skipCount)
+{
+    <div id="ajax_loading" style="width:300px;margin: 10px  auto 15px;text-align:center;display:none;" data-skip="@ViewBag.skipCount">
+        <img src="/assets/mobile/images/loading.gif">
+    </div>
+}
+@if (Model.Count == 0)
+{
+    <div class="alert alert-danger text-center">暂时没有商品了</div>
+}
+
+
+
+

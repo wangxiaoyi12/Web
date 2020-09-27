@@ -1,0 +1,247 @@
+﻿@using DataBase
+@using Business
+@{
+    ViewBag.Title = "我的订单";
+    string curUserID = User_Shop.GetMemberID();
+    Member_Info curUser = User_Shop.GetMember_Info();
+    //1.获取订单分页数据
+    int pageIndex = ReqHelper.GetInt("pageIndex", 1);
+    int pageSize = 8;
+    int? state = ReqHelper.GetInt("state");
+    var query = DB.ShopOrder.Where(q => q.MemberID == curUserID);
+    if (state != null)
+    {
+        query = query.Where(q => q.State == state);
+    }
+    int recordCount = query.Count();
+    query = query.OrderByDescending(q => q.SubmitTime);
+    List<ShopOrder> orderList = query.Skip((pageIndex - 1) * pageSize)
+        .Take(pageSize)
+        .ToList();
+}
+@section Head{
+    <style>
+        .delete_order_btn {
+            cursor: pointer;
+        }
+
+            .delete_order_btn:hover {
+                text-decoration: underline;
+                color: #F90;
+            }
+    </style>
+}
+@section Footer{
+    <script>
+        $(function(){
+            //删除订单绑定
+            $('.delete_order_btn').click(function(){
+                var thisBtn=$(this);
+                var orderid=thisBtn.attr('data-id');
+                if(window.confirm('确定要删除吗')){
+                    $.post('@Url.Action("DeleteForm")',{orderid:orderid},function(data){
+                        if(data.status==1){
+                            alert(data.msg);
+                            setTimeout(function(){
+                                location.reload();
+                            },800);
+                        }else{
+                            alert(data.msg);
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+}
+<!--用户中心样式-->
+<div class="user_style clearfix">
+    <div class="user_center clearfix">
+        <!--左侧菜单图层-->
+        @Html.Partial("LeftMenu")
+        <!--右侧内容图层-->
+        <div class="right_style">
+            <div class="user_title_name"><span>订单列表</span></div>
+            <div class="Order_Sort">
+                <ul>
+                    <li><a href="@Url.Action("OrderForm",new { state=1})"><img src="/assets/shop/images/icon-dingdan1.png" /><br />待付款（@(DB.ShopOrder.GetCount(curUserID, ShopEnum.OrderState.Submit.GetHashCode()))）</a></li>
+                    <li><a href="@Url.Action("OrderForm",new { state=2})"><img src="/assets/shop/images/icon-dingdan.png" /><br />已完成（@(DB.ShopOrder.GetCount(curUserID, ShopEnum.OrderState.Pay.GetHashCode()))）</a></li>
+                    <li><a href="@Url.Action("OrderForm",new { state=3})"><img src="/assets/shop/images/icon-kuaidi.png"</a><br />运输中（@(DB.ShopOrder.GetCount(curUserID, ShopEnum.OrderState.FaHuo.GetHashCode()))）</li>
+                    <li class="noborder"><a href="@Url.Action("OrderForm")"><img src="/assets/shop/images/icon-weibiaoti101.png" /><br />全部订单（@(DB.ShopOrder.GetCount(curUserID))）</a></li>
+                </ul>
+            </div>
+            <div class="Order_form_list">
+                <table>
+                    <thead>
+                        <tr>
+                            <td class="list_name_title0">商品</td>
+                            <td class="list_name_title1">单价(元)</td>
+                            <td class="list_name_title2">数量</td>
+                            <td class="list_name_title4">实付款(元)</td>
+                            <td class="list_name_title5">运费</td>
+                            <td class="list_name_title6">订单状态</td>
+                            <td class="list_name_title7">操作</td>
+                        </tr>
+                    </thead>
+                    @if (orderList.Count > 0)
+                    {
+                        foreach (var item in orderList)
+                        {
+                            <tbody>
+                                <tr>
+                                    <td colspan="7" class="Order_form_time">
+                                        @(item.SubmitTime.ToString("yyyy-MM-dd")) 订单号：@item.OrderCode
+                                        @if (DB.ShopOneBuy.Any(q => q.OrderID == item.GUID))
+                                        {
+                                            <em style="color:red;">【一元购】</em>
+                                        }&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        @if (item.Type == "未挂卖")
+                                        {
+                                            <em>倒计时:</em>
+                                            <div id="DjTimeDiv" style="margin-top: -30px;margin-left: 420px;"></div>
+                                            <input type="hidden" value="@((item.SubmitTime.AddHours(48)))" i id="hidTime">
+                                        }
+                                        else if (item.Type == "挂卖中")
+                                        {
+                                            <em>倒计时:</em>
+                                            <div id="DjTimeDiv" style="margin-top: -30px;margin-left: 420px;"></div>
+                                            <input type="hidden" value="@((item.SubmitTime.AddHours(168)))" i id="hidTime">
+                                        }
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3">
+                                        <table class="Order_product_style">
+                                            <tbody>
+                                                @foreach (var proItem in item.ShopOrderProducts)
+                                                {
+                                                    string url = Url_Shop.GetProduct(proItem.ShopProduct);
+                                                    <tr>
+                                                        <td>
+                                                            <div class="product_name clearfix">
+                                                                <a href="@url" target="_blank" class="product_img"><img src="@Url_Shop.GetProductImg(proItem.ShopProduct)" width="80px" height="80px"></a>
+                                                                <a href="@url" target="_blank">@proItem.ShopProduct.Title</a>
+                                                                <p class="specification">@proItem.ShopProduct.SubTitle</p>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            @Url_Shop.GetProductPriceJiaG(proItem.ShopProduct)<br />
+                                                            @Url_Shop.GetProductPriceXianJin(proItem.ShopProduct)&nbsp;(收益)
+                                                            @Url_Shop.GetProductPriceGouWu(proItem.ShopProduct)&nbsp;(配货价)
+                                                        </td>
+                                                        <td>@proItem.Count</td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                    <td class="split_line">
+                                        <span class="PriceShopping">@(item.RealAmount)</span><br />
+                                        <span class="RealScore">@(item.RealScore )</span>总收益<br />
+                                        <span class="RealScore">@(item.RealCongXiao )</span>总配货价<br />
+                                    </td>
+                                    <td class="split_line">
+                                        @(item.Postage)
+                                    </td>
+
+                                    <td class="split_line">@item.StateName</td>
+                                    <td class="operating">
+                                        @if (item.State == ShopEnum.OrderState.FaHuo.GetHashCode())
+                                        {
+                                            <a href="" class="firmOrderBtn" data-id="@item.GUID">确认收货</a>
+                                        }
+                                        else if (item.State == ShopEnum.OrderState.Chu.GetHashCode())
+                                        {
+                                            //if ((int)Math.Floor((DateTime.Now - item.SubmitTime).TotalHours) >= 24)
+                                            //{
+                                                @*<em>待处理</em>*@
+                                                <a href="" class="tihuoOrderBtn" data-id="@item.GUID">提货</a><br />
+                                                <a href="" class="weituoOrderBtn" data-id="@item.GUID">委托</a>
+                                            @*}
+                                            else
+                                            {
+                                                <em>未到挂卖时间</em>
+                                            }*@
+                                        }
+                                        @*else if (item.State == ShopEnum.OrderState.WeiTuo.GetHashCode())
+                                            {
+                                                <em>委托中</em>
+
+
+                                            }*@
+                                        else if (item.State == ShopEnum.OrderState.GuaM.GetHashCode())
+                                        {
+                                            <em>挂卖中</em>
+
+
+                                        }
+                                        else if (item.State == ShopEnum.OrderState.Pay.GetHashCode())
+                                        {
+                                            <em>等待发货...</em>
+                                        }
+                                        else if (item.State == ShopEnum.OrderState.Submit.GetHashCode())
+                                        {
+                                            <a href="@Url.Action("Calculate",new { id=item.GUID})" data-id="@item.GUID">付款</a>
+                                            <br />
+                                            <small class="delete_order_btn" data-id="@item.GUID">删除</small>
+                                        }
+                                    </td>
+                                </tr>
+                            </tbody>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="6" class="blank" style="height:100px;line-height:100px;">没有数据了</td>
+                        </tr>
+                    }
+                </table>
+            </div>
+            <div id="pageOne" class="pageBar"></div>
+            <script>
+                var pageOne = $('#pageOne').pageBar({
+                    pageIndex: @(pageIndex),
+                    pageSize: @(pageSize),
+                    showType:'default',
+                    recordCount: @(recordCount),
+                    submitEvent: function (index) {
+                        var state=urlHelper.getQueryString('state');
+                        var result=[];
+                        if(state.length>0)
+                            result.push('state='+state);
+                        if(index>1)
+                            result.push('pageindex='+index);
+                        location.href=location.pathname+'?'+result.join('&');
+                    }
+                });
+            </script>
+        </div>
+    </div>
+</div>
+<script language="javascript" type="text/javascript">
+
+    var time;
+    var minutes;
+    var seconds;
+    var str;
+
+
+    var starttime = new Date($("#hidTime").val());
+    //alert(starttime.toLocaleString());
+    setInterval(function () {
+        var nowtime = new Date();
+        var time = starttime - nowtime;
+        var day = parseInt(time / 1000 / 60 / 60 / 24);
+        var hour = parseInt(time / 1000 / 60 / 60 % 24);
+        var minute = parseInt(time / 1000 / 60 % 60);
+        var seconds = parseInt(time / 1000 % 60);
+        if (minute < 0) {
+            $('#DjTimeDiv').html("<a>委托失败</a>");
+        } else {
+            $('#DjTimeDiv').html(day + "天" + hour + "时" + minute + "分" + seconds + "秒");
+        }
+
+    }, 1000);
+
+</script>

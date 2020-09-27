@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<fields>
+  <field>
+    <code>CreateTime</code>
+    <name>日期</name>
+  </field>
+  <field>
+    <code>MemberCode</code>
+    <name>会员编号</name>
+  </field>
+  <field>
+    <code>NickName</code>
+    <name>姓名</name>
+  </field>
+  <field>
+    <code>TypeName</code>
+    <name>类型</name>
+  </field>
+  <field>
+    <code>Comment</code>
+    <name>摘要</name>
+  </field>
+  <field>
+    <code>RefMemberCode</code>
+    <name>相关会员编号</name>
+  </field>
+  <field>
+    <code>RefNickName</code>
+    <name>相关会员姓名</name>
+  </field>
+  <field>
+    <code>Amount</code>
+    <name>金额</name>
+  </field> 
+</fields>

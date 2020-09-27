@@ -1,0 +1,76 @@
+﻿@using DataBase
+@using Business
+@{
+    ViewBag.Title = "我的足迹";
+    string curUserID = User_Shop.GetMemberID();
+}
+@section Head{
+}
+@section Footer{
+
+}
+<!--足迹界面样式-->
+<div class="Inside_pages">
+    <div class="footprint_style clearfix">
+        <div class="title_name"><em></em>我的足迹 <b>MY TRACKS</b></div>
+        <ul>
+            @{
+                //1.获取浏览记录分页数据
+                int pageIndex = ReqHelper.GetInt("pageIndex", 1);
+                int pageSize = 15;
+                var query = DB.ShopBrowsingHistory.Where(q =>q.MemberID== curUserID&& q.ShopProduct.IsEnable == true);
+                int recordCount = query.Count();
+                List<ShopBrowsingHistory> history = query
+                    .OrderByDescending(q => q.CreateTime)
+                    .Skip((pageIndex - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToList();
+                if (history.Count > 0)
+                {
+                    foreach (var item in history)
+                    {
+                        string url = Url_Shop.GetProduct(item.ShopProduct);
+                        <li class="Record_style">
+                            <div class="biankuan">
+                                <div class="img_link center"><a href="@url"><img src="@Url_Shop.GetProductImg(item.ShopProduct)" /></a></div>
+                                <div class="name"><a href="@url">@item.ShopProduct.Title</a></div>
+                                <div class="Price"><b>￥</b>@Url_Shop.GetProductPrice(item.ShopProduct)</div>
+                                <div class="logo">
+                                    @if (item.ShopProduct.ShopBrand != null)
+                                    {
+                                        <a href="@Url_Shop.GetProduct(item.ShopProduct.ShopBrand)">
+                                          <img src="@Url_Shop.GetImg(item.ShopProduct.ShopBrand.Logo)" width="150" height="50"/>
+                                        </a>
+                                    }
+                                    else {
+                                        <div style="height:53px;"></div>
+                                    }
+                                </div>
+                            </div>
+                        </li>
+                    }
+                }
+                else
+                {
+                    <li class="blank" style="height:300px;line-height:300px;width:100%;">暂时没有记录</li>
+                }
+
+            }
+        </ul>
+    </div>
+    <div id="pageOne" class="pageBar"></div>
+    <script>
+        var pageOne = $('#pageOne').pageBar({
+            pageIndex: @(pageIndex),
+            pageSize: @(pageSize),
+            showType:'default',
+            recordCount: @(recordCount),
+            submitEvent: function (index) {
+                var url=location.pathname;
+                if(index>1)
+                    url+='?pageindex='+index;
+                location.href=url;
+            }
+        });
+    </script>
+</div>

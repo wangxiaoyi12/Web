@@ -1,0 +1,195 @@
+﻿@using DataBase
+@using Business
+@{
+  
+    ViewBag.Title = ("收益转推广奖");
+    Member_Info member = ViewBag.m as Member_Info;
+    string type = ViewBag.Type;
+}
+<div class="personal">
+    <div class="container top-container">
+        <div class="row">
+            <header class="header header_1">
+                <div class="fix_nav">
+                    <div class="nav_inner">
+                        <a class="nav-left back-icon" href="javascript:history.back();">@("返回")</a>
+                        <div class="tit">@("转换")@type</div>
+
+                        <a style="float:right;margin:-43px 10px;" href="/Member_Member/Member/Convertlist">
+                            <i style="color:white;font-size:15px;">@("转换记录")</i>
+                        </a>
+
+                    </div>
+                </div>
+            </header>
+        </div>
+    </div>
+
+    <div class="container middle">
+
+        @*<div class="row ">
+                <div class="list-group-item">
+                    @("最高价格")：<span class="max_price">$@(DB.XmlConfig.XmlSite.MaxPrice)</span>
+                    @("最低价格")：<span class="min_price">$@(DB.XmlConfig.XmlSite.MinPrice)</span><br />
+                    @("最大交易量")：<span class="max_price">@(DB.XmlConfig.XmlSite.MaxCount)</span>
+                    @("最小交易量")：<span class="min_price">@(DB.XmlConfig.XmlSite.MinCount)</span>
+                </div>
+            </div>*@
+
+        <form action="" class="myform" id="form1">
+            <div style="height:15px"></div>
+            <div class="row">
+                <div class="list-group">
+                    <div class="list-group-item">
+
+                        <div class="pull-left">
+                            @("我的收益")
+                        </div>
+                        <div class="pull-right">
+                            @member.Commission
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="list-group-item">
+                        <div class="pull-left">
+                            @("我的推广奖")
+                        </div>
+                        <div class="pull-right">
+                            @member.ShopCoins.Value.ToString("0.00")
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    @*<div class="list-group-item">
+                        <div class="pull-left">
+                            @("我的余额宝")
+                        </div>
+                        <div class="pull-right">
+                            @member.YuE.Value.ToString("0.00")
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>*@
+                </div>
+
+                <div class="list-group">
+                 
+                   
+                    <div class="list-group-item">
+                        <div class="pull-left">
+                            @("转换类型")
+                        </div>
+                        <div class="pull-right">
+                            <select name="TranType" id="txTranType" class="form-control select2" nullmsg="" errormsg="@("请选择转换类型")" required>
+                             
+                                @*<option value="奖金积分" selected="selected">奖金积分</option>*@
+                                <option value="收益转推广奖" selected="selected">@("收益转推广奖")</option>
+                                @*<option value="奖金转余额宝">@("奖金转余额宝")</option>*@
+                                @*<option value="3000" selected="selected">3000</option>
+                                    <option value="5000" selected="selected">5000</option>
+                                    <option value="10000" selected="selected">10000</option>
+                                    <option value="30000" selected="selected">30000</option>
+                                    <option value="50000" selected="selected">50000</option>*@
+                            </select>
+
+                            @*<input name='Qty' type="text" id="txtQty" placeholder="@("请输入数量")" required>*@
+                        </div><div class="clearfix"></div>
+                    </div>
+                    <div class="list-group-item">
+                        <div class="pull-left">
+                            @("请输入数量")
+                        </div>
+                        <div class="pull-right">
+                            <input name='Qty' type="text" id="txtQty" placeholder="@("请输入数量")" required>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="list-group-item">
+                        <div class="pull-left">
+                            @("支付密码")
+                        </div>
+                        <div class="pull-right">
+                            <input name='payPwd' type="password" id="txtpayPwd" placeholder="@("请输入支付密码")">
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="row" id="divBtn">
+                <button class="btn btn-block btn-primary" type='button' onclick="toBuy()">
+                    @("转换")
+                </button><br />
+
+            </div>
+
+            <div style="height:15px"></div>
+            @*<div class="row">
+                <div class="list-group-item">
+                    <p style="color:crimson">("转出后即时到帐")，@("无法撤回")，@("请知晓")</p>
+
+                </div>
+            </div>*@
+
+        </form>
+    </div>
+
+  
+    <script src="~/js/iconfont.js"></script>
+    @*<script src="~/js/particles.min.js"></script>*@
+    <script src="~/js/app.js"></script>
+    <!--@("支付密码弹框")-->
+
+    <script>
+        $(function () {
+            $("#cancel").click(function () {
+                $(".PayPopup").hide();
+                hidMid.value = "";
+            });
+            $(".PayBtn").click(function () {
+                if ($("#payPwd").val() == "") {
+                    return;
+                }
+
+            });
+        });
+
+        function toBuy() {
+            if ($("#txtQty").val() == "")
+            {
+                show("数量不能为空");
+                return;
+            } else if ($("#txtpayPwd").val() == "") {
+                show("支付密码不能为空"); return;
+            }
+
+
+            @*confirm("@("转换提示")!", "@("您确定要转换吗")？@("转换后即时到帐")，@("无法撤回")，@("请知晓")", function () {*@
+                PayOrder();
+            //});
+
+        }
+        function PayOrder() {
+            //show(1);
+            //var obj = $("#PayBtn");
+            //obj.prop('disabled', true);
+            //obj.attr('disabled', true);
+
+            $(".PayBtn").unbind("click"); //@("移除")click
+
+
+            $.post("/mobile/mobilecenter/ToConvert", { Qty: $("#txtQty").val(), PayPwd: $("#txtpayPwd").val(), TranType: $("#txTranType").val() }, function (data) {
+
+                if (data.status == 1) {
+                    show('操作成功');
+                    setTimeout(function () {
+                        location.href = "/mobile/mobilecenter/convertlist";
+                    }, 500);
+                } else {
+                    show(data.msg);
+                }
+            });
+        }
+    </script>
+</div>
+@Html.Partial("_Footer")

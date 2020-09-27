@@ -1,0 +1,541 @@
+﻿@using Business
+@using DataBase
+@{
+    ViewBag.Title = "个人中心";
+    //获取当前登录用户
+    Member_Info curUser = User_Shop.GetMember_Info();
+
+    //获取数量
+    int daifukuanCount = DB.ShopOrder.GetCount(curUser.MemberId, 1);
+    int daichuli = DB.ShopOrder.GetCount(curUser.MemberId, 0);
+    int daifahuoCount = DB.ShopOrder.GetCount(curUser.MemberId, 2);
+    int daiweituo = DB.ShopOrder.GetCount(curUser.MemberId, 30);
+    int daishouhuoCount = DB.ShopOrder.GetCount(curUser.MemberId, 3);
+
+    //var context = HttpContext.Current;
+    //var img = context.Server.MapPath(ViewBag.Src);
+    var picurl = ViewBag.Src;
+}
+
+@section Head{
+    <style>
+        /*.maincontainer {
+            padding-bottom:30px;
+        }*/
+        .accountInfo p {
+            margin-bottom: 3px;
+        }
+
+        #targetQrCode canvas {
+            width: 100%;
+        }
+
+        .maincontainer {
+            height: auto !important;
+            margin: 0 auto;
+            max-width: 768px;
+            padding-bottom: 10px;
+            position: relative;
+        }
+
+
+        .m-order li {
+            width: 25%;
+        }
+
+        .ewm button {
+            /*display: block;*/
+            width: 40%;
+            background: #ec6a12;
+            border: none;
+            border-radius: 5px;
+            line-height: 40px;
+            color: #fff;
+            margin: 0 auto;
+            margin-top: -200px;
+            font-size: 16px;
+            margin-left: 20px;
+        }
+    </style>
+}
+@section Footer{
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery.fileDownload/1.4.2/jquery.fileDownload.js"></script>
+    <script>
+
+
+
+
+
+
+
+
+        function downloadIamge() {
+            if ('@ViewBag.isPhone' == 'true') {
+             
+                callNative.download( '@ViewBag.Src');
+            } else {
+                // 通过选择器获取img元素  图片地址，
+                var url = '@picurl';
+                // 将图片的src属性作为URL地址
+                var a = document.createElement('a');
+                var event = new MouseEvent('click');
+
+                a.download = '下载图片'; //下载图片名称  test
+                a.href = url;
+                //执行下载
+                a.dispatchEvent(event);
+            }
+    }
+        $(function () {
+            $('#qrcodeBtn').click(function () {
+                $('#myModalmin').modal('show');
+            });
+            //处理二维码
+            $('#targetQrCode').qrcode({
+                text: $('#targetQrCode').attr('data-url')
+            });
+
+            (function () {
+                //生成，推广图片
+                @*var canvas = document.getElementById('cardCanvas');
+                var ctx = canvas.getContext('2d');
+
+                var templateurl = '/assets/mobile/img/template.jpg';
+                var template = new Image();
+                template.onload = function () {
+                    canvas.width = template.width;
+                    canvas.height = template.height;
+                    //添加背景
+                    ctx.drawImage(template, 0, 0, template.width, template.height);
+
+                    //添加头像
+                    var logourl = '@Url_Mobile.GetImg(curUser.Pwd3)';  //'/SysManage/Desk/gettouxiang';
+                    var logo = new Image();
+                    logo.onload = function () {
+                        logo.width = 100;
+                        logo.height = 100;
+                        ctx.drawImage(logo, 440, 150, 200, 200);
+                        //添加昵称
+                        ctx.font = 'normal 25px 微软雅黑';
+                        ctx.fillStyle = '#f30100';
+                        ctx.fillText('@curUser.NickName', 380, 170);
+                        //添加二维码
+                        getQrCode(function (img) {
+                            ctx.drawImage(img, 225, 890, 630, 630);
+                            //绘制结算
+                            $('#card').attr('src', canvas.toDataURL('image/png'));
+
+                        });
+                    }
+                    logo.src = logourl;
+                }
+                template.src = templateurl;*@
+
+
+                function getQrCode(onSucess) {
+                    var qrCanvas = $('#targetQrCode').find('canvas')[0];
+                    var img = new Image();
+                    img.onload = function () {
+                        img.width = 190;
+                        img.height = 190;
+                        onSucess(img);
+                    }
+                    img.src = qrCanvas.toDataURL('image/png');
+                }
+
+
+            })();
+
+
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            var attr = parseInt($(".member_m_pic_1").height());
+            var attr3 = parseInt($(".member_m_z_1").height());
+            var h = attr - attr3;
+            var clientWidth = document.body.clientWidth;
+            $(".member_mp_t_img img").css("width", clientWidth * 0.3);
+            $(".member_mp_t_img img").css("height", clientWidth * 0.3);
+
+            //handleUserPic();
+
+        });
+        //function handleUserPic() {
+        //    var th = $(".member_m_pic").outerHeight(true);
+        //    if (th < 60) {
+        //        setTimeout("handleUserPic", 500);
+        //    } else {
+        //        $(".member_m_pic .img-circle").css("height", th * 0.9);
+        //        $(".member_m_pic .img-circle").css("width", th * 0.9);
+        //    }
+        //}
+    </script>
+}
+<div class="maincontainer centerPage" style="background-color: #eee;">
+    <div class="container" style="max-width:768px;margin:0 auto;">
+        <div class="row">
+            <div class="member_top member_top_1" style="height: 150px;background-color: #FF5454;">
+                <div class="member_top_bg">@*<img src="~/assets/mobile/images/member_bg.png">*@</div>
+                <div class="pull-left" style="margin-top: 50px;margin-left: 50px;color: white;">
+
+                    @if (curUser.IsServiceCenter == "是")
+                    {
+                        <p>收益</p>
+                    }
+                    else
+                    {
+                        <p>收益</p>
+                    }
+                </div>
+                <div class="pull-left" style="margin-top: 80px;margin-left: -28px;color: yellow;">
+                    @if (curUser.IsServiceCenter == "是")
+                    {
+                        <p>@curUser.Commission</p>
+                    }
+                    else
+                    {
+                        <p>@curUser.Commission</p>
+                    }
+
+                </div>
+                <a href="@Url.Action("Info")">
+                    <div class="member_m_pic member_m_pic_1">
+                        <img class="img-circle" style="height: 60px;width: 60px;margin-left: 135%;margin-top: 5px;"
+                             src="@Url_Mobile.GetImg(curUser.Pwd3)">
+                        <div class="member_m_x member-success" style="margin-left: 115%">
+                            [@curUser.NickName]<br /> @curUser.DLName<br /> @curUser.ZCName
+                            <span></span>
+                        </div>
+                    </div>
+                </a>
+                <div class="pull-right" style="margin-top: 50px;margin-right: 50px;color: white;">
+                    <p>推广奖</p>
+                </div>
+                <div class="pull-right" style="margin-top: 80px;margin-right: -34px;color: yellow;">
+                    <p>@curUser.ShopCoins</p>
+                </div>
+                <a class="member_m_r" href="@Url.Action("Address")">收货地址&gt;</a>
+            </div>
+            <div class="list-group mb10">
+                <a href="@Url.Action("Bill")" class="list-group-item tip">
+                    <div class="list_group_img">
+                        <img src="/assets/mobile/images/member_img16.png">
+                    </div>
+                    我的订单
+                    <span class="gary pull-right">查看全部订单</span>
+                </a>
+                <div class="list-group-item p0 clearfix">
+                    <div class="col-xs-3 p0" style="width: 25%;">
+                        <a class="order_tab_link" href="@Url.Action("Bill", new { type = 1 })">
+                            <em class="order_img">
+                                <img src="/assets/mobile/images/order_bg_3.png">
+                            </em>待付款
+                            @if (daifukuanCount > 0)
+                            {
+                                <em class="badge badge-info">@daifukuanCount</em>
+                            }
+                        </a>
+                    </div>
+                    @*<div class="col-xs-3 p0" style="width: 100px;">
+                            <a class="order_tab_link" href="@Url.Action("Bill", new { type = 0 })">
+                                <em class="order_img">
+                                    <img src="/assets/mobile/images/order_bg_4.png">
+                                </em>待处理
+                                @if (daichuli > 0)
+                                {
+                                    <em class="badge badge-info">@daichuli</em>
+                                }
+                            </a>
+                        </div>*@
+                    <div class="col-xs-3 p0" style="width: 25%;">
+                        <a class="order_tab_link" href="@Url.Action("Bill", new { type = 2 })">
+                            <em class="order_img">
+                                <img src="/assets/mobile/images/order_bg_2.png">
+                            </em>待发货
+                            @if (daifahuoCount > 0)
+                            {
+                                <em class="badge badge-info">@daifahuoCount</em>
+                            }
+                        </a>
+                    </div>
+                    <div class="col-xs-3 p0" style="width: 25%;">
+                        <a class="order_tab_link" href="@Url.Action("Bill", new { type = 3 })">
+                            <em class="order_img">
+                                <img src="/assets/mobile/images/order_bg_1.png">
+                            </em>待收货
+                            @if (daishouhuoCount > 0)
+                            {
+                                <em class="badge badge-info">@daishouhuoCount</em>
+                            }
+                        </a>
+                    </div>
+
+                    <div class="col-xs-3 p0" style="width: 25%;">
+                        <a class="order_tab_link" href="@Url.Action("Bill", new { type=4})">
+                            <em class="order_img">
+                                <img src="/assets/mobile/images/order_bg.png">
+                            </em>已完成
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="list-group mb10 member_list_group clearfix">
+                <div class="row" style="margin-bottom:3%;margin-right:0px;background:white">
+
+                    <div class="col-xs-12 p0" style="border-bottom: 1px solid #e7ecf1 !important;">
+                        <a class="order_tab_link" style="padding: 0px 0;" href="#">
+                            <h4 style="width: 40%;text-align: left;margin-left: 10%;"><img src="~/assets/mobile/images/tuiguang.png" style="width:15%;margin-left:10px;margin-right:10px"> @("我的积分")</h4><h4 style="margin-top:-36px;float:right;margin-right:10px">@(curUser.Scores)&nbsp;&nbsp;&nbsp;></h4>
+
+                        </a>
+                    </div>
+                    <div class="col-xs-12 p0" style="border-bottom: 1px solid #e7ecf1 !important;">
+                        <a class="order_tab_link" style="padding: 0px 0;" id="qrcodeBtn">
+                            <h4 style="width: 40%;text-align: left;margin-left: 10%;"><img src="~/assets/mobile/images/erweima.png" style="width:15%;margin-left:10px;margin-right:10px"> @("我的二维码")</h4><h4 style="margin-top:-36px;float:right;margin-right:10px">></h4>
+
+                        </a>
+                    </div>
+
+
+                </div>
+                <div class="row" style="margin-bottom:3%;margin-right:0px;background:white">
+                    <div class="col-xs-12 p0" style="border-bottom: 1px solid #e7ecf1 !important;border-top: 1px solid #e7ecf1 !important;">
+                            <a class="order_tab_link" style="padding: 0px 0;" href="@Url.Action("Promotion")">
+                                <h4 style="width: 40%;text-align: left;margin-left: 10%;"><img src="~/assets/mobile/images/3.png" style="width:15%;margin-left:10px;margin-right:10px"> @("销售人员")</h4><h4 style="margin-top:-36px;float:right;margin-right:10px">></h4>
+
+                            </a>
+                        </div>
+                  
+                        <div class="col-xs-12 p0" style="border-bottom: 1px solid #e7ecf1 !important;">
+                            <a class="order_tab_link" style="padding: 0px 0;" href="@Url.Action("convertlist")">
+                                <h4 style="width: 40%;text-align: left;margin-left: 10%;"><img src="/assets/mobile/images/order_bg_8.png" style="width:15%;margin-left:10px;margin-right:10px"> @("收益转换")</h4><h4 style="margin-top:-36px;float:right;margin-right:10px">></h4>
+
+                            </a>
+                        </div>
+                        <div class="col-xs-12 p0" style="border-bottom: 1px solid #e7ecf1 !important;">
+                            <a class="order_tab_link" style="padding: 0px 0;" href="@Url.Action("DrawList")">
+                                <h4 style="width: 40%;text-align: left;margin-left: 10%;"><img src="/assets/mobile/images/order_bg_9.png" style="width:15%;margin-left:10px;margin-right:10px"> @("收益提现")</h4><h4 style="margin-top:-36px;float:right;margin-right:10px">></h4>
+
+                            </a>
+                        </div>
+                    
+
+                </div>
+                <div class="row" style="margin-bottom:3%;margin-right:0px;background:white">
+                    <div class="col-xs-12 p0" style="border-bottom: 1px solid #e7ecf1 !important;border-top: 1px solid #e7ecf1 !important;">
+                        <a class="order_tab_link" style="padding: 0px 0;" href="@Url.Action("AppIndex")">
+                            <h4 style="width: 40%;text-align: left;margin-left: 10%;"><img src="/assets/mobile/images/order_bg_5.png" style="width:15%;margin-left:10px;margin-right:10px"> @("申请代理")</h4><h4 style="margin-top:-36px;float:right;margin-right:10px">></h4>
+
+                        </a>
+                    </div>
+                    @*<div class="col-xs-12 p0" style="border-bottom: 1px solid #e7ecf1 !important;border-top: 1px solid #e7ecf1 !important;">
+                        <a class="order_tab_link" style="padding: 0px 0;" href="@Url.Action("AppIndex")">
+                            <h4 style="width: 40%;text-align: left;margin-left: 10%;"><img src="/assets/mobile/images/order_bg_5.png" style="width:15%;margin-left:10px;margin-right:10px"> @("下载二维码")</h4><h4 style="margin-top:-36px;float:right;margin-right:10px">></h4>
+
+                        </a>
+                    </div>*@
+                    <div class="col-xs-12 p0" style="border-bottom: 1px solid #e7ecf1 !important;">
+                        <a class="order_tab_link" style="padding: 0px 0;" href="@Url.Action("Collect")">
+                            <h4 style="width: 40%;text-align: left;margin-left: 10%;"><img src="~/assets/mobile/images/1.png" style="width:15%;margin-left:10px;margin-right:10px"> @("我的收藏")</h4><h4 style="margin-top:-36px;float:right;margin-right:10px">></h4>
+                        </a>
+                    </div>
+                    <div class="col-xs-12 p0" style="border-bottom: 1px solid #e7ecf1 !important;">
+                        <a class="order_tab_link" style="padding: 0px 0;" href="@Url.Action("Comment")">
+                            <h4 style="width: 40%;text-align: left;margin-left: 10%;"><img src="~/assets/mobile/images/2.png" style="width:15%;margin-left:10px;margin-right:10px"> @("我的评论")</h4><h4 style="margin-top:-36px;float:right;margin-right:10px">></h4>
+                        </a>
+                    </div>
+                </div>
+                <div class="row" style="margin-bottom:3%;margin-right:0px;background:white">
+                    <div class="col-xs-12 p0" style="border-bottom: 1px solid #e7ecf1 !important; border-top: 1px solid #e7ecf1 !important;">
+                        <a class="order_tab_link" style="padding: 0px 0;" href="@Url.Action("News")">
+                            <h4 style="width: 40%;text-align: left;margin-left: 10%;"><img src="~/assets/mobile/img/ic_myspace.png" style="width:15%;margin-left:10px;margin-right:10px"> @("商城公告")</h4><h4 style="margin-top:-36px;float:right;margin-right:10px">></h4>
+                        </a>
+                    </div>
+
+                    <div class="col-xs-12 p0" style="border-bottom: 1px solid #e7ecf1 !important;" data-toggle="modal" data-target="#qqModal" onclick="showQR()">
+                        <a class="order_tab_link" style="padding: 0px 0;">
+                            <h4 style="width: 40%;text-align: left;margin-left: 10%;"><img src="~/assets/mobile/images/people2.png" style="width:15%;margin-left:10px;margin-right:10px"> @("联系客服")</h4><h4 style="margin-top:-36px;float:right;margin-right:10px">></h4>
+                        </a>
+                    </div>
+                    <div class="col-xs-12 p0" style="border-bottom: 1px solid #e7ecf1 !important;">
+                        <a class="order_tab_link" style="padding: 0px 0;" href="/Mobile/MobileCenter/PwdInfo">
+                            <h4 style="width: 40%;text-align: left;margin-left: 10%;"><img src="/assets/mobile/images/order_bg_5.png" style="width:15%;margin-left:10px;margin-right:10px"> @("密码修改")</h4><h4 style="margin-top:-36px;float:right;margin-right:10px">></h4>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="btn-danger" style="margin-bottom:10%; margin-bottom: 10%;
+    width: 95%;
+    margin-left: 2.5%;
+    text-align: center;
+    border-radius: 10px;">
+                <a href="#" id="logOut" class="btn btn-info btn-danger" style="width:100%;font-size:15px">
+                    退 出 登 录
+                </a>
+            </div>
+
+
+
+
+
+
+
+            @*<a href="@Url.Action("Collect")" class="list-group-item col-xs-4">
+                    <div class="m_img"><img src="~/assets/mobile/images/1.png"></div>
+                    <p class="m_name">我的收藏</p>
+                </a>
+                <a href="@Url.Action("Comment")" class="list-group-item col-xs-4">
+                    <div class="m_img"><img src="~/assets/mobile/images/2.png"></div>
+                    <p class="m_name">我的评论</p>
+                </a>
+                <a data-toggle="modal" data-target="#qqModal" onclick="showQR()" class="list-group-item col-xs-4">
+                    <div class="m_img"><img src="~/assets/mobile/images/4.png"></div>
+                    <p class="m_name">客服 </p>
+                </a>
+                <a href="#" id="logOut" class="list-group-item col-xs-4">
+                    <div class="m_img"><img src="~/assets/mobile/images/5.png"></div>
+                    <p class="m_name">退&nbsp;出 </p>
+                </a>*@
+        </div>
+        @*<div class="list-group mb10">
+                <a href="@Url.Action("News")" class="list-group-item tip">
+                    <div class="list_group_img"><img src="/assets/mobile/images/order_bg_8.png"></div>
+                    商城公告
+                </a>
+                <a href="@Url.Action("Collect")" class="list-group-item tip">
+                    <div class="list_group_img"><img src="/assets/mobile/images/order_bg_5.png"></div>
+                    我的收藏
+                </a>
+                <a href="@Url.Action("Comment")" class="list-group-item tip">
+                    <div class="list_group_img"><img src="/assets/mobile/images/order_bg_9.png"></div>
+                    我的评论
+                </a>
+                <a href="/SysManage/Desk/Index" class="list-group-item tip">
+                    <div class="list_group_img"><img src="~/assets/mobile/images/order_bg_3.png"></div>
+                    办公系统
+                </a>
+            </div>*@
+    </div>
+</div>
+<div class="modal fade" id="myModalmin" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form class="form-horizontal" role="form" data-method="formAjax">
+                <div class="modal-header member_tc_top" style="background-color:#ea5527">
+                    <button type="button" class="close member_tc_xx" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        推广名片 <small style="font-size:12px;color:white;">注：长按可以保存图片</small>
+                    </h4>
+                </div>
+
+                <div style="overflow:hidden;width: 100%;">
+                    <div id="targetQrCode" data-url="@Url_Mobile.GetQrCodeLink(curUser)" style="display:none;"></div>
+                    <canvas id="cardCanvas" style="border:1px solid red;display:none"></canvas>
+                    <img id="card" src="@ViewBag.Src" style="max-width:100%;" />
+                    <div class="ewm" style="margin-top:-55px;margin-bottom:25px">
+                        <button onclick="wxShare()" style="margin-top: -200px;">分享</button>
+                       
+                        <button onclick="downloadIamge()" >下载</button>
+                    </div>
+                    @*<div class="ewm" >
+
+
+                        </div>*@
+                </div>
+                <div></div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="bindModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form class="form-horizontal" role="form" data-method="formAjax">
+                <div class="modal-header member_tc_top">
+                    <button type="button" class="close member_tc_xx" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        您还没有绑定微信公众号？
+                    </h4>
+                </div>
+                <div style="overflow:hidden;width: 100%;padding-top: 20px;">
+                    <a href="/mobile/login/auth" class="btn btn-success">
+                        立即绑定
+                    </a>
+                </div>
+                <div style="height:60px;"></div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+@Html.Partial("_Footer")
+<script>
+    // 下载
+   
+
+
+
+    $('#logOut').click(function () {
+        $.post('/shop/login/logoff', {}, function (data) {
+            if (data.status == 1) {
+                show("退出成功");
+                setTimeout(function () {
+                    location.href = '/mobile/memberlogin/index';
+                }, 600);
+            } else {
+                alert(data.msg);
+            }
+        });
+    });
+    function showQR() {
+        $('#qqModal').show();
+        $('#qqModal').addClass("am-modal-active");
+    }
+
+   
+    //微信朋友圈
+    function wxShareFriend() {
+        //var a = $('#card').attr('src');
+
+        var url = "http://www.zhwlh.com"+'@ViewBag.Src';                            // 获取图片地址
+        var a = document.createElement('a');          // 创建一个a节点插入的document
+        var event = new MouseEvent('click')           // 模拟鼠标click点击事件
+        a.download = 'beautifulGirl'                  // 设置a节点的download属性值
+        a.href = url;                                 // 将图片的src赋值给a节点的href
+        a.dispatchEvent(event)
+        //jsBridge.share({
+            //0 微信朋友圈
+            //1 微信好友
+            //2 QQ好友
+            //3 QQ空间
+            @*to: 0,
+            title: "物来惠",
+            link: "http://www.zhwlh.com"+'@ViewBag.Src',
+            imgUrl: "http://www.zhwlh.com"+'@ViewBag.Src',
+            img_height: 640,
+            img_width: 360,
+            desc: "摘要：推广图片。"*@
+
+    } @* alert("http://www.zhwlh.com/" + '@ViewBag.Src');*@
+    @* jsBridge.share({
+
+        to: 1,
+        title: "物来惠",
+        link: "http://www.zhwlh.com" + '@ViewBag.Src',
+        imgUrl: "http://www.zhwlh.com" + '@ViewBag.Src',
+        img_height: 640,
+        img_width: 360,
+        desc: "摘要：推广图片。"
+    });*@
+    //微信好友
+    function wxShare() {
+
+        callNative.share("http://www.zhwlh.com"+'@ViewBag.Src');
+    }
+</script>

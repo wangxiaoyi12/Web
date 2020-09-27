@@ -1,0 +1,107 @@
+﻿@using Business
+@using DataBase
+@model ShopOrder
+@{
+    ViewBag.Title = "我的订单";
+    //获取当前登录用户
+    Member_Info curUser = User_Shop.GetMember_Info();
+    Layout = "~/Views/Shared/_LayoutPageMy0915.cshtml";
+    ////获取数量
+    //int daifukuanCount = DB.ShopOrder.GetCount(curUser.MemberId, 1);
+    //int daifahuoCount = DB.ShopOrder.GetCount(curUser.MemberId, 2);
+    //int daishouhuoCount = DB.ShopOrder.GetCount(curUser.MemberId, 3);
+}
+<style>
+    footer {
+        display: none;
+    }
+</style>
+<div class="container topBg">
+    <!-- 头部导航 -->
+    <div class="header" style="box-shadow: 0 0 10px rgba(1, 73, 206,.2);">
+        <ul>
+            <li class="header-left" onclick="location.href='@Url_Mobile.GetUserCenter()'">
+                <i class="iconfont icon-fanhui"></i>
+            </li>
+            <li>收货管理</li>
+            <li class="header-right">
+
+            </li>
+        </ul>
+    </div>
+    <ul class="siteList">
+        @{
+
+            //1.获取地址列表
+            List<ShopMyAddress> addressList = DB.ShopMyAddress.Where(q => q.MemberID == curUser.MemberId)
+                .OrderByDescending(q => q.IsDefault)
+                .ThenBy(q => q.CreateTime)
+                .ToList();
+            foreach (var item in addressList)
+            {
+                <li>
+                    <p>@item.Name <span class="bsclr_gay">@item.Tel</span></p>
+                    <p>@item.Address</p>
+                    <div class="operation">
+                        @if (item.IsDefault != true)
+                        {
+                            <p onclick="defaultaddress(@item.ID)"><a class="setDefault">设置默认</a></p>
+                        }
+                        <p><a class="editBtn" href="/mobile/mobilecenter/addressdetail/@item.ID">修改</a></p>
+                        <p onclick="removeAddress(@item.ID)">删除</p>
+                    </div>
+                </li>
+
+            }
+        }
+    </ul>
+    <div class="toSiteNew">
+        <a href="/mobile/mobilecenter/addressdetail/0">
+            <span>+</span>
+            新增收货地址
+        </a>
+    </div>
+
+
+
+    <div class="pd_btm"></div>
+    <div class="bgColor"></div>
+</div>
+<script>
+    //设置默认
+    function defaultaddress(id){
+     
+        $.ajax({
+            url: '/shop/usercenter/DefaultAddress',
+            type: 'post',
+            data: { id: id },
+            success: function (data) {
+                if (data.status == 1) {
+                    show('设置成功');
+                    location.reload();
+                } else {
+                    show(data.msg);
+                }
+            }
+        });
+    }
+    //删除地址
+    function removeAddress(id) {
+        $.ajax({
+            url: '/shop/usercenter/deleteaddress',
+            type: 'post',
+            data: { id: id },
+            success: function (data) {
+                if (data.status == 1) {
+                    show('删除成功');
+                    setTimeout(function () {
+                        location.reload();
+                    }, 500);
+
+                } else {
+                    alert(data.msg);
+                }
+            }
+        });
+    }
+</script>

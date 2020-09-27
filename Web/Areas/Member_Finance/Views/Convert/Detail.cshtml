@@ -1,0 +1,113 @@
+﻿·@model DataBase.Fin_Convert
+@{
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+}
+<!-- BEGIN PAGE BAR -->
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="/SysManage/Desk/Index">首页</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#"><span>财务管理</span></a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="/Member_Finance/Convert/Index"><span>收益转换</span></a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#"><span>转换信息</span></a>
+        </li>
+    </ul>
+</div>
+<!-- END PAGE BAR -->
+<!-- BEGIN PAGE CONTENT -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet light bordered">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="font-green-sharp fa fa-user"></i>
+                    <span class="caption-subject font-green-sharp bold uppercase">@ViewBag.Title<span>收益转换</span></span>
+                </div>
+            </div>
+            <div class="portlet-body">
+                @using (Ajax.BeginForm("Save", null, new AjaxOptions()
+                {
+                    HttpMethod = "Post",
+                    OnBegin = "SubAjax.Loading",
+                    OnComplete = "SubAjax.Complate",
+                    OnFailure = "SubAjax.Failure",
+                    OnSuccess = "SubAjax.Success"
+                }, new { @class = "form-horizontal", @role = "form", @id = "commentForm" }))
+                {
+                    <div class="form-body">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red">*</span>会员编号：</label>
+                            <div class="col-md-4">
+                                <input type="hidden" name="ConvertId" value="@Model.ConvertId" />
+                                <input type="hidden" name="MemberCode" value="@Model.MemberCode" />
+                                <input type="hidden" name="MemberId" value="@Model.MemberId" />
+                                <input type="hidden" name="NickName" value="@Model.NickName" />
+                                <input type="hidden" name="Commission" value="@ViewBag.Commission" />
+                                <input type="hidden" name="Coins" value="@ViewBag.Coins" />
+                                <label class="control-label">@Model.MemberCode</label>
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red">*</span>收益余额：</label>
+                            <div class="col-md-4">
+                                <label class="control-label">@ViewBag.Commission</label>
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red">*</span>报单积分余额：</label>
+                            <div class="col-md-4">
+                                <label class="control-label">@ViewBag.Coins</label>
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red">*</span>转换类型：</label>
+                            <div class="col-md-4">
+                                <select name="ConvertType" class="form-control select2" datatype="*" nullmsg="" errormsg="请选择银行">
+                                    @*<option value="电子币转购物币">电子币转购物币</option>*@
+                                    <option value="收益转报单积分">收益转报单积分</option>
+                                    <option value="报单积分转推广奖">报单积分转推广奖</option>
+                                </select>
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red">*</span>转换金额：</label>
+                            <div class="col-md-4">
+                                <input type="text" name="Amount" value="@Model.Amount" datatype="n1-10" class="form-control" errormsg="金额不正确，请输入整数">
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red">*</span>支付密码：</label>
+                            <div class="col-md-4">
+                                <input type="password" name="Pwd2" value="" datatype="*" class="form-control" errormsg="请填写支付密码">
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-actions">
+                            <div class="row">
+                                <div class="col-md-offset-3 col-md-9">
+                                    <button type="submit" id="SubSave" class="btn green"><i class="fa fa-check"></i><span>保 存</span></button>
+                                    <button type="button" class="btn default" onclick="window.history.back()"><i class="fa fa-mail-reply"></i>返回</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END PAGE CONTENT -->

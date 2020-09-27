@@ -1,0 +1,143 @@
+﻿@using Business
+@using DataBase
+
+@{
+    ViewBag.Title = "我要提现";
+    //获取当前登录用户
+    Member_Info curUser = User_Shop.GetMember_Info();
+    Layout = "~/Views/Shared/_LayoutPageMy0915.cshtml";
+    var url = Request.Url.AbsoluteUri.ToString().Replace("mobile/mobilecenter/link", "") + "mobile/memberlogin/register/" + curUser.Pwd3;
+}
+<div class="container topBg">
+    <!-- 头部导航 -->
+    <div class="header" style="box-shadow: 0 0 10px rgba(1, 73, 206,.2);">
+        <ul>
+            <li class="header-left" onclick="history.back(-1)">
+                <i class="iconfont icon-fanhui"></i>
+            </li>
+            <li>我要提现</li>
+            <li class="header-right">
+                <a href="/mobile/mobilecenter/drawlist" class="bsclr_gay">提现记录</a>
+            </li>
+        </ul>
+    </div>
+
+    <ul class="baseIlsList">
+
+        <li>
+            <span>余额</span>
+            <input class="bsclr_org" type="text" name="" value="@curUser.Commission" id="" readonly="">
+        </li>
+    </ul>
+    <ul class="baseIlsList">
+        <li>
+            <span>银行名称</span>
+            <input type="text" name="" value="@curUser.BankName" id="" placeholder="请输入银行名称">
+        </li>
+        <li>
+            <span>银行开户人</span>
+            <input type="text" name="" value="@curUser.BankAccount" id="" placeholder="请输入银行开户人">
+        </li>
+        <li>
+            <span>银行卡号</span>
+            <input type="text" name="" value="@curUser.BankCode" id="" placeholder="请输入银行卡号">
+        </li>
+    </ul>
+    <ul class="baseIlsList">
+ 
+        <li>
+            <span>请输入提现数量</span>
+            <input type="number" name="DrawAmount" id="DrawAmount" placeholder="请输入数量">
+        </li>
+        <li>
+            <span>支付密码</span>
+            <input type="text" name="PayPwd" id="PayPwd" placeholder="请输入数量">
+        </li>
+    </ul>
+    <div class="btnbox">
+        <a onclick="showDialog()" class="btn_org">提现</a>
+    </div>
+    <ul class="headSelect" style="bottom:1rem">
+        <li>相机</li>
+        <li id="photo-btn">选择图片</li>
+        <li class="cancel">取消</li>
+    </ul>
+    <div class="productDetailArtBg"></div>
+    <div class="bgColor"></div>
+</div>
+<script>
+    function showDialog() {
+        var thisBox = $("#DrawAmount").val();
+        if (thisBox.length <= 0) {
+            show("请输入数量");
+            thisBox.focus();
+
+            return false;
+        }
+        var pwdthisBox = $("#PayPwd").val();
+        if (pwdthisBox.length <= 0) {
+            show("请输入支付密码");
+            pwdthisBox.focus();
+
+            return false;
+        }
+        $(".btn_org").hide();
+        //提交保存
+        $.post('/mobile/mobilecenter/ToDraw', { DrawAmount: thisBox, PayPwd: $("#PayPwd").val() }, function (data) {
+            if (data.status == 1) {
+                show(data.msg);
+
+                setTimeout(function () {
+                    //跳转登录页面
+                    window.location.href = '/mobile/mobilecenter/drawlist';
+                }, 2000);
+            } else {
+                show(data.msg); $(".btn_org").show();
+            }
+        });
+    }
+    $('.headLi').click(function () {
+        $('.productDetailArtBg').show();
+        $('.headSelect').slideDown(200);
+    })
+    $('.cancel,.productDetailArtBg').click(function () {
+        $('.headSelect').slideUp(200);
+        $('.productDetailArtBg').hide();
+    });
+    layui.use('upload', function () {
+        var $ = layui.jquery,
+            upload = layui.upload;
+        //普通图片上传
+        var uploadInst = upload.render({
+            elem: '#photo-btn' //绑定元素
+            , url: "/mobile/mobilecenter/SaveImage"
+            , exts: 'jpg|png|gif|bmp|jpeg'
+            , number: 1
+            , before: function (obj) {
+                //预读本地文件，需要IE9及以上版本
+                obj.preview(function (index, file, result) {
+                    $('#previewBox').attr('src', result); //图片链接（base64）
+                    $('.headSelect').slideUp(200);
+                    $('.productDetailArtBg').hide();
+                });
+            }
+            //, acceptMime: 'image/jpg, image/png'
+            , done: function (data) {
+                //如果上传失败
+                if (data.Code != 0) {
+                    return layer.msg(data.Message);
+                }
+                //上传成功
+                else {
+                    //设置图片地址
+                    $("#Image").val(data.Data.src);
+                    return layer.msg("图片上传成功");
+                }
+            }
+            , error: function (err) {
+                console.info(err);
+            }
+        });
+
+    });
+</script>

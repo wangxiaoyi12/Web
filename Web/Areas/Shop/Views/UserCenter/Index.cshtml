@@ -1,0 +1,215 @@
+﻿@using DataBase
+@using Business
+@{
+    ViewBag.Title = "个人中心";
+    Xml_Shop config = DB.XmlConfig.XmlShop;
+    Member_Info curUser = User_Shop.GetMember_Info();
+    string curUserID = curUser.MemberId;
+}
+@section Head{
+}
+@section Footer{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            setInterval(showTime, 1000);
+            function timer(obj, txt) {
+                obj.text(txt);
+            }
+            function showTime() {
+                var today = new Date();
+                var weekday = new Array(7)
+                weekday[0] = "星期日"
+                weekday[1] = "星期一"
+                weekday[2] = "星期二"
+                weekday[3] = "星期三"
+                weekday[4] = "星期四"
+                weekday[5] = "星期五"
+                weekday[6] = "星期六"
+                var y = today.getFullYear() + "年";
+                var month = today.getMonth() + 1 + "月";
+                var td = today.getDate();
+                var d = weekday[today.getDay()];
+                var h = today.getHours();
+                var m = today.getMinutes();
+                var s = today.getSeconds();
+                timer($("#y"), y + month);
+                //timer($("#MH"),month);
+                timer($("h1"), td);
+                timer($("#D"), d);
+                timer($("#H"), h);
+                timer($("#M"), m);
+                timer($("#S"), s);
+            }
+        })
+    </script>
+}
+<!--用户中心样式-->
+<div class="user_style clearfix">
+    <div class="user_center clearfix">
+        <!--左侧菜单图层-->
+        @Html.Partial("LeftMenu")
+        <!--右侧内容图层-->
+        <div class="right_style">
+            <div class="r_user_style">
+                <div class="Notice"><i class="icon_Notice"></i><span>系统最新公告:</span>为了更好地服务于【@(config.ShopName)】的会员朋友及用户 发表意见。</div>
+                <!--账户信息图层样式-->
+                <div class="Account_info">
+                    <div class="u_date">
+                        <h4 id="y" class="years"></h4>
+                        <h1></h1>
+                        <h4 id="D"></h4>
+                    </div>
+                    <div class="user_name_info">
+                        <ul>
+                            <li class="us_two">
+                                <dl><dt class="left">收益:</dt><dd>￥<b>@(curUser.Commission )</b></dd></dl>
+                                <dl><dt class="left">推广奖:</dt><dd><b>@(curUser.ShopCoins)</b></dd></dl>
+                                @*<dl><dt class="left">配货价:</dt><dd><b>@(curUser.Scores)</b></dd></dl>*@
+                            </li>
+                            <li class="us_Order">
+                                <dl><dt class="left">配货价:</dt><dd><b style="color:red;">@(curUser.Scores )</b></dd></dl>
+                                <dl><dt class="left">未完成：</dt><dd><a href="@Url.Action("OrderForm",new { state=1})">@(DB.ShopOrder.GetCount(curUserID, ShopEnum.OrderState.Submit.GetHashCode()))</a></dd></dl>
+                                <dl><dt class="left">已完成：</dt><dd><a href="@Url.Action("OrderForm",new { state=2})">@(DB.ShopOrder.GetCount(curUserID, ShopEnum.OrderState.Pay.GetHashCode()))</a><a href="@Url_Shop.GetMyAddress()" class="Address">[收货地址管理]</a></dd></dl>
+                            </li>
+                            <li class="us_grade">
+                                <dl>
+                                    <dt class="left">等级：</dt>
+                                    <dd>
+                                        @if (curUser.MemberLevelId == 0)
+                                        {
+                                            <b class="">粉丝</b>
+                                        }
+                                        else
+                                        {
+                                        <b class="">@curUser.MemberLevelName</b>
+                                        }
+                                        <a href="/shop/product?classid=1">[会员升级]</a>
+                                    </dd>
+                                </dl>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <!--订单信息样式-->
+                <div class="user_info_p_s clearfix">
+                    <div class="left_user_cont">
+                        <div class="us_Orders left clearfix">
+                            <div class="Orders_name">
+                                <div class="title_name">
+                                    <div class="Records">购买记录</div>
+                                    <div class="right select">
+                                        只显示你最近30天的购买记录
+                                    </div>
+                                </div>
+                            </div>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>产品名称</th>
+                                        <th>数量</th>
+                                        <th>状态</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        //获取最近30天购买记录
+                                        int state1 = ShopEnum.OrderState.Finish.GetHashCode();
+                                        int total = 0;
+                                        List<ShopOrderProduct> orderList = DB.ShopOrder.GetOrderProductList(curUser.MemberId, out total, state1, DateTime.Now.AddDays(-30), DateTime.Now);
+                                        foreach (var item in orderList)
+                                        {
+                                            string url = Url_Shop.GetProduct(item.ShopProduct);
+                                            <tr>
+                                                <td class="img_link">
+                                                    <a href="@url" class="img"><img src="@Url_Shop.GetProductImg(item.ShopProduct)" width="80" height="80"></a>
+                                                    <a href="@url" class="title">@item.Name</a>
+                                                </td>
+                                                <td>@item.Count</td>
+                                                <td>完成</td>
+                                                <td><a href="@url">查看</a></td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                            <div class="us_jls">共@(total)条记录</div>
+                        </div>
+                    </div>
+                    <!--右侧记录样式-->
+                    <div class="right_user_recording">
+                        <div class="us_Record">
+                            <div id="Record_p" class="Record_p">
+                                <div class="title_name">
+                                    <span class="name left">浏览历史</span>
+                                    <span class="pageState right"><span>1</span>/9</span>
+                                </div>
+                                <div class="hd">
+                                    <a class="next">&lt;</a>
+                                    <a class="prev">&gt;</a>
+                                </div>
+                                <div class="bd" style="min-height:208px;">
+                                    <ul>
+                                        @{
+                                                //1.获取浏览记录
+                                                List<ShopProduct> history = DB.ShopBrowsingHistory.Where(q => q.MemberID == curUser.MemberId && q.ShopProduct.IsEnable)
+                                                    .OrderByDescending(q => q.CreateTime)
+                                                    .Take(11)
+                                                    .Select(q => q.ShopProduct)
+                                                    .ToList();
+                                                foreach (var item in history)
+                                                {
+                                                    string url = Url_Shop.GetProduct(item);
+                                                <li>
+                                                    <div class="p_width">
+                                                        <div class="pic"><a href="@url"><img src="@Url_Shop.GetProductImg(item)"></a></div>
+                                                        <div class="title"><a href="@url">@item.Title</a></div>
+                                                        <div class="Purchase_info"><span class="p_Price">￥@Url_Shop.GetProductPrice(item)</span> <a href="@Url_Shop.GetProduct(item)" class="Purchase">立即购买</a></div>
+                                                    </div>
+                                                </li>
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <script type="text/javascript">jQuery("#Record_p").slide({ mainCell:".bd ul",effect:"leftLoop",vis:1,autoPlay:false });</script>
+                    </div>
+                </div>
+                <!--收藏商品-->
+                <div class="Collections_p">
+                    <div class="title_name">收藏的商品</div>
+                    <div id="Collect_Product" class="Collect_Products">
+                        <div class="hd">
+                            <a class="next">&lt;</a>
+                            <a class="prev">&gt;</a>
+                        </div>
+                        <div class="bd" style="min-height:277px;">
+                            <ul>
+                                @{
+                                    //获取用户收藏的产品
+                                    List<ShopProduct> collectList = DB.ShopCollectionProduct.Where(q => q.MemberID == curUser.MemberId && q.ShopProduct.IsEnable == true)
+                                                                    .OrderByDescending(q => q.CreateTime)
+                                                                    .Take(10)
+                                                                    .Select(q => q.ShopProduct)
+                                                                    .ToList();
+                                    foreach (var item in collectList)
+                                    {
+                                        string url = Url_Shop.GetProduct(item);
+                                        <li>
+                                            <div class="pic"><a href="@url"><img src="@Url_Shop.GetProductImg(item)"></a></div>
+                                            <div class="title"><a href="@url">@item.Title</a></div>
+                                            <div class="p_Price">￥@Url_Shop.GetProductPrice(item)</div>
+                                        </li>
+                                    }
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                    <script type="text/javascript">jQuery("#Collect_Product").slide({ mainCell:".bd ul",effect:"leftLoop",vis:5,autoPlay:false });</script>
+                </div>
+                <!--结束-->
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,63 @@
+﻿@using DataBase
+@using Business
+@model List<ShopOrderComment>
+
+
+
+@foreach (var item in Model)
+{
+    Member_Info member = DB.Member_Info.FindEntity(item.MemberID);
+        <div class="media">
+            <div class="media-left">
+                @*<a>
+                    <img class="media-object" src="@Url_Shop.GetImg((member==null?"":member.HeadimgUrl))">
+                </a>*@
+                <a>
+            <img style="width:110px;height:110px;margin-left:20px" class="media-object" src="@Url_Mobile.GetImg(member.Pwd3)">
+        </a>
+                <h4 style="margin-left:60px"> @member.NickName</h4>
+             
+            </div>
+            <div class="media-body">
+                @*<p>@item.Score 分</p>*@
+                <p>
+                    @for (int i = 0; i < 5; i++)
+                    {
+                        if (i < item.Score)
+                        {
+                            <span class="glyphicon glyphicon-star text-warning"></span>
+                        }
+                        else
+                        {
+                            <span class="glyphicon glyphicon-star-empty"></span>
+                        }
+                    }
+                </p>
+                @*<h4 class="media-heading">@(member==null?"游客": member.NickName)</h4>*@
+                <p>@item.Description</p>
+                <p style="width:100%">
+                    <span class="glyphicon glyphicon-time">@item.CreateTime.ToString("yyyy-MM-dd HH:mm")</span>
+                </p>
+            </div>
+        </div>
+}
+
+
+ @*分页条*@
+@if (ViewBag.allCount > ViewBag.skipCount)
+{
+    <div id="ajax_loading" style="width:300px;margin: 10px  auto 15px;text-align:center;"
+         onclick="next_comments(this)"
+          data-skip="@ViewBag.skipCount">
+        <button class="btn btn-success" >点击获取更多》</button>
+        <img src="/assets/mobile/images/loading.gif">
+    </div>
+}
+@if(Model.Count==0)
+{
+    <div class="alert alert-danger text-center">暂时没有评论了</div>
+}
+
+
+
+

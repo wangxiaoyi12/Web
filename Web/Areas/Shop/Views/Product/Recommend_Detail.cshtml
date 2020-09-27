@@ -1,0 +1,20 @@
+﻿@using DataBase
+@model List<ShopProduct>
+<div class="Recommend">
+    <div class="title_name">同类产品推荐</div>
+    <div class="Recommend_list">
+        <ul>
+            @foreach (var item in Model)
+            {
+                string url = Url_Shop.GetProduct(item);
+                <li class="clearfix">
+                    <div class="pic_img"><a href="@url"><img src="@Url_Shop.GetProductImg(item)" data-bd-imgshare-binded="1"></a></div>
+                    <div class="r_content">
+                        <div class="title"><a href="@url">@item.Title</a></div>
+                        <div class="p_Price">@Url_Shop.GetProductPrice(item)</div>
+                    </div>
+                </li>
+            }
+        </ul>
+    </div>
+</div>

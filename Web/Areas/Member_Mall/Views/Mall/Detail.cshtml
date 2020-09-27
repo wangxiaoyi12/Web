@@ -1,0 +1,152 @@
+﻿@model DataBase.Product_Info
+@{
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+}
+@section css{
+    <link href="/assets/global/css/mall.css" rel="stylesheet" />
+}
+<!-- BEGIN PAGE BAR -->
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="/SysManage/Desk/Index">首页</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#"><span>购物商城</span></a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="/Member_Mall/Mall/Index"><span>购物商城</span></a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="/Member_Mall/Mall/Detail/@Model.ProductId"><span>商品详情</span></a>
+        </li>
+    </ul>
+</div>
+<!-- END PAGE BAR -->
+<!-- BEGIN PAGE CONTENT -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet light bordered">
+            <div class="portlet-title">
+                <div class="caption">
+                    <span class="caption-subject font-green-sharp bold uppercase"><span>商品详情</span></span>
+                </div>
+            </div>
+            <div class="portlet-body">
+                @using (Ajax.BeginForm("Save", null, new AjaxOptions()
+                {
+                    HttpMethod = "Post",
+                    OnBegin = "BuyConfirm",
+                    OnComplete = "SubAjax.Complate",
+                    OnFailure = "SubAjax.Failure",
+                    OnSuccess = "SubAjax.Success"
+                }, new { @class = "form-horizontal", @role = "form", @id = "commentForm" }))
+                {
+                    var url = Model.ImgUrl;
+                    if (string.IsNullOrEmpty(url))
+                    {
+                        url = "/assets/pages/img/noimg.gif";
+                    }
+                    <div class="form-body">
+                        <div class="goods_info_part">
+                            <div class="goods_picture">
+                                <div class="m_img">
+                                    <img id="imgUrl" src="@url.Trim('&')" style="width:330px;border-width:0px;" />
+                                </div>
+                            </div>
+                            <div class="goods_infos">
+                                <h2>
+                                    @Model.ProductName
+                                    <em></em>
+                                </h2>
+                                <div class="price_box">
+                                    <p class="price_now">
+                                        规格型号： @Model.ModelName
+                                        <input type="hidden" name="ProductId" value="@Model.ProductId" />
+                                    </p>
+                                    <p class="price_now">原价：￥<em><s>@Model.OriginalPrice</s></em>元</p>
+                                    <p class="price_now">现价：<strong>￥<em>@Model.SalePrice</em></strong>元</p>
+
+                                </div>
+                                <ul class="reserve">
+                                    <li>
+                                        <span class="reserve_title">购买数量：</span>
+                                        <span class="reserve_number reserve_box">
+                                            <input class="reduce_one" type="button" value="-" onclick="cal_num('cut')" />
+                                            <input name="goods_num" type="text" id="goods_num" class="numer_box only_num" value="1" maxlength="4" />
+                                            <input type="button" value="+" class="add_one" onclick="cal_num('add')" />
+                                        </span>
+                                    </li>
+                                </ul>
+                                <div class="form-actions">
+                                    <div class="row">
+                                        <div class="col-md-offset-3 col-md-9">
+                                            <a onclick="buy()" class="btn red"><i class="fa fa-shopping-cart"></i><span> 购买</span></a>
+                                            <button type="button" class="btn default" onclick="window.history.back()"><i class="fa fa-mail-reply"></i>返回</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <span class="caption-subject font-green-sharp bold uppercase"><span>商品介绍</span></span>
+                            </div>
+                        </div>
+                        <div class="form-body">
+                            <div class="goods_descr">
+                                @Html.Raw(Model.ProductComment)
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <!-- END PAGE CONTENT -->
+    @section scripts{
+        <script type="text/javascript">
+            // 计算数量
+            function cal_num(type) {
+                var goods_num = $("#goods_num").val();
+                if (isNaN(goods_num)) {
+                    goods_num = 0;
+                }
+                goods_num = parseInt(goods_num);
+                if (type == 'add') {
+                    goods_num++;
+                }
+                else if (type == 'cut') {
+                    if (goods_num > 1) {
+                        goods_num--;
+                    }
+                }
+                $("#goods_num").val(goods_num)
+            }
+
+            function buy() {
+                confirm("购买确认!", "您确定要购买此商品吗？", function () {
+                    var goods_num = $("#goods_num").val();
+                    $.ajax({
+                        url: "/Member_Mall/Mall/Save",
+                        data: { ProductId: @Model.ProductId, goods_num: goods_num},
+                        type: "post",
+                        success: function (backdata) {
+                            if(backdata.Status=="y"){
+                                alert("操作提示", backdata.Msg,function () {
+                                    location.href=backdata.ReUrl;
+                                })
+                            }else{
+                                alertError("下单失败",backdata.Msg);
+                            }
+                        }, error: function (error) {
+                            console.log(error);
+                        }
+                    });
+                });
+            }
+        </script>
+    }

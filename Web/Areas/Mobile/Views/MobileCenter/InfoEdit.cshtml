@@ -1,0 +1,123 @@
+﻿@using Business
+@using DataBase
+@model ShopOrder
+@{
+    ViewBag.Title = "我的订单";
+    //获取当前登录用户
+    Member_Info curUser = User_Shop.GetMember_Info();
+    Layout = "~/Views/Shared/_LayoutPageMy0915.cshtml";
+    ////获取数量
+    //int daifukuanCount = DB.ShopOrder.GetCount(curUser.MemberId, 1);
+    //int daifahuoCount = DB.ShopOrder.GetCount(curUser.MemberId, 2);
+    //int daishouhuoCount = DB.ShopOrder.GetCount(curUser.MemberId, 3);
+}
+<div class="container topBg">
+    <!-- 头部导航 -->
+    <div class="header" style="box-shadow: 0 0 10px rgba(1, 73, 206,.2);">
+        <ul>
+            <li class="header-left" onclick="history.back(-1)">
+                <i class="iconfont icon-fanhui"></i>
+            </li>
+            <li>用户资料</li>
+            <li class="header-right">
+
+            </li>
+        </ul>
+    </div>
+    <!-- 列表 -->
+    <form id="form1">
+        <ul class="baseIlsList">
+            <li>
+                <span>真实姓名</span>
+                <input type="text" name="NickName" value="@curUser.NickName" id="NickName">
+
+            </li>
+
+
+            <li>
+                <span>身份证号码</span>
+                <input type="text" name="IdCode" value="@curUser.IdCode" id="IdCode">
+            </li>
+        </ul>
+        <ul class="baseIlsList">
+            <li class="bankLi">
+                <span>银行名称</span>
+
+                <select name="BankName" id="BankName" class="form-control select2" nullmsg="" errormsg="请选择银行名称">
+                    <option value="">请选择银行...</option>
+                    @{
+                        foreach (var item in ViewData["Banks"] as dynamic)
+                        {
+                            if (curUser.BankName == item.BasicDataName)
+                            {
+                                <option value="@item.BasicDataName" selected="selected">@item.BasicDataName</option>
+                            }
+                            else
+                            {
+                                <option value="@item.BasicDataName">@item.BasicDataName</option>
+                            }
+                        }
+                    }
+                </select>
+
+            </li>
+            <li>
+                <span>银行户名</span>
+                <input type="text" name="BankAccount" id="@curUser.BankAccount" value="@curUser.BankAccount" placeholder="未填写">
+            </li>
+            <li>
+                <span>银行账号</span>
+                <input type="text" name="BankCode" id="@curUser.BankCode" value="@curUser.BankCode" placeholder="未填写">
+                <!-- <i class="iconfont icon-jiufuqianbaoicon07"></i> -->
+            </li>
+        </ul>
+    </form>
+    <div class="btnbox">
+        @if (curUser.IsDL == "否")
+        {
+            <a onclick="showDialog()" class="btn_org">点击保存</a>
+        }
+    </div>
+    <div class="bgColor"></div>
+</div>
+<script>
+    Select('.select')
+        function showDialog() {
+
+        var isHasEmpty = false;
+        var form = $("#form1");
+        var isHasEmpty = false;
+        form.find('input[type="text"]').each(function () {
+            var thisBox = $(this);
+            if (thisBox.val().length <= 0) {
+                thisBox.focus();
+                isHasEmpty = true;
+                return false;
+            }
+        });
+
+            if ($("#BankName").val().length <= 0) {
+                show("请选择银行");
+                isHasEmpty = true;
+                return false;
+            }
+        if (isHasEmpty == false) {
+            $(".btn_org").hide();
+            //提交保存
+            $.post('/mobile/mobilecenter/InfoSave', form.serialize(), function (data) {
+                if (data.status == 1) {
+                    show(data.msg);
+
+                    setTimeout(function () {
+                        //跳转登录页面
+                        window.location.href = '@Url_Mobile.GetUserCenter()';
+                    }, 2000);
+                } else {
+                    show(data.msg); $(".btn_org").show();
+                }
+            });
+        }
+
+
+    }
+</script>

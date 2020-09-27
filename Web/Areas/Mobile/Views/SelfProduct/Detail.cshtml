@@ -1,0 +1,246 @@
+﻿@using DataBase
+@using Common
+
+@{
+    ViewBag.Title = "首页";
+    Layout = "~/Views/Shared/_LayoutPageCategory0915.cshtml";
+    int id = ViewBag.id;
+    ShopProduct product = DB.ShopProduct.FindEntity(id);
+    Shop shopModel = DB.Shop.FindEntity(product.ShopID);
+    Member_Info curUser = User_Shop.GetMember_Info();
+
+}
+<style>
+    .detailsPic img {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    footer {
+        display: none;
+    }
+</style>
+<input type="hidden" id="prodId" value="@product.ID" />
+<input type="hidden" id="code" value="1" />
+<div class="container topBg">
+    <!-- 头部导航 -->
+    <div class="header productDetailHeader" style="box-shadow: 0 0 10px rgba(1, 73, 206,.2);">
+        <ul>
+            <li class="header-left" onclick="history.back(-1)">
+                <i class="iconfont icon-fanhui"></i>
+            </li>
+            <li>
+                <dl class="prdtDtlTab">
+                    <dd class="prdtDtlTabAct">商品</dd>
+                    <dd>详情</dd>
+                </dl>
+            </li>
+            <li class="header-right">
+                <a href="">@*<img src="~/assets/jnwz200915/images/icon_fx.png" alt="">*@</a>
+            </li>
+        </ul>
+    </div>
+    <!-- tab内容 -->
+    <ul class="prdtDtlCtn">
+        <li class="prdtDtlCtnAct">
+            <!-- 轮播 -->
+
+            @{
+                //获取图片列表
+                List<ShopProductImage>
+                    imgList = DB.ShopProductImage.Where(q => q.ProductID == product.ID).OrderBy(q => q.Sort).ToList();
+            }
+            <div class="prdtDtl-swp">
+                <div class="swiper-container">
+                    <div class="swiper-wrapper">
+                        @foreach (var item in imgList)
+                        {
+                            <div class="swiper-slide"><img src="@item.URL"></div>
+                        }
+                        @*<div class="swiper-slide"><img src="~/assets/jnwz200915/images/banner2.png"></div>
+                            <div class="swiper-slide"><img src="~/assets/jnwz200915/images/banner2.png"></div>
+                            <div class="swiper-slide"><img src="~/assets/jnwz200915/images/banner2.png"></div>*@
+                    </div>
+                    <div class="swiper-pagination"></div>
+                </div>
+            </div>
+            <div class="details">
+                @*<span class="vipPrice">会员价</span>*@<p class="price"><span id="YouHui">￥@DB.ShopProduct.GetYouHuiPrice(product)</span> <span class="resalePrice" id="KuCun">库存:@DB.ShopProduct.GetKuCun(product)</span></p>
+                <p class="bsclr_gay">原价<s id="LingShou">￥@DB.ShopProduct.GetLingShouPrice(product)</s></p>
+                <p class="txt">@product.Title</p>
+            </div>
+            <!-- 商品属性 -->
+            <ul class="productDetailArt">
+                @{
+                    <input id="guige" hidden />
+                    List<string> strlist = ViewBag.GG as List<string>;
+
+                    for (var i = 0; i < strlist.Count; i++)
+                    {
+
+
+                        string[] yearArray = strlist[i].Split('_');
+                        <p class="bsclr_gay">@(yearArray[1])</p>
+                        <ul class="rdoList size@(yearArray[0])">
+
+                            @{
+                                for (var c = 0; c < yearArray.Length; c++)
+                                {
+                                    if (c > 1)
+                                    {
+
+                                        <li>
+                                            <label for="@yearArray[c]">
+                                                @( yearArray[c])
+                                                <input type="radio" name="checkbox_@yearArray[0]" value="@(yearArray[c])" />
+                                            </label>
+                                        </li>
+
+
+                                    }
+                                }
+
+                            }
+                        </ul>
+                    }
+
+
+                }
+
+                @*<p class="bsclr_gay">库存</p>   <p class="bsclr_gay">1447</p>*@
+                @*<div class="carNum">
+                        <p class="bsclr_gay">1447</p>
+                    </div>*@
+                <p class="bsclr_gay">数量</p>
+                <div class="carNum">
+                    <span class="minus">-</span>
+                    <input class="inpNum count" id="buy-num" value="1" type="number" name="" id="" readonly>
+                    <span class="add">+</span>
+                </div>
+        </li>
+
+
+
+    </ul>
+    <li>
+
+        <div class="detailsPic">
+            @Html.Raw(product.Content)
+
+        </div>
+        @*<div class="detailsPic">
+                <div class="picBox"><img src="~/assets/jnwz200915/images/banner2.png"></div>
+                <div class="picBox"><img src="~/assets/jnwz200915/images/banner1.png"></div>
+                <div class="picBox"><img src="~/assets/jnwz200915/images/banner2.png"></div>
+                <div class="picBox"><img src="~/assets/jnwz200915/images/banner2.png"></div>
+                <div class="picBox"><img src="~/assets/jnwz200915/images/banner2.png"></div>
+            </div>*@
+    </li>
+</div>
+
+
+
+<!-- 底部 -->
+<div class="pd_btm"></div>
+
+
+
+<div class="productDetailBtm">
+    <ul>
+        <li>
+            <a class="picBox collectBtn" data-id="@product.ID">
+                @if (User_Shop.IsCollect(product.ID))
+                {
+                    <img src="~/assets/jnwz200915/images/icon_scAct.png" class="favorites">
+                }
+                else
+                {
+                    <img src="~/assets/jnwz200915/images/icon_sc.png" class="favorites">
+                }
+            </a>
+        </li>
+        <li>
+            <a href="@Url_Mobile.GetMyCart()" class="picBox">
+                <img src="~/assets/jnwz200915/images/icon_guc.png">
+            </a>
+            <span class="numCar" id="totalNum">@User_Shop.GetCartCount()</span>
+        </li>
+
+    </ul>
+    <div class="addCar cartBtn" data-id="@product.ID">
+        <a>加入购物车</a>
+        <span class="carAnimation"></span>
+    </div>
+    <div class="promptlyBuy buyNowBtn" data-id="@product.ID">
+        <a>立即购买</a>
+    </div>
+</div>
+
+<div class="bgColor"></div>
+<script>
+    @*$('.addCar').click(function () {
+        setTimeout(function () {
+            $('.numCar').text(@(DB.ShopCat.Where(a=>a.MemberID==curUser.MemberId).Sum(a => (decimal?)a.Count) ?? 0));
+        }, 150)
+        $('.numCar').addClass('animationCar')
+        setTimeout(function () {
+            $('.numCar').removeClass('animationCar')
+        }, 300)
+      
+    })*@
+
+
+    // 数量加减
+    numInput('.minus', '.add', '.inpNum');
+    // tab切换
+    tabs('.prdtDtlTab>dd', 'prdtDtlTabAct', '.prdtDtlCtn>li', 'prdtDtlCtnAct')
+    // banner
+    var mySwiper = new Swiper('.prdtDtl-swp .swiper-container', {
+        direction: 'horizontal', // 垂直切换选项
+        loop: true, // 循环模式选项
+        initialSlide: 1,
+        speed: 400,
+
+        autoplay: {
+            delay: 19000,
+            disableOnInteraction: false,
+        },
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+            type: 'fraction', //分页器样式
+        },
+        uniqueNavElements: false,
+    })
+    $('.favorites').click(function () {
+   
+        $(this).attr({ src: "/assets/jnwz200915/images/icon_scAct.png" })
+    })
+     // 单选切换
+    $(document).on("click", ".rdoList label", function () {
+        $(this).addClass('rdoAct')
+        $(this).parent().siblings().children().removeClass('rdoAct');
+        var str = "";
+        var list = document.getElementsByClassName("rdoAct")
+        for (var i = 0; i < list.length; i++) {
+            str += list[i].getAttributeNode("for").value + "_";
+        }
+        var str = str.substr(0, str.length - 1);
+
+        $.post("/Ajax/GetProPrice", { str: str, id:@product.ID }, function (d) {
+            //alert(d);
+            var yearArray = new Array();
+
+            yearArray = d.split("_");
+            $("#LingShou").html("￥" +yearArray[0]);
+            $("#YouHui").html("￥"+yearArray[1]);
+            $("#PeiHuo").html(yearArray[2]);
+            $("#KuCun").html("@("库存"):" + yearArray[3]);
+            $("#guige").val(str);
+
+        })
+
+    })
+
+
+</script>

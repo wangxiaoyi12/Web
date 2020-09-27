@@ -1,0 +1,25 @@
+﻿{
+  "sProcessing": "처리 중...",
+  "sLengthMenu": "보이기 _MENU_ 항목 결과",
+  "sZeroRecords": "일치하는 결과",
+  "sInfo": "제  _START_ ~  _END_ 항목 결과는 모두 _TOTAL_ 항목",
+  "sInfoEmpty": "제  0 至 0 항목 결과는 모두 0 항목",
+  "sInfoFiltered": "(by _MAX_  항목 결과 필터)",
+  "sInfoPostFix": "",
+  "sSearch": "검색:",
+  "sUrl": "",
+  "sEmptyTable": "표 가운데 데이터 비어",
+  "sLoadingRecords": "불러오는 중...",
+  "sInfoThousands": ",",
+  "oPaginate": {
+    "sFirst": "홈",
+    "sPrevious": "에서 페이지",
+    "sNext": "다음",
+    "sLast": "끝쪽"
+  },
+  "oAria": {
+    "sSortAscending": ": 으로 오름차순 배열 이 열",
+    "sSortDescending": ": 으로 내림 차순 이 열"
+  }
+
+}

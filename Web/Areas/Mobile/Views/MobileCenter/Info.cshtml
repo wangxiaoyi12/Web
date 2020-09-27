@@ -1,0 +1,97 @@
+﻿@using Business
+@using DataBase
+
+@{
+    ViewBag.Title = "我要提现";
+    //获取当前登录用户
+    Member_Info curUser = User_Shop.GetMember_Info();
+    Layout = "~/Views/Shared/_LayoutPageMy0915.cshtml";
+    var url = Request.Url.AbsoluteUri.ToString().Replace("mobile/mobilecenter/link", "") + "mobile/memberlogin/register/" + curUser.Pwd3;
+}
+<div class="container topBg">
+    <!-- 头部导航 -->
+    <div class="header" style="box-shadow: 0 0 10px rgba(1, 73, 206,.2);">
+        <ul>
+            <li class="header-left" onclick="GetIndex()">
+                <i class="iconfont icon-fanhui"></i>
+            </li>
+            <li>设置</li>
+            <li class="header-right">
+                <a href="/mobile/mobilecenter/infoedit" class="bsclr_org">编辑资料</a>
+            </li>
+        </ul>
+    </div>
+    <!-- 列表 -->
+    <ul class="baseIlsList">
+      
+        <li>
+            <span>编号</span>
+            <input type="text" readonly name="" value="@curUser.Code" id="">
+        </li>
+        <li>
+            <span>姓名</span>
+            <input type="text" name="" value="@curUser.NickName" id="">
+        </li>
+        <li>
+            <span>会员等级</span>
+            <input type="text" name="" value="@curUser.MemberLevelName" id="">
+        </li>
+      
+    </ul>
+    <ul class="baseIlsList">
+        <li>
+            <span>推荐人编号</span>
+            <input type="text" name="" value="@curUser.RecommendCode" id="">
+        </li>
+        
+    </ul>
+    <ul class="baseIlsList">
+        <li>
+            <span>银行名称</span>
+            <input type="text" name="" value="@curUser.BankName" id="">
+        </li>
+        <li>
+            <span>银行账号</span>
+            <input type="text" name="" value="@curUser.BankCode" id="">
+        </li>
+        <li>
+            <span>开户人</span>
+            <input type="text" name="" value="@curUser.BankAccount" id="">
+        </li>
+        
+    </ul>
+    <ul class="baseIlsList">
+       
+        <li>
+            <span>身份证号</span>
+            <input type="text" name="" value="@curUser.IdCode" id="">
+        </li>
+       
+    </ul>
+
+    <div class="btnbox">
+        <a href="" class="btn_org">退出登录</a>
+    </div>
+
+    <ul class="headSelect">
+        <li>相机</li>
+        <li id="photo-btn">选择图片</li>
+        <li class="cancel">取消</li>
+    </ul>
+    <div class="productDetailArtBg"></div>
+    <div class="bgColor"></div>
+</div>
+<script>
+    $('.btn_org').click(function () {
+        $.post('/shop/login/logoff', {}, function (data) {
+            if (data.status == 1) {
+                show("退出成功");
+                setTimeout(function () {
+                    location.href = '/mobile/login/index';
+                }, 600);
+            } else {
+                alert(data.msg);
+            }
+        });
+    });
+</script>

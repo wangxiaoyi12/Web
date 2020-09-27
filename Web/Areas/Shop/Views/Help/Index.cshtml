@@ -1,0 +1,87 @@
+﻿@using DataBase
+@using Business
+@model int
+@{
+    //获取当前分类ID
+    ShopArticleCategory currentClass = DB.ShopArticleCategory.FindEntity(q => q.ID == Model);
+    ShopArticle currentArticle = DB.ShopArticle.Where(q => q.CategoryID == Model&&q.IsShow&&q.IsCheck).FirstOrDefault();
+    ViewBag.Title = "帮助中心";
+}
+@section Head{
+    <style>
+        .h_qus_box {
+            padding:30px 15px;
+            min-height:400px;
+        }
+        .content{
+            line-height:28px;
+            font-size:11pt;
+        }
+    </style>
+}
+@section Footer{
+}
+<!--帮助中心样式-->
+<div class="Inside_pages clearfix">
+    <div class="helpBox">
+        <div class="Location_link"><em></em><a href="@Url_Shop.GetIndex()">网站首页</a>  &lt;   <a >帮助中心</a>  </div>
+        <!--[[leftMenu菜单-->
+        <div class="lMenu">
+            <h2 class="h2_tle">帮助中心</h2>
+            <div class="list_box">
+                <ul>
+                    @{
+                       
+                        List<ShopArticleCategory> parentList = DB.ShopArticleCategory.GetListByParent(null);
+                        foreach (var item in parentList)
+                        {
+                            <li>
+                                <a class="small_tlt  @(item.ID==currentClass.PID?"cr":"crd")" href="javascript:void(0)" data-id="@item.ID">@item.Name</a>
+                                <ul class="ul_item" style="display:@(item.ID==currentClass.PID?"block":"none")" >
+                                    @{
+                                            //获取子分类列表
+                                            List<ShopArticleCategory> children = DB.ShopArticleCategory.GetListByParent(item.ID);
+                                            foreach (var child in children)
+                                            {
+                                                string url = Url_Shop.GetHelp(child);
+                                            <li><a class="@(child.ID==currentClass.ID?"selGreen":"")" href="@url" >@child.Name</a></li>
+                                        }
+                                    }
+                                </ul>
+                            </li>
+                        }
+                    }
+                </ul>
+            </div>
+            <script type="text/javascript">
+                $(function () {
+                    $(".lMenu ul li").click(function () {
+                        var thisSpan = $(this);
+                        $(".ul_item").prev(".small_tlt").removeClass("cr");
+                        $("ul", this).prev(".small_tlt").addClass("cr");
+                        $(this).children(".ul_item").slideDown("fast");
+                        $(this).siblings().children(".ul_item").slideUp("fast");
+                    })
+                });
+            </script>
+        </div>
+
+        <div class="rcont">
+            <div class="shopProcess">
+                <div class="h_qus_box">
+                    @if (currentArticle != null)
+                    {
+                        //浏览次数++
+                        DB.ShopArticle.ClicksAdd(currentArticle.ID);
+                        <h2 class="hp_tle">@currentArticle.Title</h2>
+                        <div class="articleContent content">@Html.Raw(currentArticle.Content)</div>
+                    }
+                    else
+                    {
+                        <div>你要访问的文章不存在或已经删除</div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

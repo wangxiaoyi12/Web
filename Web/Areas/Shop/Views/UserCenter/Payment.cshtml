@@ -1,0 +1,222 @@
+﻿@using DataBase
+@using Business
+@{
+    ViewBag.Title = "确认订单";
+    Member_Info curUser = User_Shop.GetMember_Info();
+}
+@section Head{
+}
+@section Footer{
+    <script src="~/assets/shop/js/jquery.jumpto.js"></script>
+    <script src="~/assets/shop/js/jquery.reveal.js"></script>
+    <script src="~/assets/shop/js/MyAddress.js"></script>
+    <script>
+        function checkLength(which) {
+            var maxChars = 50; //
+            if (which.value.length > maxChars) {
+                alert("您出入的字数超多限制!");
+                // 超过限制的字数了就将 文本框中的内容按规定的字数 截取
+                which.value = which.value.substring(0, maxChars);
+                return false;
+            } else {
+                var curr = maxChars - which.value.length; //250 减去 当前输入的
+                document.getElementById("sy").innerHTML = curr.toString();
+                return true;
+            }
+        }
+        $(function () {
+            $(':input').labelauty();
+
+            //绑定提交订单
+            $('.submit_btn').click(function () {
+                var address = $('#select ul.active').attr('data-id');
+                if (address == '' || address == undefined) {
+                    alert("请选择收货地址");
+                } else {
+                    $.myPost('/shop/usercenter/SubmitForm', {
+                        AddressID: address,
+                        remark: $('#remark').val()
+                    }, function (data) {
+                        alert(data.msg);
+                        setTimeout(function () {
+                            location.href = '@Url.Action("orderform")';
+                        }, 800);
+                    });
+                }
+                return false;
+            });
+        });
+    </script>
+}
+<!--订单确认样式-->
+<div id="Orders" class="Inside_pages  clearfix">
+    <div class="Process"><img src="/assets/shop/images/Process_img_02.png" /></div>
+    @if (ViewBag.msg != null)
+    {
+        <div class="alert alert-danger">
+            生成订单出错：@ViewBag.msg
+        </div>
+    }
+    <div class="Orders_style clearfix">
+        <div class="address clearfix">
+            <div class="title">收货人信息</div>
+            <div class="adderss_list clearfix">
+                <div class="title_name">选择收货地址 <a href="@Url.Action("Address",new { redirecturl=Url_Shop.GetMyPayment()})#add">+添加地址</a></div>
+                <div class="list" id="select">
+                    @{
+                        //1.获取收货地址
+                        List<ShopMyAddress> addressList = DB.ShopMyAddress.Where(q => q.MemberID == curUser.MemberId).ToList();
+                        foreach (var item in addressList)
+                        {
+                            <ul class="confirm @(item.IsDefault==true?"active":"")" data-id="@item.ID">
+                                @if (item.IsDefault == true)
+                                {
+                                    <div class="default">默认地址</div> }
+                                <div class="adderss_operating">
+                                    <div class="Operate"><a href="javascript:removeAddress(@item.ID);" class="delete_btn"></a> <a href="@Url.Action("Address",new { id=item.ID,redirecturl=Url_Shop.GetMyPayment()})" class="modify_btn"></a></div>
+                                </div>
+                                <div class="user_address">
+                                    <li>@item.Name</li>
+                                    <li>@item.ShowAddressName</li>
+                                    <li class="Postcode">@item.PostCode</li>
+                                    <li>@item.Tel</li>
+                                </div>
+                            </ul>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+        <form class="form" method="post">
+            <fieldset>
+                <!--产品列表-->
+                <div class="Product_List">
+                    <table>
+                        <thead>
+                            <tr class="title">
+                                <td class="name">商品名称</td>
+                                <td class="price">商品价格</td>
+                                <td class="Quantity">购买数量</td>
+                                <td class="Money">金额</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                //获取购物车内容
+                                List<ShopCat> catList = DB.ShopCat.Where(q => q.MemberID == curUser.MemberId)
+                                         .OrderByDescending(q => q.CreateTime).ToList();
+                                decimal totalShopping = 0;
+                                decimal totalScore = 0;
+                                decimal YunFei = 0;
+                                for (int i = 0; i < catList.Count; i++)
+                                {
+                                    var item = catList[i];
+                                    YunFei += item.ShopProduct.Postage;
+                                    @*if (item.ShopProduct.PriceShopping > 0 && item.ShopProduct.PV > 0)
+                                        {
+                                            totalShopping += item.ShopProduct.PriceShopping * item.Count;
+                                            totalScore += item.ShopProduct.PV * item.Count;
+                                            string url = Url_Shop.GetProduct(item.ShopProduct);
+                                            <tr>
+                                                <td class="Product_info">
+                                                    <a href="@url"><img src="@Url_Shop.GetProductImg(item.ShopProduct)" width="100" height="100" /></a>
+                                                    <a href="@url" class="product_name">@item.ShopProduct.Title</a>
+                                                </td>
+                                                <td>
+
+                                                    <span class="PriceShopping">@(item.ShopProduct.PriceShopping )</span>&nbsp;(零售价)<br />
+                                                    <span class="PV">@(item.ShopProduct.PV)</span>&nbsp;(积分)<br />
+
+                                                </td>
+                                                <td>@item.Count</td>
+                                                <td class="Moneys">
+                                                    <span class="PriceShopping">@(item.ShopProduct.PriceShopping * item.Count)</span>&nbsp;(总金额)<br />
+                                                    <span class="PV">@(item.ShopProduct.PV * item.Count)</span>&nbsp;(总积分)<br />
+                                                </td>
+                                            </tr>
+                                        }
+                                        else if (item.ShopProduct.PriceShopping > 0)
+                                        {*@
+                            if (item.ShopProduct.CategoryID1 != 15 && item.ShopProduct.CategoryID1 != 16)
+                            {
+                                totalShopping += item.ShopProduct.PriceShopping * item.Count;
+                                string url = Url_Shop.GetProduct(item.ShopProduct);
+                                <tr>
+                                    <td class="Product_info">
+                                        <a href="@url"><img src="@Url_Shop.GetProductImg(item.ShopProduct)" width="100" height="100" /></a>
+                                        <a href="@url" class="product_name">@item.ShopProduct.Title</a>
+                                    </td>
+                                    <td>
+
+                                        <span class="PriceShopping">@(item.ShopProduct.PriceShopping )</span><br />
+
+                                    </td>
+                                    <td>@item.Count</td>
+                                    <td class="Moneys">
+                                        <span class="PriceShopping">@(item.ShopProduct.PriceShopping * item.Count)</span><br />
+                                    </td>
+                                </tr>
+                            }
+                            else
+                            {
+                                totalShopping += item.ShopProduct.PV * item.Count;
+                                totalScore += item.ShopProduct.PriceScore * item.Count;
+                                string url = Url_Shop.GetProduct(item.ShopProduct);
+                                <tr>
+                                    <td class="Product_info">
+                                        <a href="@url"><img src="@Url_Shop.GetProductImg(item.ShopProduct)" width="100" height="100" /></a>
+                                        <a href="@url" class="product_name">@item.ShopProduct.Title</a>
+                                    </td>
+                                    <td>
+
+                                        <span class="PriceShopping">@(item.ShopProduct.PV)收益</span><br />
+                                        <span class="PriceShopping">@(item.ShopProduct.PriceScore)配货价</span>
+                                    </td>
+                                    <td>@item.Count</td>
+                                    <td class="Moneys">
+                                        <span class="PriceShopping">@(item.ShopProduct.PV * item.Count)收益</span><br />
+                                        <span class="PriceShopping">@(item.ShopProduct.PriceScore * item.Count)配货价</span>
+                                    </td>
+                                </tr>
+                                }
+
+
+                            }
+
+
+
+                            //}
+                            }
+                        </tbody>
+                    </table>
+                    <div class="Pay_info">
+                        <label>订单留言</label><input name="" id="remark" type="text" onkeyup="checkLength(this);" class="text_name " />
+                        <span class="wordage">剩余字数：<span id="sy" style="color:Red;">50</span></span>
+                    </div>
+                    <!--价格-->
+                    <div class="price_style">
+                        <div class="right_direction">
+                            <ul>
+                                @if (totalShopping > 0 && totalScore > 0)
+                                {
+                                    <li><label>总收益&emsp;</label><span>@(totalShopping)</span><i></i></li>
+                                        <li><label>总配货价&emsp;</label><span>@(totalScore)</span></li>
+
+                                }
+                                else if (totalShopping > 0)
+                                {
+                                    <li><label>总金额&emsp;</label><span>@(totalShopping)</span><i></i></li>
+                                }
+                                <li><label>运费&emsp;&emsp;&emsp;</label><span>@(YunFei)</span></li>
+                            </ul>
+                            <div class="btn">
+                                <input name="submit" type="submit" value="提交订单" class="submit_btn" />
+                                <input type="button" onclick="location.href='@Url_Shop.GetMyCat()'" value="返回购物车" class="return_btn" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>

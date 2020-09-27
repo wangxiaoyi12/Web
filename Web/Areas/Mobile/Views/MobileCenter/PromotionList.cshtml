@@ -1,0 +1,39 @@
+﻿@using DataBase
+@model List<Member_Info>
+
+
+@{
+    foreach (var item in Model)
+    {
+            <li class="list-group-item ">
+                <div class="pull-left text-primary">
+                    <span class="glyphicon glyphicon-user"></span>
+                    @item.Code 【@item.NickName】
+                </div>
+                <div class="pull-right">
+                    <small>
+                        <span class="glyphicon glyphicon-time"></span>
+                        @if (item.CreateTime != null)
+                        {
+                            @item.CreateTime.Value.ToString("yyyy-MM-dd HH:mm")
+                        }
+                    </small>
+                </div>
+                <div class="clearfix"></div>
+            </li>
+       
+    }
+
+    if (ViewBag.skipCount < ViewBag.recordCount)
+    {
+        <div class="btn btn-primary btn-block viewMore" data-skip="@ViewBag.skipCount">加载更多>></div>
+    }
+    else
+    {
+        <p class="noData">暂时没有数据了?</p>
+    }
+}
+
+
+
+

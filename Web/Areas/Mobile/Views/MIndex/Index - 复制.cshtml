@@ -1,0 +1,153 @@
+﻿@using DataBase
+@using Business
+@{
+    ViewBag.Title = "首页";
+    Member_Info curUser = User_Shop.GetMember_Info();
+    //1.关键词
+    string keywords = ReqHelper.GetString("keywords");
+}
+@section Footer{
+    <script src="~/assets/mobile/js/product.js?ver=@Url_Mobile.GetVersion()"></script>
+}
+<style>
+    .userinfo {
+        padding: 8px 0px;
+        color: #3c3b3b;
+    }
+
+        .userinfo a {
+            color: #337ab7;
+        }
+
+        .userinfo em {
+            color: #ec124a;
+        }
+
+    .countInfo {
+        color: #776f6f;
+        background: #DDE5ED;
+        padding: 0px 10px;
+        position: relative;
+        margin-bottom: 10px;
+    }
+
+        .countInfo em {
+            color: #ec124a;
+        }
+
+        .countInfo .count {
+            position: absolute;
+            background: #DDE5ED;
+            right: 0px;
+            top: 0px;
+            height: 30px;
+            padding: 0px 10px;
+            line-height: 30px;
+        }
+
+    #gongao {
+        width: 100%;
+        height: 30px;
+        overflow: hidden;
+        line-height: 30px;
+        font-size: 13px;
+        font-family: '宋体';
+        color: #0C77CF;
+        font-weight: bold;
+    }
+
+        #gongao #scroll_begin,
+        #gongao #scroll_end {
+            display: inline;
+        }
+
+    .tb_box .tab_tit img {
+        height: 50%;
+    margin-top: 15px;
+    }
+    .row{
+        margin-left:0px;
+        margin-right:0px;
+    }
+    .tb_box .tab_tit {
+        padding: 10px;
+    }
+
+        .tb_box .tab_tit .more {
+            margin-top: 10px;
+            margin-right: 5px;
+        }
+
+    .tb_box .item .title {
+        height: 15px;
+        margin-bottom: 5px;
+    }
+    .tb_box .item {
+    height: 260px;
+    margin-top: 10px;
+    padding-top: 10px;
+    margin-bottom: 5px;
+    position: relative;
+    border: 0px solid red;
+    background: white;
+    padding-left: 10px;
+    padding-right: 10px;
+    width: 49.2%;
+}
+    body{
+        background-color:#eee;
+    }
+</style>
+<header class="header">
+    @*<div class="fix_nav">
+        <div class="nav_inner">
+            <div class="tit">@(DB.XmlConfig.XmlShop.ShopName)</div>
+            <a class="nav-right2" href="@Url_Mobile.GetUserCenter()">会员中心</a>
+        </div>
+    </div>*@
+    <div class="row category">
+        <a class="nav-left" style="text-indent:0px;height:50px; top:-1px;width:100px;">
+            <img src="@DB.XmlConfig.XmlShop.ShopLogo" style="width: 60px;height: 40px;margin-left: 10px;margin-top: 12px;border-radius: 1%;" />
+        </a>
+        <div class="order_sou" style="right:30px;">
+            <form action="/m_search/list" method="get" id="searchform" name="searchform">
+                <input name="keyword" id="keyword" placeholder="搜索商品" type="text" value="@keywords">
+                <span class="pro_sou" style="cursor: pointer;" onclick="searchproduct();"><img src="/assets/mobile/images/Search.png"></span>
+            </form>
+        </div>
+    </div>
+</header>
+
+@Html.Action("GetBanner", "MIndex", new { id = 2 })
+
+<div class="container">
+    @*@if (User_Shop.IsLogin())
+        {
+            <div class="userinfo text-center">
+                我的现金：<em>@(curUser.Coins)</em>&emsp;
+                我的积分：<em>@(curUser.ShopCoins)</em>
+            </div>
+        }*@
+
+
+
+    @Html.Action("GetCategory")
+    @Html.Action("List")
+    @Html.Partial("_Footer")
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#slide img").each(function () {
+            var img_src = $(this).attr("_src");
+            $(this).attr("src", img_src);
+        });
+    });
+    function searchproduct() {
+        var keyword = document.getElementById("keyword").value;
+        if (keyword == undefined || keyword == null || keyword == "") {
+            alert("请输入搜索关键字！");
+            return false;
+        }
+        document.getElementById("searchform").submit();
+    }
+</script>

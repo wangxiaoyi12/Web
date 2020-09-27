@@ -1,0 +1,95 @@
+﻿@using DataBase
+@using Business
+@using DataBase
+@using Business
+@{
+    ViewBag.Title = "我的收藏";
+    //1.获取分页数据
+    int pageIndex = ReqHelper.GetInt("pageindex", 1);
+    int pageSize = 12;
+    string curUserID = User_Shop.GetMemberID();
+    var query = DB.ShopCollectionProduct.Where(q => q.MemberID == curUserID && q.ShopProduct.IsEnable == true);
+    int recordCount = query.Count();
+    query = query.OrderByDescending(q => q.CreateTime);
+    List<ShopCollectionProduct> collectList = query.Skip((pageIndex - 1) * pageSize).ToList();
+}
+@section Head{
+
+}
+@section Footer{
+    <script>
+        $(function(){
+            //删除收藏
+            $('.collect_list .delete').click(function(){
+                var id=$(this).attr('data-id');
+                $.myPost('/shop/usercenter/deletecollect',{
+                    id:id
+                },function(data){
+                    alert(data.msg);
+                    setTimeout(function(){
+                        location.reload();
+                    },800);
+                });
+            });
+        });
+    </script>
+}
+<!--用户中心样式-->
+<div class="user_style  Inside_pages clearfix">
+    <div class="user_center">
+        <!--左侧菜单图层-->
+        @Html.Action("LeftMenu")
+        <!--右侧样式-->
+        <div class="right_style">
+            <div class="user_title_name"><span>用户收藏</span></div>
+            <div class="r_user_style">
+                <div class="collect">
+                    <div class="Quantity"><i class="iconfont icon-favor"></i>收藏量：@(recordCount)条 | 最多收藏100条</div>
+                </div>
+                <div class="collect_list">
+                    <ul>
+                        @{
+                            if (collectList.Count > 0)
+                            {
+                                foreach (var item in collectList)
+                                {
+                                    string url = Url_Shop.GetProduct(item.ShopProduct);
+                                    <li class="collect_p">
+                                        <em class="iconfont icon-close2 delete" data-id="@item.ID"></em>
+                                        <div class="collect_info">
+                                            <div class="img_link"> <a href="@url" class="center "><img src="@Url_Shop.GetProductImg(item.ShopProduct)" /></a></div>
+                                            <dl class="xinxi">
+                                                <dt><a href="@url" class="name">@item.ShopProduct.Title</a></dt>
+                                                <dd><span class="Price"><b>￥</b>@Url_Shop.GetProductPrice(item.ShopProduct)</span>
+                                                <span class="collect_Amount"><I class="iconfont icon-shoucang"></I>@DB.ShopCollectionProduct.GetCount(item.ProductID)</span></dd>
+                                            </dl>
+                                        </div>
+                                    </li>
+                                }
+                            }
+                            else
+                            {
+                            <li class="blank" style="width:100%;height:300px;line-height:300px;">暂时没有收藏记录</li>
+                            }
+                        }
+                    </ul>
+                </div>
+                <div id="pageOne" class="pageBar"></div>
+                <script>
+                    var pageOne = $('#pageOne').pageBar({
+                        pageIndex: @(pageIndex),
+                        pageSize: @(pageSize),
+                        showType:'default',
+                        recordCount: @(recordCount),
+                        submitEvent: function (index) {
+                            var url=location.pathname;
+                            if(index>1)
+                                url+='?pageindex='+index;
+                            location.href=url;
+                        }
+                    });
+                </script>
+            </div>
+        </div>
+    </div>
+</div>

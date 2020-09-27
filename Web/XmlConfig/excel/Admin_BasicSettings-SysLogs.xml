@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<fields>
+  <field>
+    <code>ID</code>
+    <name>ID标识</name>
+  </field>
+  <field>
+    <code>EmpName</code>
+    <name>姓名</name>
+  </field>
+  <field>
+    <code>Event</code>
+    <name>事件</name>
+  </field>
+  <field>
+    <code>Description</code>
+    <name>描述</name>
+  </field>
+  <field>
+    <code>CreateTime</code>
+    <name>时间</name>
+  </field> 
+</fields>

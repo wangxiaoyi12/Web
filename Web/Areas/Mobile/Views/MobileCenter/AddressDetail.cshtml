@@ -1,0 +1,206 @@
+﻿@using Business
+@using DataBase
+@model ShopOrder
+@{
+    ViewBag.Title = "我的订单";
+    //获取当前登录用户
+    Member_Info curUser = User_Shop.GetMember_Info();
+    ShopMyAddress address = ViewBag.address as ShopMyAddress;
+    if(address.ID==0)
+    {
+        address.CountyID = 1;
+        address.CityID = 1;
+        address.ProvId = 1;
+    }
+    Layout = "~/Views/Shared/_LayoutPageMy0915.cshtml";
+    ////获取数量
+    //int daifukuanCount = DB.ShopOrder.GetCount(curUser.MemberId, 1);
+    //int daifahuoCount = DB.ShopOrder.GetCount(curUser.MemberId, 2);
+    //int daishouhuoCount = DB.ShopOrder.GetCount(curUser.MemberId, 3);
+}
+<style>
+    footer {
+        display: none;
+    }
+</style>
+<div class="container topBg siteNewBox">
+    <!-- 头部导航 -->
+    <div class="header" style="box-shadow: 0 0 10px rgba(1, 73, 206,.2);">
+        <ul>
+            <li class="header-left" onclick="history.back(-1)">
+                <i class="iconfont icon-fanhui"></i>
+            </li>
+            <li>编辑地址</li>
+            <li class="header-right">
+
+            </li>
+        </ul>
+    </div>
+    <form id="form1">
+        <ul class="baseIlsList">
+            <li>
+                <input type="hidden" id="ID" name="ID" value="@address.ID" />
+                <span>姓名</span>
+                <input type="text" name="Name" value="@address.Name" id="Name" placeholder="请输入姓名">
+            </li>
+            <li>
+                <span>手机号</span>
+                <input type="text" name="Tel" value="@address.Tel" id="Tel" placeholder="请输入手机号">
+            </li>
+            <li>
+                <span>省</span>
+                <select class="form-control" id="ProvID" name="ProvId" onchange="changeProv()" value=""></select>
+            </li>
+            <li>
+                <span>市</span>
+                <select class="form-control" id="CityId" name="CityId" onchange="changeCity()" value=""></select>
+            </li>
+            <li>
+                <span>区</span>
+                <select class="form-control" id="CountyId" name="CountyId" value=""></select>
+
+            </li>
+
+
+
+            <li>
+                <span>详细地址</span>   <input class="form-control" id="Address" name="Address" placeholder="请输入详细地址" type="text" value="@address.Address" />
+
+            </li>
+        </ul>
+
+
+        <div class="btnbox">
+            <a onclick="showDialog()" class="btn_org">保存</a>
+        </div>
+        <div class="bgColor"></div>
+    </form>
+</div>
+
+
+<script>
+    function showDialog() {
+       
+        var isHasEmpty = false;
+        var form = $("#form1");
+        var isHasEmpty = false;
+        form.find('input[type="text"]').each(function () {
+            var thisBox = $(this);
+            if (thisBox.val().length <= 0) {
+                thisBox.focus();
+                isHasEmpty = true;
+                return false;
+            }
+        });
+
+        if (isHasEmpty == false) {
+            $(".btn_org").hide();
+            //提交保存
+            $.post('/shop/usercenter/AddAddress', form.serialize(), function (data) {
+                if (data.status == 1) {
+                    show(data.msg);
+
+                    setTimeout(function () {
+                        //跳转登录页面
+                        window.location.href = "/mobile/mobilecenter/address";
+                    }, 2000);
+                } else {
+                    alert(data.msg);
+                }
+            });
+        }
+
+
+    }
+    loadProv();
+    //加载省市县
+    var ProvID, CityID, CountID;
+    function loadProv() {
+
+        $('#ProvId').val(@address.ProvId);
+        $('#CityID').val(@address.CityID);
+        $('#CountyID').val(@address.CountyID);
+        $.post("/Ajax/GetProv", {}, function (d) {
+            for (var i = 0; i < d.length; i++) {
+                var item = d[i];
+                if (@address.ProvId == item.id) {
+                    $("#ProvID").append('<option value="' + item.id + '" selected>' + item.text + '</option>');
+                }  else {
+                    $("#ProvID").append('<option value="' + item.id + '">' + item.text + '</option>');
+                }
+            }
+            changeProv();
+        });
+    }
+    function changeProv() {
+        var id = $("#ProvID").val();
+        $('#CityId').empty();
+        $.post("/Ajax/GetCity", { id: id }, function (d) {
+            for (var i = 0; i < d.length; i++) {
+                var item = d[i];
+                if (@address.CityID == item.id) {
+                    $("#CityId").append('<option value="' + item.id + '" selected>' + item.text + '</option>');
+                } else {
+                    $("#CityId").append('<option value="' + item.id + '">' + item.text + '</option>');
+                }
+            }
+            changeCity();
+
+        });
+    }
+    function changeCity(thisID) {
+        var id = $("#CityId").val();
+        $('#CountyId').empty();
+        $.post("/Ajax/GetCounty", { id: id }, function (d) {
+            for (var i = 0; i < d.length; i++) {
+                var item = d[i];
+                if (@address.CountyID == item.id) {
+                    $("#CountyId").append('<option value="' + item.id + '" selected>' + item.text + '</option>');
+                } else {
+                    $("#CountyId").append('<option value="' + item.id + '">' + item.text + '</option>');
+                }
+
+            }
+
+            ProvID = CityID = CountID = 0;
+        })
+    }
+        var valo = $("#area").attr("areaid");
+        $('#area').scroller('destroy').scroller({
+            theme: 'ios', //皮肤样式
+            mode: 'scroller', //选择模式：弹出
+            lang: 'zh',
+            rows: 4,
+            preset: 'area',
+            display: 'bottom',
+            valueo: valo,
+            animation: 'slideup',
+            onSelect: function (valueText, inst) {
+            alert(valueText);
+            }
+        });
+
+    /**
+     * 设置默认值
+     */
+    !function () {
+        var $target = $('#siteSelect');
+        $target.citySelect({
+            country: '中国',
+            provance: '山东省',
+            city: '济南市',
+            area: '天桥区',
+            id: '1-15-135-1334'
+        });
+
+        $target.on('click', function (event) {
+            event.stopPropagation();
+            $target.citySelect('open');
+        });
+
+        $target.on('done.ydui.cityselect', function (ret) {
+            console.log(ret);
+            $(this).val(ret.country + ' ' + ret.provance + ' ' + ret.city + ' ' + ret.area);
+        });
+    }();
+</script>

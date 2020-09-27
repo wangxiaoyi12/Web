@@ -1,0 +1,3981 @@
+/* ------------------- index.html K ------------------- */
+.indexHeader {
+    position: absolute;
+    width: 100%;
+    height: 3.5rem;
+    background-image: url(../images/bg_indexTop.png);
+    background-size: 100% 100%;
+}
+
+    .indexHeader .searchBox {
+        width: 95%;
+        margin: .2rem auto;
+        border-radius: .5rem;
+        padding: .12rem .2rem;
+        background: #fff;
+    }
+
+        .indexHeader .searchBox a {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+    .indexHeader input {
+        width: 80%;
+        padding: 0 .3rem;
+        color: #929EB2;
+    }
+
+    .indexHeader i {
+        color: #929EB2;
+    }
+
+/* 轮播 */
+.index-sw {
+    position: relative;
+    margin-top: 1.1rem;
+}
+
+    .index-sw img {
+        width: 100%;
+        height: 100%;
+        display: block;
+        border-radius: .1rem;
+    }
+
+    .index-sw .swiper-paginationBox {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        position: absolute;
+        bottom: .4rem;
+        z-index: 2;
+    }
+
+    .index-sw .swiper-pagination-bullet {
+        width: 0.1rem;
+        height: 0.1rem;
+        background: #fff;
+        opacity: 0.8;
+        border-radius: 100px;
+        overflow: hidden;
+        margin: 0 .05rem;
+    }
+
+    .index-sw .swiper-pagination-bullet-active {
+        background: #70172B !important;
+    }
+
+    .index-sw .swiper-container-horizontal > .swiper-pagination-bullets,
+    .index-sw .swiper-pagination-custom,
+    .index-sw .swiper-pagination-fraction {
+        bottom: 0.1rem;
+    }
+
+    .index-sw .swiper-button-next {
+        width: 1rem !important;
+        height: .5rem !important;
+        right: 3% !important;
+    }
+
+    .index-sw .swiper-button-prev {
+        width: 1rem !important;
+        height: .5rem !important;
+        left: 3% !important;
+    }
+
+    .index-sw .swiper-slide {
+        text-align: center;
+        font-size: 18px;
+        background: #fff;
+        /* Center slide text vertically */
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: flex;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        -webkit-justify-content: center;
+        justify-content: center;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        -webkit-align-items: center;
+        align-items: center;
+        transition: 300ms;
+        transform: scale(0.85) !important;
+        -webkit-transform: scale(0.85);
+        -ms-transform: scale(0.85);
+        border-radius: .1rem;
+    }
+
+    .index-sw .swiper-slide-active,
+    .index-sw .swiper-slide-duplicate-active {
+        transform: scale(1) !important;
+    }
+
+/* news-swiper */
+.newsSwiper {
+    padding: 0 .4rem;
+    box-shadow: 0 0 2px #ddd;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.newsSwiperImg {
+    width: 23%;
+}
+
+    .newsSwiperImg img {
+        width: 100%;
+        display: block;
+    }
+
+.cont {
+    width: 77%;
+    background: #fff;
+    overflow: hidden;
+    display: table;
+    /* border-left: 1px solid #ccc; */
+}
+
+    .cont .swiper-container {
+        width: 100%;
+        height: 40px;
+        float: left;
+        margin-top: -3px;
+    }
+
+    .cont .swiper-slide {
+        font-size: 18px;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        -webkit-box-pack: flex-start;
+        -ms-flex-pack: flex-start;
+        -webkit-justify-content: flex-start;
+        justify-content: flex-start;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        -webkit-align-items: center;
+        align-items: center;
+    }
+
+        .cont .swiper-slide p {
+            font-size: 12px;
+            color: #000;
+            line-height: 23px;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 1;
+            overflow: hidden;
+            max-height: 23px;
+            padding-top: 2px;
+            padding-left: .2rem;
+            color: rgb(118, 122, 125);
+        }
+
+.OptList4 {
+    padding: .2rem .2rem;
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}
+
+    .OptList4 .OptListli {
+        width: 25%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin: .15rem 0;
+    }
+
+   
+
+    .OptList4 .OptListli a > div {
+        width: .9rem;
+        height: .9rem;
+    }
+
+    .OptList4 .OptListli a > p {
+        padding: .07rem 0;
+        font-size: .24rem;
+        color: rgb(118, 122, 125);
+    }
+
+    .OptList4 .picBox {
+        margin: 0 auto;
+    }
+
+.indexListBox {
+    width: 94%;
+    background: #fff;
+    margin: 0 auto;
+    border-radius: .05rem;
+}
+
+.OptList2 {
+    padding: .2rem .2rem;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+    .OptList2 .OptListli {
+        width: 48%;
+        height: 1.8rem;
+        background-size: 100% 100%;
+        overflow: hidden;
+    }
+
+/* .OptList2 .OptListli div {
+	margin: .5rem 0 0 .2rem;
+}
+
+.OptList2 .OptListli p {
+	color: #fff;
+} */
+
+/* .OptList2 li:nth-child(1) {
+	background-image: url(../images/indexList2_1.png);
+}
+
+.OptList2 li:nth-child(2) {
+	background-image: url(../images/indexList2_2.png);
+} */
+
+/* .OptList2 li:nth-child(1) button {
+	font-size: .22rem;
+	background: red;
+	color: #fff;
+	border-radius: .4rem;
+	padding: .1rem .2rem;
+	transform: scale(.75) translate(-25%, 10%);
+}
+
+.OptList2 li:nth-child(2) button {
+	font-size: .22rem;
+	background: rgba(0, 0, 0, 0);
+	border: 1px solid #fff;
+	color: #fff;
+	border-radius: .4rem;
+	padding: .1rem .2rem;
+	transform: scale(.75) translate(-25%, 10%);
+} */
+
+.indexList {
+    width: 94%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.indexListLi {
+    width: 48.5%;
+    background: #fff;
+    margin: .2rem 0;
+    border-radius: .1rem;
+    overflow: hidden;
+}
+
+    .indexListLi .txt {
+        padding: .15rem;
+    }
+
+        .indexListLi .txt .top {
+            font-weight: bold;
+            text-overflow: -o-ellipsis-lastline;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+            min-height: .76rem;
+        }
+
+        .indexListLi .txt .ctn {
+            font-size: .22rem;
+            padding: .05rem 0;
+            color: rgb(216, 69, 22);
+        }
+
+            .indexListLi .txt .ctn span:nth-child(1) {
+                color: rgb(216, 69, 22);
+                font-size: .32rem;
+                font-weight: bold;
+            }
+
+            .indexListLi .txt .ctn span:nth-child(2) {
+                color: rgb(216, 69, 22);
+                display: inline-block;
+                font-size: .24rem;
+                border: 1px solid rgb(216, 69, 22);
+                padding: .03rem .1rem;
+                transform: scale(.75);
+            }
+
+
+        .indexListLi .txt .btm {
+            font-size: .24;
+            padding: .05rem 0;
+            color: #c2c2c2;
+        }
+
+.indexListJJJ {
+    color: #c2c2c2;
+    text-align: center;
+    margin-bottom: .2rem;
+}
+
+/* ------------------- classify.html K ------------------- */
+.classifyTop {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background: #fff;
+    padding: .15rem 0;
+}
+
+    .classifyTop > i {
+        font-size: .35rem;
+    }
+
+    .classifyTop p {
+        color: #666666;
+    }
+
+.AllClassify_searchBox {
+    width: 87%;
+    height: .6rem;
+    line-height: .55rem;
+    border: 1px solid #E5E5E5;
+    border-radius: .5rem;
+    padding: 0 .3rem;
+    overflow: hidden;
+    background: #F0F0F0;
+}
+
+    .AllClassify_searchBox input {
+        border: none;
+    }
+
+    .AllClassify_searchBox i {
+        color: #c2c2c2;
+    }
+
+.AllClassifyTabBox {
+    display: flex;
+    margin-top: .1rem;
+}
+
+    .AllClassifyTabBox .AllClassifyTab {
+        width: 22%;
+        display: flex;
+        flex-wrap: wrap;
+        align-content: flex-start;
+        justify-content: center;
+        text-align: center;
+        background: #fff;
+    }
+
+        .AllClassifyTabBox .AllClassifyTab li {
+            margin: .2rem 0;
+            width: 100%;
+        }
+
+.AllClassifyTabAct {
+    font-weight: bold;
+    color: #D92435;
+    border-left: .05rem solid #D92435;
+}
+
+.AllClassifyTabBox .AllClassifyTabCount {
+    width: 78%;
+}
+
+    .AllClassifyTabBox .AllClassifyTabCount > li {
+        display: none;
+    }
+
+.AllClassifyTabBox .AllClassifyTabCountAct {
+    display: block !important;
+}
+
+.AllClassifyTabCount dl {
+    width: 95%;
+    margin: 0 auto;
+    background: #FFF;
+    padding: .2rem;
+    position: relative;
+}
+
+.AllClassifyTabCount dt {
+    padding-bottom: .2rem;
+    color: #666666;
+}
+
+.AllClassifyTabCount dl dd {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: .2rem;
+}
+
+.AllClassifyTabCount .picBox {
+    width: 32%;
+    position: relative;
+    overflow: hidden;
+}
+
+    .AllClassifyTabCount .picBox p {
+        position: absolute;
+        top: -.45rem;
+        left: -.45rem;
+        background: red;
+        color: #fff;
+        font-size: .24rem;
+        height: .9rem;
+        width: .9rem;
+        text-align: center;
+        transform: rotate(-45deg);
+        line-height: 1.4rem;
+    }
+
+.qgDate {
+    display: flex;
+    align-items: center;
+    padding: .2rem;
+}
+
+    .qgDate > div {
+        flex: 1;
+        text-align: center;
+    }
+
+        .qgDate > div p {
+            padding: .05rem 0;
+        }
+
+.AllClassifyTabCount .txtBox {
+    width: 65%;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+}
+
+    .AllClassifyTabCount .txtBox .top {
+        font-size: .26rem;
+        font-weight: bold;
+    }
+
+    .AllClassifyTabCount .txtBox .btm {
+        font-size: .24rem;
+        color: #FE3D26;
+    }
+
+        .AllClassifyTabCount .txtBox .btm span {
+            font-size: .3rem;
+            color: #FE3D26;
+        }
+
+.rankBox {
+    position: absolute;
+    right: .2rem;
+    top: .28rem;
+    display: flex;
+}
+
+    .rankBox > div {
+        display: flex;
+        align-items: center;
+        margin-left: .3rem;
+    }
+
+    .rankBox p,
+    .rankBox i {
+        font-size: .25rem;
+        color: #666666;
+        padding: 0 .03rem;
+    }
+
+
+.AllClassifyTab2 {
+    width: 95%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    /* height: 3rem; */
+}
+
+    .AllClassifyTab2 li {
+        width: 23%;
+        text-align: center;
+        font-size: .245rem;
+        background: #fff;
+        padding: .2rem .07rem;
+        margin: .2rem 0;
+    }
+
+.AllClassifyTab2Act {
+    color: #FE3D26;
+}
+
+.AllClassifyTab2Count > div {
+    display: none;
+}
+
+.AllClassifyTab2Count .AllClassifyTab2CountAct {
+    display: block;
+}
+
+.DefrayalPic {
+    margin: .3rem auto;
+    height: 1.4rem;
+    width: 1.4rem;
+}
+
+.DefrayalDetails {
+    width: 90%;
+    margin: 0 auto;
+    background: url(../images/img_Defrayal3.png) no-repeat;
+    background-size: 100%;
+    height: 6rem;
+    position: relative;
+}
+
+.DefrayalDetails_Jf {
+    position: absolute;
+    top: .9rem;
+    left: 50%;
+    transform: translate(-50%, 0);
+}
+
+    .DefrayalDetails_Jf .bsft_big {
+        font-size: .45rem;
+    }
+
+.DefrayalDetails_Box {
+    position: absolute;
+    top: 2.5rem;
+    left: 25%;
+    transform: translate(-20%, 0);
+}
+
+    .DefrayalDetails_Box p {
+        padding: .05rem 0;
+    }
+
+/* ------------------- car.html K ------------------- */
+
+.carTop {
+    position: absolute;
+    width: 100%;
+    height: 2.5rem;
+    background: url(../images/img_carTop.png) no-repeat;
+    background-size: 100% 100%;
+    z-index: -1;
+}
+
+    .carTop div {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 92%;
+        margin: .4rem 4%;
+    }
+
+    .carTop p:first-child {
+        font-size: .32rem;
+        font-weight: bold;
+        color: #fff;
+    }
+
+    .carTop p:last-child {
+        font-size: .22rem;
+        color: #fff;
+    }
+
+.carList {
+    margin-top: 1.3rem;
+}
+
+    .carList li {
+        width: 95%;
+        margin: .25rem auto;
+        background: #fff;
+        border-radius: .07rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: .2rem 0;
+    }
+
+        .carList li .CkbBox {
+            width: 7%;
+            display: flex;
+            justify-content: center;
+        }
+
+        .carList li input[type=checkbox],
+        .carBtm input {
+            right: .3rem;
+            -webkit-appearance: none;
+            width: 0.4rem;
+            height: 0.4rem;
+            border-radius: 50%;
+            background: url(../images/icon_Rdo.png) no-repeat;
+            background-size: 100% 110%;
+            display: inline-block;
+            cursor: pointer;
+            vertical-align: middle;
+            overflow: hidden;
+        }
+
+            .carList li input[type=checkbox]:checked,
+            .carBtm label input:checked {
+                width: 0.4rem;
+                height: 0.4rem;
+                overflow: hidden;
+                border: 1px solid #fff;
+                background: url(../images/icon_dui.png) no-repeat;
+                background-size: 100% 110%;
+            }
+
+        .carList li .picBox {
+            width: 24%;
+        }
+
+        .carList li .txtBox {
+            width: 66%;
+        }
+
+            .carList li .txtBox .top {
+                font-weight: bold;
+                font-size: .25rem;
+                margin-bottom: .05rem;
+            }
+
+            .carList li .txtBox .ctn {
+                font-size: .22rem;
+                color: #999999;
+            }
+
+            .carList li .txtBox .btm {
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-end;
+                margin-top: .2rem;
+            }
+
+                .carList li .txtBox .btm p > span {
+                    font-size: .32rem;
+                }
+
+
+.carNum {
+    display: flex;
+    justify-content: space-between;
+    border: 1px solid #CECECE;
+    margin-right: .2rem;
+    border-radius: .05rem;
+    height: .45rem;
+    line-height: .43rem;
+}
+
+    .carNum input {
+        text-align: center;
+        width: .8rem;
+        border-right: 1px solid #CECECE;
+        border-left: 1px solid #CECECE;
+    }
+
+    .carNum span {
+        display: inline-block;
+        width: .4rem;
+        text-align: center;
+        color: #CECECE;
+    }
+
+.carBtm {
+    position: fixed;
+    width: 100%;
+    height: 1rem;
+    background: #fff;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    bottom: 1.1rem;
+}
+
+    .carBtm label {
+        width: 60%;
+        display: flex;
+        align-items: center;
+        padding-left: .3rem;
+    }
+
+    .carBtm input {
+        margin-right: .2rem;
+    }
+
+    .carBtm > div {
+        width: 40%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .carBtm .num {
+        width: 1.6rem;
+    }
+
+        .carBtm .num .bsclr_gay {
+            font-size: .22rem;
+        }
+
+        .carBtm .num .bsclr_org {
+            font-weight: bold;
+            padding-top: .08rem;
+        }
+
+    .carBtm .btn {
+        width: 1.6rem;
+        height: 1rem;
+        line-height: 1rem;
+        text-align: center;
+        background-image: linear-gradient(#F5570E, #FE3002);
+        color: #fff;
+    }
+
+/* ------------------- user.html K ------------------- */
+.userTop {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 3.5rem;
+    background: url(../images/bg_indexTop.png) no-repeat;
+    background-size: 100% 100%;
+    z-index: -1;
+}
+
+    .userTop > div {
+        display: flex;
+        align-items: center;
+    }
+
+    .userTop .setBox {
+        height: .8rem;
+        justify-content: flex-end;
+    }
+
+        .userTop .setBox img {
+            width: .5rem;
+            margin-right: .3rem;
+        }
+
+    .userTop .dataBox {
+        width: 92%;
+        margin: 0 auto;
+    }
+
+        .userTop .dataBox .picBox {
+            width: 1.2rem;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+
+    .userTop .txtBox {
+        margin-left: .2rem;
+    }
+
+        .userTop .txtBox p:first-child {
+            color: #fff;
+            font-size: .35rem;
+            margin: .12rem 0;
+        }
+
+            .userTop .txtBox p:first-child span {
+                display: inline-block;
+                font-size: .22rem;
+                color: #FF0000;
+                padding: .05rem .1rem;
+                background: #fff;
+                border-radius: 1rem;
+                letter-spacing: 0;
+                margin-left: .2rem;
+                /* transform: scale(.9); */
+            }
+
+        .userTop .txtBox p:last-child {
+            display: inline-block;
+            font-size: .25rem;
+            color: #FF0000;
+            padding: .07rem .2rem;
+            background: #fff;
+            border-radius: 1rem;
+            margin: .12rem 0;
+        }
+
+
+.userListBox {
+    width: 92%;
+    margin: .2rem auto;
+    background: #fff;
+    border-radius: .1rem;
+    padding: 0 .2rem;
+}
+
+.userListBox1 .OptListli a > p {
+    color: #222222;
+}
+
+.userListBox1 {
+    margin-top: 3rem;
+}
+
+.userListBox > p {
+    font-size: .3rem;
+    padding: .15rem .04rem;
+    font-weight: bold;
+    border-bottom: 1px solid #DEDEDE;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+    .userListBox > p a {
+        font-size: .26rem;
+        font-weight: 400;
+        color: #666666;
+    }
+
+.userList {
+    padding: 0;
+}
+
+    .userList .OptListli a .picBox {
+        width: .6rem;
+        height: .60rem;
+    }
+
+    .userList .OptListli a > p {
+        transform: scale(.92);
+    }
+
+
+/* ------------------- login.html K ------------------- */
+.protocol {
+    display: flex;
+    align-items: center;
+    padding: 0 .1rem;
+}
+
+    .protocol input[type="checkBox"] {
+        -webkit-appearance: none;
+        width: .35rem;
+        height: .35rem;
+        border: 1px solid #EC4E39;
+        border-radius: .5rem;
+        margin-right: .2rem;
+        transition: .3s;
+    }
+
+        .protocol input[type="checkBox"]:checked {
+            background: url(../images/icon_dui.png) no-repeat;
+            background-size: 105% 105%;
+            border: none;
+        }
+
+    .protocol span {
+        color: #EC4E39;
+    }
+
+.loginBg {
+    position: fixed;
+    top: 0;
+    background: url(../images/bg_login.png) no-repeat;
+    background-size: 100% 100%;
+    width: 100%;
+    height: 5rem;
+    z-index: -1;
+}
+
+.loginContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: auto;
+}
+
+.loginBox {
+    /* position: fixed; */
+    width: 92%;
+    /* top: 50%;
+	left: 50%; */
+    /* transform: translate(-50%, -50%); */
+    background: #fff;
+    border-radius: .2rem;
+    padding: .4rem .2rem;
+    border: 1px solid rgba(249, 248, 250, 1);
+    /* box-shadow: 0 0 .3rem rgba(201, 201, 201, .2); */
+    z-index: 1;
+}
+
+.loginList li {
+    width: 100%;
+    height: .85rem;
+    border: 1px solid rgba(201, 201, 201, 1);
+    border-radius: 1rem;
+    display: flex;
+    align-items: center;
+    padding: .2rem;
+    margin: .25rem 0;
+}
+
+.loginList i {
+    font-size: .35rem;
+    padding-left: .1rem;
+    color: #9DB5C6;
+}
+
+.loginList input {
+    height: .85rem;
+    line-height: .85rem;
+    padding-left: .3rem;
+}
+
+
+    .loginList input::-webkit-input-placeholder {
+        color: #B6C2CE;
+    }
+
+.loginTitle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+    .loginTitle p {
+        color: #999999;
+        /* font-size: .3rem; */
+    }
+
+    .loginTitle div {
+        height: .5rem;
+        width: 35%;
+        position: relative;
+        top: -.25rem;
+        border-bottom: 1px solid #DDDDDD;
+    }
+
+.loginBox .btn_org {
+    margin: .5rem 0 .3rem 0;
+}
+
+
+/* ------------------- forgetMM.html K ------------------- */
+.forgetMMbg {
+    width: 100%;
+    height: 100%;
+    background: url(../images/bg_forgetMM.jpg) no-repeat;
+    background-size: 100% 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -20;
+}
+
+.forgetMMBox > p:first-child {
+    font-size: .42rem;
+    font-weight: bold;
+    text-align: center;
+    color: #111111;
+}
+
+.forgetMMBox > p:nth-child(2) {
+    font-size: .26rem;
+    text-align: center;
+    color: #666666;
+    margin: .2rem 0 .9rem 0;
+}
+
+.forgetMMBox .codeBox {
+    width: 69%;
+    position: relative;
+}
+
+    .forgetMMBox .codeBox .btnbox {
+        width: 2rem;
+        position: absolute;
+        right: -2.05rem;
+        top: -.75rem;
+    }
+
+/* ------------------- forgetMM.html K ------------------- */
+.searchTop {
+    border-bottom: 1px solid #EFEFEF;
+}
+
+.searchBox {
+    margin: .4rem .2rem;
+}
+
+    .searchBox p {
+        color: #676767;
+        padding: .2rem 0;
+    }
+
+    .searchBox ul {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+        .searchBox ul li {
+            padding: .07rem .25rem;
+            background: rgba(236, 236, 236, 1);
+            margin-right: .2rem;
+            border-radius: .1rem;
+        }
+
+/* ------------------- productList.html K ------------------- */
+.productListTab {
+    display: flex;
+    justify-content: space-between;
+    background: #fff;
+    /* height: .6rem; */
+    padding: .2rem 0;
+    margin: .1rem 0;
+    box-shadow: 0 0 .04rem rgb(0, 0, 0, .2);
+}
+
+    .productListTab > div {
+        width: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .productListTab p,
+    .productListTab i {
+        color: #666666;
+    }
+
+
+    .productListTab > div i {
+        font-size: .22rem;
+        transform: rotate(0deg);
+    }
+
+/* ------------------- clause.html K ------------------- */
+.clauseBox {
+    padding: .2rem;
+}
+
+/* ------------------- productDetail.html K ------------------- */
+.productDetailHeader ul li:nth-child(2) {
+    display: flex !important;
+    align-items: center !important;
+}
+
+.prdtDtlTab {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #C5C5C5;
+    border-radius: .1rem;
+    height: .5rem;
+    width: 2.1rem;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+    .prdtDtlTab dd {
+        text-align: center;
+        height: .5rem;
+        line-height: .5rem;
+        width: 50%;
+        font-weight:;
+    }
+
+    .prdtDtlTab .prdtDtlTabAct {
+        background: #7F7F7F;
+        color: #fff;
+    }
+
+.prdtDtlCtn > li {
+    display: none;
+}
+
+.prdtDtlCtn .prdtDtlCtnAct {
+    display: block;
+}
+
+
+/* lunbo */
+
+.prdtDtl-swp .swiper-container {
+    width: 100%;
+    height: 7rem;
+    position: relative;
+}
+
+    .prdtDtl-swp .swiper-container img {
+        width: 100%;
+        height: 100%;
+    }
+
+.prdtDtl-swp .swiper-pagination {
+    /* position: absolute; */
+    left: 85%;
+    width: .8rem;
+    background: rgba(0, 0, 0, .4);
+    color: #fff;
+    border-radius: .2rem;
+    bottom: .4rem;
+    display: flex;
+    justify-content: center;
+}
+
+    .prdtDtl-swp .swiper-pagination span {
+        color: #fff;
+        width: .05rem;
+        margin-right: .12rem;
+    }
+
+
+
+.details {
+    background: #fff;
+    padding: .2rem;
+}
+
+    .details .price #YouHui {
+        font-size: .45rem;
+        color: red;
+        font-weight: bold;
+        letter-spacing: -1px;
+    }
+
+
+    .details .vipPrice {
+        color: rgb(216, 69, 22);
+        display: inline-block;
+        font-size: .24rem;
+        border: 1px solid rgb(216, 69, 22);
+        padding: .03rem .1rem;
+        transform: scale(.85);
+        margin-left: .4rem;
+        font-weight: 400;
+        letter-spacing: 1px;
+    }
+
+    .details .resalePrice {
+        font-weight: 400;
+        margin-left: .2rem;
+        letter-spacing: -1px;
+    }
+
+    .details .bsclr_gay {
+        padding: .12rem 0 .25rem 0;
+    }
+
+    .details .txt {
+        font-weight: bold;
+        font-size: .35rem;
+        padding: 0rem 0 .25rem 0;
+    }
+
+.evaluate {
+    margin: .2rem 0;
+    background: #fff;
+}
+
+    .evaluate dt {
+        font-size: .32rem;
+        position: relative;
+        margin: .2rem;
+        padding: .25rem 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #E3E3E3;
+    }
+
+    .evaluate i {
+        font-size: .26rem;
+    }
+
+    .evaluate dd {
+        padding: .2rem;
+    }
+
+        .evaluate dd .user {
+            display: flex;
+            align-items: center;
+        }
+
+            .evaluate dd .user p {
+                font-size: .32rem;
+                /* font-weight: bold; */
+                margin-left: .2rem;
+            }
+
+                .evaluate dd .user p img {
+                    width: .4rem;
+                    /* height: .35rem; */
+                }
+
+
+        .evaluate dd .picBox {
+            width: 1rem;
+            height: 1rem;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+
+        .evaluate dd .data {
+            display: flex;
+            align-items: center;
+            margin: .1rem 0;
+        }
+
+    .evaluate .data .bsclr_gay {
+        letter-spacing: 0px;
+    }
+
+    .evaluate .data .star {
+        margin-left: .5rem;
+    }
+
+        .evaluate .data .star img {
+            width: .32rem;
+        }
+
+    .evaluate dd .txt {
+        font-size: .3rem;
+        margin-top: .25rem;
+    }
+
+    .evaluate dd .pic {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        margin: .1rem 0;
+    }
+
+        .evaluate dd .pic img {
+            width: 23%;
+            margin: .1rem 0;
+            border-radius: .05rem;
+        }
+
+            .evaluate dd .pic img:not(:nth-child(4n+4)) {
+                margin-right: 2.66666667%;
+            }
+
+    .evaluate dd .reply {
+        background: rgba(243, 243, 243, 1);
+        border-radius: .05rem;
+        padding: .2rem;
+    }
+
+.like > p {
+    text-align: center;
+    font-size: .3rem;
+}
+
+.likeList {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: .2rem;
+    border-radius: .2rem;
+    overflow: hidden;
+}
+
+    .likeList li {
+        width: 32%;
+        background: #fff;
+        margin: .1rem 0;
+    }
+
+        .likeList li:not(:nth-child(3n+3)) {
+            margin-right: 2%;
+        }
+
+        .likeList li p {
+            font-size: .25rem;
+            padding: .1rem;
+        }
+
+            .likeList li p:not(.bsclr_org) {
+                padding: .1rem .1rem 0 .1rem;
+                text-overflow: -o-ellipsis-lastline;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                line-clamp: 2;
+                -webkit-box-orient: vertical;
+                min-height: .64rem;
+            }
+
+        .likeList li .bsclr_org {
+            font-size: .28rem;
+            /* font-weight: bold; */
+            margin-bottom: .1rem;
+            letter-spacing: 0;
+        }
+
+.productDetailBtm {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 1rem;
+    background: #fff;
+    display: flex;
+    z-index: 11;
+}
+
+    .productDetailBtm ul {
+        width: 25%;
+        display: flex;
+    }
+
+        .productDetailBtm ul li {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .productDetailBtm ul li {
+            border-right: 1px solid #E7E7E7;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .productDetailBtm ul li a {
+                width: .5rem;
+                height: .5rem;
+            }
+
+    .productDetailBtm .numCar {
+        position: absolute;
+        display: inline-block;
+        background: #FF0B0B;
+        color: #fff;
+        border-radius: 50%;
+        width: .32rem;
+        height: .32rem;
+        line-height: .32rem;
+        text-align: center;
+        top: .12rem;
+        right: .45rem;
+    }
+
+.animationCar {
+    animation: addCar .3s;
+}
+
+@keyframes addCar {
+    0% {
+        width: .32rem;
+        height: .32rem;
+        transform: rotate(0deg);
+        right: -.6rem;
+        opacity: 0;
+    }
+
+    25% {
+        width: .35rem;
+        height: .35rem;
+        transform: rotate(5deg);
+    }
+
+    50% {
+        width: .35rem;
+        height: .35rem;
+        transform: rotate(0deg);
+    }
+
+    75% {
+        width: .35rem;
+        height: .35rem;
+        transform: rotate(-5deg);
+    }
+
+    100 {
+        width: .32rem;
+        height: .32rem;
+        transform: rotate(0deg);
+        right: .45rem;
+        opacity: 1;
+    }
+}
+
+.productDetailBtm > div {
+    width: 37.5%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+    .productDetailBtm > div:last-child {
+        text-align: center;
+        background-image: linear-gradient(#F5570E, #FE3002);
+        color: #fff;
+    }
+
+        .productDetailBtm > div:last-child a {
+            color: #fff;
+        }
+
+.detailsPic {
+    padding: .2rem;
+}
+
+.productDetailArtBg {
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    bottom: 0;
+    z-index: 9;
+    display: none;
+}
+
+.productDetailArt {
+    /* position: fixed; */
+    width: 100%;
+    background: #fff;
+    bottom: 1rem;
+    z-index: 10;
+    padding: .3rem .2rem;
+    /* display: none; */
+    border-bottom: .5rem solid #FAFAFA;
+}
+
+    .productDetailArt .top {
+        display: flex;
+        align-items: flex-end;
+    }
+
+        .productDetailArt .top .picBox {
+            width: 1.9rem;
+            border-radius: .1rem;
+            overflow: hidden;
+            margin-right: .4rem;
+        }
+
+        .productDetailArt .top .bsclr_org {
+            font-size: .3rem;
+            font-weight: bold;
+            padding: .1rem 0;
+        }
+
+        .productDetailArt .top .bsclr_gay {
+            font-size: .26rem;
+            padding: .1rem 0;
+        }
+
+    .productDetailArt > .bsclr_gay {
+        margin: .3rem 0;
+    }
+
+    .productDetailArt .carNum {
+        width: 2.3rem;
+        /* margin-bottom: 2rem; */
+    }
+
+        .productDetailArt .carNum input {
+            width: 1rem;
+        }
+
+        .productDetailArt .carNum span {
+            width: 100%;
+        }
+
+    .productDetailArt .rdoList {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        margin: .2rem 0;
+    }
+
+        .productDetailArt .rdoList li {
+            margin: .1rem .2rem .1rem 0;
+            line-height: .6rem;
+            height: .6rem;
+        }
+
+        .productDetailArt .rdoList label {
+            border: 1px solid #CECECE;
+            padding: .1rem .2rem;
+            border-radius: .1rem;
+        }
+
+        .productDetailArt .rdoList input {
+            display: none;
+        }
+
+        .productDetailArt .rdoList .rdoAct {
+            border: 1px solid #FF0B0B;
+            color: #FF0B0B;
+        }
+
+/* ------------------- productDetail.html K ------------------- */
+.verifyOrderSite {
+    background: #fff;
+    padding: .2rem;
+    margin: .2rem 0;
+}
+
+    .verifyOrderSite a {
+        display: flex;
+        align-items: center;
+    }
+
+    .verifyOrderSite .picBox {
+        width: 1.2rem;
+        margin-right: .25rem;
+    }
+
+    .verifyOrderSite .txt p:nth-child(1) {
+        font-weight: bold;
+        font-size: .3rem;
+        padding: .1rem 0;
+    }
+
+    .verifyOrderSite .txt .bsclr_gay {
+        font-weight: 400;
+        letter-spacing: 0;
+        font-size: .26rem;
+        margin-left: .2rem;
+    }
+
+.verifyOrderProduct {
+    background: #fff;
+    padding: .2rem;
+    margin: .2rem 0;
+}
+
+    .verifyOrderProduct .top {
+        display: flex;
+        align-items: center;
+        position: relative;
+    }
+
+        .verifyOrderProduct .top .picBox {
+            width: .6rem;
+            height: .6rem;
+            overflow: hidden;
+            margin-right: .2rem;
+        }
+
+        .verifyOrderProduct .top i {
+            font-size: .24rem;
+            color: #C0C0C0;
+            margin-left: .4rem;
+        }
+
+    .verifyOrderProduct .ctn {
+        display: flex;
+        margin: .2rem 0;
+    }
+
+        .verifyOrderProduct .ctn .picBox {
+            width: 26%;
+            margin-right: .2rem;
+            border-radius: .05rem;
+            overflow: hidden;
+        }
+
+        .verifyOrderProduct .ctn .txt {
+            width: 56%;
+            font-weight: bold;
+            font-size: .26rem;
+        }
+
+        .verifyOrderProduct .ctn .price {
+            width: 25%;
+            text-align: right;
+        }
+
+            .verifyOrderProduct .ctn .price p:nth-child(1) {
+                margin-top: .05rem;
+                font-weight: bold;
+            }
+
+        .verifyOrderProduct .ctn .bsclr_gay {
+            font-size: .24rem;
+        }
+
+.verifyOrderBtm > .bsclr_org {
+    width: 75%;
+    line-height: 1rem;
+    padding-left: .2rem;
+    font-weight: bold;
+}
+
+/* ------------------- orderPay.html K ------------------- */
+.orderPayTop {
+    margin: .3rem 0;
+    height: 2rem;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    background: #fff;
+}
+
+    .orderPayTop p:first-child {
+        color: #333333;
+        font-size: .3rem;
+    }
+
+    .orderPayTop p:last-child {
+        color: #FF0B0B;
+        font-size: .45rem;
+        padding: .2rem 0;
+        font-weight: bold;
+    }
+
+.orderPayTitle {
+    padding: .2rem;
+    color: #999999;
+}
+
+.orderPayList {
+    background: #fff;
+}
+
+    .orderPayList li label {
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid #F3F5F7;
+        padding: .3rem;
+        position: relative;
+    }
+
+    .orderPayList p {
+        /* color: #E8ECED; */
+        font-size: .3rem;
+        margin-left: .3rem;
+    }
+
+    .orderPayList img {
+        width: .55rem;
+    }
+
+    .orderPayList li label input {
+        position: absolute;
+        right: .3rem;
+        -webkit-appearance: none;
+        width: 0.4rem;
+        height: 0.4rem;
+        display: inline-block;
+        cursor: pointer;
+        vertical-align: middle;
+        overflow: hidden;
+    }
+
+        .orderPayList li label input:checked {
+            width: 0.4rem;
+            overflow: hidden;
+            background: url('../images/dui.png') no-repeat;
+            background-size: 105% 110%;
+            background-position: -.5px;
+        }
+
+.orderPayBtn a {
+    width: 90%;
+    margin: 1rem auto;
+    height: .9rem;
+    line-height: .9rem;
+    border-radius: 1rem;
+    background: #FF9E1C;
+    display: block;
+    color: #fff;
+    text-align: center;
+    font-size: .32rem;
+}
+
+/* 支付弹窗 */
+.payAlert {
+    width: 100%;
+    height: 5rem;
+    background: #fff;
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+    .payAlert form {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+.payAlertHeader {
+    width: 100%;
+    height: 1rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ccc;
+}
+
+    .payAlertHeader li {
+        height: 1rem;
+        line-height: 1rem;
+    }
+
+        .payAlertHeader li:nth-child(1),
+        .payAlertHeader li:nth-child(3) {
+            width: 20%;
+        }
+
+            .payAlertHeader li:nth-child(1) .iconfont {
+                font-size: .3rem;
+                color: #333;
+                padding-left: .2rem;
+            }
+
+        .payAlertHeader li:nth-child(2) {
+            width: 60%;
+            text-align: center;
+        }
+
+.payAlert .pswInp {
+    width: 80%;
+    height: .8rem;
+    color: #777;
+    text-align: center;
+    border: 1px solid #ccc;
+    background: #fff;
+    border-radius: 1rem;
+    margin: .8rem auto .3rem auto;
+}
+
+.payAlert input[type=password] {
+    cursor: pointer;
+    -webkit-appearance: none;
+}
+
+.payAlert .forgetMM {
+    color: #02A9F1;
+    display: table;
+}
+
+.payBtn {
+    width: 80%;
+    height: .8rem;
+    line-height: .8rem;
+    color: #fff;
+    text-align: center;
+    border-radius: 10px;
+    border: 1px solid #207EF9;
+    background: #207EF9;
+    margin: .5rem 0 .2rem 0;
+}
+
+/* ------------------- paySuccess.html K ------------------- */
+.payTrue {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+    .payTrue img {
+        width: 2rem;
+        display: block;
+    }
+
+.payTrueState {
+    font-size: .3rem;
+    text-align: center;
+    margin-top: .2rem;
+}
+
+.payTruePrice {
+    font-size: .35rem;
+    font-weight: bold;
+    text-align: center;
+    margin-top: .2rem;
+}
+
+.payGoBox {
+    width: 80%;
+    margin: 1rem auto 0 auto;
+    display: flex;
+    justify-content: space-between;
+}
+
+    .payGoBox a {
+        display: inline-block;
+        width: 2.5rem;
+        height: .78rem;
+        line-height: .78rem;
+        border-radius: 1rem;
+        text-align: center;
+        color: #979797;
+        border: 1px solid #979797;
+        /* margin-left: 1rem; */
+    }
+
+/* ------------------- vipApply.html K ------------------- */
+.bankLi .select {
+    min-width: 43%;
+    height: .6rem;
+    /* width: 60%; */
+    position: relative;
+}
+
+    .bankLi .select dt {
+        box-shadow: none;
+        background: none;
+        text-align: right;
+        padding-right: .55rem;
+        border-radius: 0px;
+        height: .6rem;
+        line-height: .6rem;
+    }
+
+    .bankLi .select > i {
+        position: absolute;
+        top: 50%;
+        transform: translate(-40%, -50%) !important;
+    }
+
+    .bankLi .select .cur {
+        /* border: 1px solid #CCCCCC; */
+        /* box-shadow: 0 0 3px rgba(204, 204, 204, 1); */
+        border: none;
+        box-shadow: none;
+    }
+
+.select dt:hover {
+    border: none;
+}
+
+.bankLi .select li {
+    text-align: right;
+    /* padding-right: .35rem; */
+}
+
+    .bankLi .select li a {
+        padding-right: .35rem;
+    }
+
+.vipApplyClause {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+    /* 单选框 */
+    .vipApplyClause input {
+        -webkit-appearance: none;
+        width: 0.35rem;
+        height: 0.35rem;
+        display: inline-block;
+        background: #9B9B9B;
+        margin: 0 5px 0 0 !important;
+        cursor: pointer;
+        vertical-align: middle;
+        border-radius: 1rem;
+        overflow: hidden;
+    }
+
+        .vipApplyClause input:checked {
+            width: 0.35rem;
+            border-radius: 1rem;
+            overflow: hidden;
+            background: url(../images/icon_dui.png) no-repeat;
+            background-size: 100% 110%;
+            background-position: -.5px;
+        }
+
+/* ------------------- eWallet.html K ------------------- */
+.eWalletTop {
+    width: 94%;
+    height: 3.4rem;
+    margin: .4rem auto;
+    background: url(../images/img_eWallet.png) no-repeat;
+    background-size: 100% 100%;
+    position: relative;
+}
+
+    .eWalletTop > div {
+        position: absolute;
+        top: 50%;
+        left: 10%;
+        transform: translate(0, -50%);
+    }
+
+        .eWalletTop > div p:nth-child(1) {
+            color: #fff;
+            font-size: .3rem;
+        }
+
+        .eWalletTop > div p:nth-child(2) {
+            color: #fff;
+            font-size: .53rem;
+            padding-top: .2rem;
+            /* font-weight: bold; */
+        }
+
+.eWalletList {
+    width: 94%;
+    margin: .4rem auto;
+    background: #fff;
+    padding: .2rem;
+    border-radius: .1rem;
+}
+
+    .eWalletList li {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #DDDDDD;
+        padding-bottom: .2rem;
+    }
+
+        .eWalletList li:not(:first-child) {
+            padding-top: .2rem;
+        }
+
+        .eWalletList li > div p:last-child {
+            padding-top: .12rem;
+            letter-spacing: 0;
+        }
+
+        .eWalletList li > p {
+            font-size: .32rem;
+            font-weight: bold;
+            letter-spacing: 0;
+        }
+
+/* ------------------- myOrder.html K ------------------- */
+.myOrderTab {
+    display: flex;
+    height: .8rem;
+    padding: 0 .1rem;
+    margin: .2rem 0;
+}
+
+    .myOrderTab li {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+.myOrderCtn > div {
+    display: none;
+}
+
+.myOrderCtn .myOrderCtnAct {
+    display: block;
+}
+
+.myOrderTab li p {
+    padding-bottom: .1rem;
+    color: #111111;
+    border-bottom: .05rem solid #F5F5F5;
+    transition: .3s;
+}
+
+.myOrderTab .myOrderTabAct p {
+    color: #F74E3A;
+    border-bottom: .05rem solid #F74E3A;
+}
+
+
+
+.myOrderProduct {
+    width: 94%;
+    margin: .2rem auto;
+    border-radius: .07rem;
+}
+
+    .myOrderProduct .top > .bsclr_org {
+        position: absolute;
+        right: 0;
+        font-size: .24rem;
+    }
+
+    .myOrderProduct > dl dd {
+        border-bottom: 1px solid #F5F5F5;
+    }
+
+    .myOrderProduct .btm {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+    }
+
+        .myOrderProduct .btm .sum span {
+            display: inline-block;
+            font-weight: bold;
+            font-size: .32rem;
+            padding: .1rem 0;
+        }
+
+    .myOrderProduct .skipBox {
+        margin: .15rem 0;
+    }
+
+        .myOrderProduct .skipBox > a {
+            display: inline-block;
+            border: 1px solid #CCCCCC;
+            padding: .05rem .4rem;
+            border-radius: .6rem;
+            color: #111111;
+            letter-spacing: 0;
+            margin-left: .1rem;
+        }
+
+    .myOrderProduct .txt .bsclr_gay {
+        padding: .05rem 0;
+        font-weight: bold;
+    }
+
+/* ------------------- orderDetails.html K ------------------- */
+.orderDetailsTop {
+    background: url(../images/img_eWallet.png) no-repeat;
+    background-size: 100% 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 2rem;
+}
+
+    .orderDetailsTop p {
+        color: #fff;
+        font-size: .4rem;
+    }
+
+.orderDetailsList .myOrderProduct {
+    width: 100%;
+    /* margin: 0 !important; */
+    border-radius: 0;
+    padding: .2rem .2rem 0 .2rem;
+}
+
+    .orderDetailsList .myOrderProduct > p {
+        display: flex;
+        justify-content: space-between;
+        height: .95rem;
+        line-height: .95rem;
+    }
+
+    .orderDetailsList .myOrderProduct .freight {
+        border-bottom: 1px solid #F5F5F5;
+    }
+
+.orderId {
+    background: #fff;
+    padding: .2rem;
+}
+
+    .orderId > p {
+        display: flex;
+        justify-content: space-between;
+        padding: .15rem 0;
+    }
+
+    .orderId span {
+        letter-spacing: 0;
+    }
+
+.orderDetailsSite {
+    margin: 0;
+}
+
+.orderDetails {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding: .2rem;
+    background: #fff;
+    display: flex;
+    justify-content: flex-end;
+}
+
+    .orderDetails a {
+        display: inline-block;
+        border: 1px solid #CCCCCC;
+        padding: .05rem .4rem;
+        border-radius: .6rem;
+        color: #111111;
+        letter-spacing: 0;
+        margin-left: .1rem;
+    }
+
+/* ------------------- releaseEvaluate.html K ------------------- */
+
+.releaseEvaluateBox {
+    margin: .2rem 0;
+    background: #fff;
+}
+
+    .releaseEvaluateBox .top {
+        display: flex;
+        align-items: center;
+        padding: .2rem;
+        border-bottom: 1px solid #EEEEEE;
+    }
+
+        .releaseEvaluateBox .top .picBox {
+            width: 12%;
+            border-radius: .05rem;
+            overflow: hidden;
+            margin-right: .2rem;
+        }
+
+        .releaseEvaluateBox .top p {
+            width: 87%;
+            font-size: .32rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-weight: 500;
+        }
+
+    .releaseEvaluateBox .txt textarea {
+        width: 100%;
+        padding: .2rem;
+        border: none;
+    }
+
+    .releaseEvaluateBox .scoreList {
+        padding-bottom: .3rem;
+    }
+
+        .releaseEvaluateBox .scoreList > li {
+            display: flex;
+            align-items: center;
+            padding: .1rem .2rem;
+        }
+
+            .releaseEvaluateBox .scoreList > li p {
+                padding-right: .2rem;
+                /* font-weight: bold; */
+            }
+
+
+    /*---- 多图上传 ----- */
+    .releaseEvaluateBox .layui-btn {
+        background: url(../images/img_tianjia.png) no-repeat;
+        background-size: 100% 100%;
+        background-color: transparent !important;
+        border-radius: .2rem;
+        z-index: 40;
+        border: 1px dashed #DCDCDC !important;
+    }
+
+    .releaseEvaluateBox .layui-upload {
+        width: 97%;
+        margin: 0 0 0 3%;
+    }
+
+    .releaseEvaluateBox .layui-upload-list {
+        background: none;
+        display: flex;
+        height: auto;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+        width: 100%;
+        max-height: 300rem;
+        padding: .2rem 0;
+        overflow: visible;
+    }
+
+        .releaseEvaluateBox .layui-upload-list > div {
+            width: 30%;
+            height: 2.2rem;
+            border-radius: .1rem;
+            margin: .15rem 0;
+            padding: .2rem;
+            margin-right: 3.3%;
+            border: 1px solid #DCDCDC;
+            position: relative;
+        }
+
+        .releaseEvaluateBox .layui-upload-list img {
+            height: 100%;
+            width: 100%;
+        }
+
+    .releaseEvaluateBox .deleteImg {
+        position: absolute;
+        top: -.15rem;
+        right: -.15rem;
+        width: .4rem;
+        color: #fff;
+        height: .4rem;
+        line-height: .4rem;
+        text-align: center;
+        background: #FF1216;
+        border-radius: 50%;
+    }
+
+/* ------------------- site.html K ------------------- */
+.siteList {
+    background: #fff;
+    margin: .2rem 0;
+}
+
+
+    .siteList li {
+        padding: .2rem;
+        position: relative;
+    }
+
+        .siteList li > p:first-child {
+            font-size: .32rem;
+            padding: .1rem 0;
+            font-weight: bold;
+        }
+
+        .siteList li > p span {
+            font-weight: 400;
+        }
+
+        .siteList li:not(:last-child) {
+            border-bottom: 1px solid #f5f5f5;
+        }
+
+
+    .siteList .operation {
+        position: absolute;
+        top: 0;
+        right: -2.8rem;
+        display: flex;
+        height: 100%;
+        display: none;
+    }
+
+        .siteList .operation p {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            width: 1.4rem;
+            color: #fff;
+        }
+
+            .siteList .operation p a {
+                color: #fff;
+            }
+
+            .siteList .operation p:nth-child(1) {
+                background: #A0A0A0;
+            }
+
+            .siteList .operation p:nth-child(2) {
+                background: #F8AA2B;
+            }
+
+            .siteList .operation p:nth-child(3) {
+                background: #FF3300;
+            }
+
+    .siteList li {
+        transition: transform 0.5s;
+    }
+
+        .siteList li:hover {
+            transform: translate(-2.8rem, 0);
+        }
+
+            .siteList li:hover .operation {
+                display: flex;
+            }
+
+.toSiteNew {
+    position: fixed;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: .9rem;
+    background: #fff;
+}
+
+    .toSiteNew span {
+        display: inline-block;
+        border: 1px solid #F8AA2B;
+        color: #F8AA2B;
+        width: .35rem;
+        height: .33rem;
+        line-height: .27rem;
+        padding-left: .02rem;
+        text-align: center;
+        border-radius: 50%;
+        margin-right: .06rem;
+    }
+
+.siteNewBox textarea {
+    padding: .2rem;
+    width: 100%;
+    border: none;
+    background: none;
+}
+
+.siteAlterList span,
+.siteAlterList p {
+    height: .6rem;
+    line-height: .6rem;
+}
+
+/* ------systemGg.html  开始 */
+.systemGgList {
+    width: 100%;
+    margin-top: .2rem;
+    margin-bottom:1.2rem;
+}
+
+    .systemGgList li {
+        width: 94%;
+        margin: .35rem auto;
+        border-radius: 10px;
+        overflow: hidden;
+        background: #fff;
+        /* box-shadow: 0 3px 10px rgba(1, 73, 206, .2); */
+        position: relative;
+        padding: .25rem .3rem;
+    }
+
+        .systemGgList li a {
+            display: flex;
+            justify-content: space-between;
+        }
+
+.systemGgList-img {
+    width: .8rem;
+    height: .8rem;
+    background: #FF3A2A;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: .15rem;
+    margin-right: .2rem;
+}
+
+    .systemGgList-img img {
+        width: .35rem;
+        display: block;
+    }
+
+.systemGgList-count {
+    width: 87%;
+}
+
+    .systemGgList-count p:not(:last-child) {
+        margin-bottom: .1rem;
+    }
+
+    .systemGgList-count .systemGgList-bt {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+        overflow: hidden;
+    }
+
+    .systemGgList-count .systemGgList-time,
+    .systemGgList-count .systemGgList-text {
+        color: #777;
+        font-size: .24rem;
+    }
+
+    .systemGgList-count .systemGgList-text {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
+    }
+
+/* ------systemGgIls.html  开始 */
+.systemGgIlsBox {
+    padding: .3rem;
+   
+    margin-bottom: 1.2rem;
+}
+
+    .systemGgIlsBox p {
+        margin-bottom: .2rem;
+    }
+
+.systemGgIlsBox-bt {
+    font-size: .4rem;
+    font-weight: bold;
+}
+
+.systemGgIlsBox-time {
+    color: #777;
+    font-size: .24rem;
+}
+
+.systemGgIlsBox-text {
+    font-size: .28rem;
+}
+
+
+/* ------------------- myTracks.html K ------------------- */
+.myTracksList {
+    margin: .2rem 0;
+    background: #fff;
+    padding-bottom: .8rem;
+}
+
+    .myTracksList li {
+        display: flex;
+        position: relative;
+        padding: .2rem;
+        transition: transform 0.3s;
+        border-bottom: 1px solid #F5F5F5;
+    }
+
+        .myTracksList li:last-child {
+        }
+
+        .myTracksList li .picBox {
+            width: 20%;
+        }
+
+        .myTracksList li .txt {
+            width: 77.5%;
+            margin-left: 2.5%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .myTracksList li .operation {
+            position: absolute;
+            top: 0;
+            right: -1.4rem;
+            display: flex;
+            height: 100%;
+            display: none;
+        }
+
+
+    .myTracksList .operation p {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        width: 1.4rem;
+        color: #fff;
+        background: #FF3300;
+    }
+
+    .myTracksList li:hover {
+        transform: translate(-1.4rem, 0);
+    }
+
+        .myTracksList li:hover .operation {
+            display: flex;
+        }
+
+/* ------------------- myComment.html K ------------------- */
+.myCommentBox .evaluate {
+    background: none;
+}
+
+    .myCommentBox .evaluate dd {
+        position: relative;
+        margin: .2rem 0;
+        background: #fff;
+    }
+
+    .myCommentBox .evaluate .data {
+        position: absolute;
+        top: .55rem;
+        right: .2rem;
+        letter-spacing: 0;
+    }
+
+.myCommentBox .star {
+    margin-left: .2rem;
+}
+
+    .myCommentBox .star img {
+        width: .28rem;
+    }
+
+.myCommentBox .product a {
+    width: 98%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background: #F5F4F7;
+    padding: .15rem 0;
+}
+
+.myCommentBox .product .bsclr_gay {
+    font-size: .26rem;
+    padding-top: .15rem;
+}
+
+.myCommentBox .product i {
+    font-size: .32rem;
+}
+
+.myCommentBox .operation {
+    display: flex;
+    justify-content: flex-end;
+    margin: .1rem;
+}
+
+    .myCommentBox .operation a {
+        display: inline-block;
+        border: 1px solid #CCCCCC;
+        padding: .05rem .4rem;
+        border-radius: .6rem;
+        color: #999999;
+        letter-spacing: 0;
+        margin-left: .1rem;
+    }
+
+/* ------------------- myTeam.html K ------------------- */
+.myTeamList {
+    background: #fff;
+    margin: .2rem 0;
+}
+
+    .myTeamList li {
+        display: flex;
+        align-items: center;
+        padding: .2rem;
+    }
+
+        .myTeamList li:not(:last-child) {
+            border-bottom: 1.5px solid #F5F5F5;
+        }
+
+
+        .myTeamList li .picBox {
+            width: 1rem;
+            height: 1rem;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-right: .3rem;
+        }
+
+        .myTeamList li > p {
+            font-size: .32rem;
+            margin-right: .2rem;
+        }
+
+        .myTeamList li > i {
+            display: inline-block;
+            background: #2271E2;
+            color: #fff;
+            padding: .02rem .1rem;
+            border-radius: .04rem;
+            font-size: .24rem;
+        }
+
+/* ------------------- set.html K ------------------- */
+.headSelect {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    display: none;
+    z-index: 102;
+}
+
+    .headSelect li {
+        background: #fff;
+        height: 1.2rem;
+        border-bottom: .2rem solid #F5F5F5;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+/* ------------------- set.html K ------------------- */
+.invitationBg {
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    background: #FFC82E;
+}
+
+.invitationBox {
+    width: 80%;
+    position: absolute;
+    top: 47%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    background: #fff;
+    border-radius: .2rem;
+    padding: .5rem .6rem;
+}
+
+    .invitationBox .hr {
+        height: .1rem;
+        border-bottom: 1.5px dashed #DEDEDE;
+        margin: .3rem 0;
+    }
+
+    .invitationBox .top {
+        height: 1.3rem;
+        line-height: 1.3rem;
+    }
+
+    .invitationBox .copyTop {
+        margin: .7rem 0 .3rem 0;
+    }
+
+    .invitationBox .btnbox a {
+        width: 100%;
+        margin-top: .45rem;
+    }
+
+/* ------------------- mutualShiftJl.html K ------------------- */
+
+.mutualShiftJlTop {
+    display: flex;
+    align-items: center;
+    background: #fff;
+    margin: .2rem 0;
+    text-align: center;
+    height: .95rem;
+}
+
+.mutualShiftJlList {
+    /* background: #fff; */
+}
+
+    .mutualShiftJlList li {
+        display: flex;
+        align-items: center;
+        background: #fff;
+        margin-bottom: .05rem;
+        text-align: center;
+        height: .88rem;
+    }
+
+        .mutualShiftJlTop p:nth-child(1),
+        .mutualShiftJlList li p:nth-child(1) {
+            width: 26%;
+        }
+
+        .mutualShiftJlList li p:nth-child(1) {
+            letter-spacing: 0;
+        }
+
+        .mutualShiftJlTop p:nth-child(2),
+        .mutualShiftJlList li p:nth-child(2) {
+            width: 48%;
+        }
+
+        .mutualShiftJlTop p:nth-child(2),
+        .mutualShiftJlList li p:nth-child(2) {
+            width: 50%;
+        }
+
+        .mutualShiftJlTop p:nth-child(3),
+        .mutualShiftJlList li p:nth-child(3) {
+            width: 26%;
+        }
+
+/* ------------------- mutualShiftJl.html K ------------------- */
+.withdrawDepositJlList li {
+    background: #fff;
+    margin: .2rem 0;
+    padding: .2rem;
+}
+
+    .withdrawDepositJlList li > div {
+        display: flex;
+        align-items: center;
+        padding: .1rem 0;
+    }
+
+        .withdrawDepositJlList li > div p {
+            width: 33.3%;
+            text-align: center;
+        }
+
+            .withdrawDepositJlList li > div p:first-child {
+                text-align: left;
+            }
+
+            .withdrawDepositJlList li > div p:last-child {
+                text-align: right;
+            }
+
+.withdrawDepositJlList .bsft_bold {
+    font-size: .3rem;
+}
+
+.withdrawDepositJlList .procedure {
+    font-size: .24rem;
+}
+
+.withdrawDepositJlList .data {
+    letter-spacing: 0;
+}
+
+
+.siteAlterList .siteMobiscroll {
+    justify-content: flex-start;
+}
+
+    .siteAlterList .siteMobiscroll select {
+        padding: 0 2%;
+        margin: 0;
+        width: auto;
+        text-align: center;
+        text-align-last: center;
+        margin-right: .15rem;
+        border: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+    }
+
+    .siteAlterList .siteMobiscroll option {
+        text-align: center;
+        text-align-last: center;
+    }
+
+/* ------------------- buyPermit.html K ------------------- */
+.buyPermitSelectNumBox {
+    background: #fff;
+    padding: .2rem 0;
+}
+
+/* 标题 */
+.title {
+    padding: 0 .25rem;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+    .title span {
+        display: inline-block;
+        width: .08rem;
+        height: .38rem;
+        background: #EB4F3C;
+        /* border-radius: 2rem; */
+    }
+
+    .title p {
+        padding: 0 .15rem;
+        font-size: .32rem;
+        font-weight: bold;
+    }
+
+
+.buyPermitSelectNumBox .RdoBox {
+    padding: .2rem;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+    .buyPermitSelectNumBox .RdoBox label {
+        width: 31%;
+        height: 1.5rem;
+        background: #F2F2F2;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0.2rem 0;
+        border-radius: .2rem;
+    }
+
+        .buyPermitSelectNumBox .RdoBox label span {
+            font-size: .35rem;
+            font-weight: bold;
+        }
+
+        .buyPermitSelectNumBox .RdoBox label:not(:nth-child(3n+3)) {
+            margin-right: 3%;
+        }
+
+        .buyPermitSelectNumBox .RdoBox label input {
+            display: none;
+        }
+
+    .buyPermitSelectNumBox .RdoBox .RdoAct {
+        background: linear-gradient(#FE3002, #F5570E);
+    }
+
+        .buyPermitSelectNumBox .RdoBox .RdoAct,
+        .buyPermitSelectNumBox .RdoBox .RdoAct span {
+            color: #fff;
+        }
+
+.buyPermitList {
+    margin-top: .2rem;
+}
+
+    .buyPermitList li p:nth-child(1) {
+        width: 40%;
+    }
+
+    .buyPermitList li p:nth-child(2) {
+        width: 30%;
+    }
+
+    .buyPermitList li p:nth-child(3) {
+        width: 30%;
+    }
+
+/* ------------------- securityCenter.html K ------------------- */
+.securityCenterList li {
+    padding: .25rem .2rem;
+}
+
+.securityCenterList .title {
+    padding: .3rem 0 .15rem 0;
+}
+
+.securityCenterList li span {
+    font-size: .32rem;
+}
+
+.securityCenterList input::-webkit-input-placeholder {
+    /* WebKit browsers */
+    color: #999;
+}
+
+.securityCenterList input:-moz-placeholder {
+    /* Mozilla Firefox 4 to 18 */
+    color: #999;
+}
+
+.securityCenterList input::-moz-placeholder {
+    /* Mozilla Firefox 19+ */
+    color: #999;
+}
+
+.securityCenterList input:-ms-input-placeholder {
+    /* Internet Explorer 10+ */
+    color: #999;
+}
+
+.BtmBtn {
+    position: fixed;
+    bottom: .5rem;
+    width: 100%;
+}
+
+
+/* ---------------------- kefu.html 客服中心  开始 ---------------------- */
+.kefuTab {
+    display: flex;
+    justify-content: space-around;
+    height: 1rem;
+    line-height: 1rem;
+    border-bottom: 1px solid #E5E5E5;
+}
+
+.kefuTabAct span {
+    padding: .1rem 0;
+    color: #EB4F3C;
+    font-weight: bold;
+    border-bottom: .05rem solid #EB4F3C;
+}
+
+.kefuTabCount > div {
+    display: none;
+}
+
+.kefuTabCount .kefuTabCountAct {
+    display: block;
+}
+
+
+.kefuGlbox {
+    width: 94%;
+    margin: .2rem auto;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #fff;
+    position: relative;
+}
+
+    .kefuGlbox li {
+        padding: .25rem;
+        display: flex;
+        justify-content: flex-start;
+    }
+
+        .kefuGlbox li span {
+            width: 1.5rem;
+            padding: .1rem 0;
+        }
+
+        .kefuGlbox li > input,
+        .kefuGlbox li > textarea {
+            border: 1px solid #DCDCDC;
+            padding: .1rem;
+            color: #DCDCDC;
+            width: 75%;
+            border-radius: .03rem;
+            padding: .05rem .2rem;
+        }
+
+        .kefuGlbox li p {
+            padding: .1rem 0;
+            width: 70%;
+        }
+
+        .kefuGlbox li .kefuBoxesbtn {
+            border: 1px solid #DCDCDC;
+            width: 75%;
+            text-align: center;
+            position: relative;
+        }
+
+.kefuBoxesbtn i {
+    position: absolute;
+    right: .2rem;
+    font-size: .28rem;
+}
+
+/* 客服弹窗 */
+.kefuBoxesbox {
+    width: 90%;
+    margin: 0 auto;
+    padding: .4rem .3rem;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 6rem;
+    left: 50%;
+    transform: translate(-50%, -20%);
+    background: #fff;
+    z-index: 201;
+    border-radius: .1rem;
+    display: none;
+}
+
+    .kefuBoxesbox label {
+        padding: .2rem .2rem;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+    }
+
+        .kefuBoxesbox label span {
+            font-size: .32rem;
+        }
+
+    /* 单选框 */
+    .kefuBoxesbox input.cbox {
+        -webkit-appearance: none;
+        width: 0.4rem;
+        height: 0.4rem;
+        display: inline-block;
+        margin: 0 5px 0 0 !important;
+        cursor: pointer;
+        vertical-align: middle;
+        border: 1px solid lightgray;
+        border-radius: 1rem;
+        overflow: hidden;
+    }
+
+        .kefuBoxesbox input.cbox:checked {
+            border: 1px solid #fff;
+            width: 0.4rem;
+            border-radius: 1rem;
+            overflow: hidden;
+            background: #EB4F3C;
+            background-size: 100% 100%;
+            background-position: -.5px;
+            border: 1px solid lightgray;
+        }
+
+
+.kefubg {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, .1);
+    z-index: 200;
+    display: none;
+}
+
+/*---- 多图上传 ----- */
+.kefuGlbox .layui-btn {
+    background: url(../images/img_tianjia.png) no-repeat;
+    background-size: 100% 100%;
+    width: 2.2rem !important;
+    height: 2.2rem !important;
+    background-color: transparent !important;
+    border-radius: .2rem;
+    z-index: 40;
+    margin: .1rem 0;
+}
+
+.kefuGlbox .layui-upload {
+    width: 75%;
+}
+
+.kefuGlbox .layui-upload-list {
+    background: none;
+    display: flex;
+    height: auto;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    width: 100%;
+    max-height: 300rem;
+    padding: .2rem 0;
+    overflow: visible;
+}
+
+    .kefuGlbox .layui-upload-list > div {
+        width: 2.2rem;
+        height: 2.2rem;
+        border-radius: .2rem;
+        margin: .1rem 0;
+        padding: .2rem;
+    }
+
+    .kefuGlbox .layui-upload-list > div {
+        border: 1px solid #DCDCDC;
+        position: relative;
+    }
+
+    .kefuGlbox .layui-upload-list img {
+        height: 100%;
+        width: 100%;
+    }
+
+.kefuGlbox .deleteImg {
+    position: absolute;
+    top: -.2rem;
+    right: -.2rem;
+    width: .45rem;
+    color: #fff;
+    height: .45rem;
+    line-height: .45rem;
+    text-align: center;
+    background: #FF1216;
+    border-radius: 50%;
+}
+
+/* 已回留言 */
+.send_outList {
+    padding: .3rem;
+}
+
+.send_outListli {
+    padding: .2rem 0;
+}
+
+    .send_outListli > p {
+        padding: 0 .2rem;
+        text-align: center;
+        letter-spacing: 0;
+    }
+
+.send_outListlibox {
+    width: 94%;
+    margin: .2rem auto;
+    border-radius: 0px;
+    overflow: hidden;
+    background: #f5f5f5;
+    /* box-shadow: 0 3px 3px rgba(1, 73, 206, .2); */
+    position: relative;
+    padding: .2rem .3rem;
+}
+
+    .send_outListlibox p {
+        padding: .03rem 0;
+    }
+
+        .send_outListlibox p:last-child {
+            margin-left: .1rem;
+        }
+
+.return_leave p {
+    text-align: right;
+}
+
+.return_leave .bsclr_gay {
+    text-align: center;
+    letter-spacing: 0;
+}
+
+/* 查看凭证 */
+.See {
+    text-align: center;
+    position: fixed;
+    width: 80%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    z-index: 201;
+    display: none;
+}
+
+    .See p {
+        font-size: .32rem;
+        padding: .2rem 0;
+    }
+
+.SeePic {
+    width: 5.5rem;
+    margin: 0 auto;
+    height: 6rem;
+}
+
+.See .btnbox .btn_blue {
+    width: 1.5rem;
+    line-height: .55rem;
+    height: .55rem;
+    margin: .1rem auto .2rem auto;
+}
+
+
+
+/* ---------------------- signIn.html 客服中心  开始 ---------------------- */
+.signIn .top {
+    width: 100%;
+    height: 5rem;
+    background: linear-gradient(#FE3002, #F5570E);
+    margin-bottom: .2rem;
+    overflow: hidden;
+}
+
+    .signIn .top .out-1 {
+        width: 3.5rem;
+        height: 3.5rem;
+        border-radius: 100%;
+        -webkit-border-radius: 100%;
+        background: rgba(255, 255, 255, 0.4);
+        margin: .5rem auto 0 auto;
+        position: relative;
+    }
+
+        .signIn .top .out-1 .out-2 {
+            width: 3rem;
+            height: 3rem;
+            border-radius: 100%;
+            -webkit-border-radius: 100%;
+            background: #ffffff;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+            .signIn .top .out-1 .out-2 .signBtn {
+                width: 2.6rem;
+                height: 2.6rem;
+                border-radius: 100%;
+                -webkit-border-radius: 100%;
+                border: 1px #F5570E solid;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+            }
+
+                .signIn .top .out-1 .out-2 .signBtn strong,
+                .signIn .top .out-1 .out-2 .signBtn span {
+                    display: block;
+                    width: 85%;
+                    margin: 0 auto;
+                    text-align: center;
+                    color: #F5570E;
+                }
+
+                .signIn .top .out-1 .out-2 .signBtn strong {
+                    height: 1.3rem;
+                    line-height: 1.3rem;
+                    font-weight: 600;
+                    border-bottom: 1px #eee solid;
+                }
+
+                .signIn .top .out-1 .out-2 .signBtn span {
+                    height: 1.3rem;
+                    line-height: 1.3rem;
+                    font-size: .28rem;
+                    line-height: 1rem !important;
+                }
+
+        .signIn .top .out-1:active {
+            animation: sign .25s forwards;
+            -webkit-animation: sign .25s forwards;
+        }
+
+.signIn .tips {
+    position: absolute;
+    top: 5rem;
+    z-index: 999;
+    width: 100%;
+    color: #fff;
+    font-size: .28rem;
+    text-align: center;
+    padding-bottom: .5rem;
+}
+
+.signIn .Calendar {
+    background: #fff;
+    padding-bottom: .2rem;
+}
+
+    .signIn .Calendar #toyear {
+        border-bottom: 1px #e7e7e7 solid;
+        width: 96%;
+        margin: 0 auto;
+        height: 1rem;
+        text-align: center;
+        color: #333;
+        font-size: .5rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+        .signIn .Calendar #toyear .year-month {
+            height: 100%;
+            line-height: .3rem;
+            font-size: .32rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .signIn .Calendar #toyear #idCalendarPre,
+        .signIn .Calendar #toyear #idCalendarNext {
+            height: 100%;
+            line-height: .95rem;
+            padding: 0 1rem;
+            text-align: center;
+            font-size: .4rem;
+            color: #999;
+        }
+
+    .signIn .Calendar table,
+    .signIn .Calendar tr,
+    .signIn .Calendar td {
+        border: 0;
+    }
+
+    .signIn .Calendar table {
+        width: 96%;
+        margin: 0 auto;
+    }
+
+        .signIn .Calendar table tr {
+            text-align: center;
+            height: .7rem;
+        }
+
+            .signIn .Calendar table tr td span {
+                margin: 0 auto;
+                display: block;
+                line-height: .7rem;
+                width: .7rem;
+                height: .7rem;
+                font-size: .28rem;
+                border-radius: 100%;
+            }
+
+            .signIn .Calendar table tr .onToday span {
+                background: linear-gradient(#FE3002, #F5570E);
+                color: #fff;
+            }
+
+/* ---------------------- teamBuy.html 团队抢购  开始 ---------------------- */
+.teamBuyBox {
+    width: 100%;
+    height: auto;
+    background: url(../images/bg_team.jpg) no-repeat;
+    background-size: 100% 100%;
+    padding: 1.4rem 0;
+}
+
+    .teamBuyBox > i {
+        position: absolute;
+        top: .2rem;
+        left: .2rem;
+        color: #fff;
+        font-weight: bold;
+    }
+
+.teamBuyList {
+    height: calc(100vh - 2.8rem);
+    overflow: auto;
+}
+
+    .teamBuyList li > a {
+        display: flex;
+        width: 98%;
+        margin: .2rem auto;
+        background: url(../images/img_teamBuy.png) no-repeat;
+        background-size: 100% 100%;
+        justify-content: flex-start;
+        /* align-items: center; */
+        padding: 1.1rem .6rem .5rem .6rem;
+        position: relative;
+    }
+
+        .teamBuyList li > a > p {
+            position: absolute;
+            top: .13rem;
+            left: 50%;
+            transform: translate(-50%, 0%);
+            color: rgba(240, 240, 240, 1);
+            font-weight: bold;
+            font-size: .32rem;
+        }
+
+        .teamBuyList li > a .picBox {
+            width: 27%;
+        }
+
+        .teamBuyList li > a .txtBox {
+            width: 70%;
+            margin-left: 3%;
+            display: flex;
+            justify-content: space-between;
+            flex-direction: column;
+        }
+
+    .teamBuyList .layui-progress {
+        height: .17rem;
+    }
+
+    .teamBuyList .layui-progress-bar {
+        height: .17rem;
+        background-color: #FF6101;
+    }
+
+    .teamBuyList li > a .txtBox > p {
+        overflow: hidden;
+        display: -webkit-box;
+        text-overflow: ellipsis;
+        -webkit-line-clamp: 2;
+        /*要显示的行数*/
+        -webkit-box-orient: vertical;
+    }
+
+    .teamBuyList li > a .txtBox .btm {
+        display: flex;
+        justify-content: space-between;
+    }
+
+        .teamBuyList li > a .txtBox .btm .bsclr_org {
+            font-weight: bold;
+        }
+
+        .teamBuyList li > a .txtBox .btm s {
+            font-weight: 400;
+            font-size: .22rem;
+        }
+
+        .teamBuyList li > a .txtBox .btm span {
+            background: linear-gradient(#FE5F2B, #FA9845);
+            color: #fff;
+            padding: .03rem .15rem;
+            border-radius: .05rem;
+        }
+
+.progressLi {
+    position: relative;
+}
+
+    .progressLi .layui-progress {
+        width: 70%;
+        margin-left: .2rem;
+    }
+
+    .progressLi .layui-progress-bar {
+        background-color: #FF6101;
+    }
+
+    .progressLi .layui-progress .layui-progress-text {
+        white-space: nowrap;
+    }
+
+
+/* ---------------------- redPacket.html 团队抢购  开始 ---------------------- */
+.hbList {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    height: calc(100vh - 1rem);
+    padding: .2rem 0;
+}
+
+    .hbList li {
+        width: 33.33333%;
+        height: 33.33333%;
+        box-sizing: border-box;
+        padding: .2rem .15rem;
+        /* margin: .2rem .15rem; */
+        overflow: hidden;
+    }
+
+
+    .hbList img {
+        width: 100%;
+        height: 100%;
+        border-radius: 4px;
+    }
+
+
+.donghua {
+    animation: myfirst 0.6s infinite;
+    animation-iteration-count: 1;
+}
+
+@keyframes myfirst {
+    0% {
+        transform: rotate(1deg);
+    }
+
+    50% {
+        transform: rotate(-1deg);
+    }
+
+    100% {
+        transform: rotate(1deg);
+    }
+}
+
+
+
+
+/* ------ withdrawDeposit.html  kkkk */
+.verifyPhone .btn_org {
+    width: 1.6rem;
+    font-size: .22rem;
+    border-radius: .05rem;
+    height: .6rem;
+    line-height: .6rem;
+}
+
+/* ------ index.html  新轮播 */
+.OptList2 .OptListli .swiper-container {
+    height: 100%;
+}
+
+    .OptList2 .OptListli .swiper-container .picBox {
+        width: 100%;
+        height: 100%;
+    }
+
+        .OptList2 .OptListli .swiper-container .picBox img {
+            height: 100%;
+        }
+
+.OptList2 .OptListli .swiper-pagination {
+    bottom: 1px;
+}
+
+
+/* ------myTame.html  开始 */
+.myTameUserInfo {
+    width: 100%;
+    padding: .4rem .2rem .7rem .2rem;
+    background: linear-gradient(#F5570E, #FE3002);
+    /* border-radius: 0 0 .3rem .3rem; */
+    overflow: hidden;
+}
+
+    .myTameUserInfo > div {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .myTameUserInfo p {
+        color: #fff;
+        /* width: 100%; */
+    }
+
+        .myTameUserInfo p .iconfont {
+            color: #fff;
+        }
+
+        .myTameUserInfo p:not(:last-child) {
+            margin-bottom: .1rem;
+        }
+
+.teamList {
+    display: none;
+}
+
+    .teamList li {
+        padding: .2rem;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        border-bottom: 1px solid #ddd;
+    }
+
+        .teamList li:not(:last-child) {
+            /* border-bottom: 1px solid #ddd; */
+        }
+
+    .teamList .teamList-img {
+        width: 19%;
+        /* height: 1.2rem; */
+        overflow: hidden;
+    }
+
+        .teamList .teamList-img img {
+            width: 100%;
+            display: block;
+            border-radius: 50%;
+        }
+
+.teamList-info {
+    width: 81%;
+    margin-left: .2rem;
+}
+
+    .teamList-info p {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+    }
+
+        .teamList-info p:not(:last-child) {
+            margin-bottom: .1rem;
+        }
+
+.wfTeamBox {
+    position: absolute;
+    width: 96%;
+    left: 2%;
+    top: 3rem;
+    background: #fff;
+    border-radius: .15rem;
+    padding: .0rem .2rem;
+    overflow: auto;
+    height: calc(100vh - 3.2rem);
+}
+
+.performanceClick {
+    background: #F84709;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: .2rem 0;
+    padding: .1rem;
+}
+
+
+    .performanceClick p {
+        color: #fff;
+        font-weight: bold;
+    }
+
+    .performanceClick i {
+        color: #fff;
+        font-size: .26rem;
+        transform: rotate(90deg);
+        transition: .3s;
+    }
+
+/* ------myTame.html  结束 */
+
+
+/* ------redPacketDetails.html  结束 */
+.hbNum {
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: .4rem 0;
+}
+
+    .hbNum .name {
+        font-weight: bold;
+        padding: .05rem 0;
+        font-size: .34rem;
+        display: flex;
+        align-items: center;
+    }
+
+        .hbNum .name span {
+            background: #D1AA74;
+            color: #fff;
+            font-weight: 400;
+            padding: .03rem .05rem;
+            border-radius: .05rem;
+            font-size: .24rem;
+            margin-left: .1rem;
+        }
+
+    .hbNum .bsclr_gay {
+        font-size: .26rem;
+    }
+
+    .hbNum .num {
+        color: #CCAE72;
+        margin-top: .5rem;
+    }
+
+        .hbNum .num span {
+            font-size: .9rem;
+            letter-spacing: 0;
+            color: #CCAE72;
+            margin-right: .1rem;
+            font-weight: bold;
+        }
+
+    .hbNum .skip {
+        display: flex;
+        align-items: center;
+    }
+
+        .hbNum .skip a {
+            color: #CCAE72;
+            font-size: .26rem;
+        }
+
+        .hbNum .skip i {
+            color: #CCAE72;
+            font-size: .26rem;
+        }
+
+.hbNumRecord {
+    margin-top: .2rem;
+    background: #fff;
+}
+
+    .hbNumRecord .hbDetails {
+        padding: .2rem;
+        color: #AEAEAE;
+        border-bottom: 1px solid #F1F1F1;
+    }
+
+.hbNumRecord_list {
+    padding-bottom: .2rem;
+    height: calc(100vh - 6.2rem);
+    overflow-x: auto;
+}
+
+    .hbNumRecord_list li {
+        display: flex;
+        justify-content: space-between;
+        margin: .2rem 0;
+        padding: 0 .2rem;
+    }
+
+        .hbNumRecord_list li .picBox {
+            width: 15%;
+            border-radius: .05rem;
+            overflow: hidden;
+        }
+
+            .hbNumRecord_list li .picBox img {
+                max-height: 100%;
+            }
+
+        .hbNumRecord_list li .textBox {
+            width: 83%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #F1F1F1;
+        }
+
+            .hbNumRecord_list li .textBox .left .name {
+                font-weight: bold;
+                padding-bottom: .2rem;
+            }
+
+            .hbNumRecord_list li .textBox .left .name {
+                font-weight: bold;
+                padding-bottom: .2rem;
+            }
+
+
+/* ------------ 9.22新加 ------------ */
+.wantRedeem_topBg {
+    position: absolute;
+    top: .86rem;
+    left: 0;
+    width: 100vw;
+    z-index: -1;
+}
+
+.wantRedeem_topPd {
+    height: 3.7rem;
+}
+
+.wantRedeemBox {
+    display: flex;
+    align-items: center;
+    width: 96%;
+    margin: .2rem auto;
+    background: #fff;
+    border-radius: .1rem;
+    padding: .2rem;
+    box-shadow: 0px 0px 0.05rem rgba(240, 236, 236, .8);
+}
+
+    .wantRedeemBox img {
+        width: 1.7rem;
+        height: 1.7rem;
+        margin-left: .2rem;
+        border-radius: .05rem;
+    }
+
+    .wantRedeemBox p {
+        margin-left: .5rem;
+        color: #FC3900;
+        font-size: .4rem;
+    }
+
+    .wantRedeemBox input.orgRadio {
+        -webkit-appearance: none;
+        width: .4rem;
+        height: .4rem;
+        border: 1px solid #FE3D26;
+        border-radius: 50%;
+        transition: .3s;
+    }
+
+        .wantRedeemBox input.orgRadio:checked {
+            background: #FE3D26;
+            position: relative;
+        }
+
+            .wantRedeemBox input.orgRadio:checked::before {
+                content: '';
+                width: .22rem;
+                height: .22rem;
+                background: #fff;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                border-radius: 50%;
+                transform: translate(-50%,-50%);
+            }
+
+.TeamBuy_Data {
+    display: flex;
+    align-items: center;
+    width: 96%;
+    margin: .2rem auto;
+    background: #fff;
+    padding: .2rem;
+    border-radius: .1rem;
+}
+
+    .TeamBuy_Data .left {
+        display: flex;
+        align-items: center;
+        flex: 6;
+    }
+
+        .TeamBuy_Data .left img {
+            width: 1rem;
+            height: 1rem;
+            border-radius: 50%;
+            margin-right: .4rem;
+        }
+
+    .TeamBuy_Data .right {
+        flex: 3.5;
+        display: flex;
+        text-align: center;
+        justify-content: space-around;
+    }
+
+        .TeamBuy_Data .right .bsclr_gay {
+            padding-top: .1rem;
+        }
+
+.teamBuyJl_list li {
+    display: flex;
+    width: 96%;
+    margin: .2rem auto;
+    background: #fff;
+    padding: .2rem;
+    border-radius: .1rem;
+}
+
+.teamBuyJl_list .picBox {
+    flex: 2.5;
+}
+
+.teamBuyJl_list .textBox {
+    flex: 7;
+    padding: .05rem 0;
+    padding-left: .2rem;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+}
+
+    .teamBuyJl_list .textBox .headline {
+        font-size: .32rem;
+    }
+
+    .teamBuyJl_list .textBox .people {
+        font-size: .24rem;
+        background: #fff;
+        display: flex;
+        justify-content: space-between;
+        border: 1px solid #FE3D26;
+        color: #FE3D26;
+        border-radius: .05rem;
+        padding-right: .05rem;
+        font-weight: 400;
+    }
+
+        .teamBuyJl_list .textBox .people i {
+            background: #FFC1BC;
+            color: #FE3D26;
+            font-size: .34rem;
+        }
+
+    .teamBuyJl_list .textBox > div {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+        .teamBuyJl_list .textBox > div p {
+            font-size: .32rem;
+            letter-spacing: 0;
+            font-weight: bold;
+        }
+
+            .teamBuyJl_list .textBox > div p .bsclr_gay {
+                font-size: .24rem;
+            }
+
+        .teamBuyJl_list .textBox > div .seeJl {
+            color: #fff;
+            padding: .1rem .2rem;
+            border-radius: .1rem;
+            background: #FE3D26;
+            font-size: .26rem;
+            position: relative;
+            top: -.1rem;
+        }
+
+.winningRecord {
+    background: url(../images/TeamJls.png) no-repeat;
+    background-size: 100% 100%;
+    height: 5rem;
+    margin: .2rem auto;
+    padding: 0 .38rem;
+    padding-top: .35rem;
+}
+
+    .winningRecord .headline {
+        margin: .2rem auto;
+        width: 45%;
+        letter-spacing: 0;
+        color: #fff;
+        background: #F02F28;
+        text-align: center;
+        height: .65rem;
+        line-height: .65rem;
+        border-radius: .1rem;
+    }
+
+.Jl_swiperTop {
+    display: flex;
+    width: 100%;
+}
+
+    .Jl_swiperTop > p {
+        flex: 1;
+        text-align: center;
+        font-weight: bold;
+    }
+
+    .Jl_swiperTop .name,
+    .Jl_swiperTop .date {
+        flex: 1.6;
+    }
+
+.Jl_swiper {
+    height: 3.4rem;
+}
+
+    .Jl_swiper .swiper-slide {
+        display: flex;
+    }
+
+        .Jl_swiper .swiper-slide p {
+            flex: 1;
+            text-align: center;
+            letter-spacing: 0;
+            font-size: .24rem;
+            color: #F02F28;
+        }
+
+        .Jl_swiper .swiper-slide .name,
+        .Jl_swiper .swiper-slide .date {
+            flex: 1.6;
+        }
+
+.teamWinningJl_list li {
+    display: flex;
+    align-items: center;
+    width: 96%;
+    margin: .2rem auto;
+    border-bottom: 1px solid #F6ECEB;
+    padding: .2rem 0;
+}
+
+.teamWinningJl_list .picBox {
+    flex: 1.5;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.teamWinningJl_list .textBox {
+    flex: 8.5;
+    padding-left: .2rem;
+}
+
+    .teamWinningJl_list .textBox .headline {
+        font-size: .3rem;
+    }
+
+    .teamWinningJl_list .textBox .subTitle {
+        font-size: .24rem;
+        margin-top: .1rem;
+        white-space: nowrap;
+        letter-spacing: 0;
+    }
+
+        .teamWinningJl_list .textBox .subTitle .bsclr_org {
+            font-size: .24rem;
+        }
+
+        .teamWinningJl_list .textBox .subTitle .date {
+            font-size: .24rem;
+            float: right;
+        }

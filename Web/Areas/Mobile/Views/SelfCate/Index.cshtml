@@ -1,0 +1,225 @@
+﻿@{
+    Layout = null;
+    string Id = ReqHelper.GetString("id");
+    if (Id == "")
+    {
+        Id = "8";
+    }
+
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>@("商品分类")</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+    <meta name="format-detection" content="telephone=no">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <link href="/assets/t1/css/iconfont.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/mobile/css/style.css" rel="stylesheet" />
+    <link id="wechatMenuStyle" href="/assets/t1/css/wechatmenu.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="/assets/t1/css/class.css" type="text/css">
+    <link href="~/assets/mobile/css/MyStyle.css" rel="stylesheet" />
+    <link href="~/assets/mobile/css/member.css" rel="stylesheet" />
+    <link href="~/assets/global/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <meta content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=0" name="viewport">
+    <style>
+        .header{
+            position:unset !important;
+        }
+        .round_icon {
+            width: 34px;
+            height: 34px;
+            display: flex;
+            /*border-radius: 50%;*/
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .foot-con a {
+    display: block;
+    width: 25%;
+    float: left;
+    text-align: center;
+    font-size: 12px;
+    position: relative;
+}.foot-con_2 a, .foot-con_2 .text, .foot-con_2 .glyphicon {
+    color: #999;
+}
+ .foot-con .glyphicon {
+    width: 28px;
+    height: 32px;
+    margin-top: 3px;
+    display: inline-block;
+    font-size: 15px;
+    line-height: 28px;
+    /*color: rgba(157,157,157,0.6);*/
+}.foot-con .text {
+    display: block;
+    line-height: 1;
+    margin-top: -3px;
+}
+    </style>
+    <script>
+		(function (doc, win) {
+			var docEl = doc.documentElement,
+				resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+				recalc = function () {
+					var clientWidth = docEl.clientWidth;
+					if (!clientWidth) return;
+					if (win.orientation == 90 || win.orientation == -90) { return };//@("横屏幕阻止计算宽度")
+					if (clientWidth >= 750) {
+						docEl.style.fontSize = '100px';
+					} else {
+						docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+					}
+				};
+			if (!doc.addEventListener) return;
+			win.addEventListener(resizeEvt, recalc, false);
+			doc.addEventListener('DOMContentLoaded', recalc, false);
+
+		})(document, window);
+    </script>
+</head>
+
+<body>
+    <header class="header">
+        <div class="fix_nav">
+            <div class="nav_inner">
+                <a class="nav-left back-icon" href="javascript:history.back();">@("返回")</a>
+                <div class="tit">@("分类")</div>
+            </div>
+        </div>
+    </header>
+    <div class="content controler" style="height: 87%;   ">
+        <ul class="parent-tab wp">
+            @{  var all = DB.ShopProductCategory.Where().Select(a => new { a.ID, a.PID, a.Logo, a.Name, a.Sort })
+                    .OrderBy(a => a.Sort).ToList();
+                var type2 = all.Where(a => a.PID == null).Select(a => new { a.ID, a.Name }).ToList();
+                var type22 = all.Where(a => a.PID == null && a.ID == Convert.ToInt32(Id)).Select(a => new { a.ID, a.Name }).ToList();
+                foreach (var item in type2)
+                {
+                    if (item.ID.ToString() == Id)
+                    {
+                        if (item.ID == 345)
+                        {
+                            <li id="type1" class="active" onclick="location.href='/mobile/mobilecenter/oneindex'"> @item.Name </li>
+                        }
+                        else
+                        {
+                            <li id="type1" class="active" onclick="location.href='/mobile/selfcate?id=@item.ID'"> @item.Name </li>
+                        }
+                    }
+                    else
+                    {
+                        if (item.ID == 345)
+                        {
+                            <li id="type1" onclick="location.href='/mobile/mobilecenter/oneindex'">@item.Name</li>
+                        }
+                        else
+                        {
+
+                            <li id="type1" onclick="location.href='/mobile/selfcate?id=@item.ID'">@item.Name</li>
+                        }
+                    }
+
+                }
+
+            }
+        </ul>
+        <div class="sub-tab wp">
+            <ul>
+                @{  foreach (var item in type22)
+                    {
+                        var type3 = all.Where(a => a.PID == item.ID);
+
+                        <li class="parent-item">
+                            <div class="parent-tab-t">@item.Name </div>
+                            <ol class="parent-tab-c clearfix">
+                                @{
+                                    foreach (var item3 in type3)
+                                    {
+                                        <li class="sub-tab-c-item">
+
+                                            @if (item3.ID == 345)
+                                            {
+                                                <a href="/mobile/mobilecenter/oneindex">
+                                                    <img class="round_icon" src="@item3.Logo">
+                                                    <p class="tab-name">@item3.Name</p>
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                <a href="/mobile/selfproduct?classid=@item3.ID">
+                                                    <img class="round_icon" src="@item3.Logo">
+                                                    <p class="tab-name">@item3.Name</p>
+                                                </a>
+                                            }
+                                        </li>
+                                    }
+                                }
+                            </ol>
+                        </li>
+                                    }
+                }
+            </ul>
+        </div>
+    </div>
+    @Html.Partial("_Footer")
+
+    <script type="text/javascript">
+		(function () {
+			var menuitems = document.querySelectorAll(".menuitem");
+			var _href = window.location.href;
+
+			//console.log(_href);
+
+			var i = 0, l = menuitems.length, str;
+
+			for (; i < l; i++) {
+
+				str = menuitems[i].firstChild.href;
+
+				if (_href.indexOf(str) >= 0) {
+					//console.log(str);
+					menuitems[i].classList.add('curr');
+					return;
+				}
+			}
+		})();
+    </script>
+    <script src="~/assets/global/plugins/jquery.min.js" type="text/javascript"></script>
+    <script>
+		$(function () {
+			//@("初始化")
+			$(".parent-tab>li").eq(0).addClass("");
+			// @("将数据缓存")。@("避免重复获取")dom@("数据")
+			var topwidth = $("header").innerHeight();
+			var heights = [];
+			$.each($(".parent-item"), function (i, e) {
+				heights.push($(e).offset().top - topwidth);
+			})
+
+			$("body").on("click", ".parent-tab>li", function () {
+				$(this).addClass("").siblings().removeClass("");
+				// var topheight=$("header").innerHeight();
+				// var _scroll=$($(this).attr("tag")).offset().top-topheight;
+				// console.log(topheight);
+				// console.log("@("应该设置")"+$('.sub-tab').scrollTop());
+				// console.log($($(this).attr("tag")).offset().top-topheight);
+				// console.log($($(this).attr("tag")));
+				// console.log($($(this).attr("tag")).offset().top);
+				// console.log(_scroll);
+				// $('.sub-tab').scrollTop(heights[i]);
+				var i = $(this).index();
+				$('.sub-tab').stop().animate(
+					{
+						scrollTop: heights[i] + "px"
+					},
+					{ duration: 250, easing: "swing" }
+				)
+			})
+		})
+    </script>
+</body>
+</html>

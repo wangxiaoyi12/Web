@@ -1,0 +1,36 @@
+﻿@using DataBase
+@model List<ShopProduct>
+<div class="pro_ranking">
+    <div class="title_name"><em></em>销量排行</div>
+    <div class="ranking_list">
+        <ul id="tabRank">
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                ShopProduct item = Model[i];
+                string url = Url_Shop.GetProduct(item);
+                if (i == 0)
+                {
+                    <li class="t_p on">
+                        <em class="icon_ranking">@(i+1)</em>
+                        <dt><h3><a href="@url">@item.Title</a></h3></dt>
+                        <dd class="clearfix">
+                            <a href="@url"><img src="@Url_Shop.GetProductImg(item)" width="90" height="90" /></a>
+                            <span class="Price">@Url_Shop.GetProductPrice(item)</span>
+                        </dd>
+                    </li>
+                }
+                else
+                {
+                    <li class="t_p">
+                        <em class="icon_ranking">@(i+1)</em>
+                        <dt><h3><a href="@url">@item.Title</a></h3></dt>
+                        <dd class="clearfix">
+                            <a href="@url"><img src="@Url_Shop.GetProductImg(item)" width="90" height="90" /></a>
+                            <span class="Price">@Url_Shop.GetProductPrice(item)</span>
+                        </dd>
+                    </li>
+                }
+            }
+        </ul>
+    </div>
+</div>

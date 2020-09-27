@@ -1,0 +1,185 @@
+﻿@using DataBase
+@using Business
+@{
+
+    ViewBag.Title = ("收益提现");
+    Member_Info member = ViewBag.m as Member_Info;
+}
+<div class="personal">
+    <div class="container top-container">
+        <div class="row">
+            <header class="header header_1">
+                <div class="fix_nav">
+                    <div class="nav_inner">
+                        <a class="nav-left back-icon" href="javascript:history.back();">@("返回")</a>
+                        <div class="tit">@("收益提现")</div>
+                    </div>
+                </div>
+            </header>
+        </div>
+    </div>
+
+    <div class="container middle">
+
+        @*<div class="row ">
+                <div class="list-group-item">
+                    @("最高价格")：<span class="max_price">$@(DB.XmlConfig.XmlSite.MaxPrice)</span>
+                    @("最低价格")：<span class="min_price">$@(DB.XmlConfig.XmlSite.MinPrice)</span><br />
+                    @("最大交易量")：<span class="max_price">@(DB.XmlConfig.XmlSite.MaxCount)</span>
+                    @("最小交易量")：<span class="min_price">@(DB.XmlConfig.XmlSite.MinCount)</span>
+                </div>
+            </div>*@
+
+        <form action="" class="myform" id="form1">
+            <div style="height:15px"></div>
+            <div class="row">
+                <div class="list-group">
+                    <div class="list-group-item">
+                        <div class="pull-left">
+                            @("收益积分")
+                        </div>
+                        <div class="pull-right">
+                            @member.Commission
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+              
+                <div id="USD">
+                    <div class="list-group">
+                        <div class="list-group-item">
+                            <div class="pull-left">
+                                @("选择银行")
+                            </div>
+                            <div class="pull-right">
+                                @member.BankName
+                                @*<select name="BankName" class="form-control select2" nullmsg="" errormsg="@("请选择银行")" required>
+                                        <option value="">@("请选择银行")...</option>
+                                        @{
+                                            foreach (var item in ViewData["Banks"] as dynamic)
+                                            {
+                                                if (member.BankName == item.BasicDataName)
+                                                {
+                                                    <option value="@item.BasicDataName" selected="selected">@item.BasicDataName</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@item.BasicDataName">@item.BasicDataName</option>
+                                                }
+                                            }
+                                        }
+                                    </select>*@
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="list-group-item">
+                            <div class="pull-left">
+                                @("账号")
+                            </div>
+                            <div class="pull-right">
+                                @(member.BankCode)
+                                @*<input type="text" name='bankcode' readonly value="@(member.BankCode)" required>*@
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="list-group-item">
+                            <div class="pull-left">
+                                @("账户名")
+                            </div>
+                            <div class="pull-right">
+                                @(member.BankAccount == "" ? "" : member.BankAccount)
+                                @*<input type="text" name='BankAccount' readonly value="@(member.BankAccount)" placeholder="@("请输入真实姓名")" required>*@
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </div>
+     
+                <div class="list-group-item">
+                    <div class="pull-left">
+                        @("提收益额")
+                    </div>
+                    <div class="pull-right">
+                        <input name='DrawAmount' type="text" id="txtDrawAmount" placeholder="@("请输入金额")">
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="list-group-item">
+                    <div class="pull-left">
+                        @("支付密码")
+                    </div>
+                    <div class="pull-right">
+                        <input name='payPwd' type="password" id="txtpayPwd" placeholder="@("请输入支付密码")">
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="list-group-item">
+                    <div class="pull-left">
+                        @("备注")
+                    </div>
+                    <div class="pull-right">
+                        <textarea type="text" name='Comment' id="txtComment" class="txt" placeholder="@("请输入备注")"></textarea>
+
+
+                    </div><div class="clearfix"></div>
+                </div>
+
+
+            </div>
+
+
+            <div class="row" id="divBtn">
+                <button class="btn btn-block btn-primary" type='button' onclick="toDraw()">
+                    @("申请提现")
+                </button>
+            </div>
+
+
+
+        </form>
+    </div>
+
+
+
+    <script>
+   
+        $(function () {
+            $("#cancel").click(function () {
+                $(".PayPopup").hide();
+                hidMid.value = "";
+            });
+            $(".PayBtn").click(function () {
+
+                if ($("#payPwd").val() == "") {
+                    return;
+                }
+                PayOrder();
+            });
+        });
+
+        function toDraw() {
+                 PayOrder();
+      
+        }
+        function PayOrder() {
+            //alert("11");
+            $(".PayBtn").unbind("click"); //@("移除")click
+
+            $.post("/mobile/mobilecenter/ToDraw", { DrawAmount: $("#txtDrawAmount").val(), PayPwd: $("#txtpayPwd").val(), Comment: $("#txtComment").val(), DrawType: "收益" }, function (data) {
+
+                if (data.status == 1) {
+                    show('操作成功');
+                  
+                    setTimeout(function () {
+                        location.href = "/mobile/mobilecenter/DrawList";
+                    }, 500);
+                } else {
+                    show(data.msg);
+                }
+            });
+         
+        }
+       
+    </script>
+</div>
+@Html.Partial("_Footer")

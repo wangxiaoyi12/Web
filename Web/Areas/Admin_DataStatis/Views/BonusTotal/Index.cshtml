@@ -1,0 +1,264 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+    var Path = "/Admin_DataStatis/BonusTotal/";
+    var title = "收益总表";
+    var timeFlag = "时间";
+}
+
+<!-- BEGIN PAGE BAR -->
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="/SysManage/Home/Index">首页</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#">数据统计</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="/Admin_DataStatis/BonusTotal/Index"><span>收益总表</span></a>
+        </li>
+    </ul>
+</div>
+<!-- END PAGE BAR -->
+<!-- BEGIN PAGE CONTENT -->
+<div class="row">
+    <!-- BEGIN SAMPLE TABLE PORTLET-->
+    <div class="col-md-12">
+        <div class="portlet box green">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-database"></i>@(title)列表
+                </div>
+                <div class="tools">
+                    <a style="color:white" onclick="ToExcel()" title="导出Excel"> <i class="fa fa-sign-out"></i>导出Excel </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="table-responsive">
+                    <div class="table-toolbar col-md-3">
+                        <div class="btn-group">
+                            <a href="@(Path)Member" class="btn green">
+                                <i class="fa fa-trash-o"></i> 按会员统计
+                            </a>
+                        </div>
+                    </div>
+                    <form class="form form-horizontal form-inline">
+                        <fieldset>
+                            <div class="control-group">
+                                <div class="controls">
+                                    <div class="col-md-3">
+                                    </div>
+                                    <div class="col-md-9 text-right">
+                                        <div class="input-group col-md-8">
+                                            <input type="text" value="" id="start" placeholder="@(timeFlag)起" class="form-control ">
+                                            <span class="input-group-addon"> to </span>
+                                            <input type="text" value="" id="end" placeholder="@(timeFlag)至" class="form-control ">
+                                            <a class="btn btn-default input-group-addon" href="javascript:searchList();">
+                                                <span class="glyphicon glyphicon-search "></span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+
+                </div>
+                <div class="table-responsive">
+                    <table id="datatable" class="table table-striped table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" id='checkAll'></th>
+                                <th>日期</th>
+                                <th>推广奖</th>
+                                @*<th>一代平级奖</th>
+        <th>二平级奖</th>*@
+                                <th>平级奖</th>
+                                <th>超越奖</th>
+
+
+
+                                <th>分红奖</th>
+                                <th>突出贡献奖</th>
+                                <th>代理推荐奖</th>
+                                <th>代理津贴</th>
+                                <th>拼团奖</th>
+                                <th>小计</th>
+                                <th>税</th>
+                                <th>实际金额</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                        <tfoot>
+                            <tr>
+                                <th class="text-center" colspan="2">合  计</th>
+                                <th>0</th>
+                                <th>0</th>
+                                <th>0</th>
+                                @*<th>0</th>
+        <th>0</th>*@
+                                <th>0</th>
+                                <th>0</th>
+                                <th>0</th>
+                                <th>0</th>
+                                <th>0</th>
+                                <th>0</th>
+                                <th>0</th>
+                                <th>0</th>
+                                <th></th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END SAMPLE TABLE PORTLET-->
+</div>
+
+@section scripts {
+    <script type="text/javascript">
+        var oTable;
+        var idField = "GroupDate";
+        var path = "@Path";
+        var dataSource = path + "getDataSource";
+        var searchData = function (e) {
+            return {
+                startTime: $("#start").val(),
+                end: $("#end").val(),
+                start: e.start,
+                length: e.length,
+                draw: e.draw
+            }
+        };
+        var columns = [//绑定数据
+            {
+                data: idField,
+                createdCell: function (nTd, sData, oData, iRow, iCol) {
+                    $(nTd).html("<input type='checkbox' name='checkList' value='" + sData + "'>");
+                }
+            },
+            {
+                data: 'GroupDate',
+                createdCell: function (nTd, sData, oData, iRow, iCol) {
+                    $(nTd).html(oData.GroupDate.split(' ')[0]);
+                }
+            },
+           { data: '推广奖' },
+             //{ data: '一代平级奖' },
+             //  { data: '二代平级奖' },
+            { data: '平级奖' },
+            { data: '超越奖' },
+            { data: '分红奖' },
+            { data: '突出贡献奖' },
+            { data: '代理推荐奖' },
+            { data: '代理津贴' },
+            { data: '拼团奖' },
+
+            { data: '小计' },
+            { data: '税' },
+            { data: '实际金额' },
+             {
+                 data: 'GroupDate',
+                 createdCell: function (nTd, sData, oData, iRow, iCol) {
+                     $(nTd).html("<a href='/Admin_DataStatis/BonusDetails/Index/" + oData.GroupDate.split(' ')[0] + "' name='Show' class='btn green btn-xs greend'><i class='fa fa-search'></i> 查看明细</a>&nbsp;")
+                 }
+             }
+        ];
+        function searchList() {
+            oTable.ajax.reload(null, false);
+        }
+        $(function () {
+            $('#start').datetimepicker({
+                language: 'zh-CN',
+                format: 'yyyy-mm-dd',
+                autoclose: 1,
+                minView: 2
+            }).on('changeDate', function (ev) {
+                var start = $('#start').val();
+                $('#end').datetimepicker('setStartDate', start);
+                $('#start').datetimepicker('hide');
+            });
+            $('#end').datetimepicker({
+                language: 'zh-CN',
+                format: 'yyyy-mm-dd',
+                autoclose: 1,
+                minView: 2
+            }).on('changeDate', function (ev) {
+                var end = $('#end').val();
+                $('#start').datetimepicker('setEndDate', end);
+                $('#end').datetimepicker('hide');
+            });
+        });
+        function ToExcel() {
+            var href = "/Admin_DataStatis/BonusTotal/ToExcel/收益总表?startTime=" + $("#start").val() + "&end=" + $("#end").val();
+            window.open(href);
+        }
+        $(document).ready(function () {
+            oTable = initTable();
+        });
+
+        /**
+        * 表格初始化
+        * returns {*|jQuery}
+        */
+        function initTable() {
+            var table = $("#datatable").DataTable({
+                bFilter: false,
+                dom: '<f<t>lip>',
+                ordering: false,
+                serverSide: true,
+                language: {
+                    url: '/assets/global/plugins/DataTables-1.10.12/zh-CN.json'//汉化
+                },
+                ajax: {
+                    url: dataSource,
+                    type: 'post',
+                    data: searchData
+                },   //异步加载数据
+                columnDefs: [
+            { "searchable": false, "targets": 0 },//第一列禁用搜索
+            { "orderable": false, "targets": 0 }, //第一列禁用排序
+                ],
+                columns: columns,
+                initComplete: function (settings, json) {
+                    $("a[name='Restore']").css("visibility", $("#IsRestore").val());
+                },
+                footerCallback: function (tfoot, data, start, end, display) {
+                    $.ajax({
+                        url: "/Ajax/getFootTotal",// 跳转到 action
+                        data: { startTime: $("#start").val(), end: $("#end").val() },
+                        type: "post",
+                        cache: false,
+                        dataType: "json",
+                        success: function (entity) { 
+                            var total = 0;
+                            $(tfoot).find('th').eq(1).html(entity.推广奖).css("color", "red");
+                            //$(tfoot).find('th').eq(2).html(entity.一代平级奖).css("color", "red");
+                            //$(tfoot).find('th').eq(3).html(entity.二代平级奖).css("color", "red");
+                            $(tfoot).find('th').eq(2).html(entity.平级奖).css("color", "red");
+                            $(tfoot).find('th').eq(3).html(entity.超越奖).css("color", "red");
+
+                            $(tfoot).find('th').eq(4).html(entity.分红奖).css("color", "red");
+                            $(tfoot).find('th').eq(5).html(entity.突出贡献奖).css("color", "red");
+                            $(tfoot).find('th').eq(6).html(entity.代理推荐奖).css("color", "red");
+                            $(tfoot).find('th').eq(7).html(entity.代理津贴).css("color", "red");
+                            $(tfoot).find('th').eq(8).html(entity.拼团奖).css("color", "red");
+
+                            $(tfoot).find('th').eq(9).html(entity.小计).css("color", "red");
+                            $(tfoot).find('th').eq(10).html(entity.税).css("color", "red");
+                            $(tfoot).find('th').eq(11).html(entity.实际金额).css("color", "red");
+                        
+                        }
+                    });
+                }
+            });
+            return table;
+        }
+    </script>
+
+}

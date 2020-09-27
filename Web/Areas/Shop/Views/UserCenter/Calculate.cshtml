@@ -1,0 +1,168 @@
+﻿@using DataBase
+@using Business
+@{
+    ViewBag.Title = "确认付款";
+    Member_Info curUser = User_Shop.GetMember_Info();
+    string orderid = ReqHelper.GetString("id");
+}
+@section Head{
+    <style>
+        .right_direction h1 {
+            margin-bottom: 30px;
+            text-indent: 20px;
+        }
+
+        .right_direction p {
+            line-height: 30px;
+            font-size: 14px;
+            padding-left: 20px;
+        }
+
+            .right_direction p label {
+                margin-right: 10px;
+            }
+
+            .right_direction p span,
+            .right_direction p i {
+                color: #F00;
+                font-size: 16px;
+            }
+
+        .Product_List .price_style .btn {
+            float: none;
+        }
+    </style>
+}
+@section Footer{
+    <script>
+        $(function () {
+            //绑定付款
+            $('.submit_btn').click(function () {
+                //var storecode = $('#StoreCode').val();
+                //if (storecode.length <= 0) {
+                //    alert('请填写社区店编号');
+                //    return;
+                //}
+                $.myPost('/shop/usercenter/CalcuteForm', {
+                    orderid: '@orderid'
+                    //paytype: $('input[name="PayType"]:checked').val()
+                    //storecode: storecode
+                }, function (data) {
+                    if (data.msg.indexOf('http') != -1) {
+                        //跳转支付
+                        //window.open(data.msg,"_blank");
+                        alert('支付接口完善中...');
+                    } else {
+                        alert(data.msg);
+                        setTimeout(function () {
+                            location.href = '@Url.Action("orderform")';
+                        }, 800);
+                    }
+                }, function (data) {
+                    alert(data.msg);
+                    $('.submit_btn').prop('disabled', false);
+                });
+                $('.submit_btn').prop('disabled', true);
+                return false;
+            });
+        });
+    </script>
+}
+<!--购物车样式-->
+<div class="Inside_pages">
+    <div class="Process_img"><img src="/assets/shop/images/Process_img_01.png" /></div>
+    <div class="Product_List clearfix">
+        <div class="price_style">
+            <div class="right_direction" style="float:none;margin:auto;padding:50px 0px;">
+                <h1>订单生成成功</h1>
+                @{
+                    int state = ShopEnum.OrderState.Submit.GetHashCode();
+                    var query = DB.ShopOrder
+                        .Where(q => q.MemberID == curUser.MemberId && q.State == state);
+                    if (string.IsNullOrEmpty(orderid) == false)
+                    {
+                        query = query.Where(q => q.GUID == orderid);
+                    }
+
+                    List<ShopOrder> orderList = query
+                        .ToList();
+                    decimal totalAmount = orderList.Sum(q => q.RealShopping);
+                    decimal totalScore = orderList.Sum(q => q.RealScore);//收益
+                    decimal yunfei = Convert.ToDecimal(orderList.Sum(q => q.Postage));
+                    decimal totalCongXiao = orderList.Sum(q => q.RealCongXiao);//配货价
+                                                                               //decimal totalMoney = orderList.Sum(q => q.RealShopping);
+
+                    ShopProduct product = DB.ShopOrderProduct.Where(q => q.OrderID == orderid)
+                                        .First().ShopProduct;
+                }
+                @if (totalScore > 0 || totalCongXiao > 0)
+                {
+                    <p><label>总现金&emsp;</label><span>@(totalScore)</span><i>￥</i></p>
+                    <p><label>总配货价&emsp;</label><span>@(totalCongXiao)</span><i>￥</i></p>
+                }
+                else
+                {
+                    <p><label>总金额&emsp;</label><span>@(totalAmount)</span><i>￥</i></p>
+                }
+             
+              
+                <p><label>运费&emsp;</label><span>@(yunfei)</span><i>￥</i></p>
+                <p style="height:20px;"></p>
+                @*@if (product.IsDingDan())
+                    {*@
+                @*<p>选择支付方式：</p>
+                    <p>
+                        <label><input type="radio" name="PayType" value="5" checked /> 电子币</label>
+                    </p>*@
+                @*<p>
+                        <label><input type="radio" name="PayType" value="3" /> 全额现金</label>
+                    </p>*@
+                @*}
+                    else if (product.IsLvLiu())
+                    {
+                        <p>选择支付方式：</p>
+                        <p>
+                            <label><input type="radio" name="PayType" value="6" checked /> 全额旅游积分</label>
+                        </p>
+                    }*@
+                @*else
+                    {
+                        <p>支付详细统计：</p>
+                        <p><label>现金&emsp;</label><span>@(totalMoney)</span></p>
+                        if (totalScore > 0)
+                        {
+                            <p><label>积分&emsp;</label><span>@(totalScore)</span></p>
+                        }
+                        if (totalCongXiao > 0)
+                        {
+                            <p><label>邮费&emsp;</label><span>@(totalCongXiao) ￥</span></p>
+                        }
+                        <br /><br />
+
+                        <p>选择支付方式：</p>
+                        <p>
+                            <label><input type="radio" name="PayType" value="1" checked /> 积分+收益</label>
+                        </p>
+                        <p>
+                            <label><input type="radio" name="PayType" value="4" /> 积分+电子币</label>
+                        </p>
+                    }*@
+                <br />
+                <small style="color:#aaa;">(注：个人账户信息，收益：<b>@(curUser.Commission)</b>&nbsp;&nbsp;&nbsp;推广奖：<b>@(curUser.ShopCoins)&nbsp;&nbsp;&nbsp;配货价：<b>@(curUser.Scores)</b></small>
+                <br /><br />
+                @*<small style="color:#aaa;">
+                        如需现金付款，请去公众号付款
+                    </small>*@
+                <br /><br />
+                @*<p><span style="color:red">*</span> 社区店编号：<input type="text" id="StoreCode" placeholder="如需公司发货，请填写admin" style="padding:3px 5px;width:200px;" /></p>
+                    <br />*@
+
+                <div class="btn">
+                    <input name="submit" type="submit" value="确认付款" class="submit_btn" />
+                    <input type="button" onclick="location.href='@Url_Shop.GetMyOrder()'" value="我的订单" class="return_btn" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <br /><br /><br /><br />
+</div>

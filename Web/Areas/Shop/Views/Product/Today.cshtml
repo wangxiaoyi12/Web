@@ -1,0 +1,28 @@
+﻿@using DataBase
+@model List<ShopProduct>
+
+<div class="page_recommend">
+    <div class="hd"><em></em>今日推荐<ul></ul></div>
+    <div class="bd">
+        <ul>
+            @foreach (var item in Model)
+            {
+                string url = Url_Shop.GetProduct(item);
+            <li>
+                <div class="img"><a href="@url"><img src="@Url_Shop.GetProductImg(item)" width="120" height="120" /></a></div>
+                <div class="pro_info">
+                    <a href="@url">@item.Title</a>
+                    <p class="Price">@Url_Shop.GetProductPrice(item)</p>
+                    <p class="Sales">热销：<b>@item.Sales</b>件</p>
+                </div>
+            </li>
+            }
+        </ul>
+    </div>
+    <a class="next" href="javascript:void(0)"><em class="iconfont icon-left"></em></a>
+    <a class="prev" href="javascript:void(0)"><em class="iconfont icon-right"></em></a>
+</div>
+
+<script type="text/javascript">
+            jQuery(".page_recommend").slide({ titCell: ".hd ul", mainCell: ".bd ul", autoPage: true, effect: "left", autoPlay: true, vis: 4, trigger: "click" });
+</script>

@@ -1,0 +1,202 @@
+﻿@model DataBase.ShopOneBuy
+@{
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+}
+@section css{
+}
+<!-- BEGIN PAGE BAR -->
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="/SysManage/Desk/Index">首页</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#"><span>商城管理</span></a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#"><span>一元购</span></a>
+        </li>
+    </ul>
+</div>
+<!-- END PAGE BAR -->
+<!-- BEGIN PAGE CONTENT -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet light bordered">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="font-green-sharp fa fa-user"></i>
+                    <span class="caption-subject font-green-sharp bold uppercase">@ViewBag.Title<span>一元购</span></span>
+                </div>
+            </div>
+            <div class="portlet-body">
+                @using (Ajax.BeginForm("Save", null, new AjaxOptions()
+                {
+                    HttpMethod = "Post",
+                    OnBegin = "SubAjax.Loading",
+                    OnComplete = "SubAjax.Complate",
+                    OnFailure = "SubAjax.Failure",
+                    OnSuccess = "SubAjax.Success"
+                }, new { @class = "form-horizontal", @role = "form", @id = "commentForm" }))
+                {
+                    <div class="form-body">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red">*</span>期号：</label>
+                            <div class="col-md-4">
+                                <input type="hidden" name="ID" value="@Model.ID" />
+                                <input type="hidden" name="IsFinish" value="@Model.IsFinish" />
+                                <input type="hidden" name="ProductID" value="@Model.ProductID" />
+                                <input type="hidden" name="FinishTime" value="@Model.FinishTime" />
+                                <input type="hidden" name="WinTime" value="@Model.WinTime" />
+                                <input type="hidden" name="State" value="@Model.State" />
+                                @if (Model.ID == 0)
+                                {
+                                    <input type="text" name="Code" value="@Model.Code" class="form-control" nullmsg="请输入一元购期号" datatype="*1-20" errormsg="一元购期号不正确">
+                                }
+                                else
+                                {
+                                    <input type="hidden" name="Code" value="@Model.Code" />
+                                    <label class="control-label">@Model.Code</label>
+                                }
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red"></span>商品：</label>
+                            <div class="col-md-4">
+                                <label class="control-label">   @ViewBag.PName</label>
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red"></span>总需人次：</label>
+                            <div class="col-md-4">
+                                <input type="text" name="TotalCount" value="@Model.TotalCount" class="form-control" nullmsg="请输入总人次" datatype="n1-20" errormsg="总人次不正确">
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red"></span>参与人次：</label>
+                            <div class="col-md-4">
+                                <label class="control-label"> @Model.Count</label>
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group" style="display:none">
+                            <label class="col-md-2 control-label"><span style="color:red"></span>支付方式：</label>
+                            <div class="col-md-4">
+                                <select name="PayWay" class="form-control select2" nullmsg="">
+                                    <option value="">请选择...</option>
+                                    @{
+                                        foreach (KeyValuePair<int, string> item in ViewBag.List)
+                                        {
+                                            if (Model.PayWay == item.Key)
+                                            {
+                                                <option value="@item.Key" selected="selected">@item.Value</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.Key">@item.Value</option>
+                                            }
+                                        }
+                                    }
+                                </select>
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red"></span>添加时间：</label>
+                            <div class="col-md-4">
+                                <input type="text" name="CreateTime" id="start" value="@Model.CreateTime.ToString("yyyy-MM-dd HH:mm:ss")" class="form-control">
+                            </div>
+                            <span></span>
+                        </div>
+                        @if (Model.State == ShopEnum.OneBuyState.Finish.Value())
+                        {
+                            <div class="form-group">
+                                <label class="col-md-2 control-label"><span style="color:red"></span>完成时间：</label>
+                                <div class="col-md-4">
+                                    <label class="control-label">   @Model.FinishTime</label>
+                                </div>
+                                <span></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label"><span style="color:red"></span>获奖人编号：</label>
+                                <div class="col-md-2">
+                                    <button type="button" id="btnRandom" onclick="randomwin()" class="btn red"><i class="fa fa-check"></i><span>随机生成</span></button>
+                                </div>
+                                <div class="col-md-2">
+                                    <input type="text" name="MemberCode" id="MemberCode" ajaxurl="/Ajax/IsOneBuy/@Model.ID" datatype="*0-50" value="@Model.MemberCode" class="form-control">
+                                </div>
+                                <span></span>
+                            </div>
+                        }
+                        else if (Model.State == ShopEnum.OneBuyState.End.Value())
+                        {
+                            <div class="form-group">
+                                <label class="col-md-2 control-label"><span style="color:red"></span>完成时间：</label>
+                                <div class="col-md-4">
+                                    <label class="control-label">   @Model.FinishTime</label>
+                                </div>
+                                <span></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label"><span style="color:red"></span>获奖人：</label>
+                                <div class="col-md-4">
+                                    <label class="control-label">  会员编号:@Model.MemberCode  &nbsp;&nbsp; 姓名：@Model.NickName</label>
+                                </div>
+                                <span></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label"><span style="color:red"></span>获奖时间：</label>
+                                <div class="col-md-4">
+                                    <label class="control-label">    @Model.WinTime</label>
+                                </div>
+                                <span></span>
+                            </div>
+                        }
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red"></span>是否启用：</label>
+                            <div class="col-md-4">
+                                <input type="checkbox" name="IsEnable" value="True" @(Model.IsEnable == true ? "checked=\"checked\")" : "")>
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-actions">
+                            <div class="row">
+                                <div class="col-md-offset-3 col-md-9">
+                                    <button type="submit" id="SubSave" class="btn green"><i class="fa fa-check"></i><span>保 存</span></button>
+                                    <button type="button" class="btn default" onclick="window.history.back()"><i class="fa fa-mail-reply"></i>返回</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                                        }
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END PAGE CONTENT -->
+@section scripts{
+    <script>
+        function randomwin() {
+            $.post("/Ajax/RandomWin", {id:@Model.ID}, function (d) {
+                if(d.Status=="y"){
+                    $("#MemberCode").val(d.Msg);
+                }else{
+                    alertError("错误提示",d.Msg);
+                }
+            });
+        }
+        $(function () {
+            $('#start').datetimepicker({
+                language: 'zh-CN',
+                format: 'yyyy-mm-dd hh:ii:ss',
+                autoclose: 1,
+                //minView: 2
+            }) 
+        });
+    </script>
+}

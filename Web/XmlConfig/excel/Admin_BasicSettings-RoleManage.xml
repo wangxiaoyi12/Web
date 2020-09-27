@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<fields>
+  <field>
+    <code>role_name</code>
+    <name>角色名称</name>
+  </field>
+  <field>
+    <code>role_type</code>
+    <name>类型</name>
+  </field> 
+</fields>

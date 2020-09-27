@@ -1,0 +1,130 @@
+﻿@model DataBase.ShopBigWheel
+    @{
+        Layout = "~/Views/Shared/_LayoutPage.cshtml";
+    }
+    @section css{
+        @*<link href="~/assets/global/myplugins/Uploader/Uploader6.0.min.css" rel="stylesheet" />*@
+    }
+    <!-- BEGIN PAGE BAR -->
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="/SysManage/Home/Index">首页</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <a href="#"><span>商城管理</span></a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <a href="@(ViewBag.Path)/Index"><span>大转盘</span></a>
+            </li>
+        </ul>
+    </div>
+    <!-- END PAGE BAR -->
+    <!-- BEGIN PAGE CONTENT -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet light bordered">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="font-green-sharp fa fa-user"></i>
+                        <span class="caption-subject font-green-sharp bold uppercase">@ViewBag.Title<span>大转盘</span></span>
+                    </div>
+                </div>
+                <div class="portlet-body">
+                    @using (Ajax.BeginForm("Save", null, new AjaxOptions()
+                    {
+                        HttpMethod = "Post",
+                        OnBegin = "SubAjax.Loading",
+                        OnComplete = "SubAjax.Complate",
+                        OnFailure = "SubAjax.Failure",
+                        OnSuccess = "SubAjax.Success"
+                    }, new { @class = "form-horizontal", @role = "form", @id = "commentForm" }))
+                    {
+                        <div class="form-body">
+                            <div class="form-group">
+                                <label class="col-md-2 control-label"><span style="color:red">*</span>大转盘标题：</label>
+                                <div class="col-md-4">
+                                    <input type="hidden" name="ID" value="@Model.ID" />
+                                    <input type="hidden" name="CreateTime" value="@Model.CreateTime" />
+                                    <input type="text" name="Title" value="@Model.Title" class="form-control" nullmsg="请输入大转盘标题" datatype="*1-100" errormsg="大转盘标题不正确">
+                                </div>
+                                <span></span>
+                            </div>                             
+                            <div class="form-group">
+                                <label class="col-md-2 control-label"><span style="color:red"></span>编号：</label>
+                                <div class="col-md-4">
+                                    <input type="text" name="Code" value="@Model.Code" class="form-control" nullmsg="请输入编号" datatype="*0-50" errormsg="编号不正确">
+                                </div>
+                                <span></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label"><span style="color:red"></span>开始日期：</label>
+                                <div class="col-md-4">
+                                    <input type="text" name="StartTime" id="start" value="@(Model.StartTime==null?"":Model.StartTime.Value.ToString("yyyy-MM-dd"))" class="form-control" nullmsg="请输入开始日期" datatype="*0-50" errormsg="开始日期不正确">
+                                </div>
+                                <span></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label"><span style="color:red"></span>截止日期：</label>
+                                <div class="col-md-4">
+                                    <input type="text" name="EndTime" id="end" value="@(Model.EndTime==null?"":Model.EndTime.Value.ToString("yyyy-MM-dd"))" class="form-control" nullmsg="请输入截止日期" datatype="*0-50" errormsg="截止日期不正确">
+                                </div>
+                                <span></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label"><span style="color:red"></span>是否启用：</label>
+                                <div class="col-md-4">
+                                    <input type="checkbox" name="IsEnable" value="True" @(Model.IsEnable == true ? "checked=\"checked\")" : "")>
+                                </div>
+                                <span></span>
+                            </div> 
+                            <div class="form-group">
+                                <label class="col-md-2 control-label"><span style="color:red"></span>大转盘简介：</label>
+                                <div class="col-md-4">
+                                    <textarea name="Desc" rows="8" class="form-control" nullmsg="请输入大转盘简介">@Model.Desc</textarea>
+                                </div>
+                                <span></span>
+                            </div>
+                            <div class="form-actions">
+                                <div class="row">
+                                    <div class="col-md-offset-3 col-md-9">
+                                        <button type="submit" id="SubSave" class="btn green"><i class="fa fa-check"></i><span>保 存</span></button>
+                                        <button type="button" class="btn default" onclick="window.history.back()"><i class="fa fa-mail-reply"></i>返回</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                                            }
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END PAGE CONTENT -->
+    @section scripts{
+        <script>
+            $(function () {
+                $('#start').datetimepicker({
+                    language: 'zh-CN',
+                    format: 'yyyy-mm-dd',
+                    autoclose: 1,
+                    minView: 2
+                }).on('changeDate', function (ev) {
+                    var start = $('#start').val();
+                    $('#end').datetimepicker('setStartDate', start);
+                    $('#start').datetimepicker('hide');
+                });
+                $('#end').datetimepicker({
+                    language: 'zh-CN',
+                    format: 'yyyy-mm-dd',
+                    autoclose: 1,
+                    minView: 2
+                }).on('changeDate', function (ev) {
+                    var end = $('#end').val();
+                    $('#start').datetimepicker('setEndDate', end);
+                    $('#end').datetimepicker('hide');
+                });
+            });
+        </script>
+    }

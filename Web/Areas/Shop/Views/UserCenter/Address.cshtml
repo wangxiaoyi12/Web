@@ -1,0 +1,242 @@
+﻿@using DataBase
+@using Business
+@{
+    ViewBag.Title = "个人中心";
+    Member_Info curUser = User_Shop.GetMember_Info();
+}
+@section Head{
+    <link href="~/assets/shop/Threelinkage/linkage.css" rel="stylesheet" />
+    <style>
+        .select_adderss select {
+            min-width: 100px;
+            min-height: 25px;
+            line-height: 25px;
+        }
+        #form1 input:focus {
+            box-shadow:#ff6a00 0px 0px 3px;
+        }
+    </style>
+}
+@section Footer{
+    <script src="~/assets/shop/js/MyAddress.js"></script>
+}
+<!--用户中心样式-->
+<div class="user_style clearfix">
+    <div class="user_center clearfix">
+        <!--左侧菜单图层-->
+        @Html.Partial("LeftMenu")
+        <!--右侧内容图层-->
+        <div class="right_style">
+           
+            <div class="user_title_name"><span>地址管理</span></div>
+            <div class="frame user_address clearfix">
+                @if (ViewBag.id == null)
+                {
+                    <!--地址列表-->
+                    <div class="Address_List clearfix">
+                        @{
+                            //1.获取地址列表
+                            List<ShopMyAddress> addressList = DB.ShopMyAddress.Where(q => q.MemberID == curUser.MemberId).OrderByDescending(q => q.CreateTime)
+                                .ToList();
+                            foreach (var item in addressList)
+                            {
+                                <ul class="Address_info @(item.IsDefault==true?"active":"")" >
+                                    <div class="address_title">
+                                        <a href="@Url.Action("Address",new { id=item.ID})" class="modify" title="修改信息"></a>地址信息 @(item.IsDefault == true ? "(默认)" : "")
+                                        <a href="javascript:removeAddress('@item.ID')" class="delete "><i class="iconfont icon-close2"></i></a>
+                                    </div>
+                                    <li>@item.Name</li>
+                                    <li>@item.ShowAddressName</li>
+                                    <li>@item.Tel</li>
+                                    <li>@item.PostCode</li>
+                                    <a class="setDefault" data-id="@item.ID">设置默认</a>
+                                </ul>
+                            }
+                        }
+                    </div>
+                    <a name="add"></a>
+                    <form id="form1">
+                        <div class="Add_Addresss">
+                            <div class="title_name"><i></i>添加地址</div>
+                           
+                            <table>
+                                <tr>
+                                    <td class="label_name">收货地址</td>
+                                    <td colspan="3" class="select" style="padding:10px 10px;">
+                                        <span class="select_adderss">
+                                            <label> 省份 </label>
+                                            <select class="kitjs-form-suggestselect " id="ProvId" name="ProvId" onchange="changeProv()">
+                                                @{
+                                                    //省列表
+                                                    List<Area_Province> proList = DB.Area_Province.ToList();
+                                                    foreach (var item in proList)
+                                                    {
+                                                        if (item.id == curUser.ProvId)
+                                                        {
+                                                            <option value="@item.id" selected>@item.name</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@item.id">@item.name</option>
+                                                        }
+                                                    }
+                                                }
+                                            </select>
+                                        </span>
+                                        <span class="select_adderss">
+                                            <label> 市/县 </label>
+                                            <select class="kitjs-form-suggestselect " id="CityId" name="CityId" onchange="changeCity()">
+                                                @{
+                                                    //省列表
+                                                    List<Area_City> cityList = DB.Area_City.ToList();
+                                                    foreach (var item in cityList)
+                                                    {
+                                                        if (item.id == curUser.CityId)
+                                                        {
+                                                            <option value="@item.id" selected>@item.name</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@item.id">@item.name</option>
+                                                        }
+                                                    }
+                                                }
+                                            </select>
+                                        </span>
+                                        <span class="select_adderss">
+                                            <label> 区/县 </label>
+                                            <select class="kitjs-form-suggestselect" id="CountyId" name="CountyId">
+                                                @{
+                                                    //省列表
+                                                    List<Area_County> countyList = DB.Area_County.ToList();
+                                                    foreach (var item in countyList)
+                                                    {
+                                                        if (item.id == curUser.CountyId)
+                                                        {
+                                                            <option value="@item.id" selected>@item.name</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@item.id">@item.name</option>
+                                                        }
+                                                    }
+                                                }
+                                            </select>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="label_name">详细地址</td>
+                                    <td><input name="Address" type="text" class="Add-text"  value="@curUser.PostAddress"/><i>（选填）</i></td>
+                                    <td class="label_name">手&nbsp;&nbsp;机</td>
+                                    <td><input name="Tel" type="text" class="Add-text" value="@curUser.Mobile" /><i>（必填）</i></td>
+                                </tr>
+                                <tr>
+                                    <td class="label_name">收件人姓名</td>
+                                    <td><input name="Name" type="text" class="Add-text" value="@curUser.NickName" /><i>（必填）</i></td>
+                                    <td class="label_name">邮&nbsp;&nbsp;编</td>
+                                    <td><input name="PostCode" type="text" class="Add-text"  /><i>（必填）</i></td>
+                                </tr>
+                            </table>
+                            <div class="address_Note"><span>注：</span>只能添加5个收货地址信息。请勿用假名填写地址，如造成损失由收货人自己承担。</div>
+                            <div class="btn"><input name="1" type="button" value="添加地址" class="Add_btn" /></div>
+                        </div>
+                    </form>
+                           }
+                        else
+                        {
+                            int id = ViewBag.id;
+                            ShopMyAddress address = DB.ShopMyAddress.FindEntity(q=>q.ID== id);
+                            <form id="form1">
+                                <input name="id" type="hidden" value="@address.ID" />
+                                <div class="Add_Addresss">
+                                    <div class="title_name"><i></i>修改地址</div>
+                                    <table>
+                                        <tr>
+                                            <td class="label_name">收货地址</td>
+                                            <td colspan="3" class="select" style="padding:10px 10px;">
+                                                <span class="select_adderss">
+                                                    <label> 省份 </label>
+                                                    <select class="kitjs-form-suggestselect " id="ProvId" name="ProvId" onchange="changeProv()">
+                                                        @{
+                                                            //省列表
+                                                            List<Area_Province> proList = DB.Area_Province.ToList();
+                                                            foreach (var item in proList)
+                                                            {
+                                                                if (item.id == address.ProvId)
+                                                                {
+                                                                    <option value="@item.id" selected>@item.name</option>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <option value="@item.id">@item.name</option>
+                                                                }
+                                                            }
+                                                        }
+                                                    </select>
+                                                </span>
+                                                <span class="select_adderss">
+                                                    <label> 市/县 </label>
+                                                    <select class="kitjs-form-suggestselect " id="CityId" name="CityId" onchange="changeCity()">
+                                                        @{
+                                                            //省列表
+                                                            List<Area_City> cityList = DB.Area_City.ToList();
+                                                            foreach (var item in cityList)
+                                                            {
+                                                                if (item.id == address.CityID)
+                                                                {
+                                                                    <option value="@item.id" selected>@item.name</option>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <option value="@item.id">@item.name</option>
+                                                                }
+                                                            }
+                                                        }
+                                                    </select>
+                                                </span>
+                                                <span class="select_adderss">
+                                                    <label> 区/县 </label>
+                                                    <select class="kitjs-form-suggestselect" id="CountyId" name="CountyId">
+                                                        @{
+                                                            //省列表
+                                                            List<Area_County> countyList = DB.Area_County.ToList();
+                                                            foreach (var item in countyList)
+                                                            {
+                                                                if (item.id == address.CountyID)
+                                                                {
+                                                                    <option value="@item.id" selected>@item.name</option>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <option value="@item.id">@item.name</option>
+                                                                }
+                                                            }
+                                                        }
+                                                    </select>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="label_name">详细地址</td>
+                                            <td><input name="Address" type="text" class="Add-text" value="@address.Address" /><i>（选填）</i></td>
+                                            <td class="label_name">手&nbsp;&nbsp;机</td>
+                                            <td><input name="Tel" type="text" class="Add-text"  value="@address.Tel"/><i>（必填）</i></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="label_name">收件人姓名</td>
+                                            <td><input name="Name" type="text" class="Add-text" value="@address.Name" /><i>（必填）</i></td>
+                                            <td class="label_name">邮&nbsp;&nbsp;编</td>
+                                            <td><input name="PostCode" type="text" class="Add-text" value="@address.PostCode" /><i>（必填）</i></td>
+                                        </tr>
+                                    </table>
+                                    <div class="address_Note"><span>注：</span>只能添加5个收货地址信息。请勿用假名填写地址，如造成损失由收货人自己承担。</div>
+                                    <div class="btn"><input name="1" type="button" value="确定修改" class="Add_btn" /></div>
+                                </div>
+                            </form>
+                    }
+                
+            </div>
+        </div>
+    </div>
+</div>

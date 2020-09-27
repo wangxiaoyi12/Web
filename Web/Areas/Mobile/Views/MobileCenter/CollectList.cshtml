@@ -1,0 +1,64 @@
+﻿@using DataBase
+@model List<ShopCollectionProduct>
+@{ 
+    Member_Info curUser = User_Shop.GetMember_Info();
+}
+@{
+    foreach (var item in Model)
+    {
+        ShopProduct product = item.ShopProduct;
+        string url = Url_Mobile.GetProduct(product);
+        <ul class="list-group productItem">
+            <li class="list-group-item text-primary">
+                <span class="glyphicon glyphicon-gift "></span>
+                @product.Shop.ShopName
+            </li>
+            <li class="list-group-item hproduct clearfix">
+                <div class="p-pic">
+                    <a href="@url"><img class="img-responsive" src="@Url_Shop.GetProductImg(product)"></a>
+                </div>
+                <div class="p-info">
+                    <a href="@url"><p class="p-title">@product.Title</p></a>
+                    <p class="p-origin">
+                        <a class="close p-close deleteCollectBtn" data-id="@item.ID" href="javascript:void(0);">×</a>
+                        @if (curUser.IsServiceCenter == "是")
+                        {
+                            <span>
+                                零售价: ￥@DB.ShopProduct.GetLingShouPrice(product)
+
+                            </span><br />
+                            <span>
+                                配货价: ￥@DB.ShopProduct.GetPeiHuoPrice(product)
+
+                            </span>
+                        }
+                        else
+                        {
+                            <span>
+                                零售价: ￥@DB.ShopProduct.GetLingShouPrice(product)
+
+                            </span><br />
+                            <span>
+                                优惠价: ￥@DB.ShopProduct.GetYouHuiPrice(product)
+
+                            </span>
+                        }
+                    </p>
+                </div>
+            </li>
+        </ul>
+    }
+
+    if (ViewBag.skipCount < ViewBag.recordCount)
+    {
+        <div class="btn btn-primary btn-block viewMore" data-skip="@ViewBag.skipCount">加载更多>></div>
+    }
+    else
+    {
+        <p class="noData">暂时没有数据了?</p>
+    }
+}
+
+
+
+

@@ -1,0 +1,25 @@
+﻿{
+  "sProcessing": "処理...",
+  "sLengthMenu": "表示 _MENU_ 項結果",
+  "sZeroRecords": "マッチング結果",
+  "sInfo": "表示第 _START_ ～ _END_ 項結果，全 _TOTAL_ 項",
+  "sInfoEmpty": "表示第0から0項目の結果、共0項目",
+  "sInfoFiltered": "(_MAX_ 項結果ろ過)",
+  "sInfoPostFix": "",
+  "sSearch": "検索:",
+  "sUrl": "",
+  "sEmptyTable": "表にデータを空",
+  "sLoadingRecords": "読み込み中...",
+  "sInfoThousands": ",",
+  "oPaginate": {
+    "sFirst": "トップページ",
+    "sPrevious": "にページ",
+    "sNext": "次のページ",
+    "sLast": "末页"
+  },
+  "oAria": {
+    "sSortAscending": ": 昇順配列その列",
+    "sSortDescending": ": 降順配列その列"
+  }
+
+}

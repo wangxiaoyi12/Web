@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<fields>
+  <field>
+    <code>Code</code>
+    <name>会员编号</name>
+  </field>
+  <field>
+    <code>NickName</code>
+    <name>姓名</name>
+  </field>
+  <field>
+    <code>Mobile</code>
+    <name>手机</name>
+  </field>
+  <field>
+    <code>CreateTime</code>
+    <name>注册时间</name>
+  </field>
+  <field>
+    <code>MemberLevelName</code>
+    <name>级别</name>
+  </field>
+  <field>
+    <code>Commission</code>
+    <name>收益</name>
+  </field>
+  <field>
+    <code>Coins</code>
+    <name>电子币</name>
+  </field>
+  <field>
+    <code>IsServiceCenter</code>
+    <name>状态</name>
+  </field>
+</fields>

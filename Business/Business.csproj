@@ -1,0 +1,154 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{5BD68BB3-3CE3-45C5-B985-83A324FDC4DA}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Business</RootNamespace>
+    <AssemblyName>Business</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.Extended">
+      <HintPath>..\packages\EntityFramework.Extended.6.1.0.168\lib\net45\EntityFramework.Extended.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="SMSHelper">
+      <HintPath>..\Web\bin\SMSHelper.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="EFBase.cs" />
+    <Compile Include="Implementation\Area_CityImp.cs" />
+    <Compile Include="Implementation\Area_CountyImp.cs" />
+    <Compile Include="Implementation\Fin_DrawImp.cs" />
+    <Compile Include="Implementation\Fin_InfoImp.cs" />
+    <Compile Include="Implementation\Fin_RemitImp.cs" />
+    <Compile Include="Implementation\Fin_LiuShuiImp.cs" />
+    <Compile Include="Implementation\Fin_ShiChangimpImp.cs" />
+    <Compile Include="Implementation\LogsImp.cs" />
+    <Compile Include="Implementation\Member_InfoImp.cs" />
+    <Compile Include="Implementation\Allocation_InfoImp.cs" />
+    <Compile Include="Implementation\Area_ProvinceImp.cs" />
+    <Compile Include="Implementation\Area_TownImp.cs" />
+    <Compile Include="Implementation\Article_InfoImp.cs" />
+    <Compile Include="Implementation\Bill_InfoImp.cs" />
+    <Compile Include="Implementation\BNet_InfoImp.cs" />
+    <Compile Include="Implementation\Fin_ConvertImp.cs" />
+    <Compile Include="Implementation\Fin_TransferImp.cs" />
+    <Compile Include="Implementation\Member_UpgradeImp.cs" />
+    <Compile Include="Implementation\Product_InfoImp.cs" />
+    <Compile Include="Implementation\QueryableExtension.cs" />
+    <Compile Include="Implementation\Sys_BasicTypeImp.cs" />
+    <Compile Include="Implementation\Sys_LevelImp.cs" />
+    <Compile Include="Implementation\DataBaseManager.cs" />
+    <Compile Include="Implementation\JiangImp.cs" />
+    <Compile Include="Implementation\News_InfoImp.cs" />
+    <Compile Include="Implementation\Sys_BasicDataImp.cs" />
+    <Compile Include="Implementation\Sys_EmployeeImp.cs" />
+    <Compile Include="Implementation\Sys_MsgImp.cs" />
+    <Compile Include="Implementation\Sys_NavigationImp.cs" />
+    <Compile Include="Implementation\Sys_RoleImp.cs" />
+    <Compile Include="Implementation\Sys_Role_NavImp.cs" />
+    <Compile Include="Implementation\XmlConfig.cs" />
+    <Compile Include="DB.cs" />
+    <Compile Include="New\PraiseRecordImp.cs" />
+    <Compile Include="New\ScoreRecordImp.cs" />
+    <Compile Include="New\SettleRecordImp.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Shop\GuiGeName_InfoImp.cs" />
+    <Compile Include="Shop\GuiGeProduct_InfoImp.cs" />
+    <Compile Include="Shop\GuiGe_InfoImp.cs" />
+    <Compile Include="Shop\ShopArticleImp.cs" />
+    <Compile Include="Shop\ShopArticleCategoryImp.cs" />
+    <Compile Include="Shop\ShopAttentionImp.cs" />
+    <Compile Include="Shop\ShopBrandImp.cs" />
+    <Compile Include="Shop\ShopBrowsingHistoryImp.cs" />
+    <Compile Include="Shop\ShopBigWheelLogImp.cs" />
+    <Compile Include="Shop\ShopBigWheelDetailImp.cs" />
+    <Compile Include="Shop\ShopBigWheelImp.cs" />
+    <Compile Include="Shop\ShopCollectionProductImp.cs" />
+    <Compile Include="Shop\ShopCategoryPayWayImp.cs" />
+    <Compile Include="Shop\ShopExpressImp.cs" />
+    <Compile Include="Shop\ShopCatImp.cs" />
+    <Compile Include="Shop\ShopSlideImp.cs" />
+    <Compile Include="Shop\ShopMyAddressImp.cs" />
+    <Compile Include="Shop\ShopNavigationImp.cs" />
+    <Compile Include="Shop\ShopOneBuyImp.cs" />
+    <Compile Include="Shop\ShopOneBuyDetailImp.cs" />
+    <Compile Include="Shop\ShopOrderImp.cs" />
+    <Compile Include="Shop\ShopOrderCommentImp.cs" />
+    <Compile Include="Shop\ShopOrderProductImp.cs" />
+    <Compile Include="Shop\ShopOrderStateImp.cs" />
+    <Compile Include="Shop\ShopPayWayImp.cs" />
+    <Compile Include="Shop\ShopProductImp.cs" />
+    <Compile Include="Shop\ShopProductCategoryImp.cs" />
+    <Compile Include="Shop\ShopProductImageImp.cs" />
+    <Compile Include="Shop\ShopImp.cs" />
+    <Compile Include="TaskTime.cs" />
+    <Compile Include="Tools.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{F230EC8B-4F93-4866-8B04-93B43900B7A6}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DataBase\DataBase.csproj">
+      <Project>{4f3287f9-1815-41c9-be90-647466dc6066}</Project>
+      <Name>DataBase</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Wechat\Wechat.csproj">
+      <Project>{E78E4B90-4A69-438C-9FE2-F4331A055651}</Project>
+      <Name>Wechat</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

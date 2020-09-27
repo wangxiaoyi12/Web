@@ -1,0 +1,584 @@
+﻿
+@{
+    ViewBag.Title = "Detail";
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+}
+@model DataBase.Member_Info
+<!-- BEGIN PAGE BAR -->
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="/SysManage/Home/Index">首页</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#">会员管理</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="/Admin_Member/FormalMember/Index"><span>修改会员信息</span></a>
+        </li>
+    </ul>
+</div>
+<!-- END PAGE BAR -->
+<!-- BEGIN PAGE CONTENT -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet light bordered">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="font-green-sharp fa fa-user"></i>
+                    <span class="caption-subject font-green-sharp bold uppercase">修改会员信息</span>
+                </div>
+            </div>
+            <div class="portlet-body">
+                @using (Ajax.BeginForm("SaveMember", null, new AjaxOptions()
+                {
+                    HttpMethod = "Post",
+                    OnBegin = "SubAjax.Loading",
+                    OnComplete = "SubAjax.Complate",
+                    OnFailure = "SubAjax.Failure",
+                    OnSuccess = "Success"
+                }, new { @class = "form-horizontal", @role = "form", @id = "commentForm" }))
+                {
+                    <div class="form-body">
+                        <!-- Nav tabs -->
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li role="presentation" class="active"><a href="#tab1" role="tab" data-toggle="tab">会员信息</a></li>
+                            <li role="presentation"><a href="#tab2" role="tab" data-toggle="tab">会员业绩</a></li>
+                            <li role="presentation"><a href="#tab3" role="tab" data-toggle="tab">账户信息</a></li>
+                            <li role="presentation"><a href="#tab4" role="tab" data-toggle="tab">联系信息</a></li>
+                        </ul>
+
+                        <!-- Tab panes -->
+                        <div class="tab-content">
+                            <div role="tabpanel" class="tab-pane active" id="tab1">
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label"><span style="color:red">*</span>会员编号：</label>
+                                    <div class="col-md-4">
+                                        <input type="hidden" name="MemberId" value="@Model.MemberId" />
+                                        <label class="control-label"><span style="color:red"></span>@Model.Code</label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label"><span style="color:red">*</span>姓名：</label>
+                                    <div class="col-md-4">
+                                        <input type="text" name="NickName" value="@Model.NickName" class="form-control" placeholder="请输入姓名" datatype="*2-30" nullmsg="" errormsg="姓名输入汉字2-30个">
+                                    </div>
+                                    <span></span>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label"><span style="color:red">*</span>性别：</label>
+                                    <div class="col-md-4">
+                                        <div class="mt-radio-inline">
+                                            <label class="mt-radio">
+                                                <input type="radio" name="Sex" checked="checked" value="男" @(Model.Sex == "男" ? "checked" : "")> 男
+                                                <span></span>
+                                            </label>
+                                            <label class="mt-radio">
+                                                <input type="radio" name="Sex" value="女" @(Model.Sex == "女" ? "checked" : "")> 女
+                                                <span></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <span></span>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label"><span style="color:red"></span>身份证：</label>
+                                    <div class="col-md-4">
+                                        <input type="text" name="IdCode" value="@Model.IdCode" class="form-control" placeholder="请输入身份证" errormsg="身份证不正确">
+                                    </div>
+                                    <span></span>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label"><span style="color:red"></span>注册时间：</label>
+                                    <div class="col-md-4">
+                                        <label class="control-label"><span style="color:red"></span>@Model.CreateTime</label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label"><span style="color:red"></span>最后登录时间：</label>
+                                    <div class="col-md-4">
+                                        <label class="control-label"><span style="color:red"></span>@Model.LastLogin</label>
+                                    </div>
+                                </div>     <div class="form-group">
+                                    <label class="col-md-2 control-label"><span style="color:red"></span>@("级别")：</label>
+                                    <div class="col-md-4">
+                                        <select name="MemberLevelId" class="form-control select2" datatype="*" nullmsg="">
+                                            @{
+                                                foreach (var item in ViewData["ZC"] as dynamic)
+                                                {
+                                                    if (Model.MemberLevelId == item.LevelId)
+                                                    {
+                                                        <option value="@item.LevelId" selected="selected">@item.LevelName</option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value="@item.LevelId">@item.LevelName</option>
+                                                    }
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                                @*<div class="form-group">
+                                        <label class="col-md-2 control-label"><span style="color:red"></span>加盟资格：</label>
+                                        <div class="col-md-4">
+                                            <select name="MemberLevelId" class="form-control select2">
+                                                <option value="">===选择级别=</option>
+                                                @{
+                                                    foreach (var item in ViewData["Level"] as dynamic)
+                                                    {
+                                                        if (Model.MemberLevelId == item.LevelId)
+                                                        {
+                                                            <option value="@item.LevelId" selected="selected">@item.LevelName</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@item.LevelId">@item.LevelName</option>
+                                                        }
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>*@
+                                @*<div class="form-group">
+                                        <label class="col-md-2 control-label"><span style="color:red"></span>级：</label>
+                                        <div class="col-md-4">
+                                            <select name="StarLevel" class="form-control select2">
+                                                <option value=" ">===空=</option>
+                                                @{
+                                                    foreach (var item in Enums.GetList<Enums.StarLevel>())
+                                                    {
+                                                        if (Model.StarLevel == item.Key)
+                                                        {
+                                                            <option value="@item.Key" selected="selected">@item.Value</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@item.Key">@item.Value</option>
+                                                        }
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>*@
+
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label"><span style="color:red"></span>推荐人编号：</label>
+                                    <div class="col-md-4">
+                                        <label class="control-label"><span style="color:red"></span>@Model.RecommendCode</label>
+                                        @*<input type="text" readonly="readonly" name="RecommendCode" value="@Model.RecommendCode" class="form-control"
+                                            datatype="*"
+                                            errormsg="推荐人编号不能空">*@
+                                    </div>
+                                </div>
+                                @*<div class="form-group">
+                                    <label class="col-md-2 control-label"><span style="color:red"></span>店主编号：</label>
+                                    <div class="col-md-4">
+                                        <label class="control-label"><span style="color:red"></span>@Model.ServiceCenterCode</label>
+                                    </div>
+                                </div>*@
+                                @*
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label"><span style="color:red"></span>安置人编号：</label>
+                                        <div class="col-md-4">
+                                            <label class="control-label"><span style="color:red"></span>@Model.UpperCode</label>
+                                        </div>
+                                    </div>*@
+                                @*<div class="form-group">
+                                    <label class="col-md-2 control-label"><span style="color:red">*</span>是否店主：</label>
+                                    <div class="col-md-4">
+                                        <div class="mt-radio-inline">
+                                            <label class="mt-radio">
+                                                <input type="radio" name="IsServiceCenter" checked="checked" value="否" @(Model.IsServiceCenter == "否" ? "checked" : "")> 否
+                                                <span></span>
+                                            </label>
+                                            <label class="mt-radio">
+                                                <input type="radio" name="IsServiceCenter" value="是" @(Model.IsServiceCenter == "是" ? "checked" : "")> 是
+                                                <span></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <span></span>
+                                </div>*@
+                                @*<div class="form-group">
+                                        <label class="col-md-2 control-label"><span style="color:red">*</span>当前店主级别：</label>
+                                        <div class="col-md-4">
+                                            <input type="text" name="AppellationLeveName" value="@Model.AppellationLeveName" class="form-control" readonly="readonly">
+                                        </div>
+                                        <span></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label"><span style="color:red"></span>店主级别：</label>
+                                        <div class="col-md-4">
+                                            <select name="NiCheng" id="NiCheng" class="form-control select2" datatype="*" nullmsg="">
+                                                <option value="会员">会员</option>
+                                                <option value="直营店">直营店</option>
+                                                <option value="专卖店">专卖店</option>
+                                            </select>
+                                        </div>
+                                    </div>*@
+                                @*<div class="form-group">
+                                        <label class="col-md-2 control-label"><span style="color:red"></span>店主编号：</label>
+                                        <div class="col-md-4">
+                                            <label class="control-label"><span style="color:red"></span>@Model.ServiceCenterCode</label>
+                                        </div>
+                                    </div>*@
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label"><span style="color:red">*</span>是否锁定：</label>
+                                    <div class="col-md-4">
+                                        <div class="mt-radio-inline">
+                                            <label class="mt-radio">
+                                                <input type="radio" name="IsLock" checked="checked" value="否" @(Model.IsLock == "否" ? "checked" : "")> 否
+                                                <span></span>
+                                            </label>
+                                            <label class="mt-radio">
+                                                <input type="radio" name="IsLock" value="是" @(Model.IsLock == "是" ? "checked" : "")> 是
+                                                <span></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <span></span>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label"><span style="color:red">*</span>是否锁定得奖：</label>
+                                    <div class="col-md-4">
+                                        <div class="mt-radio-inline">
+                                            <label class="mt-radio">
+                                                <input type="radio" name="IsLockCommission" checked="checked" value="false" @(Model.IsLockCommission != true ? "checked" : "")> 否
+                                                <span></span>
+                                            </label>
+                                            <label class="mt-radio">
+                                                <input type="radio" name="IsLockCommission" value="true" @(Model.IsLockCommission == true ? "checked" : "")> 是
+                                                <span></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <span></span>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label"><span style="color:red">*</span>是否锁定提现：</label>
+                                    <div class="col-md-4">
+                                        <div class="mt-radio-inline">
+                                            <label class="mt-radio">
+                                                <input type="radio" name="IsLockDraw" checked="checked" value="false" @(Model.IsLockDraw != true ? "checked" : "")> 否
+                                                <span></span>
+                                            </label>
+                                            <label class="mt-radio">
+                                                <input type="radio" name="IsLockDraw" value="true" @(Model.IsLockDraw == true ? "checked" : "")> 是
+                                                <span></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <span></span>
+                                </div>
+                                <div class="form-group">
+                                        <label class="col-md-2 control-label"><span style="color:red">*</span>是否突出贡献职称：</label>
+                                        <div class="col-md-4">
+                                            <div class="mt-radio-inline">
+                                                <label class="mt-radio">
+                                                    <input type="radio" name="IsLockFen" checked="checked" value="false" @(Model.IsLockFen != true ? "checked" : "")> 否
+                                                    <span></span>
+                                                </label>
+                                                <label class="mt-radio">
+                                                    <input type="radio" name="IsLockFen" value="true" @(Model.IsLockFen == true ? "checked" : "")> 是
+                                                    <span></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <span></span>
+                                    </div>
+                            </div>
+                            <div role="tabpanel" class="tab-pane" id="tab2">
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label"><span style="color:red"></span>推荐人数：</label>
+                                    <div class="col-md-4">
+                                        <label class="control-label"><span style="color:red"></span>@ViewBag.RCount</label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label"><span style="color:red"></span>增减余额：</label>
+                                    <div class="col-md-4">
+                                        <label class="control-label" id="labCommission">@Model.Commission</label>
+                                        <input type="text" name="AddCommission" id="AddCommission" datatype="*" value="0">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label"><span style="color:red"></span>增减累计余额：</label>
+                                    <div class="col-md-4">
+                                        <label class="control-label" id="labCommissionSum"><span style="color:red"></span>@Model.CommissionSum</label>
+                                        <input type="text" name="AddCommissionSum" id="AddCommissionSum" datatype="*" value="0">
+                                    </div>
+                                </div>
+                                @*<div class="form-group">
+                                        <label class="col-md-2 control-label"><span style="color:red"></span>增减报单积分：</label>
+                                        <div class="col-md-4">
+                                            <label class="control-label" id="labCoins"><span style="color:red"></span>@Model.Coins</label>
+                                            <input type="text" id="AddCoins" name="AddCoins" datatype="*" value="0">
+                                        </div>
+                                    </div>*@
+                                @*<div class="form-group">
+                                    <label class="col-md-2 control-label"><span style="color:red"></span>增减推广奖：</label>
+                                    <div class="col-md-4">
+                                        <label class="control-label" id="ShopCoins"><span style="color:red"></span>@Model.ShopCoins</label>
+                                        <input type="text" id="AddShopCoins" name="AddShopCoins" datatype="*" value="0">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label"><span style="color:red"></span>增减积分：</label>
+                                    <div class="col-md-4">
+                                        <label class="control-label" id="Scores"><span style="color:red"></span>@Model.Scores</label>
+                                        <input type="text" id="AddScores" name="AddScores" datatype="*" value="0">
+                                    </div>
+                                </div>*@
+                                @*<div class="form-group">
+                                        <label class="col-md-2 control-label"><span style="color:red"></span>增减配货价：</label>
+                                        <div class="col-md-4">
+                                            <label class="control-label" id="Scores"><span style="color:red"></span>@Model.Scores</label>
+                                            <input type="text" id="AddScores" name="AddScores" datatype="*" value="0">
+                                        </div>
+                                    </div>
+                                    <div class="form-group" hidden>
+                                        <label class="col-md-2 control-label"><span style="color:red"></span>增减商城积分：</label>
+                                        <div class="col-md-4">
+                                            <label class="control-label" id="TourScores"><span style="color:red"></span>@Model.TourScores</label>
+                                            <input type="text" id="AddTourScores" name="AddTourScores" datatype="*" value="0">
+                                        </div>
+                                    </div>*@
+                                @*<div class="form-group">
+                                        <label class="col-md-2 control-label"><span style="color:red">*</span>支付密码：</label>
+                                        <div class="col-md-4">
+                                            <input type="password" name="Pwd2" id="Pwd2" class="form-control">
+                                        </div>
+                                        <span></span>
+                                    </div>*@
+
+                                @*<div class="form-group">
+                                        <label class="col-md-2 control-label"><span style="color:red"></span>旅游积分：</label>
+                                        <div class="col-md-4">
+                                            <label class="control-label" id="TourScores"><span style="color:red"></span>@Model.TourScores</label>
+                                            <input type="text" id="AddTourScores" name="AddTourScores" datatype="*" value="0">
+                                        </div>
+                                    </div>*@
+                            </div>
+                            <div role="tabpanel" class="tab-pane" id="tab3">
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label"><span style="color:red"></span>银行名称：</label>
+                                    <div class="col-md-4">
+                                        <select name="BankName" class="form-control select2" nullmsg="" errormsg="请选择银行">
+                                            <option value="">请选择银行...</option>
+                                            @{
+                                                foreach (var item in ViewData["Banks"] as dynamic)
+                                                {
+                                                    if (Model.BankName == item.BasicDataName)
+                                                    {
+                                                        <option value="@item.BasicDataName" selected="selected">@item.BasicDataName</option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value="@item.BasicDataName">@item.BasicDataName</option>
+                                                    }
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                    <span></span>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label"><span style="color:red"></span>开户行：</label>
+                                    <div class="col-md-4">
+                                        <input type="text" name="OpenBank" value="@Model.OpenBank" class="form-control" errormsg="请填写开户行">
+                                    </div>
+                                    <span></span>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label"><span style="color:red"></span>地址：</label>
+                                    <div class="col-md-4">
+                                        <input type="text" name="BankAddress" value="@Model.BankAddress" class="form-control" errormsg="请填写开户行地址">
+                                    </div>
+                                    <span></span>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label"><span style="color:red"></span>户名：</label>
+                                    <div class="col-md-4">
+                                        <input type="text" name="BankAccount" value="@Model.BankAccount" class="form-control" errormsg="请填写户名">
+                                    </div>
+                                    <span></span>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label"><span style="color:red"></span>账号：</label>
+                                    <div class="col-md-4">
+                                        <input type="text" name="BankCode" value="@Model.BankCode" class="form-control" errormsg="请填写银行账号">
+                                    </div>
+                                    <span></span>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label"><span style="color:red"></span>支付宝：</label>
+                                    <div class="col-md-4">
+                                        <input type="text" name="Alipay" value="@Model.Alipay" class="form-control" errormsg="请填写支付宝">
+                                    </div>
+                                    <span></span>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label"><span style="color:red"></span>微信：</label>
+                                    <div class="col-md-4">
+                                        <input type="text" name="WeiXin" value="@Model.WeiXin" class="form-control" errormsg="请填写微信">
+                                    </div>
+                                    <span></span>
+                                </div>
+                            </div>
+                            <div role="tabpanel" class="tab-pane" id="tab4">
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label">@*<span style="color:red">*</span>*@省：</label>
+                                    <div class="col-md-4">
+                                        <select id="ProvId" name="ProvId" class="form-control select2" onchange="changeProv()">
+                                            <option value="">请选择省...</option>
+                                            @{
+                                                foreach (var item in ViewData["Prov"] as dynamic)
+                                                {
+                                                    if (Model.ProvId == item.id)
+                                                    {
+                                                        <option value="@item.id" selected="selected">@item.name</option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value="@item.id">@item.name</option>
+                                                    }
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                    <span></span>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label"><span style="color:red"></span>市：</label>
+                                    <div class="col-md-4">
+                                        <select id="CityId" name="CityId" class="form-control select2" errormsg="请选择市" onchange="changeCity()">
+                                            @{
+                                                foreach (var item in ViewData["City"] as dynamic)
+                                                {
+                                                    if (Model.CityId == item.id)
+                                                    {
+                                                        <option value="@item.id" selected="selected">@item.name</option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value="@item.id">@item.name</option>
+                                                    }
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                    <span></span>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label"><span style="color:red"></span>区：</label>
+                                    <div class="col-md-4">
+                                        <select id="CountyId" name="CountyId" class="form-control select2" errormsg="请选择区">
+                                            @{
+                                                foreach (var item in ViewData["County"] as dynamic)
+                                                {
+                                                    if (Model.CountyId == item.id)
+                                                    {
+                                                        <option value="@item.id" selected="selected">@item.name</option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value="@item.id">@item.name</option>
+                                                    }
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                    <span></span>
+                                </div>
+
+                                <div class="form-group" hidden>
+                                    <label class="col-md-2 control-label"><span style="color:red"></span>手机号：</label>
+                                    <div class="col-md-4">
+                                        <input type="text" name="Mobile" value="@Model.Mobile" class="form-control" errormsg="请填写手机号">
+                                    </div>
+                                    <span></span>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label"><span style="color:red"></span>邮箱：</label>
+                                    <div class="col-md-4">
+                                        <input type="text" name="Email" value="@Model.Email" class="form-control" errormsg="请填写Email">
+                                    </div>
+                                    <span></span>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label"><span style="color:red"></span>收货地址：</label>
+                                    <div class="col-md-4">
+                                        <input type="text" name="PostAddress" value="@Model.PostAddress" class="form-control" errormsg="请填写收货地址">
+                                    </div>
+                                    <span></span>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label"><span style="color:red"></span>QQ：</label>
+                                    <div class="col-md-4">
+                                        <input type="text" name="QQ" value="@Model.QQ" class="form-control" errormsg="请填写QQ">
+                                    </div>
+                                    <span></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <div class="row">
+                                <div class="col-md-offset-3 col-md-9">
+                                    <button type="submit" id="SubSave" class="btn green"><i class="fa fa-check"></i><span>保 存</span></button>
+                                    <button type="button" class="btn default" onclick="window.history.back()"><i class="fa fa-mail-reply"></i>返回</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END PAGE CONTENT -->
+@section scripts{
+    <script>
+        function Success(result) {
+            SubAjax.Complete();
+            if (result.Status == "y") {
+                alert("成功提示", result.Msg, function () {
+                    location.reload();
+                    @*$.post("/Admin_Member/FormalMember/getMember", { id: '@Model.MemberId' }, function (d) {
+                        $("#labCommission").html(d.Commission);
+                        $("#labCommissionSum").html(d.CommissionSum);
+                        $("#labCoins").html(d.Coins);
+                        $("#labInteractionAmount").html(d.InteractionAmount);
+                        $("#AddCommission").val("0");
+                        $("#AddCommissionSum").val("0");
+                        $("#AddCoins").val("0");
+                    });*@
+                });
+            } else {
+                alertError("错误提示", result.Msg);
+            }
+        }
+
+        function changeProv() {
+            var id = $("#ProvId").val();
+            $('#CityId').empty();
+            $.post("/Ajax/GetCity", { id: id }, function (d) {
+                $("#CityId").select2({
+                    data: d, cache: true
+                });
+                changeCity();
+            })
+        }
+        function changeCity() {
+            var id = $("#CityId").val();
+            $('#CountyId').empty();
+            $.post("/Ajax/GetCounty", { id: id }, function (d) {
+                $("#CountyId").select2({
+                    data: d, cache: true
+                });
+            })
+        }
+    </script>
+}

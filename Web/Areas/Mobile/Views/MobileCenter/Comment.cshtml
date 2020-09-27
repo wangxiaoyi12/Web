@@ -1,0 +1,61 @@
+﻿@using Business
+@using DataBase
+@{
+    ViewBag.Title = "我的评论";
+    //获取当前登录用户
+    Member_Info curUser = User_Shop.GetMember_Info();
+}
+@section Head{
+    
+}
+@section Footer{
+
+}
+
+<header class="header">
+    <div class="fix_nav">
+        <div class="nav_inner">
+            <a class="nav-left back-icon" href="@Url_Mobile.GetUserCenter()">返回</a>
+            <div class="tit">我的评论</div>
+        </div>
+    </div>
+</header>
+
+<div class="container centerPage">
+    <div class="row listTitle">
+        <div class="pull-left">
+            <span class="glyphicon glyphicon-list"></span>
+            <b>评论列表</b>
+        </div>
+        <div class="pull-right">
+            共<small>@(DB.ShopOrderComment.Where(q => q.MemberID == curUser.MemberId).Count())</small>条
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="row rowlist">
+        @Html.Action("CommentList")
+    </div>
+</div>
+<script>
+    $(function () {
+        //加载更多
+        $(document.body).on({
+            click: function () {
+                var thisBtn = $(this);
+                var text = thisBtn.text();
+                if (text.indexOf('正在加载') != -1)
+                    return;
+                thisBtn.text('正在加载...');
+                $.post('@Url.Action("CommentList")', {
+                    skipCount:thisBtn.attr('data-skip')
+                }, function (data) {
+                    thisBtn.parents('.rowlist').append(data);
+                    thisBtn.remove();
+                });
+            }
+        }, '.viewMore');
+    });
+</script>
+
+
+

@@ -1,0 +1,26 @@
+﻿@using DataBase
+@model List<ShopProduct>
+
+<div class="like_p">
+    <div class="title_name"><span>猜你喜欢</span></div>
+    <div class="list">
+        <ul class="list_style">
+            @if (Model.Count > 0)
+            {
+                foreach (var item in Model)
+                {
+                    string url = Url_Shop.GetProduct(item);
+                    <li class="p_info_u">
+                        <a href="@url" class="p_img"><img src="@Url_Shop.GetProductImg(item)"  width="220" height="220"/></a>
+                        <a href="@url" class="name">@item.Title</a>
+                        <div class="Numeral"><span class="price">@Url_Shop.GetProductPrice(item)</span><span class="Sales">销量<i>@item.Sales</i>件</span></div>
+                    </li>
+                }
+            }
+            else
+            {
+                <div class="blank" style="height:322px;line-height:322px;">暂时没有数据</div>
+            }
+        </ul>
+    </div>
+</div>

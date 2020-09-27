@@ -1,0 +1,139 @@
+﻿@model DataBase.Fin_ShiChangimp
+@{
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+}
+<!-- BEGIN PAGE BAR -->
+<!-- END PAGE BAR -->
+<!-- BEGIN PAGE CONTENT -->
+
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="/SysManage/Desk/Index">首页</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#"><span>报单中心</span></a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="Detail">@ViewBag.Title<span>申请福利奖</span></a>
+        </li>
+    </ul>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet light bordered">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="font-green-sharp fa fa-user"></i>
+                    <span class="caption-subject font-green-sharp bold uppercase">@ViewBag.Title<span>申请福利奖</span></span>
+                </div>
+            </div>
+            <div class="portlet-body">
+                @using (Ajax.BeginForm("Save", null, new AjaxOptions()
+            {
+                HttpMethod = "Post",
+                OnBegin = "SubAjax.Loading",
+                OnComplete = "SubAjax.Complate",
+                OnFailure = "SubAjax.Failure",
+                OnSuccess = "SubAjax.Success"
+            }, new { @class = "form-horizontal", @role = "form", @id = "commentForm" }))
+            {
+                    <div class="form-body">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red">*</span>会员编号：</label>
+                            <div class="col-md-4">
+                                <input type="hidden" name="id" value="@Model.id" />
+                                <input type="hidden" name="MemberCode" value="@Model.MemberCode" />
+                                <input type="hidden" name="MemberId" value="@Model.MemberId" />
+                                <input type="hidden" name="NickName" value="@Model.NickName" />
+                                <label class="control-label">@Model.MemberCode</label>
+                            </div>
+                            <span></span>
+                        </div>
+                        @*<div class="form-group">
+                                <label class="col-md-4 control-label"><span style="color:red">*</span>伞下总业绩：</label>
+                                <div class="col-md-4">
+                                    <label class="control-label">@ViewBag.sanxia</label>
+                                </div>
+                                <span></span>
+                            </div>*@
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red">*</span>小部门业绩：</label>
+                            <div class="col-md-4">
+                                <label class="control-label">@ViewBag.min</label>
+                            </div>
+                            <span></span>
+                        </div>
+                        @*<div class="form-group">
+                                <label class="col-md-2 control-label"><span style="color:red">*</span>收益账户余额：</label>
+                                <div class="col-md-4">
+                                    <label class="control-label">@ViewBag.YongJin</label>
+                                </div>
+                                <span></span>
+                            </div>*@
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red">*</span>请选择福利奖：</label>
+                            <div class="col-md-4">
+                                <select name="TypeName" id="TypeName" class="form-control" datatype="*" nullmsg="">
+                                    <option value="">--请选择--</option>
+                                    <option value="10万车">10万车</option>
+                                    <option value="20万车">20万车</option>
+                                    <option value="30万车">30万车</option>
+                                    <option value="50万车">50万车</option>
+                                    <option value="80万车">80万车</option>
+                                    <option value="海景房一套">海景房一套</option>
+                                    <option value="公司原始股东">公司原始股东</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <div class="row">
+                                <div class="col-md-offset-3 col-md-9">
+                                    <button type="submit" id="SubSave" class="btn green"><i class="fa fa-check"></i><span>保 存</span></button>
+                                    @* <button type="button" class="btn default" onclick="window.history.back()"><i class="fa fa-mail-reply"></i>返  回</button>*@
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END PAGE CONTENT -->
+@section scripts{
+    <script>
+        $(function () {
+            $('#DrawTime').datetimepicker({
+                language: 'zh-CN',
+                format: 'yyyy-mm-dd hh:ii:ss',
+                autoclose: 1
+            });
+        });
+        function SubSave() {
+            confirm("确认!", "您确定要申请吗？", function () {
+                var TypeName = $("#TypeName").val();
+                $.ajax({
+                    url: "/Member_Center/ServiceApply/Save",
+                    data: { TypeName: TypeName },
+                    type: "post",
+                    success: function (backdata) {
+                        if (backdata.Status == "y") {
+                            alert("操作提示", backdata.Msg, function () {
+                                location.href = backdata.ReUrl;
+                            })
+                        } else {
+                            alertError("下单失败", backdata.Msg);
+                        }
+                    }, error: function (error) {
+                        console.log(error);
+                    }
+                });
+            });
+        }
+    </script>
+}
+
+

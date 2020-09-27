@@ -1,0 +1,166 @@
+﻿@model IEnumerable<DataBase.Product_Info>
+@{
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+    var Path = "/Member_Mall/Mall/";
+    var title = "购物商城";
+    int pageIndex = ViewBag.PageIndex;
+    int pageSize = ViewBag.PageSize;
+    int totalCount = ViewBag.TotalCount;
+    var pageCount = totalCount % pageSize == 0 ? totalCount / pageSize : totalCount / pageSize + 1;
+    string key = ViewBag.Key;
+}
+@section css{
+    <link href="/assets/global/css/mall.css" rel="stylesheet" />
+}
+<!-- BEGIN PAGE BAR -->
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="/SysManage/Desk/Index">首页</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#"><span>购物商城</span></a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="/Member_Mall/Mall/Index"><span>购物商城</span></a>
+        </li>
+    </ul>
+</div>
+<!-- END PAGE BAR -->
+<!-- BEGIN PAGE CONTENT -->
+<div class="row">
+    <!-- BEGIN SAMPLE TABLE PORTLET-->
+    <div class="col-md-12">
+        <div class="portlet light bordered">
+            <div class="portlet-title">
+                <div class="caption">
+                    <span class="caption-subject font-green-sharp bold uppercase"><span>商城商品列表</span></span>
+                </div>
+            </div>
+            <div class="col-md-9"></div>
+            <div class="input-group col-md-3">
+                <input type="text" class="form-control" placeholder="搜索商品" id="keyword" value="@key" />
+                <span class="input-group-btn">
+                    <a class="btn btn-default" href="javascript:searchList();">
+                        <span class="glyphicon glyphicon-search"></span>
+                    </a>
+                </span>
+            </div>
+            <div class="portlet-body">
+                <div class="row">
+                    @{
+                        if (Model.Count() == 0)
+                        {
+                            <text>
+                                <div style="text-align:center">
+                                    <h4>对不起，暂无商品信息！</h4>
+                                </div>
+                            </text>
+                        }
+                        else
+                        {
+                            <text>
+                                <div class="indexpro_li">
+                                    @{
+                                        foreach (var item in Model)
+                                        {
+                                            var imgurl = item.ImgUrl;
+                                            if (string.IsNullOrEmpty(imgurl))
+                                            {
+                                                imgurl = "/assets/pages/img/noimg.gif";
+                                            }
+                                            var productName = item.ProductName;
+                                            if (productName != null && productName.Length > 36)
+                                            {
+                                                productName = productName.Substring(0, 36);
+                                            }
+                                            <div class="probox">
+                                                <ul style="margin:0;padding:0">
+                                                    <li style="padding: 0px 0px 5px 0px; width: 180px; height: 180px">
+                                                        <div>
+                                                            <a href='/Member_Mall/Mall/Detail/@(item.ProductId)'>
+                                                                <img width="180" height="180" src='@imgurl.Trim('&')'
+                                                                     alt='@item.ProductName' border="0" />
+                                                            </a>
+                                                        </div>
+                                                    </li>
+                                                    <li style="height: 40px; text-align:center;padding:8px 0">
+                                                        <a href='/Member_Mall/Mall/Detail/@(item.ProductId)'>
+                                                            @productName
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        &nbsp;&nbsp;&nbsp;&nbsp;原价：<span class="colour">
+                                                            ￥@(item.OriginalPrice == null ? "" : item.OriginalPrice.Value.ToString("0.##"))
+                                                        </span>
+                                                    </li>
+                                                    <li>
+                                                        零售价：<span class="colour" style="color:red">
+                                                            ￥@(item.SalePrice == null ? "" : item.SalePrice.Value.ToString("0.##"))
+                                                        </span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                            </text>
+                                        }
+                    }
+
+                    <div style="clear:both;"> &nbsp; </div>
+                    @{
+                        var pre = pageIndex > 1 ? pageIndex - 1 : 1;
+                        var next = pageIndex == pageCount ? pageIndex : pageIndex + 1;
+                        var from = (pageIndex - 1) * pageSize;
+                        var to = from + pageSize;
+                        if (to > totalCount)
+                        {
+                            to = totalCount;
+                        }
+                    }
+                </div>
+                <div class="row" style="text-align:center">
+                    <nav>
+                        <ul class="pagination">
+                            <li>
+
+                                <a href="/Member_Mall/Mall/Index/@key?pageIndex=@pre&pageSize=@pageSize">上一页</a>
+                            </li>
+                            @for (int i = 1; i <= pageCount; i++)
+                            {
+                                if (pageIndex == i)
+                                {
+                                    <li class="active"><a href="#">@i</a></li>
+                                }
+                                else
+                                {
+                                    <li><a href="/Member_Mall/Mall/Index/@key?pageIndex=@i&pageSize=@pageSize">@i</a></li>
+                                }
+                            }
+                            <li><a href="/Member_Mall/Mall/Index/@key?pageIndex=@next&pageSize=@pageSize">下一页</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END SAMPLE TABLE PORTLET-->
+</div>
+
+@section scripts {
+    <script type="text/javascript">
+        function searchList() {
+            var key = $('#keyword').val();
+            var url = '@Path' + 'Index/' + key;
+            location.href = url;
+        }
+        function changePageSize() {
+            var size = $("#pageSize").val();
+            location.href = "/Member_Mall/Mall/Index/@key?pageIndex=1&pageSize=" + size;
+        }
+    </script>
+    @*<script src="~/assets/scripts/myListPage.js"></script>*@
+}

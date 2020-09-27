@@ -1,0 +1,189 @@
+﻿@using Business
+@using DataBase
+@{
+    ViewBag.Title = "我的购物车";
+    //获取当前登录用户
+    Member_Info curUser = User_Shop.GetMember_Info();
+    List<ShopCat> cartList = DB.ShopCat.Where(q => q.MemberID == curUser.MemberId)
+               .OrderByDescending(q => q.CreateTime).ToList();
+}
+@section Head{
+
+}
+<style>
+    .buy-btn-fix {
+        margin-top: 0px;
+        padding: 8px;
+        position: absolute;
+        right: 0;
+        top: 0;
+    }
+
+    .fixed-foot {
+        height: 60px;
+        z-index: 999;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+    }
+</style>
+@section Footer{
+    <script src="~/assets/mobile/js/shopCart.js?v=@Url_Mobile.GetVersion()"></script>
+    <style>
+        .score {
+            color: #6a91ee;
+            font-style: normal;
+            font-size: 18px;
+            margin-right: 5px;
+            vertical-align: top;
+            font-family: "Helvetica Neue";
+        }
+    </style>
+}
+<header class="header">
+    <div class="fix_nav">
+        <div class="nav_inner">
+            <a class="nav-left back-icon" href="javascript:history.go(-1);">返回</a>
+            <div class="tit">购物车</div>
+        </div>
+    </div>
+</header>
+<div class="container">
+    <div class="row rowcar">
+        @if (cartList.Count <= 0)
+        {
+            <div class="alert alert-danger">
+                <p>购物车空空,继续逛逛！</p>
+            </div>
+            <div style="padding:30px 0px;">
+                <div class="col-xs-1"></div>
+                <div class="col-xs-5">
+                    <a class="btn btn-primary" href="@Url_Mobile.GetIndex()">商城首页</a>
+                </div>
+                <div class="col-xs-5">
+                    <a class="btn btn-success" href="@Url_Mobile.GetUserCenter()">个人中心</a>
+                </div>
+                <div class="col-xs-1"></div>
+            </div>
+        }
+        else
+        {
+            foreach (var item in cartList)
+            {
+                ShopProduct product = item.ShopProduct;
+                string url = Url_Mobile.GetProduct(product);
+                <ul class="list-group productItem">
+                    <li class="list-group-item text-primary" style="margin-top:10px;">
+                        <div class="icheck pull-left mr5">
+                            <input type="checkbox" checked="checked" class="ids" prodStatus="1" />
+                            <label class="checkLabel">
+                                <span></span>
+                            </label>
+                        </div>
+                     
+                    </li>
+                    <li class="list-group-item hproduct clearfix">
+                        <div class="p-pic">
+                            <a href="@url"><img class="img-responsive" src="@Url_Shop.GetProductImg(product)"></a>
+                        </div>
+                        <div class="p-info">
+                            <a href="@url"><p class="p-title">@product.Title</p></a>
+                            <p class="p-origin">
+                                <a class="close p-close deleteCatBtn" data-id="@item.ID" href="javascript:void(0);">×</a>
+                                @if (product.CategoryID1 == DB.XmlConfig.XmlSite.Scores)
+                                {
+
+                                    <em>@Html.Raw(Url_Shop.GetProductLingShou(product, item.GuiGe))</em>
+
+                                }
+                                else
+                                {
+                                    if (curUser.IsServiceCenter == "是")
+                                    {
+                                        <em>@Html.Raw(Url_Shop.GetProductPriceStr(product, item.GuiGe))</em>
+                                    }
+                                    else
+                                    {
+                                        <em>@Html.Raw(Url_Shop.GetProductXianJin(product, item.GuiGe))</em>
+
+                                    }
+                                }
+
+                                @*<em>@Html.Raw(Url_Shop.GetProductPriceStrJiF(product))</em>*@
+                            </p>
+                            @*@if (product.IsMain())
+                                {
+                                    <div class="pull-right">
+                                        <p class="mb0">
+                                            <div class="pull-right text-primary" style="border:1px solid #337ab7;padding:1px 3px;border-radius:5px;">
+                                                ￥@(product.PriceShopping)+@(product.PriceScore)分
+                                            </div>
+                                        </p>
+                                    </div>
+                                }*@
+
+                        </div>
+                    </li>
+
+                    <li class="list-group-item clearfix">
+                        <div class="pull-left mt5">
+                            @if (product.CategoryID1 == DB.XmlConfig.XmlSite.Scores)
+                            {
+                                <span class="gary">总价：</span>
+                                <em class="red productTotalPricePV">¥<span class="totalPV">@( DB.ShopProduct.GetSPrice(product, item.GuiGe).LingShou * item.Count + product.Postage)</span></em>
+
+                            }
+                            else
+                            {
+                                if (curUser.IsServiceCenter == "是")
+                                {
+                                    <span class="gary">总价：</span>
+                                    <em class="red productTotalPrice">¥<span class="total">@( DB.ShopProduct.GetSPrice(product, item.GuiGe).PeiHuo * item.Count + product.Postage)</span></em>
+
+                                }
+                                else
+                                {
+                                    <span class="gary">总价：</span>
+                                    <em class="red productTotalPricePV">¥<span class="totalPV">@( DB.ShopProduct.GetSPrice(product, item.GuiGe).YouHui * item.Count + product.Postage)</span></em>
+
+                                }
+                            }
+                        </div>
+                        @*<div class="btn-group btn-group-sm control-num">
+                                <a href="javascript:void(0);" class="btn btn-default countSubBtn"><span class="glyphicon glyphicon-minus gary"></span></a>
+                                <input type="tel" class="btn gary2 Amount car_ipt" readonly="readonly"
+                                       value="@item.Count"
+                                       data-id="@product.ID"
+                                       data-max="@product.Inventory"
+                                       data-PriceShopping ="@(curUser.IsServiceCenter=="是"?product.PriceScore: product.PV)"
+                                       data-PV="@(product.PV)"
+                                       data-PriceScore="@(product.PriceScore)">
+                                <a href="javascript:void(0);" class="btn btn-default countAddBtn"><span class="glyphicon glyphicon-plus gary"></span></a>
+                            </div>*@
+                    </li>
+
+
+                </ul>
+            }
+            <br /><br /><br /><br />
+            <div class="fixed-foot">
+                <div class="fixed_inner">
+                    <div class="pay-point">
+                        <div class="icheck pull-left mr10">
+                            <input type="checkbox" checked="checked" id="buy-sele-all" value="1">
+                            <label for="buy-sele-all">
+                                <span class="mt10" style="margin-top:16px;"></span>全选
+                            </label>
+                        </div>
+                        @*<p>合计：<em class="red f22">¥<span id="totalPrice">0.00</span></em></p>*@
+                    </div>
+                    <div class="buy-btn-fix">
+                        <a href="javascript:submitShopCart();" class="btn btn-danger btn-buy">去结算</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

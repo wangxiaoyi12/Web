@@ -1,0 +1,57 @@
+﻿@using DataBase
+@model List<News_Info>
+
+@{
+    ViewBag.Title = "我的订单";
+    //获取当前登录用户
+    Member_Info curUser = User_Shop.GetMember_Info();
+    Layout = "~/Views/Shared/_LayoutPageMy0915.cshtml";
+    ////获取数量
+    //int daifukuanCount = DB.ShopOrder.GetCount(curUser.MemberId, 1);
+    //int daifahuoCount = DB.ShopOrder.GetCount(curUser.MemberId, 2);
+    //int daishouhuoCount = DB.ShopOrder.GetCount(curUser.MemberId, 3);
+}
+
+
+<div class="container topBg">
+    <!-- 头部导航 -->
+    <div class="header" style="box-shadow: 0 0 10px rgba(1, 73, 206,.2);">
+        <ul>
+            <li class="header-left" onclick="GetIndex()">
+                <i class="iconfont icon-fanhui"></i>
+            </li>
+            <li>系统公告</li>
+            <li class="header-right">
+
+            </li>
+        </ul>
+    </div>
+    <ul class="systemGgList">
+
+        @{
+            foreach (var item in Model)
+            {
+                <li>
+                    <a href="@Url.Action("NewsDetail",new { id=item.NewsId})">
+                        <div class="systemGgList-img">
+                            <img src="images/icon_ldpng.png" alt="">
+                        </div>
+                        <div class="systemGgList-count">
+                            <p class="systemGgList-bt">@item.Title</p>
+                            <p class="systemGgList-time">@item.CreateTime</p>
+                            <p class="systemGgList-text">@item.Comment</p>
+                        </div>
+                    </a>
+                </li>
+
+            }
+
+
+        }
+
+
+
+    </ul>
+
+    <div class="bgColor"></div>
+</div>

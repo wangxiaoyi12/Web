@@ -1,0 +1,69 @@
+﻿@{
+    ViewBag.Title = "用户登录";
+    //获取来源页面
+    string redirectUrl = ReqHelper.GetString("redirecturl");
+    if (string.IsNullOrEmpty(redirectUrl))
+    {
+        redirectUrl = Url_Mobile.GetUserCenter();
+    }
+    //判断是否是微信客户端登录
+    string authUrl = ViewBag.wxUrl;
+    authUrl += "?recirecturl=" + redirectUrl;
+}
+@section Head{
+    <style>
+        body {
+            background: white;
+        }
+
+        .qrCodeImg {
+            margin: auto;
+            margin-top: 2em;
+            width: 60%;
+            max-width: 300px;
+        }
+
+            .qrCodeImg canvas {
+                width: 100%;
+            }
+    </style>
+}
+
+@section Footer{
+    <script src="~/assets/mobile/js/login.js"></script>
+    <script src="~/assets/scripts/jquery.qrcode.min.js"></script>
+    <script>
+        var authUrl = '@authUrl';
+        $('.qrCodeImg').qrcode({
+            text: authUrl,
+            width: 300,
+            height: 300,
+        });
+        console.info(authUrl);
+    </script>
+}
+<header class="header">
+    <div class="fix_nav">
+        <div style="max-width:768px;margin:0 auto;background:#000000;position: relative;">
+            <a class="nav-left back-icon" href="javascript:history.back();">返回</a>
+            <div class="tit" style="font-size:18px;">会员登陆</div>
+        </div>
+    </div>
+</header>
+<div class="maincontainer">
+    <div class="container itemdetail mini-innner">
+        <div class="row">
+            <div class="col-md-12 tal mt20">
+                <br />
+                <h5 class="text-success text-center">使用微信客户端扫码授权注册</h5>
+                <p></p>
+
+                <div class="qrCodeImg"></div>
+                <p><br /></p>
+                <textarea rows="10" style="width:100%;display:none;">@ViewBag.wxUrl</textarea>
+            </div>@{
+                @*@ReqHelper.req.ServerVariables["HTTP_USER_AGENT"]*@
+            }
+        </div>
+    </div>
+</div>

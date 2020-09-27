@@ -1,0 +1,158 @@
+﻿@using Business
+@using DataBase
+@{
+    ViewBag.Title = "我的订单";
+    //获取当前登录用户
+    Member_Info curUser = User_Shop.GetMember_Info();
+    Layout = "~/Views/Shared/_LayoutPageIndex0915.cshtml";
+    ////获取数量
+    //int daifukuanCount = DB.ShopOrder.GetCount(curUser.MemberId, 1);
+    //int daifahuoCount = DB.ShopOrder.GetCount(curUser.MemberId, 2);
+    //int daishouhuoCount = DB.ShopOrder.GetCount(curUser.MemberId, 3);
+    var list= ViewBag.List  as List<Member_Info>;
+}
+<style>
+    body {
+        background: #F5F5F5 !important;
+    }
+
+    .picBox img {
+        max-width: 100%;
+        max-height: 100%;
+        height: 100%;
+        width: 100%;
+    }
+</style>
+<div class="container topBg">
+    <!-- 头部导航 -->
+    <div class="header productDetailHeader" style="box-shadow: 0 0 10px rgba(1, 73, 206,.2);">
+        <ul>
+            <li class="header-left" onclick="GetIndex()">
+                <i class="iconfont icon-fanhui"></i>
+            </li>
+            <li style="text-align:center;width:unset">附近店</li>
+            <li class="header-right" id="addBtn" onclick="altlocation()">
+                 升序
+            </li>
+        </ul>
+    </div>
+    <!-- tab内容 -->
+    <ul class="prdtDtlCtn">
+        <li class="prdtDtlCtnAct">
+
+            <!-- 商品属性 -->
+            <div class="productDetailArt" style="display:none;">
+
+
+
+                <div class="carNum">
+                    <span class="minus">-</span>
+                    <input class="inpNum" value="1" type="number" name="" id="" readonly>
+                    <span class="add">+</span>
+                </div>
+            </div>
+            <ul class="myTeamList">
+                @{
+                   // var pt = DB.Member_Info.Where(a => a.IsServiceCenter == "是").OrderByDescending(a => a.ActiveTime);
+                    foreach (var item in list)
+                    {
+                        <li>
+                            <div class="picBox"><img src="@Url_Mobile.GetImg(item.ShopImage)"></div>
+                            <p>店名 @item.ShopName</p><br />
+                            <i> @item.DiZhi</i>
+                        </li>
+                    }
+                }
+            </ul>
+
+        </li>
+        <li>
+            <ul class="myTeamList">
+                @{
+                    var pt1 = DB.Member_Info.Where(a => a.RecommendId == curUser.MemberId && a.MemberLevelId > 0).OrderByDescending(a => a.ActiveTime);
+                    foreach (var item in pt1)
+                    {
+                        <li>
+                            <div class="picBox"><img src="@Url_Mobile.GetImg(item.AppellationLeveName)"></div>
+                            <p>用户 @item.Code</p>
+                            <i>@item.MemberLevelName</i>
+                        </li>
+                    }
+                }
+            </ul>
+        </li>
+    </ul>
+
+    <!-- 底部 -->
+    <div class="pd_btm"></div>
+    <form action="/Mobile/MobileCenter/cash" method="get" id="Long" name="Long" style="margin-right:15px;">
+        <input name="Longitude" id="Longitude" type="text" style="display:none">
+        <input name="Latitude" id="Latitude" type="text" style="display:none">
+    </form>
+
+</div>
+<div id="Detail" class="modal fade" tabindex="-1" aria-hidden="true">
+    <div id="allmap"></div>
+
+</div>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=Mp1AIhmZn7pCIs9vTapht7CLSyKcQniY"></script>
+<script type="text/javascript">
+  
+    var lng = "";
+    var lat = "";
+    function altlocation() {
+         var map = new BMap.Map("allmap");
+        var geolocation = new BMap.Geolocation();
+        geolocation.getCurrentPosition(function (r) {
+        
+            if (this.getStatus() == BMAP_STATUS_SUCCESS) {
+                 var mk = new BMap.Marker(r.point);
+                map.addOverlay(mk);
+                map.panTo(r.point);
+              
+                lng = r.point.lng;
+                lat = r.point.lat;
+                //show('您的位置：' + lng + ',' + lat);
+                $('#Longitude').val(lng);
+                $('#Latitude').val(lat);
+                document.getElementById("Long").submit();
+            }
+            else {
+                show('failed' + this.getStatus());
+            }
+        }, { enableHighAccuracy: true })
+    };
+
+
+
+</script>
+<script>
+
+    // 单选切换
+    $(document).on("click", ".rdoList label", function () {
+        $(this).addClass('rdoAct')
+        $(this).parent().siblings().children().removeClass('rdoAct')
+    })
+    // 数量加减
+    numInput('.minus', '.add', '.inpNum');
+    // tab切换
+    tabs('.prdtDtlTab>dd', 'prdtDtlTabAct', '.prdtDtlCtn>li', 'prdtDtlCtnAct')
+    // banner
+    var mySwiper = new Swiper('.prdtDtl-swp .swiper-container', {
+        direction: 'horizontal', // 垂直切换选项
+        loop: true, // 循环模式选项
+        initialSlide: 1,
+        speed: 400,
+
+        autoplay: {
+            delay: 19000,
+            disableOnInteraction: false,
+        },
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+            type: 'fraction', //分页器样式
+        },
+        uniqueNavElements: false,
+    })
+</script>

@@ -1,0 +1,78 @@
+﻿@using DataBase
+@using Common
+
+@{
+    ViewBag.Title = "首页";
+    Layout = "~/Views/Shared/_LayoutPageCart0915.cshtml";
+
+    ViewBag.Title = "我的购物车";
+    //获取当前登录用户
+    Member_Info curUser = User_Shop.GetMember_Info();
+    List<ShopCat> cartList = DB.ShopCat.Where(q => q.MemberID == curUser.MemberId)
+               .OrderByDescending(q => q.CreateTime).ToList();
+}
+<div class="container">
+    <div class="carTop">
+        <div>
+            <p class="left">购物车</p>
+            @*<p class="right">清空</p>*@
+        </div>
+    </div>
+    <ul class="carList">
+        @foreach (var item in cartList)
+        {
+            ShopProduct product = item.ShopProduct;
+            string url = Url_Mobile.GetProduct(product);
+            <li>
+                <div class="CkbBox">
+                    <input type="checkbox" checked name="carCkb" class="ids" prodStatus="1" value="" />
+                    <label class="checkLabel">
+                        <span></span>
+                    </label>
+                </div>
+                <div class="picBox"><img src="@Url_Shop.GetProductImg(product)"></div>
+                <div class="txtBox">
+                    <p class="top">@product.Title</p>
+                    <p class="ctn">@item.GuiGe</p>
+                    <p class="ctn">单价:@DB.ShopProduct.GetSPrice(product, item.GuiGe).YouHui</p>
+                    <p class="ctn">数量:@item.Count</p>
+                    <div class="btm">
+                        <p class="bsclr_org">总价:￥<span class="bsclr_org">@(DB.ShopProduct.GetSPrice(product, item.GuiGe).YouHui * item.Count + product.Postage)</span></p>
+
+                        <a class="close p-close deleteCatBtn" data-id="@item.ID" href="javascript:void(0);">删除</a>
+                        @*<div class="carNum">
+                <span class="minus">-</span>
+                <input class="inpNum" value="1" type="number" name="" id="" readonly>
+                <span class="add">+</span>
+            </div>*@
+                    </div>
+                </div>
+            </li>
+        }
+
+    </ul>
+
+    <!-- 全选 -->
+    <div class="carBtm" >
+        <label>
+            <input type="checkbox"id="buy-sele-all" value="1" checked>
+            全选
+        </label>
+        <div>
+            <div class="num">
+                @*<p class="bsclr_gay">合计：</p>
+                <p class="bsclr_org">￥1205</p>*@
+            </div>
+            <a href="javascript:submitShopCart();" class="btn btn-buy">结算</a>
+        </div>
+    </div>
+
+    <!-- 底部 -->
+    <div class="pd_btm"></div>
+
+</div>
+<div class="bgColor"></div>
+
+<script>
+    numInput('.minus', '.add', '.inpNum');
+</script>

@@ -1,0 +1,52 @@
+﻿@using DataBase
+@using Business
+
+@{
+    //获取购物车内容
+    List<ShopCat> list = new List<ShopCat>();
+    if (User_Shop.IsLogin())
+    {
+        string curUserID = User_Shop.GetMemberID();
+        list = DB.ShopCat.Where(q => q.MemberID == curUserID).ToList();
+    }
+}
+<div class="s_cart">
+    <em class="iconfont icon-cart2"></em><a href="#">我的购物车</a>
+    <i class="ci-right">&gt;</i>
+    <i class="ci-count" id="shopping-amount">@list.Select(q=>q.Count).Sum()</i>
+</div>
+<div class="dorpdown-layer">
+    <div class="spacer"></div>
+    @if (list.Count > 0)
+    {
+        int totalCount = 0;
+        decimal totalAmount = 0;
+        <ul class="p_s_list">
+            @foreach (var item in list)
+            {
+                totalCount += item.Count;
+                totalAmount += item.Count * Url_Shop.GetMemberPrice(item.ShopProduct);
+                <li class="productItem">
+                    <div class="img"><img src="@Url_Shop.GetProductImg(item.ShopProduct)"></div>
+                    <div class="content"><p>
+                        <a href="@Url_Shop.GetProduct(item.ShopProduct)">@(item.ShopProduct.Title)</a></p>
+                    @*<p>@item.ShopProduct.SubTitle</p>*@
+                    <p>@item.Count 件</p>
+                    </div>
+                    <div class="Operations">
+                        <p class="Price">￥@Url_Shop.GetMemberPrice(item.ShopProduct)</p>
+                        <p><a  class="deleteCatBtn" data-id="@item.ID">删除</a></p>
+                    </div>
+                </li>
+            }
+        </ul>
+        <div class="Shopping_style">
+            <div class="p-total">共<b> @totalCount </b>件商品　共计<strong>￥ @totalAmount</strong></div>
+            <a href="@Url_Shop.GetMyCat()" title="去购物车结算" id="btn-payforgoods" class="Shopping">去购物车结算</a>
+        </div>
+    }
+    else
+    {
+        <div class="prompt"></div><div class="nogoods"><b></b>购物车中还没有商品，赶紧选购吧！</div>
+    }
+</div>

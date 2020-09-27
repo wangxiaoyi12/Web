@@ -1,0 +1,350 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+}
+@section css{
+    <style type="text/css">
+        td {
+            text-align: center;
+        }
+
+        .table1 {
+            border: 1px solid gray;
+        }
+
+            .table1 td {
+                border: 1px solid gray;
+            }
+
+        .actived {
+            color: white;
+            background: #16A0D3;
+            width: 120px;
+            color: white;
+            margin-right: 0px;
+        }
+
+        .noactive {
+            color: white;
+            width: 120px;
+            color: white;
+            background: #FF9D30;
+            margin-right: 0px;
+        }
+
+        .reg {
+            color: white;
+            width: 120px;
+            margin-right: 0px;
+        }
+
+        td A:link {
+            color: #fff;
+            TEXT-DECORATION: none;
+        }
+
+        td A:visited {
+            COLOR: #fff;
+            TEXT-DECORATION: none;
+        }
+
+        td A:hover {
+            COLOR: #fff;
+            text-decoration: underline;
+        }
+
+        td A:active {
+            COLOR: #fff;
+            text-decoration: underline;
+        }
+
+        .yellow {
+            color: yellow;
+        }
+
+        .width50 {
+            width: 50%;
+        }
+
+        .labelactived {
+            text-align: center;
+            vertical-align: middle;
+            background: #16A0D3;
+            color: white;
+            font-weight: 700;
+            padding: 5px 50px;
+        }
+
+        .labelnoactive {
+            text-align: center;
+            vertical-align: middle;
+            background: #FF9D30;
+            color: white;
+            font-weight: 700;
+            padding: 5px 50px;
+        }
+    </style>
+}
+
+<!-- BEGIN PAGE BAR -->
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="/SysManage/Home/Index">首页</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#"><span>市场信息</span></a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#"><span>网络结构</span></a>
+        </li>
+    </ul>
+</div>
+<!-- END PAGE BAR -->
+<!-- BEGIN PAGE CONTENT -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet light bordered">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="font-green-sharp fa fa-user"></i>
+                    <span class="caption-subject font-green-sharp bold uppercase"> <span>网络结构</span></span>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <form class="form form-horizontal form-inline">
+                    <fieldset>
+                        <div class="control-group">
+                            <div class="controls">
+                                <div class="col-md-8">
+                                    @*<label class="control-label">查询会员：</label>*@
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" placeholder="会员编号" id="txtCode" />
+                                        <span class="input-group-btn">
+                                            <a class="btn btn-default " href="javascript:searchList();">
+                                                <span class="glyphicon glyphicon-search"></span>查询
+                                            </a>
+                                        </span>
+                                    </div>&nbsp;&nbsp;
+                                    <a id="add1" href="@(ViewBag.Path)/Index2/@(ViewBag.TopId)" class="btn green">
+                                        返回顶层
+                                    </a>&nbsp;&nbsp;
+                                    <a id="add1" href="javascript:ToUp()" class="btn green">
+                                        返回上一层
+                                    </a>
+                                </div>
+                                <div class="col-md-3 text-right">
+                                    <label class="control-label labelactived">已激活</label>
+                                    <label class="control-label labelnoactive">未激活</label>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+                <div style="overflow:auto">
+                    <table width="800" cellpadding="3" cellspacing="1" border="0" class="tvb">
+                        <tr>
+                            <td colspan="6">
+                                <center style="margin-top:10px">
+                                    <table border="0" class="table1">
+                                        <tr>
+                                            <td colspan="2" id="Code1">@Html.Raw(ViewBag.Code1)</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" id="Name1">@Html.Raw(ViewBag.NickName1) &nbsp;</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" id="Level1">@Html.Raw(ViewBag.LevelName1) &nbsp;</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="1">左</td>
+                                            <td colspan="1">右</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="width50" id="L1">@Html.Raw((ViewBag.L1 ?? 0).ToString().Replace(".00", ""))</td>
+                                            <td class="width50" id="R1">@Html.Raw(ViewBag.R1 ?? 0).ToString().Replace(".00", ""))</td>
+                                        </tr>
+                                    </table>
+                                </center>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td height="36" colspan="6">
+                                <img src="/assets/global/img/t_tree_bottom_l.gif" height="30"><img src="/assets/global/img/t_tree_line.gif" alt="" width="200" height="30"><img src="/assets/global/img/t_tree_top.gif" height="30"><img src="/assets/global/img/t_tree_line.gif" alt="" width="200" height="30"><img src="/assets/global/img/t_tree_bottom_r.gif" height="30">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="50%" colspan="2">
+                                <center>
+                                    <table width="120" border="0" class="table1">
+                                        <tr>
+                                            <td colspan="2" id="Code2">@Html.Raw(ViewBag.Code2)</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" id="Name2">@Html.Raw(ViewBag.NickName2) &nbsp;</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" id="Level2">@Html.Raw(ViewBag.LevelName2) &nbsp;</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="1">左</td>
+                                            <td colspan="1">右</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="width50" id="L2">@Html.Raw((ViewBag.L2 ?? 0).ToString().Replace(".00", ""))</td>
+                                            <td class="width50" id="R2">@Html.Raw(ViewBag.R2 ?? 0).ToString().Replace(".00", ""))</td>
+                                        </tr>
+                                    </table>
+                                </center>
+                            </td>
+                            <td width="50%" colspan="4">
+                                <center>
+                                    <table width="120" border="0" class="table1">
+                                        <tr>
+                                            <td colspan="2" id="Code3">@Html.Raw(ViewBag.Code3)</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" id="Name3">@Html.Raw(ViewBag.NickName3) &nbsp;</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" id="Level3">@Html.Raw(ViewBag.LevelName3) &nbsp;</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="1">左</td>
+                                            <td colspan="1">右</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="width50" id="L3">@Html.Raw((ViewBag.L3 ?? 0).ToString().Replace(".00", ""))</td>
+                                            <td class="width50" id="R3">@Html.Raw(ViewBag.R3 ?? 0).ToString().Replace(".00", ""))</td>
+                                        </tr>
+                                    </table>
+                                </center>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td height="36" colspan="2">
+                                <img src="/assets/global/img/t_tree_bottom_l.gif" alt="" height="30"><img src="/assets/global/img/t_tree_line.gif" alt="" width="80" height="30"><img src="/assets/global/img/t_tree_top.gif" alt="" height="30"><img src="/assets/global/img/t_tree_line.gif" alt="" width="90" height="30"><img src="/assets/global/img/t_tree_bottom_r.gif" alt="" height="30">
+                            </td>
+                            <td colspan="4">
+                                <img src="/assets/global/img/t_tree_bottom_l.gif" alt="" height="30"><img src="/assets/global/img/t_tree_line.gif" alt="" width="80" height="30"><img src="/assets/global/img/t_tree_top.gif" alt="" height="30"><img src="/assets/global/img/t_tree_line.gif" alt="" width="90" height="30"><img src="/assets/global/img/t_tree_bottom_r.gif" alt="" height="30">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td valign="top" style="padding-left:50px">
+                                <table width="120" border="0" class="table1">
+                                    <tr>
+                                        <td colspan="2" id="Code4">@Html.Raw(ViewBag.Code4)</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" id="Name4">@Html.Raw(ViewBag.NickName4) &nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" id="Level4">@Html.Raw(ViewBag.LevelName4) &nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="1">左</td>
+                                        <td colspan="1">右</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="width50" id="L4">@Html.Raw((ViewBag.L4 ?? 0).ToString().Replace(".00", ""))</td>
+                                        <td class="width50" id="R4">@Html.Raw(ViewBag.R4 ?? 0).ToString().Replace(".00", ""))</td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td valign="top" style="padding-left:0px">
+                                <table width="120" border="0" class="table1">
+                                    <tr>
+                                        <td colspan="2" id="Code5">@Html.Raw(ViewBag.Code5)</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" id="Name5">@Html.Raw(ViewBag.NickName5) &nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" id="Level5">@Html.Raw(ViewBag.LevelName5) &nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="1">左</td>
+                                        <td colspan="1">右</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="width50" id="L5">@Html.Raw((ViewBag.L5 ?? 0).ToString().Replace(".00", ""))</td>
+                                        <td class="width50" id="R5">@Html.Raw(ViewBag.R5 ?? 0).ToString().Replace(".00", ""))</td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td valign="top" style="padding-left:50px">
+                                <table width="120" border="0" class="table1">
+                                    <tr>
+                                        <td colspan="2" id="Code6">@Html.Raw(ViewBag.Code6)</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" id="Name6">@Html.Raw(ViewBag.NickName6) &nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" id="Level6">@Html.Raw(ViewBag.LevelName6) &nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="1">左</td>
+                                        <td colspan="1">右</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="width50" id="L6">@Html.Raw((ViewBag.L6 ?? 0).ToString().Replace(".00", ""))</td>
+                                        <td class="width50" id="R6">@Html.Raw(ViewBag.R6 ?? 0).ToString().Replace(".00", ""))</td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td colspan="3" valign="top">
+                                <table width="120" border="0" class="table1">
+                                    <tr>
+                                        <td colspan="2" id="Code7">@Html.Raw(ViewBag.Code7)</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" id="Name7">@Html.Raw(ViewBag.NickName7) &nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" id="Level7">@Html.Raw(ViewBag.LevelName7) &nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="1">左</td>
+                                        <td colspan="1">右</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="width50" id="L7">@Html.Raw((ViewBag.L7 ?? 0).ToString().Replace(".00", ""))</td>
+                                        <td class="width50" id="R7">@Html.Raw(ViewBag.R7 ?? 0).ToString().Replace(".00", ""))</td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script>
+        function ToUp() {
+            $.post("@(ViewBag.Path)/ToUp", { id: '@(ViewBag.ID)' }, function (d) {
+                location.href = d;
+            })
+        }
+        function searchList() {
+            var id = $("#txtCode").val();
+            $.post("@(ViewBag.Path)/Search", { id: id }, function (d) {
+                if (d == '') {
+                    alertError("错误提示","无此会员记录");
+                } else {
+                    location.href = d;
+                }
+            })
+        }
+        function SearchMember(id) {
+            $("@(ViewBag.Path)/Search", { id: id }, function (list) {
+
+            });
+        }
+    </script>
+}

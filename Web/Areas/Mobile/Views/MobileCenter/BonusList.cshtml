@@ -1,0 +1,64 @@
+﻿@using DataBase
+@model List<Fin_Info>
+
+
+@{
+	foreach (var item in Model)
+	{
+		<ul class="list-group" style="margin-bottom:15px;">
+			<li class="list-group-item ">
+				<div class="pull-left text-primary">
+					<span class="glyphicon glyphicon-user"></span>
+					@item.MemberCode 【@item.NickName】
+				</div>
+				<div class="pull-right">
+					<small>
+						<span class="glyphicon glyphicon-time"></span>
+						@if (item.CreateTime != null)
+						{
+							@item.CreateTime.Value.ToString("yyyy-MM-dd HH:mm")
+						}
+					</small>
+				</div>
+				<div class="clearfix"></div>
+			</li>
+			<li class="list-group-item ">
+				<div class="pull-left ">
+					<small class="label label-primary">@*@(item.TypeName == "@("推广奖")" ? "label-primary" : "label-info")*@
+						@item.TypeName
+					</small>
+					&nbsp;
+					<small class="text-danger">
+						@*@if (item.TypeName == "@("推广奖")")
+							{*@
+						<span> @("奖金"):<b>@item.Amount</b></span>
+						@*}
+							else
+							{
+								<span>
+									@("奖金"):<b>@item.Amount</b>,@("代金券"):@item.FamousBrandFund,
+
+									@("冻结奖金")：@item.Interaction,@("税"):@item.Poundage
+								</span>
+							}*@
+					</small>
+				</div>
+				<div class="pull-right  text-danger">
+
+				</div>
+				<div class="clearfix"></div>
+			</li>
+		</ul>
+
+
+	}
+
+	if (ViewBag.skipCount < ViewBag.recordCount)
+	{
+		<div class="btn btn-primary btn-block viewMore" data-skip="@ViewBag.skipCount">@("加载更多")>></div>
+	}
+	else
+	{
+		<p class="noData">@("暂时没有数据了")?</p>
+	}
+}

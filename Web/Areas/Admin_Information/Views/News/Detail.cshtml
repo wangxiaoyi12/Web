@@ -1,0 +1,116 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+}
+<!-- BEGIN PAGE BAR -->
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="/SysManage/Home/Index">首页</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#">信息管理</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="/Admin_Information/News/Detail/@ViewBag.Ids/@ViewBag.Type">@ViewBag.Head</a>
+        </li>
+    </ul>
+</div>
+<!-- END PAGE BAR -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet light bordered">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="font-green-sharp fa fa-edit"></i>
+                    <span class="caption-subject font-green-sharp bold uppercase"><span>@ViewBag.Head</span></span>
+                </div>
+            </div>
+            <div class="portlet-body">
+                @using (Ajax.BeginForm("Save", null, new AjaxOptions()
+                {
+                    HttpMethod = "Post",
+                    OnBegin = "SubAjax.Loading",
+                    OnComplete = "SubAjax.Complate",
+                    OnFailure = "SubAjax.Failure",
+                    OnSuccess = "SubAjax.Success"
+                }, new { @class = "form-horizontal", @role = "form", @id = "commentForm" }))
+                {
+                    <div class="form-body">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red">*</span>标题：</label>
+                            <div class="col-md-4">
+                                <input type="hidden" id="type" name="type" value="@ViewBag.Type" />
+                                <input type="hidden" id="id" name="id" value="@ViewData["id"].ToString()" />
+                                <input type="text" id="title" name="title" value="@ViewData["title"].ToString()" class="form-control" placeholder="请输入标题" datatype="*" nullmsg="">
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red"></span>浏览次数：</label>
+                            <div class="col-md-4">
+                                <input type="text" id="ReadNum" name="ReadNum" value="@ViewData["ReadNum"]" class="form-control">
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red">*</span>内容：</label>
+                            <div class="col-md-7">
+                                <textarea style="height:400px" id="content" name="content" placeholder="请输入内容">@Html.Raw(ViewData["content"].ToString())</textarea>
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-actions">
+                            <div class="row">
+                                <div class="col-md-offset-3 col-md-9">
+                                    <button type="button" id="SubSave" onclick="Save()" class="btn green"><i class="fa fa-check"></i><span>保 存</span></button>
+                                    <button type="button" class="btn default" onclick="window.history.back()"><i class="fa fa-mail-reply"></i>返回</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section scripts{
+    <script src="~/assets/global/plugins/UEditor/ueditor.config.js"></script>
+    <script src="~/assets/global/plugins/UEditor/ueditor.all.min.js"></script>
+    <!-- 实例化编辑器 -->
+    <script type="text/javascript">
+        var ue = UE.getEditor('content');
+
+        function Save() {
+
+            var type = $("#type").val();
+            var id = $("#id").val();
+            var title = $("#title").val();
+            var ReadNum = $("#ReadNum").val();
+            var content = ue.getContent();
+
+            //提交数据
+            $.ajax({
+                url: "/Admin_Information/News/Save",
+                data: { type: type, id: id, title: title, content: content, ReadNum: ReadNum },
+                type: "post",
+                success: function (result) {
+                    alert("操作提示", result.Msg, function () {
+                        //如果返回结果中有 跳转url,操作成功则跳转
+                        if (result.ReUrl != '' && result.ReUrl != null) {
+                            location.href = result.ReUrl;
+                        }
+                    });
+                }, error: function (error) {
+                    console.log(error);
+                }
+            });
+
+        }
+    </script>
+}

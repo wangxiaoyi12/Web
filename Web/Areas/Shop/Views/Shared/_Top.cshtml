@@ -1,0 +1,179 @@
+﻿@using DataBase
+@using Business
+@{ 
+    DataBase.Xml_Shop config = DB.XmlConfig.XmlShop;
+    string hello = "";
+    if (DateTime.Now.Hour < 12)
+    {
+        hello = "上午好";
+    }
+    else if (DateTime.Now.Hour < 18)
+    {
+        hello = "下午好";
+    }
+    else
+    {
+        hello = "晚上好";
+    }
+}
+<!--顶部图层-->
+<div id="header_top">
+    <div id="top">
+        <div class="Inside_pages">
+            <div class="Collection">@hello，欢迎光临@(config.ShopName)！<em></em><a href="javascript:AddFavorite('@config.ShopName','@Url_Shop.GetIndex()');">收藏我们</a></div>
+            <div class="hd_top_manu clearfix">
+                <ul class="clearfix">
+                    @if (User_Shop.IsLogin())
+                    {
+                        <li class="hd_menu_tit zhuce" data-addclass="hd_menu_hover">欢迎光临本店！
+                    <a href="@Url_Shop.GetUserCenter()" class="red">[@User_Shop.GetLoginName()]</a>|<a href="javascript:logOff();" class="red">[退出]</a> 
+                    </li>
+                    }
+                    else
+                    {
+                        <li class="hd_menu_tit zhuce" data-addclass="hd_menu_hover">欢迎光临本店！
+                        <a href="@Url_Shop.GetLogin()" class="red">[请登录]</a> 
+                    @*新用户<a href="@Url_Shop.GetRegister()" class="red">[免费注册]</a>*@
+                    </li>
+                    }
+                    <li class="hd_menu_tit" data-addclass="hd_menu_hover"><a href="@Url_Shop.GetMyOrder()">我的订单</a></li>
+                    <li class="hd_menu_tit" data-addclass="hd_menu_hover"> <a href="@Url_Shop.GetMyCat()">购物车</a> </li>
+                    @*<li class="hd_menu_tit" data-addclass="hd_menu_hover"><a href="@Url_Shop.GetOnebuy()">进入一元购</a></li>*@
+                    <li class="hd_menu_tit list_name" data-addclass="hd_menu_hover">
+                        <a href="#" class="hd_menu">客户服务</a>
+                        <div class="hd_menu_list">
+                            <ul>
+                                @{
+                                    //获取店主
+                                    List<ShopArticleCategory> caterory = DB.ShopArticleCategory.GetListByParent(null);
+                                    foreach (var item in caterory)
+                                    {
+                                        <li><a href="@Url_Shop.GetHelp(item)">@item.Name</a></li>
+                                    }
+                                }
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--样式-->
+    <!--顶部样式2-->
+    <div id="header " class="header page_style">
+        <div class="logo"><a href="@Url_Shop.GetIndex()"><img src="@Url_Shop.GetImg(config.ShopLogo)" style="max-width:250px" /></a></div>
+        <!--结束图层-->
+        <div class="Search">
+            <p><input name="" type="text" class="text" /><input name="" type="submit" value="搜 索" class="Search_btn" /></p>
+            @*<p class="Words"><a href="#">苹果</a><a href="#">香蕉</a>
+            <a href="#">菠萝</a><a href="#">西红柿</a><a href="#">橙子</a></p>*@
+        </div>
+        <!--购物车样式-->
+        <div class="hd_Shopping_list" id="Shopping_list">
+            @Html.Action("TopCart","Index")
+        </div>
+    </div>
+    <!--菜单导航样式-->
+    <div id="Menu" class="clearfix">
+        <div class="index_style clearfix">
+            @{ 
+                //判断是否是首页
+                bool isIndex = false;
+                if (string.Equals(Request.RequestContext.RouteData.Values["controller"].ToString(), "index", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    isIndex = true;
+                }
+            }
+            <div id="allSortOuterbox" class="@(isIndex ? "" : "display")">
+                <div class="t_menu_img"></div>
+                <div class="Category"><a href="@Url_Shop.GetProduct()"><em></em>所有产品分类</a></div>
+                <div class="hd_allsort_out_box_new">
+                    <!--左侧栏目开始-->
+                    <ul class="Menu_list">
+                        @{
+                            //1.获取大分类
+                            List<ShopProductCategory> parentList = DB.ShopProductCategory.GetListByParent(null);
+                            foreach (var parent in parentList)
+                            {
+                                List<ShopProductCategory> temp = new List<ShopProductCategory>();
+                            <li class="name">
+                                <div class="Menu_name"><a href="@Url_Shop.GetProduct(parent)">@parent.Name</a> <span>&lt;</span></div>
+                                <div class="menv_Detail">
+                                    <div class="cat_pannel clearfix">
+                                        <div class="hd_sort_list">
+                                            @{
+                                                //获取子类1
+                                                List<ShopProductCategory> child1List = DB.ShopProductCategory.GetListByParent(parent);
+                                                for (int i = 0; i < child1List.Count; i++)
+                                                {
+                                                    ShopProductCategory child1 = child1List[i];
+                                                    <dl class="clearfix" data-tpc="1">
+                                                        <dt><a href="@Url_Shop.GetProduct(child1)">@child1.Name<i>></i></a></dt>
+                                                        <dd>
+                                                            @{
+                                                                //获取子类2
+                                                                List<ShopProductCategory> child2List = DB.ShopProductCategory.GetListByParent(child1);
+                                                                foreach (var child2 in child2List)
+                                                                {
+                                                                    if (temp.Count < 3) { temp.Add(child2); }
+                                                                    <a href="@Url_Shop.GetProduct(child2)"> @child2.Name </a>
+                                                                }
+                                                            }
+                                                        </dd>
+                                                    </dl>
+                                                }
+                                            }
+                                        </div>
+                                        <div class="Brands">
+                                                @{
+                                                    //1.获取产品下的品牌
+                                                    List<ShopBrand> brandList = DB.ShopBrand.Where(q => q.CategoryID == parent.ID)
+                                                        .OrderByDescending(q => q.Sort)
+                                                        .ThenByDescending(q => q.ID).ToList();
+                                                    foreach (var item in brandList)
+                                                    {
+                                                        <a href="@Url_Shop.GetProduct(item)" class="logo_Brands">
+                                                            <img src="@Url_Shop.GetImg(item.Logo)" />
+                                                        </a>
+                                                    }
+                                                }
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="link_name">
+                                    <p>
+                                        @foreach (var item in temp)
+                                        {
+                                            <a href="@Url_Shop.GetProduct(item)">@item.Name</a>
+                                        }
+                                    </p>
+                                </div>
+                            </li>
+                             }
+                        }
+                    </ul>
+                </div>
+            </div>
+            <script>$("#allSortOuterbox").slide({ titCell:".Menu_list li",mainCell:".menv_Detail",	});</script>
+            <!--菜单栏-->
+            <div class="Navigation" id="Navigation">
+                <ul class="Navigation_name">
+                    <li><a href="@Url_Shop.GetIndex()">首页</a></li>
+                    @{
+                        //1.获取导航
+                        int navtype = ShopEnum.NavType.Main.GetHashCode();
+                        List<ShopNavigation> navList = DB.ShopNavigation.Where(q => q.IsEnable == true && q.Type == navtype).OrderBy(q => q.Sort).ToList();
+                        for (int i = 0; i < navList.Count; i++)
+                        {
+                            ShopNavigation item = navList[i];
+                            <li><a href="@item.URL" target="@(item.Target)">@item.Name</a> @if ((i + 1) == navList.Count)
+                            { <em class="hot_icon"></em>}</li>
+                        }
+                    }
+                </ul>
+            </div>
+            <script>$("#Navigation").slide({titCell:".Navigation_name li"});</script>
+            <a  class="link_bg"><img src="/assets/shop/images/link_bg_03.png" /></a>
+        </div>
+    </div>
+</div>

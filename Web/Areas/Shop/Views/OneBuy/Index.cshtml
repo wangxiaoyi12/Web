@@ -1,0 +1,147 @@
+﻿@using DataBase
+@using Business
+@{
+    ViewBag.Title = "一元购首页";
+    //1.获取一元购分页数据
+    int pageIndex = ReqHelper.GetInt("pageIndex", 1);
+    int pageSize = 8;
+    var query = DB.ShopOneBuy.Where(q => q.IsEnable);
+    int recordCount = query.Count();
+    query = query.OrderBy(q => q.IsFinish)
+        .ThenByDescending(q => q.CreateTime);
+
+    List<ShopOneBuy> oneList = query.Skip((pageIndex - 1) * pageSize)
+        .Take(pageSize)
+        .ToList();
+}
+@section Head{
+    <link href="~/assets/shop/css/onebuy.css" rel="stylesheet" />
+}
+@section Footer{
+    <script>
+        //绑定提交
+        $('.yes-btn').click(function(){
+            var thisBtn=$(this);
+            var numBox=thisBtn.parents('.productItem').find('.car_ipt');
+            var id=numBox.attr('data-id');
+            var count=numBox.val();
+            if(thisBtn.text().indexOf('正在提交')!=-1)
+                return;
+            thisBtn.text('正在提交...');
+            $.myPost('/shop/usercenter/addonebuy',{
+                id:id,count:count
+            },function(data){
+                alert(data.msg);
+                setTimeout(function(){
+                    location.reload();
+                },800);
+            },function(data){
+                alert(data.msg);
+                if(data.msg=='余额不足'){
+                    location.href='/shop/usercenter';
+                }
+            });
+        });
+        //购买按钮
+        $('.buy_botton').click(function(){
+            $(this).hide();
+            $(this).next().addClass('btnDivShow');
+        });
+        $(function(){
+            $('.m-progress b').each(function(){
+                var btn=$(this);
+                var value=  btn.parent().attr('data-value');
+                btn.css({
+                    width:value+'%'
+                });
+            });
+        });
+</script>
+}
+<!--广告-->
+<div style="background-image:url(/assets/shop/images/ADimg_02.png);
+ background-position:center; background-repeat:no-repeat; height:400px;"></div>
+<!--团购样式-->
+<div class="Inside_pages">
+    <!--团购列表样式-->
+    <div class="group_buy  clearfix">
+        @{
+            if (oneList.Count > 0)
+            {
+                foreach (var item in oneList)
+                {
+                    string url = Url_Shop.GetProduct(item.ShopProduct);
+                    decimal percent = item.Count * 1.00m / item.TotalCount * 100;
+                    <div class="group_list">
+                        <a name="@item.ID"></a>
+                        <ul class="group_info productItem">
+                            <li class="group_img"><a href="@url" target="_blank"><img src="@Url_Shop.GetProductImg(item.ShopProduct)"></a></li>
+                            <li class="group_name">
+                                <a href="@url" target="_blank">@item.ShopProduct.Title</a>
+                                <div class="group_content">@item.ShopProduct.SubTitle</div>
+                                <div class="group_Price"><span>价值：</span><i>￥</i><em>@item.ShopProduct.PriceShopping</em></div>
+                                @*<div class="Original_Price">原价：￥65.20</div>*@
+                                <div class="g-progress">
+                                    <dl class="m-progress">
+                                        <dt title="已完成@(percent)%" data-value="@percent">
+                                            <b style="width:0px;"></b>
+                                        </dt>
+                                        <dd>
+                                            <span class="orange fl"><em>@item.Count</em>已参与</span>
+                                            <span class="gray6 fl"><em>@item.TotalCount</em>总需人次</span>
+                                            @if (User_Shop.IsLogin())
+                                {
+                                <span class="blue fr"><em>@DB.ShopOneBuyDetail.GetCount(User_Shop.GetMemberID(), item.ID)</em>已投入</span>
+                                }
+                                else
+                                {
+                                <span class="blue fr"><em>0</em>已投入</span>
+                                }
+                                        </dd>
+                                    </dl>
+                                </div>
+                                @if (item.Count >= item.TotalCount)
+                    {
+                    <a class="buy_botton graybtn">已经结束</a>
+                    }
+                    else
+                    {
+                    <a class="buy_botton">立即购买</a>
+                    <div class="btnDiv">
+                        <div class="choose-amount left">
+                            <a class="btn-reduce countSubBtn">-</a>
+                            <a class="btn-add countAddBtn">+</a>
+                            <input class="text car_ipt" id="buy-num" value="1" data-id="@item.ID" data-max="@(item.TotalCount-item.Count)">
+                        </div>
+                        <div class="yes-btn">提交</div>
+                    </div>
+                    }
+                            </li>
+                        </ul>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="blank" style="height:300px;line-height:300px;">暂时没有团购产品~</div>
+            }
+        }
+        </div>
+        <div class="clearfix" ></div>
+        <div id="pageOne" class="pageBar" style="padding-top:30px;"></div>
+        <script>
+            var pageOne = $('#pageOne').pageBar({
+                pageIndex: @(pageIndex),
+                pageSize: @(pageSize),
+                showType:'default',
+                recordCount: @(recordCount),
+                submitEvent: function (index) {
+                    var url=location.pathname;
+                    if(index>1)
+                        url+='?pageindex='+index;
+                    location.href=url;
+                }
+            });
+        </script>
+    <div style="height:80px;"></div>
+</div>

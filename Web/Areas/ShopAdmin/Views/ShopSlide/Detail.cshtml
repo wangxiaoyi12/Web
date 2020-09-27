@@ -1,0 +1,177 @@
+﻿@model DataBase.ShopSlide
+@{
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+}
+@section css{
+    <link href="~/assets/global/myplugins/Uploader/Uploader6.0.min.css" rel="stylesheet" />
+    <link href="~/assets/jQueryVideo.js6.2.8/css/video-js.css" rel="stylesheet" />
+}
+
+<!-- BEGIN PAGE BAR -->
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="/SysManage/Home/Index">首页</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#"><span>商城管理</span></a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#"><span>幻灯片</span></a>
+        </li>
+    </ul>
+</div>
+<!-- END PAGE BAR -->
+<!-- BEGIN PAGE CONTENT -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet light bordered">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="font-green-sharp fa fa-user"></i>
+                    <span class="caption-subject font-green-sharp bold uppercase">@ViewBag.Title<span>幻灯片</span></span>
+                </div>
+            </div>
+            <div class="portlet-body">
+                @using (Ajax.BeginForm("Save", null, new AjaxOptions()
+                {
+                    HttpMethod = "Post",
+                    OnBegin = "SubAjax.Loading",
+                    OnComplete = "SubAjax.Complate",
+                    OnFailure = "SubAjax.Failure",
+                    OnSuccess = "SubAjax.Success"
+                }, new { @class = "form-horizontal", @role = "form", @id = "commentForm" }))
+                {
+                    <div class="form-body">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red">*</span>名字：</label>
+                            <div class="col-md-5">
+                                <input type="hidden" name="ID" value="@Model.ID" />
+                                <input type="text" name="Title" value="@Model.Title" class="form-control" nullmsg="请输入幻灯片名字" datatype="*1-100" errormsg="幻灯片名不正确">
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red"></span><div class="uploader uploader-warning" id="uploadBtn1"></div></label>
+                            <div class="col-md-5">
+                                <input type="hidden" name="Img" id="Img" value="@Model.Img" class="form-control" placeholder="请输入Logo">
+
+                                <img id="imgImg" src="@Model.Img" alt="" height="120" />
+                                <small class="text-danger">注：手机版最佳尺寸:720*400; PC版最佳尺寸为:1136*640</small>
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red"></span>类型：</label>
+                            <div class="col-md-5">
+                                @*<label class="radio-inline">
+                                    <input type="radio" value="1" name="Type" @(Model.Type == 1 ? "checked" : "") onclick="shijian()" /> pc版
+                                </label>*@
+                                <label class="radio-inline">
+                                    <input type="radio" value="2" name="Type" checked onclick="shijian()" /> 手机版
+                                </label>
+                            </div>
+                            <span></span>
+                        </div>
+
+                        @*<div class="form-group mydiv1">
+                            <label class="col-md-2 control-label"><span style="color:red"></span><div class="uploader uploader-warning" id="test2"></div></label>
+                            <div class="col-md-5">
+                                <input type="hidden" id="Video" name="Video" value="@Model.Video" />
+                                <video id="example_video_1" class="video-js vjs-default-skin vjs-big-play-centered"
+                                       controls preload="auto" width="640" height="264" data-setup='{"example_option":true}'>
+                                    <source src="@Model.Video" id="Video" type='video/mp4' />
+                                   </video>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red"></span>链接：</label>
+                            <div class="col-md-5">
+                                <input type="text" name="Link" value="@Model.Link" class="form-control" nullmsg="请输入幻灯片链接">
+                            </div>
+                            <span></span>
+                        </div>*@
+
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red"></span>顺序：</label>
+                            <div class="col-md-5">
+                                <input type="text" name="Sort" value="@Model.Sort" class="form-control" nullmsg="请输入顺序" datatype="n0-20" errormsg="顺序不正确">
+                            </div>
+                            <span></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red"></span>幻灯片描述：</label>
+                            <div class="col-md-5">
+                                <textarea name="Description" rows="8" class="form-control" nullmsg="请输入幻灯片描述">@Model.Description</textarea>
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-actions">
+                            <div class="row">
+                                <div class="col-md-offset-3 col-md-9">
+                                    <button type="submit" id="SubSave" class="btn green"><i class="fa fa-check"></i><span>保 存</span></button>
+                                    <button type="button" class="btn default" onclick="window.history.back()"><i class="fa fa-mail-reply"></i>返回</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END PAGE CONTENT -->
+@section scripts{
+    <script src="~/assets/global/myplugins/Uploader/Uploader6.0.min.js"></script>
+    <script src="~/assets/jQueryVideo.js6.2.8/js/video.min.js"></script>@*//自动播放*@
+    @*<script src="~/assets/jQueryVideo.js6.2.8/js/videojs-ie8.min.js"></script>*@@*//手动播放*@
+    <!-- 实例化编辑器 -->
+    <script type="text/javascript">
+        /**大小图片前台处理，后台简单处理模式，上传成功后显示图片**/
+        var uploader = $('#uploadBtn1').uploader({
+            url: 'ws://@(Request.Url.Host):@(Request.Url.Port)/ajax/upload',
+            text: '上传图片',
+            fileExts: 'png;jpg;gif',
+            handleType: '0',
+            debug: false,
+            max: 1024 * 1204 * 10,
+            subfolder: 'upload/brand',
+            onSuccess: function (data) {
+                var img1 = data.relativeName;// alert(img1);
+                $("#imgImg").attr('src', img1);
+                $("#Img").val(img1);
+            }
+        });
+        //上传视频
+        var uploader = $('#test2').uploader({
+            url: 'ws://@(Request.Url.Host):@(Request.Url.Port)/ajax/upload',
+            text: '上传视频',
+            fileExts: 'Mp4',
+            handleType: '0',
+            debug: false,
+            subfolder: 'upload/Video',
+            max: 1024 * 1204 * 10,
+            onSuccess: function (data) {
+                var img1 = data.relativeName;// alert(img1);
+                $("#Video").attr('src', img1);
+                $("#Video").val(img1);
+            }
+        });
+        var myPlayer = videojs('example_video_1');
+        videojs("example_video_1").ready(function () {
+            var myPlayer = this;
+            myPlayer.play();
+        });
+        function shijian() {
+            var chufaanniu = $("input[name = 'Type']:checked").val();
+            if (chufaanniu == 1) {
+                $(".mydiv1").hide();
+            } else {
+                $(".mydiv1").show();
+            }
+        }
+    </script>
+}

@@ -1,0 +1,163 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+    var Path =ViewBag.Path;
+    var title = "分红奖";
+    var timeFlag = "分红日期";
+}
+
+<!-- BEGIN PAGE BAR -->
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="/SysManage/Home/Index">首页</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#"><span>财务管理</span></a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="@(Path)/Index"><span>@title</span></a>
+        </li>
+    </ul>
+</div>
+<!-- END PAGE BAR -->
+<!-- BEGIN PAGE CONTENT -->
+<div class="row">
+    <!-- BEGIN SAMPLE TABLE PORTLET-->
+    <div class="col-xs-12">
+        <div class="portlet box green">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-database"></i>@(title)列表
+                </div>
+                <div class="tools">
+                    <a href="javascript:;" class="collapse"> </a>
+                    <a href="javascript:;" class="reload"> </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="table-responsive">
+                    <div class="table-toolbar col-xs-3">
+                        <div class="btn-group">
+                            <a  href="@(Path)/Detail" class="btn green">
+                                <i class="fa fa-plus"></i> 分红
+                            </a>                          
+                        </div>
+                    </div>
+                    <form class="form form-horizontal form-inline">
+                        <fieldset>
+                            <div class="control-group">
+                                <div class="controls">
+                                    <div class="text-right">
+                                        <div class="input-group col-xs-6">
+                                            <input type="text" value="" id="start" placeholder="@(timeFlag)起" class="form-control ">
+                                            <span class="input-group-addon"> to </span>
+                                            <input type="text" value="" id="end" placeholder="@(timeFlag)至" class="form-control ">
+                                        </div>
+                                        <div class="input-group col-xs-3">
+                                            <input type="text" class="form-control" placeholder="搜索关键字" id="keyword" />
+                                            <span class="input-group-btn">
+                                                <a class="btn btn-default" href="javascript:searchList();">
+                                                    <span class="glyphicon glyphicon-search"></span>
+                                                </a>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                    <table id="datatable" class="table table-striped table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th style="width:3%"><input type="checkbox" id='checkAll'></th>
+                                <th>分红单号</th>
+                                <th>起始日期</th>
+                                <th>截止日期</th>
+                                <th>合计金额</th>
+                                <th>应分红金额</th>
+                                <th>实分红金额</th>
+                                <th>分红人数</th>
+                                <th>普卡每人分红</th>
+                                <th>银卡每人分红</th>
+                                <th>钻卡每人分红</th>
+                                <th>操作人</th>
+                                <th>操作时间</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END SAMPLE TABLE PORTLET-->
+</div>
+
+@section scripts {
+    <script type="text/javascript">
+        var oTable;
+        var idField = "Id";
+        var path = "@Path";
+        var dataSource = path + "/getDataSource";
+        var isDetail = false;
+        var searchData = function (e) {
+            return {
+                startTime: $("#start").val(),
+                end: $("#end").val(),
+                key: $("#keyword").val(),
+                start: e.start,
+                length: e.length,
+                draw: e.draw
+            }
+        };
+        var columns = [//绑定数据
+            {
+                data: idField,
+                createdCell: function (nTd, sData, oData, iRow, iCol) {
+                    $(nTd).html("<input type='checkbox' name='checkList' value='" + sData + "'>");
+                }
+            },
+            { data: 'Code' },
+            { data: 'StartTime' },
+            { data: 'EndTime' },
+            { data: 'TotalAmount' },
+            { data: 'AllocationAmount' },
+            { data: 'RealAmount' },
+            { data: 'MemberCount' },
+            { data: 'PerAmount' },
+                { data: 'PerAmount2' },
+                    { data: 'PerAmount3' },
+            { data: 'CreateEmpName' },
+            { data: 'CreateTime' }
+        ];
+        function searchList() {
+            oTable.ajax.reload(null, false);
+        }
+        $(function () {
+            $('#start').datetimepicker({
+                language: 'zh-CN',
+                format: 'yyyy-mm-dd',
+                autoclose: 1,
+                minView: 2
+            }).on('changeDate', function (ev) {
+                var start = $('#start').val();
+                $('#end').datetimepicker('setStartDate', start);
+                $('#start').datetimepicker('hide');
+            });
+            $('#end').datetimepicker({
+                language: 'zh-CN',
+                format: 'yyyy-mm-dd',
+                autoclose: 1,
+                minView: 2
+            }).on('changeDate', function (ev) {
+                var end = $('#end').val();
+                $('#start').datetimepicker('setEndDate', end);
+                $('#end').datetimepicker('hide');
+            });
+        });
+    </script>
+    <script src="~/assets/scripts/myListPage.js"></script>
+}

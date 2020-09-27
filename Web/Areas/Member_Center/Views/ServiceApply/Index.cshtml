@@ -1,0 +1,123 @@
+﻿@model DataBase.Member_Info
+@{
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+    var Path = "/Member_Center/ServiceApply/";
+}
+
+<!-- BEGIN PAGE BAR -->
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="/SysManage/Desk/Index">首页</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#"><span>报单中心</span></a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li >
+            <a href="Index"><span>申请店主</span></a>
+        </li>
+    </ul>
+</div>
+<!-- END PAGE BAR -->
+<!-- BEGIN PAGE CONTENT -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet light bordered">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="font-green-sharp fa fa-user"></i>
+                    <span class="caption-subject font-green-sharp bold uppercase">@ViewBag.Title<span>报单中心</span></span>
+                </div>
+            </div>
+            <div class="portlet-body">
+                @using (Ajax.BeginForm("Save", null, new AjaxOptions()
+                {
+                    HttpMethod = "Post",
+                    OnBegin = "SubAjax2.Loading",
+                    OnComplete = "SubAjax2.Complate",
+                    OnFailure = "SubAjax2.Failure",
+                    OnSuccess = "SubAjax2.Success"
+                }, new { @class = "form-horizontal", @role = "form", @id = "commentForm" }))
+                {
+                    <div class="form-body">
+                        @{
+                            if (Model.IsServiceCenter == "是")
+                            {
+                                <div id="divApplyed">
+                                    您申请的店主已通过管理员审核,您的店主编号为：@Model.Code
+                                </div>
+                            }
+                            else if (Model.IsServiceCenter == "审核中")
+                            {
+                                <div id="divApplying">
+                                    您的申请已经提交,正在审核中,请耐心等待
+                                </div>
+                            }
+                            else if (Model.IsServiceCenter == "否")
+                            {
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label"><span style="color:red"></span>会员编号：</label>
+                                    <label class="control-label text-left">@Model.Code</label>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label"> 姓名：</label>
+                                    <label class="control-label text-left">@Model.NickName</label>
+                                </div>
+                                <div class="form-actions">
+                                    <div class="row">
+                                        <div class="col-md-offset-3 col-md-9">
+                                            <button type="submit" id="SubSave" class="btn green"><i class="fa fa-check"></i><span>提交申请</span></button>
+                                            <button type="button" class="btn default" onclick="window.history.back()"><i class="fa fa-mail-reply"></i>返回</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </div>
+                            }
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END PAGE CONTENT -->
+@section scripts{ 
+    <script>
+        var SubAjax2 = {
+            Loading: function () {
+                $("#SubSave").attr("disabled", true).find("span").html("正在保存中...")
+            },
+            Success: function (result) {
+                if (result.Status == "y") {
+                    alert("成功提示", result.Msg, function () {
+                        location.href = "@(Path)Index";
+                    });
+                }
+                else {
+                    alertError("错误提示", result.Msg);
+                }
+                SubAjax.Complete();
+            },
+            SuccessBack: function (result) {
+                if (result.Status == "y") {
+                    alert("提示", result.Msg, function () {
+                        history.go(-1);
+                    });
+                }
+                else {
+                    alertError("错误提示", result.Msg);
+                    SubAjax.Complete();
+                }
+            },
+            Failure: function () {
+                alertError("错误提示", "网络超时,请稍后再试...");
+                SubAjax.Complete();
+            },
+            Complete: function () {
+                $("#SubSave").attr("disabled", false).find("span").html("提交申请")
+            }
+        };
+    </script>
+ 
+}

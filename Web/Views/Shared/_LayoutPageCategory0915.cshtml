@@ -1,0 +1,56 @@
+﻿@using DataBase;
+@using Business;
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+    <meta content="telephone=no" name="format-detection">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <title>@DB.XmlConfig.XmlSite.webname</title>
+   
+
+
+    @Html.Partial("_JsLink0915")
+    @Html.Partial("_CssLink0915")
+</head>
+<body>
+    @RenderBody()
+    <footer>
+        <ul class="footerUl">
+            <li>
+                <a href="@Url_Mobile.GetIndex()">
+                    <img src="~/assets/jnwz200915/images/footer1.png">
+                    <span class="fotSp ">首页</span>
+                </a>
+            </li>
+            <li>
+                <a href="@Url_Mobile.GetCategory()">
+                    <img src="~/assets/jnwz200915/images/footer2A.png">
+                    <span class="fotSp fotact">分类</span>
+                </a>
+            </li>
+            <li>
+                <a href="@Url_Mobile.GetMyCart()">
+                    <img src="~/assets/jnwz200915/images/footer3.png">
+                    <span class="fotSp ">购物车</span>
+                </a>
+            </li>
+            <li>
+                <a href="@Url_Mobile.GetUserCenter()">
+                    <img src="~/assets/jnwz200915/images/footer4.png">
+                    <span class="fotSp">我的</span>
+                </a>
+            </li>
+        </ul>
+    </footer>
+</body>
+<link href="~/assets/jnwz200915/layui/css/layui.css" rel="stylesheet" />
+
+<script src="~/assets/jnwz200915/layui/layui.all.js"></script>
+</html>
+

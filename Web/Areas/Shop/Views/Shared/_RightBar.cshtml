@@ -1,0 +1,110 @@
+﻿@using DataBase
+@{ 
+    Xml_Shop config = DB.XmlConfig.XmlShop;
+}
+<div class="fixedBox">
+    <ul class="fixedBoxList">
+        <li class="fixeBoxLi user"><a href="@Url_Shop.GetUserCenter()"> <span class="fixeBoxSpan iconfont icon-yonghu"></span> <strong>用户</strong></a> </li>
+        @*<li class="fixeBoxLi cart_bd" style="display:block;" id="cartboxs">
+            <p class="good_cart">0</p>
+            <span class="fixeBoxSpan iconfont icon-cart"></span> <strong>购物车</strong>
+            <div class="cartBox">
+                <div class="bjfff"></div><div class="message">购物车内暂无商品，赶紧选购吧</div>
+                <ul class="p_s_list">
+                    <li>
+                        <div class="img"><img src="/assets/shop/images/tianma.png"></div>
+                        <div class="content"><p><a href="#">产品名称</a></p><p>颜色分类:紫花8255尺码:XL</p></div>
+                        <div class="Operations">
+                            <p class="Price">￥55.00</p>
+                            <p><a href="#">删除</a></p>
+                        </div>
+                    </li>
+                </ul>
+                <div class="Shopping_style">
+                    <div class="p-total">共<b>1</b>件商品　共计<strong>￥ 515.00</strong></div>
+                    <a href="#" title="去购物车结算" id="btn-payforgoods" class="Shopping">去购物车结算</a>
+                </div>
+            </div>
+        </li>*@
+        <li class="fixeBoxLi Service ">
+            <span class="fixeBoxSpan iconfont icon-service"></span> <strong>客服</strong>
+            <div class="ServiceBox">
+                <div class="bjfffs"></div>
+                @{
+                    string qq = config.QQ;
+                    if (string.IsNullOrEmpty(qq))
+                    {
+
+                    }
+                    else
+                    {
+                        string[] temp = qq.Split(',');
+                        for (int i = 1; i <= temp.Length; i++)
+                        {
+                            string item = temp[i-1];
+                            <dl>
+                                <dt><img src="/assets/shop/images/Service1.png" width="75" height="75"></dt>
+                                <dd>
+                                    <strong>QQ客服@(i)</strong>
+                                    <p class="p2"><a href='http://wpa.qq.com/msgrd?v=3&amp;uin=@(item)&amp;menu=yes' target="_blank">点击交谈</a></p>
+                                </dd>
+                            </dl>
+                        }
+                    }
+                }
+            </div>
+        </li>
+        <li class="fixeBoxLi code cart_bd " style="display:block;" id="cartboxs">
+            <span class="fixeBoxSpan iconfont icon-erweima"></span> <strong>微信</strong>
+            <div class="cartBox">
+                <div class="bjfff"></div>
+                <div class="QR_code">
+                    <p><img src="@config.WeiXin" width="180" height="180" style="margin-top:10px;" /></p>
+                    <p>微信扫一扫，关注我们</p>
+                </div>
+            </div>
+        </li>
+        <li class="fixeBoxLi Home"> <a href="@Url_Shop.GetMyCollect()"> <span class="fixeBoxSpan iconfont  icon-shoucang"></span> <strong>收藏</strong> </a> </li>
+        <li class="fixeBoxLi Home"> <a href="@Url_Shop.GetMyFootprint()"> <span class="fixeBoxSpan iconfont  icon-zuji"></span> <strong>足迹</strong> </a> </li>
+        @*<li class="fixeBoxLi Home"> <a href="./"> <span class="fixeBoxSpan iconfont  icon-fankui"></span> <strong>反馈</strong> </a> </li>*@
+        <li class="fixeBoxLi BackToTop">
+            <span class="fixeBoxSpan iconfont icon-top"></span> <strong>返回顶部</strong>
+        </li>
+    </ul>
+</div>
+<script type="text/javascript">
+    //浮动导航
+    function float_nav(dom) {
+        var right_nav = $(dom);
+        var nav_height = right_nav.height();
+        function right_nav_position(bool) {
+            var window_height = $(window).height();
+            var nav_top = (window_height - nav_height) / 2;
+            if (bool) {
+                right_nav.stop(true, false).animate({ top: nav_top + $(window).scrollTop() }, 400);
+            } else {
+                right_nav.stop(true, false).animate({ top: nav_top }, 300);
+            }
+            right_nav.show();
+        }
+        if (!+'\v1' && !window.XMLHttpRequest) {
+            $(window).bind('scroll resize', function () {
+                if ($(window).scrollTop() > 300) {
+                    right_nav_position(true);
+                } else {
+                    right_nav.hide();
+                }
+            })
+        } else {
+            $(window).bind('scroll resize', function () {
+                if ($(window).scrollTop() > 300) {
+                    right_nav_position();
+                } else {
+                    right_nav.hide();
+                }
+            })
+        }
+    }
+    float_nav('#float');
+    float_nav('#left_nav');
+</script>

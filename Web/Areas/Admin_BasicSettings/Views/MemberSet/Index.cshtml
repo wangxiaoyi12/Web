@@ -1,0 +1,122 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+}
+
+<!-- BEGIN PAGE BAR -->
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="/SysManage/Home/Index">首页</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#">基础设置</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="/Admin_BasicSettings/MemberSet/Index"><span>会员设置</span></a>
+        </li>
+    </ul>
+</div>
+<!-- END PAGE BAR -->
+<div class="row">
+    <!-- BEGIN SAMPLE TABLE PORTLET-->
+    <div class="col-md-12">
+        <div class="portlet box green">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-database"></i>会员参数列表
+                </div>
+                <div class="tools">
+                    <a style="color:white" onclick="ToExcel()" title="导出Excel"> <i class="fa fa-sign-out"></i>导出Excel </a>
+                </div>
+            </div>
+
+            <div class="portlet-body">
+                <div class="table-responsive">
+                    <div class="table-toolbar">
+                        <div class="btn-group">
+                            <a id="Edit" onclick="Save()" class="btn green">
+                                <i class="fa fa-floppy-o"></i> 保存
+                            </a>
+                        </div>
+                    </div>
+                    <table id="datatable" class="table table-striped table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th style="width:5%">唯一主键</th>
+                                <th>级别名称</th>
+
+                                <th>推广奖比例(%)</th>
+                                <th>团队业绩</th>
+                                <th>直推/伞下会员个数</th>
+                             
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                foreach (var item in ViewData["LevelData"] as List<DataBase.Sys_Level>)
+                                {
+                                    <text>
+                                        <tr name="table_tr">
+                                            <td><input type="hidden" name="" id="LevelId" value="@item.LevelId">@item.LevelId</td>
+                                            <td><input type="text" class="form-control" name="" id="LevelName" value="@item.LevelName" /></td>
+
+                                           
+                                            <td><input type="text" class="form-control" name="" id="RecAward1" value="@item.RecAward1" /></td>
+                                            <td><input type="text" class="form-control" name="" id="TeamAward" value="@item.TeamAward" /></td>
+                                            <td><input type="text" class="form-control" name="" id="LayerPeng" value="@item.LayerPeng" /></td>
+                                        </tr>
+                                    </text>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END SAMPLE TABLE PORTLET-->
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        function Save() {
+            var sub_tr = "";
+            $("tr[name='table_tr']").each(function () {
+                var tdArr = $(this).children();
+                var LevelId = tdArr.eq(0).find("input").val();//ID
+                var LevelName = tdArr.eq(1).find("input").val();//级别名称
+                var RecAward1 = tdArr.eq(2).find("input").val();//  投资金额
+                //var RecAward1 = tdArr.eq(3).find("input").val();//ID
+                //var FindPointMoney = tdArr.eq(4).find("input").val();//级别名称
+                //var FindPointLayer = tdArr.eq(5).find("input").val();//ID
+                //var MinInvestment = tdArr.eq(6).find("input").val();//级别名称
+                //var MinLevelId = tdArr.eq(7).find("input").val();//ID
+             
+                var TeamAward = tdArr.eq(3).find("input").val();//  投资金额
+                var LayerPeng = tdArr.eq(4).find("input").val();//  投资金额
+              
+                sub_tr += LevelId + "," + LevelName + "," + RecAward1 + "," + TeamAward + "," + LayerPeng + "&";
+            });
+            //提交数据
+            $.ajax({
+                url: "/Admin_BasicSettings/MemberSet/Save",
+                data: { strList: sub_tr },
+                type: "post",
+                success: function (backdata) {
+                    alert("成功提示", backdata.Msg);
+                }, error: function (error) {
+                    alert("失败提示", error);
+                    console.log(error);
+                }
+            });
+        }
+        function ToExcel() {
+            var href = "/Admin_BasicSettings/MemberSet/ToExcel/会员级别";
+            window.open(href);
+        }
+    </script>
+}

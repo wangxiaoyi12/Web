@@ -1,0 +1,340 @@
+﻿@using Business
+@using DataBase
+@{
+    ViewBag.Title = "安全中心";
+    //获取当前登录用户
+    Member_Info curUser = User_Shop.GetMember_Info();
+}
+@section Head{
+    <style>
+        .infoPage input {
+            border: 0px;
+            text-align: right;
+        }
+   
+        .infoPage .list-group-item:first-child {
+            /*line-height: 50px;*/
+        }
+    </style>
+}
+
+
+
+<header class="header">
+    <div class="fix_nav">
+        <div class="nav_inner">
+            <a class="nav-left back-icon" href="@Url_Mobile.GetUserCenter()">返回</a>
+            <div class="tit">安全中心</div>
+            @*<a style="position:absolute;top:5px;right:3px;"
+                class="btn btn-danger pull-right"
+                href="@Url.Action("InfoEdit")">编辑</a>*@
+        </div>
+    </div>
+</header>
+
+<div class="container itemdetail mini-innner ">
+    <div class="row">
+        <form name="theForm">
+            @*<div class="list-group">
+                    <a href="@Url.Action("Account")" class="list-group-item mb10 tip">
+                        账户管理
+                    </a>
+                </div>*@
+            <ul class="list-group infoPage">
+
+
+                @*<li class="list-group-item">
+                        <div class="pull-left">
+                            头像
+                        </div>
+                        <div class="pull-right">
+                            <img width="50" height="50" src="@Url_Mobile.GetImg(curUser.Pwd3)" />
+                        </div>
+                        <div class="clearfix"></div>
+                    </li>
+                    <li class="list-group-item">
+                        <div class="pull-left">
+                            编号
+                        </div>
+                        <div class="pull-right">
+                            <input value="@curUser.Code" readonly />
+                        </div>
+                        <div class="clearfix"></div>
+                    </li>
+                    <li class="list-group-item">
+                        <div class="pull-left">
+                            姓名
+                        </div>
+                        <div class="pull-right">
+                            <input value="@curUser.NickName" readonly />
+                        </div>
+                        <div class="clearfix"></div>
+                    </li>*@
+                @*<li class="list-group-item">
+                        <div class="pull-left">
+                            会员等级
+                        </div>
+                        <div class="pull-right">
+                            <input value="@curUser.MemberLevelName" readonly />
+                        </div>
+                        <div class="clearfix"></div>
+                    </li>*@
+                @*<li class="list-group-item">
+                        <div class="pull-left">
+                            推荐人编号
+                        </div>
+                        <div class="pull-right">
+                            <input value="@curUser.RecommendCode" readonly />
+                        </div>
+                        <div class="clearfix"></div>
+                    </li>*@
+                @*<li class="list-group-item">
+                        <div class="pull-left">
+                            安置人编号
+                        </div>
+                        <div class="pull-right">
+                            <input value="@curUser.UpperCode" readonly />
+                        </div>
+                        <div class="clearfix"></div>
+                    </li>*@
+                @*<li class="list-group-item">
+                        <div class="pull-left">
+                            店主编号
+                        </div>
+                        <div class="pull-right">
+                            <input value="@curUser.ServiceCenterCode" readonly />
+                        </div>
+                        <div class="clearfix"></div>
+                    </li>*@
+                @*<li class="list-group-item">
+                        <div class="pull-left">
+                            推荐人姓名
+                        </div>
+                        <div class="pull-right">
+                            <input value="@curUser.RecommendName" readonly />
+                        </div>
+                        <div class="clearfix"></div>
+                    </li>*@
+
+
+
+                <li class="list-group-item" style="margin-top:1rem">
+                    <div class="clearfix"></div>
+                    <div class="pull-left">
+                        登录密码
+                    </div>
+                    <div class="pull-right">
+                        <button class="btn btn-primary btn-xs" data-type="1">修改密码</button>
+                    </div>
+                    <div class="clearfix"></div>
+                </li>
+                <li class="list-group-item">
+                    <div class="pull-left">
+                        支付密码
+                    </div>
+                    <div class="pull-right">
+                        <button class="btn btn-primary btn-xs" data-type="2">修改密码</button>
+                    </div>
+                    <div class="clearfix"></div>
+                </li>
+                @*<li class="list-group-item mb10 tip">
+                        <a href="#" class="">
+                            账户管理
+                        </a>
+                    </li>*@
+            </ul>
+
+
+            @*<div class="col-xs-12 p0">
+                    <button type="button" id="logOut" class="btn btn-danger btn-block" tabindex="5">
+                        退出登录
+                    </button>
+                </div>*@
+
+        </form>
+    </div>
+    @*修改登录密码*@
+    <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="p">修改密码</h4>
+                </div>
+                <div class="modal-body">
+                    @*<form class="form-horizontal" role="form" data-method="formAjax">*@
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-lock text-danger"></span>
+                                </span>
+                                <input type="password" name="OldPwd" id="OldPwd" class="form-control" placeholder="输入旧密码">
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-lock text-danger"></span>
+                                </span>
+                                <input type="password" name="Pwd" id="Pwd" class="form-control" placeholder="设置密码">
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-lock text-success"></span>
+                                </span>
+                                <input type="password" name="PwdC" id="PwdC" class="form-control" placeholder="确认密码">
+                            </div>
+                        </li>
+                        <li class="list-group-item text-center">
+                            <button class="btn btn-success" id="btnUpdatePwd">确定提交</button>
+                        </li>
+                    </ul>
+                    @*</form>*@
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@Html.Partial("_FooterMy")
+<script>
+    $(function () {
+        //修改密码
+        //$('#loginModal').modal('show');
+        $('.pull-right .btn').click(function () {
+            var dialog = $('#loginModal');
+
+            var type = $(this).attr('data-type')
+
+            //alert(type);
+            if (type == 1)
+            {
+                $("#p").html("修改登录密码")
+            } else
+                if (type == 2) {
+                    $("#p").html("修改支付密码")
+                }
+            dialog.modal('show');
+            dialog.attr('data-type', $(this).attr('data-type'));
+            return false;
+        });
+
+        $('#btnUpdatePwd').click(function () {
+            var dialog = $('#loginModal');
+            var type = dialog.attr('data-type');
+            dialog.modal('hide');
+            var OldPwd = $('#OldPwd');
+            var oldpwd = OldPwd.val();
+            //if (oldpwd.length <= 0) {
+            //    OldPwd.focus();
+            //    return;
+            //}
+            var Pwd = $('#Pwd');
+            var pwd = Pwd.val();
+            if (pwd.length <= 0) {
+                Pwd.focus();
+                return;
+            }
+            var PwdC = $('#PwdC');
+            var pwdc = PwdC.val();
+            if (pwdc.length <= 0) {
+                PwdC.focus();
+                return;
+            }
+            else if (pwdc != pwd) {
+                Pwd.val('');
+                PwdC.val('');
+                Pwd.focus();
+                show('两次输入密码不一致');
+                return;
+            }
+            //提交保存
+            $.post('@Url.Action("UpdatePwd")', {
+                oldpwd: oldpwd,
+                pwd: pwd,
+                type: type
+            }, function (data) {
+                if (data.Status == 'y') {
+                    show(data.Msg);
+                    dialog.modal('hide');
+                    //setTimeout(function () {
+                    //    //跳转登录页面
+                    //    if (type == 1) {
+                    //        Cookies.remove('_token_');
+                    //        location.href = '/mobile/mobilelogin';
+                    //    }
+                    //}, 800);
+                } else {
+                    show(data.Msg);
+                }
+            });
+        });
+
+
+        //退出登录
+        $('#logOut').click(function () {
+            $.post('/shop/login/logoff', {}, function (data) {
+                if (data.status == 1) {
+                    show('退出成功');
+                    setTimeout(function () {
+                        location.href = '/mobile/login';
+                    }, 600);
+                } else {
+                    show(data.msg);
+                }
+            });
+        });
+        $(function () {
+            //头像上传
+            $("#GoodsImage").diyUpload({
+                url: "/Admin_BasicSettings/SysParameters/SaveImage",
+                auto: true,//是否默认上传
+                title: "Images",
+                extensions: "gif,jpg,jpeg,bmp,png",
+                mimeTypes: "image/*",
+                fileNumLimit: 1,
+                thumb: {
+                    width: 110,
+                    height: 110,
+
+                    // 图片质量，只有type为`image/jpeg`的时候才有效。
+                    quality: 70,
+
+                    // 是否允许放大，如果想要生成小图的时候不失真，此选项应该设置为false.
+                    allowMagnify: false,
+
+                    // 是否允许裁剪。
+                    crop: true,
+                    // 为空的话则保留原有图片格式。
+                    // 否则强制转换成指定的类型。
+                    type: "image/jpeg"
+                },
+                success: function (data) {
+                    var url = $("#img").val();
+                    //$("#ImgUrl").val(url + data._raw + "&");
+                    $("#img").val(data._raw);
+                    console.info(data);
+                },
+                error: function (err) {
+                    console.info(err);
+                }
+            });
+        });
+    });
+
+    function showDialog() {
+        var dialog = $('#loginModal');
+        dialog.modal('show');
+        var type = dialog.attr('data-type');
+        if (type == 1) {
+            dialog.find('.modal-title').text('修改登录密码');
+        } else {
+            dialog.find('.modal-title').text('修改支付密码');
+        }
+    }
+</script>
+
+
+

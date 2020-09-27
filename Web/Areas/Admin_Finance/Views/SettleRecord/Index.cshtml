@@ -1,0 +1,187 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+}
+
+<!-- BEGIN PAGE BAR -->
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="/SysManage/Home/Index">首页</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#">财务管理</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="/Admin_Finance/Remit/Index"><span>结算记录</span></a>
+        </li>
+    </ul>
+</div>
+<!-- END PAGE BAR -->
+<!-- BEGIN PAGE CONTENT -->
+<div class="row">
+    <!-- BEGIN SAMPLE TABLE PORTLET-->
+    <div class="col-md-12">
+        <div class="portlet box green">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-database"></i>结算记录列表
+                </div>
+                @*<div class="tools">
+                    <a style="color:white" onclick="ToExcel()" title="导出Excel"> <i class="fa fa-sign-out"></i>导出Excel </a>
+                </div>*@
+            </div>
+            <div class="portlet-body">
+                <div class="table-responsive">
+                    <div class="table-toolbar col-md-3">
+                        <div class="btn-group">                         
+                            @*<a  class="btn green" href="@Url.Action("Week")">
+                                <i class="fa fa-plane"></i> 周结算
+                            </a>*@
+                            @*<a class="btn red"  href="@Url.Action("Month")">
+                                <i class="fa fa-plane"></i> 月计算
+                            </a>*@
+                        </div>
+                    </div>
+                    <form class="form form-horizontal form-inline">
+                        <fieldset>
+                            <div class="control-group">
+                                <div class="controls">
+                                    <div class="col-md-3">
+                                    </div>
+                                    <div class="col-md-9 text-right">
+                                        <div class="input-group col-md-6">
+                                            <input type="text" value="" id="start" placeholder="起始时间" class="form-control ">
+                                            <span class="input-group-addon"> to </span>
+                                            <input type="text" value="" id="end" placeholder="结束时间" class="form-control ">
+                                        </div>
+                                        <div class="input-group col-md-3">
+                                            <input type="text" class="form-control" placeholder="搜索关键字" id="keyword" />
+                                            <span class="input-group-btn">
+                                                <a class="btn btn-default" href="javascript:searchList();">
+                                                    <span class="glyphicon glyphicon-search"></span>
+                                                </a>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+                <div class="table-responsive">
+                    <table id="datatable" class="table table-striped table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th style="width:2%"><input type="checkbox" id='checkAll'></th>
+                                <th style="padding:10px">编号</th>
+                                <th style="padding:10px">结算日期</th>
+                                <th style="padding:10px">总人数</th>
+                                <th style="padding:10px">总金额</th>
+                                <th style="padding:10px">总收益</th>
+                                <th style="padding:10px">总电子币</th>
+                                <th style="padding:10px">类型</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END SAMPLE TABLE PORTLET-->
+</div>
+
+@section scripts {
+    <script type="text/javascript">
+        var oTable;
+
+        $(document).ready(function () {
+            oTable = initTable();
+            $('#start').datetimepicker({
+                language: 'zh-CN',
+                format: 'yyyy-mm-dd',
+                autoclose: 1,
+                minView: 2
+            }).on('changeDate', function (ev) {
+                var start = $('#start').val();
+                $('#end').datetimepicker('setStartDate', start);
+                $('#start').datetimepicker('hide');
+            });
+            $('#end').datetimepicker({
+                language: 'zh-CN',
+                format: 'yyyy-mm-dd',
+                autoclose: 1,
+                minView: 2
+            }).on('changeDate', function (ev) {
+                var end = $('#end').val();
+                $('#start').datetimepicker('setEndDate', end);
+                $('#end').datetimepicker('hide');
+            });
+
+        });
+        function searchList() {
+            oTable.ajax.reload()
+        }
+        /**
+        * 表格初始化
+        * returns {*|jQuery}
+        */
+        function initTable() {
+            var table = $("#datatable").DataTable({
+                dom: '<f<t>lip>',
+                "searching": false,
+                //"order": [[8, "desc"]],
+                ordering: false,
+                serverSide: true,
+                language: {
+                    url: '/assets/global/plugins/DataTables-1.10.12/zh-CN.json'//汉化
+                },
+                ajax: {
+                    url: "/Admin_Finance/SettleRecord/getDataSource",
+                    type: "POST",
+                    data: function (e) {
+                        return {
+                            startTime: $("#start").val(),
+                            end: $("#end").val(),
+                            key: $("#keyword").val(),
+                            start: e.start,
+                            length: e.length,
+                            draw: e.draw
+                        }
+                    }
+                },
+                columns: [//绑定数据
+                    {
+                        data: 'ID',
+                        createdCell: function (nTd, sData, oData, iRow, iCol) {
+                            $(nTd).html("<input type='checkbox' name='checkList' value='" + sData + "'>");
+                        }
+                    },
+                    { data: 'ID' },
+                    { data: 'CreateTime' },
+
+                    { data: 'AllCount' },
+                    { data: 'AllAmount' },
+                    { data: 'AllCommission' },
+                    { data: 'AllCoins' },
+                    {
+                        data: 'TypeName',
+                        createdCell: function (nTd, sData, oData, iRow, iCol) {
+                            if (oData.Type ==1) {
+                                $(nTd).html("<span class=\"label label-sm label-info\"> " + oData.TypeName + " </span>")
+                            } else {
+                                $(nTd).html("<span class=\"label label-sm label-danger\"> " + oData.TypeName + " </span>")
+                            }
+                        }
+                    }
+                ]
+            });
+            return table;
+        }
+
+    </script>
+}

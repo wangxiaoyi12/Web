@@ -1,0 +1,244 @@
+﻿@using DataBase
+@using Common
+
+@{
+    ViewBag.Title = "注册";
+    Layout = "~/Views/Shared/_LayoutPage0915.cshtml";
+
+    var Article_Info = DB.Article_Info.FindEntity(3);
+}
+
+
+
+
+
+<div class="container loginContainer">
+    <div class="loginBox">
+        <form id="form1">
+            <ul class="loginList forgetMMBox">
+                <li>
+                    <i class="iconfont icon-yonghu"></i>
+                    <input type="text" name="Code" id="Code" value="" placeholder="请输入手机号" required />
+                </li>
+                <li>
+                    <i class="iconfont icon-yonghu"></i>
+                    <input type="text" name="NickName" id="NickName" value="" placeholder="请输入姓名" required />
+                </li>
+                <li>
+                    <i class="iconfont icon-mima"></i>
+                    <input type="password" name="LoginPwd" id="LoginPwd" value="111111" placeholder="登录密码" required />
+                </li>
+                <li>
+                    <i class="iconfont icon-mima"></i>
+                    <input type="password" name="LoginPwdC" id="LoginPwdC" value="111111" placeholder="确认登录密码" required />
+                </li>
+                <li>
+                    <i class="iconfont icon-zhifumima"></i>
+                    <input type="password" name="Pwd2" id="Pwd2" value="222222" placeholder="支付密码" required />
+                </li>
+                <li>
+                    <i class="iconfont icon-zhifumima"></i>
+                    <input type="password" name="Pwd2C" id="Pwd2C" value="222222" placeholder="确认支付密码" required />
+                </li>
+                <li>
+                    <i class="iconfont icon-yonghu"></i>
+                    <input type="text" name="RecommendCode" id="RecommendCode" value="@ViewBag.autoCode" placeholder="请输入邀请码" required />
+                </li>
+                <li class="codeBox">
+                    <i class="iconfont icon-yanzhengma"></i>
+                    <input type="text" name="smscode" id="smscode" value="" placeholder="请输入验证码" />
+                    <div class="btnbox">
+                        <button id="smsBtn" class="btn_org">发送</button>
+                    </div>
+                </li>
+            </ul>
+
+            <div class="protocol">
+                <input type="checkbox" id="read"><p>我已阅读并同意<span class="protocolBtn">注册协议</span></p>
+            </div>
+            <div class="btnbox">
+                <button id="zc" class="btn_org">注册</button>
+            </div>
+            <div class="loginTitle">
+                <div></div>
+                <p>已有账号？</p>
+                <div></div>
+            </div>
+            <div class="btnbox">
+                <a href="/mobile/memberlogin/index" class="btn_gay">去登录</a>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="loginBg"></div>
+<div class="bgColor"></div>
+<link href="~/assets/jnwz200915/layui/css/layui.css" rel="stylesheet" />
+
+<script src="~/assets/jnwz200915/layui/layui.all.js"></script>
+<script>
+        $('.protocolBtn').click(function () {
+            layer.open({
+                title: '注册协议'
+                , content:'@Html.Raw(Article_Info.Comment)'
+            });
+        })
+    //发送按钮事件
+    $('#smsBtn').click(function () {
+      
+        var Code = $('input[name="Code"]');
+        var mobile = Code.val();
+        if (mobile.length <= 0) {
+            //Code.focus();
+            show('请输入手机号码');
+            return false;
+        }
+        else {
+            if (Regex.PhoneNumber(mobile) == false) {
+                //Code.focus();
+                show('手机号格式不正确');
+                return false;
+            }
+        }
+
+        var thisBtn = $(this);
+        thisBtn.attr('disabled', true);
+        var number = 60;
+        //发送验证码
+        $.post('@Url.Action("SendSms")', { mobile: mobile }, function (data) {
+            if (data.status == 1) {
+                show('验证码发送成功');
+                var timer = setInterval(function () {
+                    if (number == 0) {
+                        clearInterval(timer);
+                        number = 60;
+                        thisBtn.attr('disabeld', false);
+                    } else {
+                        number--;
+                        thisBtn.html(number + '秒');
+                    }
+                }, 1000);
+            } else {
+                show(data.msg);
+                thisBtn.attr('disabled', false)
+            }
+        });
+    });
+    //注册按钮点击事件
+    $('#zc').click(function () {
+        if (!$("#read").is(":checked")) {
+            show('请阅读勾选注册协议！');
+            return false;
+        }
+        //验证处理
+        var Code = $('#Code');
+        var code = Code.val();
+        if (code.length != 11) {
+            //Code.focus();
+            show('请填写正确手机号');
+            return false;
+        }
+        //真实姓名
+        var NickName = $('input[name="NickName"]');
+        if (NickName.val().length <= 0) {
+            //NickName.focus();
+            show('请输入姓名');
+            return false;
+        }
+
+
+        //密码
+        var LoginPwd = $('input[name="LoginPwd"]');
+        var loginpwd = LoginPwd.val();
+        if (loginpwd.length <= 0) {
+            //LoginPwd.focus();
+            show('请输入登录密码');
+            return false;
+        }
+       // 确认密码
+        var LoginPwdC = $('input[name="LoginPwdC"]');
+        var loginpwdc = LoginPwdC.val();
+        if (loginpwdc.length <= 0) {
+            //LoginPwdC.focus();
+            show('请再次输入登录密码');
+            return false;
+        } else if (loginpwdc != loginpwd) {
+            //LoginPwdC.focus();
+            show('两次输入密码不一致');
+            return false;
+        }
+
+
+        //支付密码
+        var Pwd2 = $('input[name="Pwd2"]');
+        var pwd2 = Pwd2.val();
+        if (pwd2.length <= 0) {
+            //Pwd2.focus();
+            show('请输入登录支付密码');
+            return false;
+        }
+        // 确认支付密码
+        var Pwd2C = $('input[name="Pwd2C"]');
+        var pwd2c = Pwd2C.val();
+        if (pwd2c.length <= 0) {
+            //Pwd2C.focus();
+            show('请再次输入登录支付密码');
+            return false;
+        } else if (pwd2c != pwd2) {
+            //Pwd2C.focus();
+            show('两次输入支付密码不一致');
+            return false;
+        }
+
+        //手机号
+        var Code = $('input[name="Code"]');
+        if (Code.parents('.list-group-item').hasClass('hidden') == false) {
+            if (Code.val().length > 0) {
+                if (Regex.PhoneNumber(Code.val()) == false) {
+                    //Code.focus();
+                    show('手机号格式不正确');
+                    return false;
+                }
+            }
+        }
+
+
+        //提交后台处理
+        var form = $('#form1');
+        var data = form.serialize();
+        show('正在提交...');
+        $('#zc').hide();
+        $.post('@Url.Action("save_one")', data, function (data) {
+            if (data.status == 1) {
+
+                showurl('恭喜！您已注册完成。请及时修改您的密码，默认密码:6个1,支付密码:6个2',"/mobile/memberlogin/index");
+                
+            } else {
+                show(data.msg);
+                $('#zc').show();
+            
+            }
+        });
+
+        ////验证编号
+        //checkCode(code, function () {
+        //    $('.memberCode').text(code);
+        //    //判断选择的是否是供应商
+        //    if (MemberLevel.val() == 2) {
+        //        show4();
+        //    } else {
+        //        //提交后台处理
+        //        var form = $('#form1');
+        //        var data = form.serialize();
+        //        show('正在提交...');
+        //        $.post('/mobile/mobilelogin/save_one', data, function (data) {
+        //            if (data.status == 1) {
+        //                show('注册成功');
+        //                show3();
+        //            } else {
+        //                show(data.msg);
+        //            }
+        //        });
+        //    }
+        //});
+    });
+</script>

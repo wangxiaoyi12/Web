@@ -1,0 +1,89 @@
+﻿@using DataBase
+@using Business
+
+@{
+    //获取大分类
+    List<ShopProductCategory> parentClass = DB.ShopProductCategory.GetListByParentID(null);
+    for (int i = 0; i < parentClass.Count; i++)
+    {
+        List<int> idClass = new List<int>();
+        var parentItem = parentClass[i];
+        //获取子类
+        List<ShopProductCategory> childClass = DB.ShopProductCategory.GetListByParentID(parentItem.ID);
+        idClass.AddRange(childClass.Select(q => q.ID));
+        idClass.Add(parentItem.ID);
+        foreach (var child2Item in childClass)
+        {
+            List<ShopProductCategory> child2Class = DB.ShopProductCategory.GetListByParentID(child2Item.ID);
+            idClass.AddRange(child2Class.Select(q => q.ID));
+        }
+        //获取大分类下的推荐产品
+        List<ShopProduct> recList = DB.ShopProduct.Where(q => idClass.Contains(q.CategoryID.Value) && q.IsEnable && q.IsRecommend)
+                .OrderByDescending(q => q.CreateTime).Take(4)
+                .ToList();
+        //获取大分类下的最新产品
+        List<ShopProduct> newList = DB.ShopProduct.Where(q => idClass.Contains(q.CategoryID.Value) && q.IsEnable && q.IsNew)
+            .OrderByDescending(q => q.CreateTime)
+            .Take(6).ToList();
+        //获取大分类下的品牌
+        List<ShopBrand> brandList = DB.ShopBrand.Where(q => q.CategoryID==parentItem.ID)
+            .OrderBy(q=>q.Sort).ThenByDescending(q=>q.ID)
+            .Take(10)
+                .ToList();
+        <div class="p_Section clearfix">
+            <div class="Section_title">
+                <div class="name"><em>@(i+1)F</em>@parentItem.Name</div>
+                <div class="p_link">
+                @{
+                   
+                    for (int j = 0; j < childClass.Count; j++)
+                    {
+                        var childItem = childClass[j];
+                        <a href="@Url_Shop.GetProduct(childItem)">@childItem.Name</a> @((i+1)!=childClass.Count?"|":"") 
+                    }
+                }</div>
+            </div>
+            <div class="Section_info clearfix">
+                <div class="pro_ad_slide">
+                    <div class="hd">
+                        <ul></ul>
+                    </div>
+                    <div class="bd">
+                        <ul>
+                            @foreach (var item in recList)
+                            {
+                                <li><a href="@Url_Shop.GetProduct(item)"><img src="@Url_Shop.GetProductImg(item,true)"  alt="@item.Title"/></a></li>
+                            }
+                        </ul>
+                    </div>
+                    <a class="prev" href="javascript:void(0)"><em class="arrow"></em></a>
+                    <a class="next" href="javascript:void(0)"><em class="arrow"></em></a>
+                </div>
+                <!--产品列表-->
+                <div class="pro_list">
+                    <ul>
+                        @foreach (var item in newList)
+                        {
+                            string url = Url_Shop.GetProduct(item);
+                            <li>
+                                <a href="@url"><img src="@Url_Shop.GetProductImg(item)" width="180" height="150" alt="@item.Title" /></a>
+                                <a href="@url" class="p_title_name">@item.Title</a>
+                                <div class="Numeral"><span class="price">@Url_Shop.GetProductPrice(item)</span><span class="Sales">销量<i>@item.Sales</i>件</span></div>
+                            </li>
+                        }
+                    </ul>
+                </div>
+                <div style="clear:both;"></div>
+                <div class="pro_logo clearfix">
+                    @foreach (var item in brandList)
+                    {
+                        <a href="@Url_Shop.GetProduct(item)"><img src="@Url_Shop.GetImg(item.Logo)" alt="@item.Name" /></a>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+}
+<script type="text/javascript">
+    jQuery(".pro_ad_slide").slide({ titCell: ".hd ul", mainCell: ".bd ul", autoPlay: true, autoPage: true, interTime: 6000 });
+</script>

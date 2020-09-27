@@ -1,0 +1,208 @@
+﻿@using Business
+@using DataBase
+@{
+    ViewBag.Title = "委托";
+    //获取当前登录用户
+    Member_Info curUser = User_Shop.GetMember_Info();
+    string guid = ReqHelper.GetString("guid");
+
+
+    ShopOrder orderModel = DB.ShopOrder.FindEntity(q=>q.GUID==guid);
+    Shop shopModel = DB.Shop.FindEntity(orderModel.ShopID);
+    List<ShopProduct> products = orderModel.ShopOrderProducts.Select(q => q.ShopProduct).ToList();
+}
+@section Head{
+    <style>
+        .list-group-item {
+            line-height:30px;
+        }
+        .list-group-item .pull-left:not(:first-child) {
+            color:black;
+        }
+        .number1 {
+            color:red;
+            font-size:20px;
+        }
+    </style>
+}
+
+@section Footer{
+
+}
+<div class="page page1">
+    <header class="header">
+        <div class="fix_nav">
+            <div class="nav_inner">
+                <a class="nav-left back-icon" href="@Url_Mobile.GetUserCenter()">返回</a>
+                <div class="tit">确认委托</div>
+            </div>
+        </div>
+    </header>
+    <div class="container itemdetail mini-innner ">
+        <div class="row">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="pull-left">
+                        <h4 class="panel-title"><span class="glyphicon glyphicon-shopping-cart text-warning"></span> 订单详细</h4>
+                    </div>
+                    <div class="pull-right">
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="panel-body">
+                    <ul class="list-group infoPage">
+                        @*<li class="list-group-item">
+                            <div class="pull-left ">
+                                交易金额：
+                            </div>
+                            <div class="pull-left">
+                                <span class="number1"> ¥@orderModel.RealAmount</span>
+                            </div>
+                            <div class="clearfix"></div>
+                        </li>*@
+                        @if (shopModel != null)
+                        {
+                            <li class="list-group-item">
+                                <div class="pull-left ">
+                                    商家名称：
+                                </div>
+                                <div class="pull-left">
+                                    @shopModel.ShopName
+                                </div>
+                                @*<div class="pull-right">
+                                    <img src="@Url_Shop.GetImg(shopModel.Logo)" width="30" />
+                                </div>*@
+                                <div class="clearfix"></div>
+                            </li>
+                        }
+       
+                        <li class="list-group-item">
+                            @foreach (var item in products)
+                            {
+                                <div class="pull-left ">
+                                    商品名称：
+                                    <br />
+                                    <img src="@Url_Shop.GetProductImg(item)" width="60" />
+                                </div>
+                                <div style="margin-left:72px;color:black;padding-top:20px;">
+                                    @item.Title
+                                </div>
+                                <div class="pull-right">
+                                </div>
+                                <div class="clearfix"></div>
+                            }
+                        </li>
+                        @*<li class="list-group-item">
+                            <div class="pull-left ">
+                                付款方式：
+                            </div>
+                            <div class="pull-left ">
+                                <img src="~/assets/apps/img/weinxin.png" width="20" />
+                                    微信支付
+                                <img src="~/assets/apps/img/zhifubao.png" width="20" />
+                                @orderModel.PayWay
+                            </div>
+                            <div class="pull-right"></div>
+                            <div class="clearfix"></div>
+                        </li>*@
+                        <li class="list-group-item">
+                            <div class="pull-left ">
+                                创建时间：
+                            </div>
+                            <div class="pull-left">
+                               @orderModel.SubmitTime.ToString("yyyy-MM-dd HH:mm")
+                            </div>
+                            <div class="pull-right"></div>
+                            <div class="clearfix"></div>
+                        </li>
+                        <li class="list-group-item">
+                            <div class="pull-left ">
+                                交易单号：
+                            </div>
+                            <div class="pull-left">
+                                @orderModel.OrderCode
+                            </div>
+                            <div class="pull-right"></div>
+                            <div class="clearfix"></div>
+                        </li>
+                        @*<li class="list-group-item">
+                            <p>
+                                注：<br />
+                                1.确认成功将会进行收益结算<br />
+                                2.确认成功后将不可返回
+                            </p>
+                        </li>*@
+                        <li class="list-group-item">
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-lock"></span>
+                                </span>
+                                <input type="password" id="Pwd2" class="form-control" placeholder="请输入支付密码">
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            <button id="yesBtn" class="btn btn-primary btn-block">确认委托</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="page page2" style="display:none">
+    <header class="header">
+        <div class="fix_nav">
+            <div class="nav_inner">
+                <a class="nav-left back-icon" href="@Url_Mobile.GetUserCenter()">返回</a>
+                <div class="tit">交易成功</div>
+            </div>
+        </div>
+    </header>
+    <div class="container">
+        <div class="row">
+            <p></p>
+            <div class="alert alert-success">
+                <p class="text-center">恭喜您，交易成功</p>
+            </div>
+            @*<a class="btn btn-primary btn-block col-xs-6" href="@Url.Action("BillComment",new { guid= orderModel.GUID})">立即评价</a>
+            <a class="btn btn-success btn-block col-xs-6" href="@Url.Action("Bill")">查看我的订单</a>*@
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        //修改密码
+        //$('#loginModal').modal('show');
+        $('.pull-right .btn').click(function () {
+            var dialog = $('#loginModal');
+            dialog.modal('show');
+            dialog.attr('data-type', $(this).attr('data-type'));
+            return false;
+        });
+
+        $('#yesBtn').click(function () {
+            var Pwd2 = $('#Pwd2');
+            var pwd2 = Pwd2.val();
+            if (pwd2.length <= 0) {
+                Pwd2.focus();
+            }
+            $.post('@Url.Action("WeiTuoOrder")', {
+                pwd2: pwd2,
+                guid:'@orderModel.GUID'
+            }, function (data) {
+                if (data.status == 1) {
+                    $('.page').hide();
+                    $('.page2').fadeIn('fast');
+                } else {
+                    show(data.msg);
+                }
+            });
+        });
+    });
+   
+</script>
+
+
+

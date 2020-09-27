@@ -1,0 +1,543 @@
+﻿@using DataBase
+@model DataBase.ShopOrder
+@{
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+    var step = 1;
+    Xml_Shop shopConfig = DB.XmlConfig.XmlShop;
+}
+@section css{
+    <style>
+        .tdleft {
+            text-align: right;
+            padding: 5px;
+            background: #eee;
+            font-weight: 800;
+            width: 100px;
+        }
+
+        td {
+            padding-left: 10px;
+        }
+    </style>
+}
+<!-- BEGIN PAGE BAR -->
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="/SysManage/Desk/Index">首页</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#"><span>商城管理</span></a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#"><span>订单详情</span></a>
+        </li>
+    </ul>
+</div>
+<!-- END PAGE BAR -->
+<!-- BEGIN PAGE CONTENT -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet light bordered">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="font-green-sharp fa fa-user"></i>
+                    <span class="caption-subject font-green-sharp bold uppercase">@ViewBag.Title<span>订单详情</span></span>
+                </div>
+            </div>
+            <div class="portlet-body">
+                @using (Ajax.BeginForm("Save", null, new AjaxOptions()
+                {
+                    HttpMethod = "Post",
+                    OnBegin = "SubAjax.Loading",
+                    OnComplete = "SubAjax.Complate",
+                    OnFailure = "SubAjax.Failure",
+                    OnSuccess = "SubAjax.Success"
+                }, new { @class = "form-horizontal", @role = "form", @id = "commentForm" }))
+                {  <div class="form-wizard">
+                    <div class="form-body">
+                        <ul class="nav nav-pills nav-justified steps">
+                            <li>
+                                <a id="tab1" href="#tab1" data-toggle="tab" class="step">
+                                    <span class="number"> 1 </span>
+                                    <span class="desc ">
+                                        <i class="fa fa-check "></i>
+                                        下单等支付
+                                        <br />@Model.SubmitTime
+
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a id="tab2" href="#tab2" data-toggle="tab" class="step">
+                                    <span class="number"> 2 </span>
+                                    <span class="desc">
+                                        <i class="fa fa-check"></i> 已支付等发货<br />@Model.PayTime
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a id="tab3" href="#tab3" data-toggle="tab" class="step">
+                                    <span class="number"> 3 </span>
+                                    <span class="desc">
+                                        <i class="fa fa-check"></i> 已发货待确认收货<br />@Model.PostTime
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#tab4" data-toggle="tab" class="step">
+                                    <span class="number"> 4 </span>
+                                    <span class="desc">
+                                        <i class="fa fa-check"></i> 完成订单<br />@Model.FinishTime
+                                    </span>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-success" style="width: 25%">
+                                <span class="sr-only">35% Complete (success)</span>
+                            </div>
+                            @{
+                                if (Model.State == ShopEnum.OrderState.Pay.GetHashCode())
+                                {
+                                    step = 2;
+                                    <div class="progress-bar blue progress-bar-striped" style="width: 25%">
+                                        <span class="sr-only">20% Complete (warning)</span>
+                                    </div>
+                                }
+                                if (Model.State == ShopEnum.OrderState.FaHuo.GetHashCode())
+                                {
+                                    step = 3;
+                                    <div class="progress-bar blue progress-bar-striped" style="width: 25%">
+                                        <span class="sr-only">20% Complete (warning)</span>
+                                    </div>
+                                    <div class="progress-bar yellow" style="width: 25%">
+                                        <span class="sr-only">10% Complete (danger)</span>
+                                    </div>
+                                }
+                                if (Model.State == ShopEnum.OrderState.Finish.GetHashCode())
+                                {
+                                    step = 4;
+                                    <div class="progress-bar blue progress-bar-striped" style="width: 25%">
+                                        <span class="sr-only">20% Complete (warning)</span>
+                                    </div>
+                                    <div class="progress-bar yellow" style="width: 25%">
+                                        <span class="sr-only">10% Complete (danger)</span>
+                                    </div>
+                                    <div class="progress-bar red" style="width: 25%">
+                                        <span class="sr-only">10% Complete (danger)</span>
+                                    </div>
+                                }
+                            }
+                        </div>
+                        <div class="note note-success">
+                            <h4 class="block">订单基本信息</h4>
+                            <p>
+                                <table style="width:100%">
+                                    <tr>
+                                        <td class="tdleft">订单号：</td>
+                                        <td>@Model.OrderCode</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="tdleft">订单类型：</td>
+                                        <td>@Model.OrderType</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="tdleft">留言备注：</td>
+                                        <td>@Model.Remark</td>
+                                    </tr>
+                                </table>
+                            </p>
+                        </div>
+                        <div class="note note-warning">
+                            <h4 class="block">商品列表</h4>
+                            <p style="background:red">
+                                @*<div class="row">
+                                    <div class="col-md-4">商品名称</div>
+                                    <div class="col-md-3">价格</div>
+                                    <div class="col-md-2">数量</div>
+                                    <div class="col-md-3">金额</div>
+                                </div>*@
+                                @{
+                                    foreach (var item in Model.ShopOrderProducts)
+                                    {
+                                        <div class="row table table-striped">
+                                            <div class="col-md-4">@item.Name</div>
+                                            <div class="col-md-3">单价:@item.Price&nbsp;</div>
+                                            <div class="col-md-2">数量:@item.Count</div>
+                                            <div class="col-md-2">规格:@item.GuiGe</div>
+                                            <div class="col-md-3">总价:@Html.Raw(item.Money )</div>
+                                        </div>     
+                                        <div class="clearfix"></div>                                  
+                                    }
+                                }
+                                <div class="row">
+                                    @*<div class="col-md-6">支付方式：@Html.Raw(string.IsNullOrEmpty(Model.PayWay) ? "未支付" : Enums.ToObject<ShopEnum.PayType>(Convert.ToInt32(Model.PayState)).ToString())</div>*@
+                                    <div class="col-md-6">邮&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;费：<span class="postNumber"> @(Model.Postage)</span>
+                                    @*<span class="btn btn-danger btn-sm" id="yfUpdateBtn">修改</span>*@
+                                    </div> 
+
+                                    <div class="input-group input-group-sm col-sm-5" style="display:none;">
+                                        <input type="text" value="@(Model.RealCongXiao)" class="form-control" />
+                                        <span class="input-group-btn">
+                                            <span class="btn btn-success btn-sm" data-id="@Model.GUID" id="yfYesBtn">提交</span>
+                                        </span>
+                                        <span class="class input-group-btn">
+                                            <span class="btn btn-danger btn-sm" id="yfCancelBtn">取消</span>
+                                        </span>
+                                    </div>                                  
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12">总金额：@(Model.RealAmount+Model.Postage)&nbsp;</div>
+                                    
+                                </div>
+
+
+                                @*<table style="width:100%" class="table  table-bordered">
+                                    <tr>
+                                        <th>商品名称</th>
+                                        <th>价格</th>
+                                        <th>数量</th>
+                                        <th>总金额</th>
+                                    </tr>
+                                    @{
+                                        foreach (var item in Model.ShopOrderProducts)
+                                        {
+                                            <tr>
+                                                <td>@item.Name</td>
+                                               
+                                                <td>@item.PriceShopping + @(item.PriceScore)</td>
+                                                <td>@item.Count</td>
+                                                <td>@Html.Raw(item.PriceShopping * item.Count) + @(item.PriceScore*item.Count)</td>
+                                            </tr>
+                                        }
+                                    }
+                                    <tr>
+                                        <td>
+                                            支付方式：@Html.Raw(string.IsNullOrEmpty(Model.PayWay) ?"未支付":Enums.ToObject<ShopEnum.PayType>(Convert.ToInt32(Model.PayWay)).ToString())
+                                        </td>
+                                        <td colspan="3">
+                                            <label class="label-control col-sm-1" style="padding:0px;padding-top:5px;">
+                                                邮费：
+                                            </label>
+                                            <div class="inline-block">
+                                                <span class="postNumber"> @(Model.RealCongXiao)</span>
+                                                <span class="btn btn-danger btn-sm" id="yfUpdateBtn">修改</span>
+                                            </div>
+                                            <div class="input-group input-group-sm col-sm-5" style="display:none;">
+                                                <input type="text" value="@(Model.RealCongXiao)" class="form-control"  />
+                                                <span class="input-group-btn">
+                                                    <span class="btn btn-success btn-sm" data-id="@Model.GUID" id="yfYesBtn">提交</span>
+                                                </span>
+                                                <span class="class input-group-btn">
+                                                    <span class="btn btn-danger btn-sm" id="yfCancelBtn">取消</span>
+                                                </span>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td colspan="4">
+                                            合计：@Html.Raw(DB.ShopOrder.getTotalMoney(Model))
+                                        </td>
+                                    </tr>
+                                </table>*@
+                            </p>
+                        </div>
+                        <div class="note note-danger">
+                            <h4 class="block">收货支付信息  &nbsp;&nbsp;&nbsp;&nbsp;<a onclick="modify2()" class="btn green">修改</a> </h4>
+                            <p>
+                                <table style="width:100%" class="table  table-bordered">
+                                    <tr>
+                                        <td class="tdleft">收货人</td>
+                                        <td id="tdReceiver">@Model.Receiver</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="tdleft">联系方式</td>
+                                        <td id="tdTel">@Model.Tel</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="tdleft">收货地址</td>
+                                        <td id="tdPostAddress">@Model.PostAddress</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="tdleft">支付方式</td>
+                                        <td>@Model.PayWay</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="tdleft">支付状态</td>
+                                        <td>@(Model.State >= 2 ? "已支付" : "未支付")</td>
+                                    </tr>
+                                    @{
+                                        if (Model.PayTime != null)
+                                        {
+                                            @*<tr>
+                                                    <td class="tdleft">支付时间</td>
+                                                    <td>@Model.PayTime</td>
+                                                </tr>*@
+                                        }
+                                        if (Model.ShopExpress != null)
+                                        {
+                                            <tr>
+                                                <td class="tdleft">物流公司</td>
+                                                <td id="tdExpressID">@Model.ShopExpress.Name</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="tdleft">运单号</td>
+                                                <td id="tdExpressCode">@Model.ExpressCode</td>
+                                            </tr>
+                                            @*<tr>
+                                                    <td class="tdleft">发货时间</td>
+                                                    <td>@Model.PostTime</td>
+                                                </tr>*@
+                                        }
+                                    }
+                                </table>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                                        }
+            </div>
+        </div>
+    </div>
+</div>
+<nav class="navbar navbar-default" style="background:#364150; border:0">
+    <div class="container" style="padding-top:8px;">
+        <div class="row">
+            <div class="col-md-offset-0 col-md-9">
+                @{
+                    if (Model.State <= ShopEnum.OrderState.Submit.GetHashCode() && Model.State >= 0)
+                    {
+                        <button type="button" id="btnCancel" onclick="cancelorder()" class="btn red"><i class="fa fa-remove"></i><span>取消订单</span></button>
+                    }
+                    if (Model.State == ShopEnum.OrderState.Pay.GetHashCode())
+                    {
+                        <button type="submit" id="btnFahuo" onclick="fahuo()" class="btn red"><i class="fa fa-check"></i><span>发货</span></button>
+                    }
+                }
+                <button type="button" class="btn default" onclick="window.history.back()"><i class="fa fa-mail-reply"></i>返回</button>
+            </div>
+        </div>
+    </div>
+</nav>
+<div id="Detail" class="modal fade" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog" style="">
+        @using (Ajax.BeginForm("Save1", null, new AjaxOptions()
+            {
+                HttpMethod = "Post",
+                OnBegin = "SubAjax.Loading",
+                OnComplete = "SubAjax.Complate",
+                OnFailure = "SubAjax.Failure",
+                OnSuccess = "Success1"
+            }, new { @class = "form-horizontal", @role = "form", @id = "commentForm" }))
+            {
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 class="modal-title">收货信息</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-body">
+                        <div class="form-group">
+                            <label class="col-md-3 control-label"><span style="color:red">*</span>收货人：</label>
+                            <div class="col-md-6">
+                                <input type="hidden" name="GUID" value="@Model.GUID" />
+                                <input type="text" id="Receiver" value="@Model.Receiver" class="form-control" placeholder="请输入收货人" datatype="*" nullmsg="">
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label"><span style="color:red">*</span>联系电话：</label>
+                            <div class="col-md-6">
+                                <input type="text" id="Tel" value="@Model.Tel" class="form-control" placeholder="请输入联系电话" datatype="*" nullmsg="">
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label"><span style="color:red">*</span>收货地址：</label>
+                            <div class="col-md-6">
+                                <input type="text" id="PostAddress" value="@Model.PostAddress" class="form-control" placeholder="请输入收货地址" datatype="*" nullmsg="">
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label"><span style="color:red"></span>备注：</label>
+                            <div class="col-md-6">
+                                <textarea id="Remark" rows="6" class="form-control" placeholder="请输入备注">@Model.Remark</textarea>
+                            </div>
+                            <span></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="col-md-12">
+                        <div class="form-actions">
+                            <div class="row">
+                                <div class="col-md-offset-3 col-md-9">
+                                    <button type="button" id="SubSave3" onclick="modify21('@Model.GUID')" class="btn green"><i class="fa fa-floppy-o"></i><span>保 存</span></button>
+                                    <button type="button" data-dismiss="modal" class="btn default"><i class="fa fa-times"></i>关 闭</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+<div id="Detail2" class="modal fade" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog" style="">
+        @using (Ajax.BeginForm("Save2", null, new AjaxOptions()
+            {
+                HttpMethod = "Post",
+                OnBegin = "SubAjax.Loading",
+                OnComplete = "SubAjax.Complate",
+                OnFailure = "SubAjax.Failure",
+                OnSuccess = "Success2"
+            }, new { @class = "form-horizontal", @role = "form", @id = "commentForm" }))
+            {
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 class="modal-title">发货物流信息</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-body">
+                        <div class="form-group">
+                            <label class="col-md-3 control-label"><span style="color:red">*</span>物流公司：</label>
+                            <div class="col-md-6">
+                                <select id="ExpressID" class="select2 form-control">
+                                    @{
+                                        var express = ViewBag.Express as List<KeyValuePair<int, string>>;
+                                        foreach (var item in express)
+                                        {
+                                            <option value="@item.Key">@item.Value</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label"><span style="color:red">*</span>快递编号：</label>
+                            <div class="col-md-6">
+                                <input type="text" id="ExpressCode" value="@Model.ExpressCode" class="form-control" placeholder="请输入快递单号" datatype="*" nullmsg="">
+                            </div>
+                            <span></span>
+                        </div>
+                        @*<div class="form-group">
+                                <label class="col-md-3 control-label"><span style="color:red">*</span>运费：</label>
+                                <div class="col-md-6">
+                                    <input type="text" name="PostAddress" value="@Model.PostAddress" class="form-control" placeholder="请输入收货地址" datatype="*" nullmsg="">
+                                </div>
+                                <span></span>
+                            </div>*@
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="col-md-12">
+                        <div class="form-actions">
+                            <div class="row">
+                                <div class="col-md-offset-3 col-md-9">
+                                    <button type="button" id="SubSave2" onclick="fahuo2('@Model.GUID')" class="btn green"><i class="fa fa-floppy-o"></i><span>保 存</span></button>
+                                    <button type="button" data-dismiss="modal" class="btn default"><i class="fa fa-times"></i>关 闭</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                                        }
+    </div>
+</div>
+<!-- END PAGE CONTENT -->
+@section scripts{
+
+    <script src="~/assets/pages/scripts/form-wizard.min.js"></script>
+    <script>
+        $(function () {
+            $('#tab@(step)').tab('show');
+
+
+            //邮费修改处理
+            $('#yfUpdateBtn').click(function () {
+                $(this).parent().hide();
+                $(this).parent().next().show();
+                return false;
+            });
+
+            $('#yfCancelBtn').click(function () {
+                $(this).parents('.input-group').hide();
+                $(this).parents('.input-group').prev().show();
+            });
+
+
+            //提交修改
+            $('#yfYesBtn').click(function () {
+                var thisGroup = $(this).parents('.input-group');
+                var amount = thisGroup.find('input').val();
+                var id = $(this).attr('data-id');
+                $.post('@Url.Action("UpdatePost")', {
+                    id: id,
+                    amount: amount
+                }, function (data) {
+                    if (data.Status == 'y') {
+                        $('.postNumber').text(parseFloat(amount).toFixed(2));
+                        thisGroup.hide().prev().show();
+                        alert(data.Msg);
+                    } else {
+                        alert(data.Msg);
+                    }
+                    });
+            });
+
+        });
+        function modify2(id) {
+            $('#Detail').modal('show');
+        }
+        function modify21(id) {
+            var Receiver = $("#Receiver").val();
+            var Tel = $("#Tel").val();
+            var PostAddress = $("#PostAddress").val();
+            var Remark = $("#Remark").val();
+            $.post("@ViewBag.Path/UpdateReceiver", { id: id, Receiver: Receiver, Tel: Tel, PostAddress: PostAddress, Remark: Remark }, function (d) {
+                myAlert(d);
+                $("#tdReceiver").html(Receiver);
+                $("#tdTel").html(Tel);
+                $("#tdPostAddress").html(PostAddress);
+                $('#Detail').modal('hide');
+            });
+        }
+        function cancelorder(id) {
+            $.post("@ViewBag.Path/Cancel", { idList: id }, function (d) {
+                myAlert(d);
+            });
+        }
+        function fahuo(id) {
+            $('#Detail2').modal('show');
+        }
+        function fahuo2(id) {
+            var ExpressID = $("#ExpressID").val();
+            var ExpressCode = $("#ExpressCode").val();
+            $.post("@ViewBag.Path/FaHuo", { id: id, ExpressID: ExpressID, ExpressCode: ExpressCode }, function (d) {
+                if (d.Status == "y") {
+                    alert("成功提示", d.Msg, function () {
+                        window.location.reload();
+                    });
+                } else {
+                    alertError("错误提示", d.Msg, function () {
+                        window.location.reload();
+                    });
+                }
+                //$("#tdExpressID").html(ExpressID);
+                //$("#tdExpressCode").html(ExpressCode);
+                $('#Detail2').modal('hide');
+                
+            });
+        }
+    </script>
+}

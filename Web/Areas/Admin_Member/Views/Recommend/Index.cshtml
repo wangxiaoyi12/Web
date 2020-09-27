@@ -1,0 +1,76 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+}
+@section css{
+    <link href="~/assets/global/plugins/jstree/dist/themes/default/style.min.css" rel="stylesheet" />
+}
+<!-- BEGIN PAGE BAR -->
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="/SysManage/Home/Index">首页</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#">会员管理</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="/Admin_Member/Recommend/Index"><span>推荐关系</span></a>
+        </li>
+    </ul>
+</div>
+<!-- END PAGE BAR -->
+<!-- BEGIN PAGE CONTENT -->
+<div class="portlet-body">
+    <div class="">
+        <div class="pull-right">
+            <div class="col-4">
+                <div class="form-group">
+                    <div class="input-group">
+                        <input class="form-control" id="SearchCode"  placeholder="请输入会员编号"/>
+                        <span class="input-group-btn">
+                            <button class="btn btn-primary" onclick="loadData();"><i class="fa fa-search"></i></button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="jstree_div"></div>
+</div>
+<!-- END PAGE CONTENT -->
+
+@section scripts{
+    <script src="~/assets/global/plugins/jstree/dist/jstree.js"></script>
+    <script type="text/javascript">
+        var tree;
+        $(function () {
+            loadTree();
+            tree = jQuery.jstree.reference("#jstree_div");
+        });
+
+        function loadTree() {
+            $('#jstree_div').jstree({
+                'plugins': ["contextmenu", "dnd", "search", "state", "types", "wholerow"],
+                "themes": { "stripes": true },
+                'core': {
+                    'data': {
+                        'url': '/Admin_Member/Recommend/getjsTreeData',  //异步加载jstree html格式的数据地址
+                        'dataType': 'json',
+                        'data': function (node) {
+                            console.info(node);
+                            return { 'id': node.id, code: $('#SearchCode').val() };
+                        }
+                    }
+                }
+            });
+        }
+
+        //加载数据
+        function loadData() {
+            $('#jstree_div').jstree('refresh');
+        }
+    </script>
+}

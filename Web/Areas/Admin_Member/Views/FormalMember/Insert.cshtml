@@ -1,0 +1,297 @@
+﻿
+@{
+    ViewBag.Title = "Insert";
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+}
+@model DataBase.Member_Info
+<!-- BEGIN PAGE BAR -->
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="/SysManage/Home/Index">首页</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#"><span>会员管理</span></a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="/Admin_Member/FormalMember/Insert">注册会员</a>
+        </li>
+    </ul>
+</div>
+<!-- END PAGE BAR -->
+<!-- BEGIN PAGE CONTENT -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet light bordered">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="font-green-sharp fa fa-user"></i>
+                    <span class="caption-subject font-green-sharp bold uppercase">注册会员</span>
+                </div>
+            </div>
+            <div class="portlet-body">
+                @using (Ajax.BeginForm("Save", null, new AjaxOptions()
+                {
+                    HttpMethod = "Post",
+                    OnBegin = "SubAjax.Loading",
+                    OnComplete = "SubAjax.Complate",
+                    OnFailure = "SubAjax.Failure",
+                    OnSuccess = "SubAjax.Success"
+                }, new { @class = "form-horizontal", @role = "form", @id = "commentForm" }))
+                {
+                    <div class="form-body">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red">*</span>手机号：</label>
+                            <div class="col-md-4">
+                                <input type="hidden" name="MemberId" value="@Model.MemberId" />
+                                <input type="text" name="Code" value="@Model.Code" class="form-control" ajaxurl="/Ajax/IsMemberId" datatype="*11-11" nullmsg="请输入手机号" errormsg="手机号必须是11位字符！" />
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red">*</span>登录密码：</label>
+                            <div class="col-md-4">
+                                <input type="password" name="LoginPwd" id="LoginPwd" value="111111" class="form-control" datatype="*3-20" nullmsg="请输入登录密码" errormsg="密码范围在3-20位之间">
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red">*</span>确认登录密码：</label>
+                            <div class="col-md-4">
+                                <input type="password" name="LoginPwdC" value="111111" class="form-control" recheck="LoginPwd" datatype="*" nullmsg="请再输入一次登录密码" errormsg="两次输入的密码不一致">
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                                <label class="col-md-2 control-label"><span style="color:red">*</span>支付密码：</label>
+                                <div class="col-md-4">
+                                    <input type="password" name="Pwd2" id="Pwd2" value="222222" class="form-control" datatype="*3-20" nullmsg="请输入支付密码" errormsg="密码范围在3-20位之间" >
+                                </div>
+                                <span></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label"><span style="color:red">*</span>确认支付密码：</label>
+                                <div class="col-md-4">
+                                    <input type="password" name="Pwd2C" value="222222" class="form-control" recheck="Pwd2" datatype="*" nullmsg="请再输入一次支付密码" errormsg="两次输入的支付密码不一致" >
+                                </div>
+                                <span></span>
+                            </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red">*</span>邀请码：</label>
+                            <div class="col-md-4">
+                                <input type="text" name="RecommendCode" value="" class="form-control" ajaxurl="/Ajax/IsExistActivedMemberYQ" datatype="*3-20" nullmsg="请填写邀请码" errormsg="邀请码编号3-20位！" />
+                            </div>
+                            <span></span>
+                        </div>
+                   
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red">*</span>姓名：</label>
+                            <div class="col-md-4">
+                                <input type="text" name="NickName" value="@Model.NickName" class="form-control" placeholder="请输入姓名" datatype="*2-10" nullmsg="" errormsg="姓名输入汉字2-10个">
+                            </div>
+                            <span></span>
+                        </div>
+                        @*<div class="form-group">
+                                <label class="col-md-2 control-label"><span style="color:red">*</span>性别：</label>
+                                <div class="col-md-4">
+                                    <div class="mt-radio-inline">
+                                        <label class="mt-radio">
+                                            <input type="radio" name="Sex" checked="checked" value="男" @(Model.Sex == "男" ? "checked" : "")> 男
+                                            <span></span>
+                                        </label>
+                                        <label class="mt-radio">
+                                            <input type="radio" name="Sex" value="女" @(Model.Sex == "女" ? "checked" : "")> 女
+                                            <span></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <span></span>
+                            </div>*@
+                       
+                        @*<div class="form-group">
+                                <label class="col-md-2 control-label"><span style="color:red">*</span>省：</label>
+                                <div class="col-md-4">
+                                    <select id="ProvId" name="ProvId" class="form-control select2" datatype="*" errormsg="请选择省" onchange="changeProv()">
+                                        <option value="">请选择省...</option>
+                                        @{
+                                            foreach (var item in ViewData["Prov"] as dynamic)
+                                            {
+                                                if (Model.ProvId == item.id)
+                                                {
+                                                    <option value="@item.id" selected="selected">@item.name</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@item.id">@item.name</option>
+                                                }
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                                <span></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label"><span style="color:red">*</span>市：</label>
+                                <div class="col-md-4">
+                                    <select id="CityId" name="CityId" class="form-control select2" datatype="*" errormsg="请选择市" onchange="changeCity()">
+                                        <option value="">请选择市...</option>
+                                    </select>
+                                </div>
+                                <span></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label"><span style="color:red"></span>区：</label>
+                                <div class="col-md-4">
+                                    <select id="CountyId" name="CountyId" class="form-control select2"  errormsg="请选择区">
+                                        <option value="">请选择区...</option>
+                                    </select>
+                                </div>
+                                <span></span>
+                            </div>*@
+                        @*<div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red"></span>身份证：</label>
+                            <div class="col-md-4">
+                                <input type="text" name="IdCode" value="@Model.IdCode" class="form-control" datatype="*0-18" placeholder="请输入身份证" errormsg="身份证不正确">
+                            </div>
+                            <span></span>
+                        </div>*@
+                        @*<div class="form-group">
+                                <label class="col-md-2 control-label"><span style="color:red"></span>选择商品：</label>
+                                <div class="col-md-4">
+                                    <select name="Pwd3" class="form-control select2" errormsg="请选择商品" >
+                                        <option value="">请选择商品...</option>
+                                        <option value="1.2米">1.2米</option>
+                                        <option value="1.5米">1.5米</option>
+                                        <option value="1.8米">1.8米</option>
+                                        <option value="玉石沙发">玉石沙发</option>
+                                        <option value="玉石床">玉石床</option>
+                                    </select>
+                                </div>
+                                <span></span>
+                            </div>*@
+                        @*<div class="form-group">
+                                <label class="col-md-2 control-label"><span style="color:red"></span>银行名称：</label>
+                                <div class="col-md-4">
+                                    <select name="BankName" class="form-control select2" nullmsg="" errormsg="请选择银行" >
+                                        <option value="">请选择银行...</option>
+                                        @{
+                                            foreach (var item in ViewData["Banks"] as dynamic)
+                                            {
+                                                if (Model.BankName == item.BasicDataName)
+                                                {
+                                                    <option value="@item.BasicDataName" selected="selected">@item.BasicDataName</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@item.BasicDataName">@item.BasicDataName</option>
+                                                }
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                                <span></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label"><span style="color:red"></span>开户行：</label>
+                                <div class="col-md-4">
+                                    <input type="text" name="OpenBank" value="@Model.OpenBank" class="form-control" errormsg="请填写开户行" >
+                                </div>
+                                <span></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label"><span style="color:red"></span>地址：</label>
+                                <div class="col-md-4">
+                                    <input type="text" name="BankAddress" value="@Model.BankAddress" class="form-control" errormsg="请填写开户行地址" >
+                                </div>
+                                <span></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label"><span style="color:red"></span>户名：</label>
+                                <div class="col-md-4">
+                                    <input type="text" name="BankAccount" value="@Model.BankAccount" class="form-control" errormsg="请填写户名" >
+                                </div>
+                                <span></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label"><span style="color:red"></span>账号：</label>
+                                <div class="col-md-4">
+                                    <input type="text" name="BankCode" value="@Model.BankCode" class="form-control" errormsg="请填写银行账号" >
+                                </div>
+                                <span></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label"><span style="color:red"></span>支付宝：</label>
+                                <div class="col-md-4">
+                                    <input type="text" name="Alipay" value="@Model.Alipay" class="form-control" errormsg="请填写支付宝">
+                                </div>
+                                <span></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label"><span style="color:red"></span>微信：</label>
+                                <div class="col-md-4">
+                                    <input type="text" name="WeiXin" value="@Model.WeiXin" class="form-control" errormsg="请填写微信">
+                                </div>
+                                <span></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-md-2 control-label"><span style="color:red"></span>邮箱：</label>
+                                <div class="col-md-4">
+                                    <input type="text" name="Email" value="@Model.Email" class="form-control" errormsg="请填写Email">
+                                </div>
+                                <span></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label"><span style="color:red"></span>收货地址：</label>
+                                <div class="col-md-4">
+                                    <input type="text" name="PostAddress" value="@Model.PostAddress" class="form-control" errormsg="请填写收货地址" >
+                                </div>
+                                <span></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label"><span style="color:red"></span>QQ：</label>
+                                <div class="col-md-4">
+                                    <input type="text" name="QQ" value="@Model.QQ" class="form-control" errormsg="请填写QQ" >
+                                </div>
+                                <span></span>
+                            </div>*@
+                        <div class="form-actions">
+                            <div class="row">
+                                <div class="col-md-offset-3 col-md-9">
+                                    <button type="submit" id="SubSave" class="btn green"><i class="fa fa-check"></i><span>保 存</span></button>
+                                    <button type="button" class="btn default" onclick="window.history.back()"><i class="fa fa-mail-reply"></i>返回</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END PAGE CONTENT -->
+@section scripts{
+    <script>
+        function changeProv() {
+            var id = $("#ProvId").val();
+            $('#CityId').empty();
+            $.post("/Ajax/GetCity", { id: id }, function (d) {
+                $("#CityId").select2({
+                    data: d, cache: true
+                });
+                changeCity();
+            })
+        }
+        function changeCity() {
+            var id = $("#CityId").val();
+            $('#CountyId').empty();
+            $.post("/Ajax/GetCounty", { id: id }, function (d) {
+                $("#CountyId").select2({
+                    data: d, cache: true
+                });
+            })
+        }
+    </script>
+}

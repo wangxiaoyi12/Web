@@ -1,0 +1,256 @@
+﻿@model DataBase.Shop
+@{
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+}
+@section css{
+    <link href="~/assets/global/myplugins/Uploader/Uploader6.0.min.css" rel="stylesheet" />
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=mjUUXEctezVuNR7m01pKFnIRiGE2a7Ro"></script>
+    <style>
+        #allmap {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            margin: 0;
+            font-family: "微软雅黑";
+        }
+    </style>
+
+}
+<!-- BEGIN PAGE BAR -->
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="/SysManage/Home/Index">首页</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#"><span>商城管理</span></a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#"><span>商家</span></a>
+        </li>
+    </ul>
+</div>
+<!-- END PAGE BAR -->
+<!-- BEGIN PAGE CONTENT -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet light bordered">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="font-green-sharp fa fa-user"></i>
+                    <span class="caption-subject font-green-sharp bold uppercase">@ViewBag.Title<span>商家</span></span>
+                </div>
+            </div>
+            <div class="portlet-body">
+                @using (Ajax.BeginForm("Save", null, new AjaxOptions()
+                {
+                    HttpMethod = "Post",
+                    OnBegin = "SubAjax.Loading",
+                    OnComplete = "SubAjax.Complate",
+                    OnFailure = "SubAjax.Failure",
+                    OnSuccess = "SubAjax.Success"
+                }, new { @class = "form-horizontal", @role = "form", @id = "commentForm" }))
+                {
+                    <div class="form-body">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red">*</span>商家名：</label>
+                            <div class="col-md-4">
+                                <input type="hidden" name="ID" value="@Model.ID" />
+                                <input type="text" name="ShopName" value="@Model.ShopName" class="form-control" nullmsg="请输入商家" datatype="*1-20" errormsg="商家不正确">
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red"></span><div class="uploader uploader-warning" id="uploadBtn1"></div></label>
+                            <div class="col-md-4">
+                                <input type="hidden" name="Logo" id="Logo" value="@Model.Logo" class="form-control" placeholder="请输入Logo">
+
+                                <img id="imgLogo" src="@Model.Logo" alt="" height="120" />
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red"></span><div class="uploader uploader-warning" id="uploadBtn2"></div></label>
+                            <div class="col-md-4">
+                                <input type="hidden" name="Background" id="Background" value="@Model.Background" class="form-control" placeholder="请输入Logo">
+
+                                <img id="imgBackground" src="@Model.Background" alt="" height="120" />
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-2 control-label">
+                                <a onclick="M_Detail()" class="btn green">
+                                    选择经纬度
+                                </a>
+                            </div>
+                            <div class="col-md-4">
+                                <input type="text" name="ShopJingWeiD" id="ShopJingWeiD" readonly="readonly" value="@Model.ShopJingWeiD" class="form-control">
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red"></span>详细地址：</label>
+                            <div class="col-md-4">
+                                <input type="text" name="WeiZhi" value="@Model.WeiZhi" class="form-control" nullmsg="请输入详细地址">
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red"></span>客服电话：</label>
+                            <div class="col-md-4">
+                                <input type="text" name="Tel" value="@Model.Tel" class="form-control" nullmsg="请输入" datatype="*0-20" errormsg="不正确">
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red"></span>客服微信：</label>
+                            <div class="col-md-4">
+                                <input type="text" name="QQ" value="@Model.QQ" class="form-control" nullmsg="请输入客服微信" datatype="n0-20" errormsg="客服微信不正确">
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red"></span>通讯地址：</label>
+                            <div class="col-md-4">
+                                <input type="text" name="Address" value="@Model.Address" class="form-control" nullmsg="请输入通讯地址" datatype="*0-20" errormsg="通讯地址不正确">
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red"></span>顺序：</label>
+                            <div class="col-md-4">
+                                <input type="text" name="Sort" value="@Model.Sort" class="form-control" nullmsg="请输入顺序" datatype="n0-20" errormsg="顺序不正确">
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red"></span>是否启用：</label>
+                            <div class="col-md-4">
+                                <input type="checkbox" name="IsEnable" value="True" @(Model.IsEnable == true ? "checked=\"checked\")" : "")>
+                            </div>
+                            <span></span>
+                        </div>
+                        @*<div class="form-group">
+                                <label class="col-md-2 control-label"><span style="color:red"></span>是否审核：</label>
+                                <div class="col-md-4">
+                                    <input type="checkbox" name="IsCheck" value="True" @(Model.IsCheck == true ? "checked=\"checked\")" : "")>
+                                </div>
+                                <span></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label"><span style="color:red"></span>审核时间：</label>
+                                <div class="col-md-4">
+                                    <input type="text" name="CheckTime" id="CheckTime" value="@(Model.CheckTime == null ? "" : Model.CheckTime.Value.ToString("yyyy-MM-dd"))" class="form-control" nullmsg="请输入审核时间" errormsg="审核时间不正确">
+                                </div>
+                                <span></span>
+                            </div>*@
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red"></span>商家简介：</label>
+                            <div class="col-md-4">
+                                <textarea name="Description" rows="8" class="form-control" nullmsg="请输入商家简介">@Model.Description</textarea>
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-actions">
+                            <div class="row">
+                                <div class="col-md-offset-3 col-md-9">
+                                    <button type="submit" id="SubSave" class="btn green"><i class="fa fa-check"></i><span>保 存</span></button>
+                                    <button type="button" class="btn default" onclick="window.history.back()"><i class="fa fa-mail-reply"></i>返回</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div id="Detail" class="modal fade" tabindex="-1" aria-hidden="true">
+        <div style="height:25px">
+            <input type="text" id="txtKey" /><button id="btnSearch" onclick="AddressSearch()">搜索</button>
+        </div>
+        <div id="allmap"></div>
+    </div>
+</div>
+<!-- END PAGE CONTENT -->
+@section scripts{
+    <script src="~/assets/global/myplugins/Uploader/Uploader6.0.min.js"></script>
+
+    <!-- 实例化编辑器 -->
+    <script type="text/javascript">
+        /**大小图片前台处理，后台简单处理模式，上传成功后显示图片**/
+        var uploader = $('#uploadBtn1').uploader({
+            url: 'ws://@(Request.Url.Host):@(Request.Url.Port)/ajax/upload',
+            text: '上传logo',
+            fileExts: 'png;jpg;gif',
+            handleType: '0',
+            debug: false,
+            max: 1024 * 1204 * 10,
+            subfolder: 'upload/shop',
+            onSuccess: function (data) {
+                var img1 = data.relativeName;// alert(img1);
+                $("#imgLogo").attr('src', img1);
+                $("#Logo").val(img1);
+            }
+        });
+        var uploader2 = $('#uploadBtn2').uploader({
+            url: 'ws://@(Request.Url.Host):@(Request.Url.Port)/ajax/upload',
+            text: '上传背景',
+            fileExts: 'png;jpg;gif',
+            handleType: '0',
+            debug: false,
+            max: 1024 * 1204 * 10,
+            subfolder: 'upload/shop',
+            onSuccess: function (data) {
+                var img1 = data.relativeName;// alert(img1);
+                $("#imgBackground").attr('src', img1);
+                $("#Background").val(img1);
+            }
+        });
+
+        $(function () {
+            $('#CheckTime').datetimepicker({
+                language: 'zh-CN',
+                format: 'yyyy-mm-dd',
+                autoclose: 1,
+                minView: 2
+            })
+        });
+        /**
+ * 弹出编辑窗口
+ * param id
+ * private
+ */
+        function M_Detail() {
+            $('#Detail').modal('show');
+            // 百度地图API功能
+            map = new BMap.Map("allmap");
+            //map.centerAndZoom("北京", 11);
+            map.centerAndZoom(new BMap.Point(116.004, 40), 12);
+
+            //单击获取点击的经纬度
+            map.addEventListener("click", function (e) {
+                alert(e.point.lng + "," + e.point.lat);
+                //关闭弹出窗口
+                $("#ShopJingWeiD").val(e.point.lng + "," + e.point.lat);
+                $('#Detail').modal('hide');
+            });
+        }
+        function AddressSearch() {
+            var key = $("#txtKey").val();
+            var local = new BMap.LocalSearch(map, {
+                renderOptions: { map: map }
+            });
+            local.search(key);
+            //map.addEventListener("click", function (e) {
+            //    alert(e.point.lng + "," + e.point.lat);
+            //    //关闭弹出窗口
+            //    $("#ShopJingWeiD").val(e.point.lng + "," + e.point.lat);
+            //    $('#Detail').modal('hide');
+            //});
+        }
+
+    </script>
+}

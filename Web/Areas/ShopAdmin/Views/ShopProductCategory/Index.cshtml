@@ -1,0 +1,299 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+}
+
+@model DataBase.ShopProductCategory
+@section css{
+    <link href="~/assets/global/plugins/jstree/dist/themes/default/style.min.css" rel="stylesheet" />
+    <link href="~/assets/global/myplugins/Uploader/Uploader6.0.min.css" rel="stylesheet" />
+}
+<!-- BEGIN PAGE BAR -->
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="/SysManage/Home/Index">首页</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#">商城管理</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href=""><span>产品类别</span></a>
+        </li>
+    </ul>
+</div>
+<!-- END PAGE BAR -->
+<!-- BEGIN PAGE CONTENT -->
+<div class="row">
+    <div class="col-md-4">
+        <div class="portlet light bordered">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="font-green-sharp fa fa-tree"></i>
+                    <span class="caption-subject font-green-sharp bold uppercase"><span>产品类别树</span></span>
+                </div>
+                <div class="actions">
+                    <a class="btn btn-circle btn-default btn-sm" onclick="Add()" style="color:red" href="javascript:;">
+                        <i class="fa fa-plus"></i> 新建
+                    </a>
+                    <a class="btn btn-circle btn-default btn-sm" onclick="_deleteMenu()" style="color:red" href="javascript:;">
+                        <i class="fa fa-trash"></i> 删除
+                    </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div id="jstree_div"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div class="portlet light bordered">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="font-green-sharp fa fa-edit"></i>
+                    <span class="caption-subject font-green-sharp bold uppercase"><span>编辑信息</span></span>
+                </div>
+            </div>
+            <div class="portlet-body">
+                @using (Ajax.BeginForm("Save", null, new AjaxOptions()
+                {
+                    HttpMethod = "Post",
+                    OnBegin = "Menu_SubAjax.Loading",
+                    OnComplete = "Menu_SubAjax.Complate",
+                    OnFailure = "Menu_SubAjax.Failure",
+                    OnSuccess = "Menu_SubAjax.Success"
+                }, new { @class = "form-horizontal", @role = "form", @id = "commentForm" }))
+                {
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><span style="color:red">*</span>上级类别：</label>
+                        <div class="col-md-4">
+                            <input type="hidden" name="ID" value="@Model.ID" />
+                            <select name="PID" id="PID" class="form-control select2">
+                                <option value="0">请选择...</option>
+                                @{
+                                    foreach (KeyValuePair<int, string> item in ViewBag.List)
+                                    {
+                                        if (Model.PID == item.Key)
+                                        {
+                                            <option value="@item.Key" selected="selected">@item.Value</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@item.Key">@item.Value</option>
+                                        }
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <span></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><span style="color:red">*</span>类别名：</label>
+                        <div class="col-md-4">
+                            <input type="text" name="Name" value="@Model.Name" datatype="*" class="form-control" placeholder="请输入类别名">
+                        </div>
+                        <span></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><span style="color:red"></span><div class="uploader uploader-warning" id="uploadBtn1"></div></label>
+                        <div class="col-md-4">
+                            <input type="hidden" name="Logo" id="Logo" value="@Model.Logo" class="form-control" placeholder="请输入Logo">
+
+                            <img id="imgLogo" src="@Model.Logo" alt="" height="120" />
+                        </div>
+                        <span></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><span style="color:red">*</span>排序数字：</label>
+                        <div class="col-md-4">
+                            <input type="text" name="Sort" value="@Model.Sort" datatype="*" class="form-control" placeholder="请输入排序数字">
+                        </div>
+                        <span></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">描述：</label>
+                        <div class="col-md-4">
+                            <textarea class="form-control" id="Description" name="Description" rows="8" placeholder="请输入备注">@Model.Description</textarea>
+                        </div>
+                        <span></span>
+                    </div>
+                    <div class="form-actions">
+                        <div class="row">
+                            <div class="col-md-offset-3 col-md-9">
+                                <button type="submit" id="SubSave" class="btn green"><i class="fa fa-check"></i><span>保 存</span></button>
+                                <button type="button" class="btn default" onclick="window.history.back()"><i class="fa fa-mail-reply"></i>返回</button>
+                            </div>
+                        </div>
+                    </div>
+                                    }
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- END PAGE CONTENT -->
+@section scripts{
+    <script src="~/assets/global/plugins/jstree/dist/jstree.js"></script>
+    <script src="~/assets/global/myplugins/Uploader/Uploader6.0.min.js"></script>
+
+    <script type="text/javascript">
+        var tree;
+        var uploader = $('#uploadBtn1').uploader({
+            url: 'ws://@(Request.Url.Host):@(Request.Url.Port)/ajax/upload',
+            text: '上传logo',
+            fileExts: 'png;jpg;gif',
+            handleType: '0',
+            debug: false,
+            max: 1024 * 1204 * 10,
+            subfolder: 'upload/ProductCategory',
+            onSuccess: function (data) {
+                var img1 = data.relativeName;// alert(img1);
+                $("#imgLogo").attr('src', img1);
+                $("#Logo").val(img1);
+            }
+        });
+        $(function () {
+            loadTree();
+            $("input[name='actiontype']").on("click", function () {
+                var actiontype = "";
+                $("input[name='actiontype']:checked").each(function (i, o) {
+                    actiontype += $(this).val();
+                    actiontype += ",";
+                });
+                $("#action_type").val(actiontype)
+            });
+            tree = jQuery.jstree.reference("#jstree_div");
+        });
+
+        function loadTree() {
+
+            $('#jstree_div').jstree({
+                'plugins': ["wholerow", "checkbox", "types"],
+                'core': {
+                    'data': {
+                        'url': '@(ViewBag.Path)/getjsTreeData',  //异步加载jstree html格式的数据地址
+                        'dataType': 'json',
+                        'data': function (node) {
+                            return { 'id': node.id };
+                        }
+                    }
+                }
+            }).bind('select_node.jstree', function (event, data) {  //绑定的点击事件
+                //alert(data.node.id)
+                $.ajax({
+                    url: "@(ViewBag.Path)/getDetail",
+                    data: { id: data.node.id },
+                    type: "post",
+                    success: function (backdata) {
+                        var pid = '';
+                        var data = eval("(" + backdata + ")");
+                        if (data.PID != null) {
+                            pid = data.PID.toString();
+                        }
+                        $("input[name='ID']").val(data.ID);
+                        $("#PID").select2("val", [pid]);
+                        $("input[name='Sort']").val(data.Sort);
+                        //$("input[name='is_lock'][value='" + data.is_lock + "']").prop("checked", true);
+                        $("input[name='Name']").val(data.Name);
+                        $("input[name='Logo']").val(data.Logo);
+                        $("#imgLogo").attr("src", data.Logo);
+                        $("#Description").val(data.Description);
+                    }, error: function (error) {
+                        console.log(error);
+                    }
+                });
+            });
+        }
+
+        //新建清空数据
+        function Add() {
+            $("input[name='ID']").val("");
+            $("#PID").select2("val", "");
+            $("input[name='Sort']").val("");
+            //$("input[name='is_lock'][value='0']").prop("checked", true);
+            $("input[name='Name']").val("");
+            $("input[name='Logo']").val("");
+            $("#Description").val("");
+        }
+
+        //增删改提交ajax
+        var Menu_SubAjax = {
+            Loading: function () {
+                $("#SubSave").attr("disabled", true).find("span").html("正在保存中...")
+            },
+            Success: function (result) {
+                if (result.Status == "y") {
+                    alert("成功提示", result.Msg);
+                    window.location.href = '/shopadmin/shopproductcategory/index';
+                } else {
+                    alertError("错误提示", result.Msg);
+                }
+                Menu_SubAjax.Complete();
+            },
+            SuccessBack: function (result) {
+                if (result.Status == "y") {
+                    alert("提示", result.Msg, function () {
+                        history.go(-1);
+                    });
+                } else {
+                    alertError("错误提示", result.Msg);
+                    Menu_SubAjax.Complete();
+                }
+            },
+            Failure: function () {
+                alertError("错误提示", "网络超时,请稍后再试...");
+                Menu_SubAjax.Complete();
+            },
+            Complete: function () {
+                $("#SubSave").attr("disabled", false).find("span").html("保 存")
+            }
+        };
+
+        /**
+       * 删除（可复制）
+       * param id
+       * private
+       */
+        function _delete(id) {
+            var url = window.location.href.split("?")[0].toLowerCase();
+            if (url.lastIndexOf("/index") > 0) {
+                url = url.substring(0, url.indexOf("/index"));
+            }
+            url = url + "/Delete";
+            confirm("删除确认!", "删除记录后不可恢复，您确定吗？", function () {
+                $.ajax({
+                    url: url,
+                    data: { idList: id },
+                    type: "post",
+                    success: function (backdata) {
+                        alert("提示", backdata.Msg);
+                        window.location.href = '/shopadmin/shopproductcategory/index';
+                    }, error: function (error) {
+                        console.log(error);
+                    }
+                });
+            })
+        }
+        /**
+      * 批量删除（可复制）
+      * param id list
+      * private
+      */
+        function _deleteMenu() {
+            var str = "";
+            var nodes = $("#jstree_div").jstree("get_checked"); //使用get_checked方法
+            for (var i = 0; i < nodes.length; i++) {
+                str += nodes[i] + ",";
+            }
+            if (str.length > 0) {
+                var IDS = str.substr(0, str.length - 1);
+                _delete(IDS);
+
+            } else {
+                alert("操作提示", "至少选择一个产品类别");
+            }
+        }
+    </script>
+}

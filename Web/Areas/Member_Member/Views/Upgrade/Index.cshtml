@@ -1,0 +1,92 @@
+﻿@model DataBase.Member_Info
+@{
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+}
+<!-- BEGIN PAGE BAR -->
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="/SysManage/Desk/Index">首页</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#">个人信息</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li >
+            <a href="Index"><span>股东升级</span></a>
+        </li>
+    </ul>
+</div>
+<!-- END PAGE BAR -->
+<!-- BEGIN PAGE CONTENT -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet light bordered">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="font-green-sharp fa fa-user"></i>
+                    <span class="caption-subject font-green-sharp bold uppercase"><span>会员升级</span></span>
+                </div>
+            </div>
+            <div class="portlet-body">
+                @using (Ajax.BeginForm("Save", null, new AjaxOptions()
+                {
+                    HttpMethod = "Post",
+                    OnBegin = "SubAjax.Loading",
+                    OnComplete = "SubAjax.Complate",
+                    OnFailure = "SubAjax.Failure",
+                    OnSuccess = "SubAjax.Success"
+                }, new { @class = "form-horizontal", @role = "form", @id = "commentForm" }))
+                {
+                    <div class="form-body">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red">*</span>用户名：</label>
+                            <div class="col-md-4">
+                                <label class="control-label">@Model.Code</label>
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red"></span>当前级别：</label>
+                            <div class="col-md-4">
+                                <input type="text" name="MemberLevelName" value="@Model.MemberLevelName" class="form-control" readonly="readonly">
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red">*</span>升级级别：</label>
+                            <div class="col-md-4">
+                                <select name="LevelId" class="form-control select2" datatype="*" errormsg="请选择升级级别">
+                                    @{
+                                        foreach (var item in ViewData["Levels"] as dynamic)
+                                        {
+                                            <option value="@item.LevelId">@item.LevelName</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red">*</span>支付密码：</label>
+                            <div class="col-md-4">
+                                <input type="password" name="Pwd2" value="" datatype="*" class="form-control" errormsg="请填写支付密码">
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-actions">
+                            <div class="row">
+                                <div class="col-md-offset-3 col-md-9">
+                                    <button type="submit" id="SubSave" class="btn green"><i class="fa fa-check"></i><span>保 存</span></button>
+                                    <button type="button" class="btn default" onclick="window.history.back()"><i class="fa fa-mail-reply"></i>返回</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                                        }
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END PAGE CONTENT -->

@@ -1,0 +1,116 @@
+﻿@using DataBase
+@{ 
+    Xml_Shop shopConfig = DB.XmlConfig.XmlShop;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="yes" name="apple-touch-fullscreen">
+    <meta content="telephone=no" name="format-detection">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1,user-scalable=no;">
+    <title>@ViewBag.Title</title>
+    @Html.Partial("_CssLink")
+    @RenderSection("Head", required: false)
+</head>
+<body>
+    @RenderBody()
+    @Html.Partial("_JsLink")
+    @RenderSection("Footer", required: false)
+    <style>
+        .foot-con a {
+            width: 25%;
+        }
+
+        .foot-con .glyphicon {
+            width: 28px;
+            height: 32px;
+            margin-top: 3px;
+            display: inline-block;
+            font-size: 15px;
+            line-height: 28px;
+            color: rgba(157,157,157,0.6);
+        }
+
+        .foot-con_2{
+             
+          background:white !important;
+        }
+         .foot-con_2 a,
+         .foot-con_2 .text,
+         .foot-con_2 .glyphicon
+        {
+        color:#999;
+        }
+    </style>
+    @*<style>
+            .indexDiv {
+                position: fixed;
+                bottom: 5px;
+                right: 10px;
+                width: 30px;
+            }
+
+                .indexDiv a {
+                    padding-top: 2px;
+                    margin-bottom:8px;
+                    display: inline-block;
+                    background: rgba(0,0,0,0.1);
+                    border: 1px solid red;
+                    height: 30px;
+                    width: 30px;
+                    border-radius: 50%;
+                    text-align: center;
+                }
+
+                .indexDiv .glyphicon {
+                    font-size: 20px;
+                    color: #ec124a;
+                }
+        </style>
+        <div class="indexDiv">
+            <a  data-toggle="modal" data-target="#qqModal"><i class="glyphicon glyphicon-headphones"></i></a>
+            <a href="/mobile"><i class="glyphicon glyphicon-home"></i></a>
+        </div>*@
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="qqModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">官方客服</h4>
+                </div>
+                <div class="modal-body">
+
+                    <p>
+                        <b>Q Q</b>：<a class="text-primary" target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=@(DB.XmlConfig.XmlShop.QQ)&site=qq&menu=yes">@(DB.XmlConfig.XmlShop.QQ)</a>
+                    </p>
+                    <p>
+                        <b>电话</b>：@(shopConfig.ShopTel)
+                    </p>
+                    @*<p>
+                        <b>微信二维码</b>：
+                        <img src="@shopConfig.WeiXin" style="max-width:80%;display:block;margin:10px auto;" />
+                    </p>*@
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+
+    <script>
+        $(document).ready(function () {
+            $("img").each(function () {
+                var img_src = $(this).attr("_src");
+                $(this).attr("src", img_src);
+            });
+        });
+    </script>
+</body>
+</html>

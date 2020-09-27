@@ -1,0 +1,122 @@
+﻿@using Business
+@using DataBase
+@{
+    ViewBag.Title = "我的订单";
+    //获取当前登录用户
+    Member_Info curUser = User_Shop.GetMember_Info();
+    Layout = "~/Views/Shared/_LayoutPageMy0915.cshtml";
+    ////获取数量
+    //int daifukuanCount = DB.ShopOrder.GetCount(curUser.MemberId, 1);
+    //int daifahuoCount = DB.ShopOrder.GetCount(curUser.MemberId, 2);
+    //int daishouhuoCount = DB.ShopOrder.GetCount(curUser.MemberId, 3);
+}
+<div class="container topBg">
+    <!-- 头部导航 -->
+    <div class="header" style="box-shadow: 0 0 10px rgba(1, 73, 206,.2);">
+        <ul>
+            <li class="header-left" onclick="history.back(-1)">
+                <i class="iconfont icon-fanhui"></i>
+            </li>
+            <li>我的订单</li>
+            <li class="header-right">
+
+            </li>
+        </ul>
+    </div>
+    <ul class="myOrderTab">
+        @{
+            Dictionary<int, string> tabList = new Dictionary<int, string>();
+            tabList.Add(1, "待付款");
+            //tabList.Add(0, "待处理");
+            tabList.Add(2, "待发货");
+            //tabList.Add(30, "委托");
+            //tabList.Add(40, "挂卖中");
+            tabList.Add(3, "已发货");
+            //tabList.Add(4, "已完成");
+            int? type = ReqHelper.GetInt("type");
+            foreach (var item in tabList)
+            {
+                if (type == item.Key)
+                {
+                    <li class="myOrderTabAct" onclick="window.location.href='@Url.Action("Bill", new { type = item.Key })'">
+                        <p> @item.Value</p>
+                    </li>
+                }
+                else
+                {
+                    <li @*class="myOrderTabAct"*@ onclick="window.location.href='@Url.Action("Bill", new { type = item.Key })'">
+                        <p> @item.Value</p>
+                    </li>
+                }
+
+            }
+        }
+
+    </ul>
+    <div class="myOrderCtn">
+        @Html.Action("BillList", new { type = type })
+
+
+
+    </div>
+
+    <div class="bgColor"></div>
+</div>
+<script>
+    tabs('.myOrderTab>li', 'myOrderTabAct', '.myOrderCtn>div', 'myOrderCtnAct')
+
+    $(function () {
+        //加载更多
+        $(document.body).on({
+            click: function () {
+                var thisBtn = $(this);
+                var text = thisBtn.text();
+                if (text.indexOf('正在加载') != -1)
+                    return;
+                thisBtn.text('正在加载...');
+                $.post('@Url.Action("BillList")', {
+                    type: '@type',
+                    skipCount: thisBtn.attr('data-skip')
+                }, function (data) {
+                    thisBtn.parents('.rowlist').append(data);
+                    thisBtn.remove();
+                });
+            }
+        }, '.viewMore');
+
+        //取消订单
+        $('.cancelBtn').click(function () {
+            var id = $(this).attr('data-id');
+            show('正在取消...');
+            $.post('@Url.Action("DoCancel")', {
+                orderid: id
+            }, function (data) {
+                if (data.status == 1) {
+                    show(data.msg);
+                    setTimeout(function () {
+                        location.reload();
+                    }, 800);
+                } else {
+                    alert(data.msg);
+                }
+            });
+        });$('.cancelBtnTH').click(function () {
+            var id = $(this).attr('data-id');
+            show('正在退货...');
+            $.post('@Url.Action("DoCancelTH")', {
+                orderid: id
+            }, function (data) {
+                if (data.status == 1) {
+                    show(data.msg);
+                    setTimeout(function () {
+                        location.reload();
+                    }, 800);
+                } else {
+                    alert(data.msg);
+                }
+            });
+        });
+    });
+</script>
+
+</script>

@@ -9,65 +9,69 @@
 }
 
 
-
+<style>
+    .layui-layer-btn a {
+        margin: auto;
+    }
+</style>
 
 
 <div class="container loginContainer">
     <div class="loginBox">
-        <form id="form1">
-            <ul class="loginList forgetMMBox">
-                <li>
-                    <i class="iconfont icon-yonghu"></i>
-                    <input type="text" name="Code" id="Code" value="" placeholder="请输入手机号" required />
-                </li>
-                <li>
-                    <i class="iconfont icon-yonghu"></i>
-                    <input type="text" name="NickName" id="NickName" value="" placeholder="请输入姓名" required />
-                </li>
-                <li>
-                    <i class="iconfont icon-mima"></i>
-                    <input type="password" name="LoginPwd" id="LoginPwd" value="111111" placeholder="登录密码" required />
-                </li>
-                <li>
-                    <i class="iconfont icon-mima"></i>
-                    <input type="password" name="LoginPwdC" id="LoginPwdC" value="111111" placeholder="确认登录密码" required />
-                </li>
-                <li>
-                    <i class="iconfont icon-zhifumima"></i>
-                    <input type="password" name="Pwd2" id="Pwd2" value="222222" placeholder="支付密码" required />
-                </li>
-                <li>
-                    <i class="iconfont icon-zhifumima"></i>
-                    <input type="password" name="Pwd2C" id="Pwd2C" value="222222" placeholder="确认支付密码" required />
-                </li>
-                <li>
-                    <i class="iconfont icon-yonghu"></i>
-                    <input type="text" name="RecommendCode" id="RecommendCode" value="@ViewBag.autoCode" placeholder="请输入邀请码" required />
-                </li>
-                <li class="codeBox">
-                    <i class="iconfont icon-yanzhengma"></i>
-                    <input type="text" name="smscode" id="smscode" value="" placeholder="请输入验证码" />
-                    <div class="btnbox">
-                        <button id="smsBtn" class="btn_org">发送</button>
-                    </div>
-                </li>
-            </ul>
 
-            <div class="protocol">
-                <input type="checkbox" id="read"><p>我已阅读并同意<span class="protocolBtn">注册协议</span></p>
-            </div>
-            <div class="btnbox">
-                <button id="zc" class="btn_org">注册</button>
-            </div>
-            <div class="loginTitle">
-                <div></div>
-                <p>已有账号？</p>
-                <div></div>
-            </div>
-            <div class="btnbox">
-                <a href="/mobile/memberlogin/index" class="btn_gay">去登录</a>
-            </div>
-        </form>
+        <ul class="loginList forgetMMBox">
+            <li>
+                <i class="iconfont icon-yonghu"></i>
+                <input type="text" name="Code" id="Code" value="" placeholder="请输入手机号" required />
+            </li>
+            <li>
+                <i class="iconfont icon-yonghu"></i>
+                <input type="text" name="NickName" id="NickName" value="" placeholder="请输入姓名" required />
+            </li>
+            <li>
+                <i class="iconfont icon-mima"></i>
+                <input type="password" name="LoginPwd" id="LoginPwd" value="" placeholder="登录密码" required />
+            </li>
+            <li>
+                <i class="iconfont icon-mima"></i>
+                <input type="password" name="LoginPwdC" id="LoginPwdC" value="" placeholder="确认登录密码" required />
+            </li>
+            <li>
+                <i class="iconfont icon-zhifumima"></i>
+                <input type="password" name="Pwd2" id="Pwd2" value="" placeholder="支付密码" required />
+            </li>
+            <li>
+                <i class="iconfont icon-zhifumima"></i>
+                <input type="password" name="Pwd2C" id="Pwd2C" value="" placeholder="确认支付密码" required />
+            </li>
+            <li>
+                <i class="iconfont icon-yonghu"></i>
+                <input type="text" name="RecommendCode" id="RecommendCode" value="@ViewBag.autoCode" placeholder="请输入邀请码" required />
+            </li>
+            <li class="codeBox">
+                <i class="iconfont icon-yanzhengma"></i>
+                <input type="text" name="smscode" id="smscode" value="" placeholder="请输入验证码" />
+                <div class="btnbox">
+                    <button id="smsBtn" class="btn_org">发送</button>
+                </div>
+            </li>
+        </ul>
+
+        <div class="protocol">
+            <input type="checkbox" id="read"><p>我已阅读并同意<span class="protocolBtn">注册协议</span></p>
+        </div>
+        <div class="btnbox">
+            <button id="zc" class="btn_org">注册</button>
+        </div>
+        <div class="loginTitle">
+            <div></div>
+            <p>已有账号？</p>
+            <div></div>
+        </div>
+        <div class="btnbox">
+            <a href="/mobile/memberlogin/index" class="btn_gay">去登录</a>
+        </div>
+
     </div>
 </div>
 <div class="loginBg"></div>
@@ -84,7 +88,7 @@
         })
     //发送按钮事件
     $('#smsBtn').click(function () {
-      
+
         var Code = $('input[name="Code"]');
         var mobile = Code.val();
         if (mobile.length <= 0) {
@@ -125,6 +129,7 @@
     });
     //注册按钮点击事件
     $('#zc').click(function () {
+
         if (!$("#read").is(":checked")) {
             show('请阅读勾选注册协议！');
             return false;
@@ -203,19 +208,21 @@
 
 
         //提交后台处理
-        var form = $('#form1');
-        var data = form.serialize();
+        //var form = $('#form1');
+        //var data = form.serialize();
         show('正在提交...');
         $('#zc').hide();
-        $.post('@Url.Action("save_one")', data, function (data) {
+        $.post('@Url.Action("save_one")', { Code: $("#Code").val(), NickName: $("#NickName").val(), LoginPwd: $("#LoginPwd").val(), Pwd2: $("#Pwd2").val(), RecommendCode: $("#RecommendCode").val() }, function (data) {
             if (data.status == 1) {
+                show('操作成功');
+                setTimeout(function () {
+                    location.href = "/mobile/memberlogin/index";
+                }, 2000);
 
-                showurl('恭喜！您已注册完成。请及时修改您的密码，默认密码:6个1,支付密码:6个2',"/mobile/memberlogin/index");
-                
             } else {
                 show(data.msg);
                 $('#zc').show();
-            
+
             }
         });
 

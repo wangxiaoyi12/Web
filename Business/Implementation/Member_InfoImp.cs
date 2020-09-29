@@ -1640,12 +1640,20 @@ namespace Business.Implementation
         /// <param name="_start">开始条数</param>
         /// <param name="pageSize">分页大小</param>
         /// <returns></returns>
-        public IQueryable<Member_Info> getSearchList(string id, DateTime? start, DateTime? end, string key, string IsActive, out int total, int _start, int pageSize)
+        public IQueryable<Member_Info> getSearchList(string id, DateTime? start, DateTime? end, string key, string IsActive, out int total, int _start, int pageSize,string Type="")
         {
             var query = DB.Member_Info.Where();
             if (start != null)
             {
                 query = query.Where(a => a.CreateTime >= start);
+            }
+            if(Type=="普通")
+            {
+                query = query.Where(a => a.MemberLevelId==0);
+            }
+            if (Type == "正式")
+            {
+                query = query.Where(a => a.MemberLevelId > 0);
             }
             if (end != null)
             {

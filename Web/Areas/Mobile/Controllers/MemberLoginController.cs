@@ -1,4 +1,5 @@
-﻿using Common;
+﻿using Aop.Api.Domain;
+using Common;
 using Common.CryptHelper;
 using DataBase;
 using System;
@@ -230,7 +231,7 @@ namespace Web.Areas.Mobile.Controllers
         /// </summary>
         /// <param name="target"></param>
         /// <returns></returns>
-        public ActionResult Save_One(Member_Info DataBase)
+        public ActionResult Save_One(string Code,string NickName,string LoginPwd,string Pwd2,string RecommendCode)
         {
             try
             {
@@ -245,6 +246,12 @@ namespace Web.Areas.Mobile.Controllers
                         throw new Exception("验证码不正确");
 
                 }
+                var DataBase = new Member_Info();
+                DataBase.Code = Code;
+                DataBase.NickName = NickName;
+                DataBase.LoginPwd = LoginPwd;
+                DataBase.Pwd2 = Pwd2;
+                DataBase.RecommendCode = RecommendCode;
                 DataBase.CreateMemberId = "00";
                 DataBase.CreateMemberName = "admin";
                 DataBase.CreateTime = DateTime.Now;

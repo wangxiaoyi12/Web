@@ -16,7 +16,7 @@
             <i class="fa fa-angle-right"></i>
         </li>
         <li>
-            <a href="/Admin_Member/FormalMember/Index"><span>正式会员</span></a>
+            <a href="/Admin_Member/FormalMember/Index"><span>@(Request["Type"])会员</span></a>
         </li>
     </ul>
 </div>
@@ -28,7 +28,7 @@
         <div class="portlet box green">
             <div class="portlet-title">
                 <div class="caption">
-                    <i class="fa fa-database"></i>会员数据列表
+                    <i class="fa fa-database"></i>@(Request["Type"])会员数据列表
                 </div>
                 <div class="tools">
                     <div class="row">
@@ -105,7 +105,7 @@
                                 <th>级别</th>
                                 @*<th>倒计时天数</th>*@
                                 @*<th>激活金额</th>*@
-                                @*<th>收益</th>*@
+                                <th>余额</th>
                                 @*<th>协议标准</th>*@
                            
                                 <th>操作</th>
@@ -183,7 +183,8 @@
                             key: $("#keyword").val(),
                             start: e.start,
                             length: e.length,
-                            draw: e.draw
+                            draw: e.draw,
+                            Type:'@Request["Type"]'
                         }
                     }
                 },   //异步加载数据
@@ -215,7 +216,7 @@
                     { data: 'MemberLevelName' },
                     //{ data: 'Day' },
                     //{ data: 'ActiveAmount' },
-                    //{ data: 'Commission' },
+                    { data: 'Commission' },
                     //{ data: 'AppellationLeveName' },
                   
                     {

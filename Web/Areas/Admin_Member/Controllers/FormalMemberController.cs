@@ -126,10 +126,10 @@ namespace Web.Areas.Admin_Member.Controllers
             var m = DB.Member_Info.FindEntity(id);
             return Json(m);
         }
-        public string getDataSource(DateTime? startTime, DateTime? end, string key, int start, int length, int draw)
+        public string getDataSource(DateTime? startTime, DateTime? end, string key, int start, int length, int draw,string Type)
         {
             var total = 0;
-            var list = DB.Member_Info.getSearchList(null, startTime, end, key, "已激活", out total, start, length)
+            var list = DB.Member_Info.getSearchList(null, startTime, end, key, "已激活", out total, start, length, Type)
                 .ToList()
                  .Select(a => new
                  {
@@ -225,7 +225,7 @@ namespace Web.Areas.Admin_Member.Controllers
             var json = DB.Member_Info.Save(DataBase, Enums.LoginType.admin,"","",0,0,0,0);
             if (json.Status == "y")
             {
-                json.ReUrl = "/Admin_Member/FormalMember/Index";   //注册成功就跳转到 激活页
+                json.ReUrl = "/Admin_Member/FormalMember/Index?Type=普通";   //注册成功就跳转到 激活页
             }
             return Json(json);
         }

@@ -121,6 +121,8 @@ function showurl(msg,url) {
         time: 2000//20s后自动关闭
 
     });
-   
-    window.location.href = url;
+    setTimeout(go(url), 2000)
+  
+} function go(url) {
+    location.href = url;
 }

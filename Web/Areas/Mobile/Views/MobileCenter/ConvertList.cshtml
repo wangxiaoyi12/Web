@@ -7,7 +7,7 @@
     //获取当前登录用户
     Member_Info curUser = User_Shop.GetMember_Info();
     Layout = "~/Views/Shared/_LayoutPageMy0915.cshtml";
-    var remit = DB.Fin_Remit.Where(a => a.MemberId == curUser.MemberId).OrderBy(a => a.RemitId);
+    var remit = DB.Fin_Remit.Where(a => a.MemberId == curUser.MemberId).OrderByDescending(a => a.RemitId);
 }
 <div class="container topBg">
     <!-- 头部导航 -->

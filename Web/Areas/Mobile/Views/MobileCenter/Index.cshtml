@@ -269,20 +269,20 @@
 <div class="productDetailArtBg"></div>
 <div class="bgColor"></div>
 <script>
-    $('.headimg').click(function () {
-        $('.productDetailArtBg').show();
-        $('.headSelect').slideDown(200);
-    })
-    $('.cancel,.productDetailArtBg').click(function () {
-        $('.headSelect').slideUp(200);
-        $('.productDetailArtBg').hide();
-    });
+    //$('.headimg').click(function () {
+    //    $('.productDetailArtBg').show();
+    //    $('.headSelect').slideDown(200);
+    //})
+    //$('.cancel,.productDetailArtBg').click(function () {
+    //    $('.headSelect').slideUp(200);
+    //    $('.productDetailArtBg').hide();
+    //});
     layui.use('upload', function () {
         var $ = layui.jquery,
             upload = layui.upload;
         //普通图片上传
         var uploadInst = upload.render({
-            elem: '#photo-btn' //绑定元素
+            elem: '.headimg' //绑定元素
             , url: "/mobile/mobilecenter/SaveImage"
             , exts: 'jpg|png|gif|bmp|jpeg'
             , number: 1

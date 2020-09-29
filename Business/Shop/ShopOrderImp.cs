@@ -111,7 +111,7 @@ namespace Business
                             throw new Exception("余额不足");
                         }
                         curUser.Commission = Convert.ToDecimal(curUser.Commission - zong);
-                        DB.Fin_LiuShui.AddLS(curUser.MemberId, zong, "商城下单");
+                        DB.Fin_LiuShui.AddLS(curUser.MemberId, -zong, "商城下单");
 
 
                         if (DB.Member_Info.Update(curUser) == false)

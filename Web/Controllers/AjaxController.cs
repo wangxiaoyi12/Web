@@ -488,6 +488,20 @@ namespace Web.Controllers
                 LogHelper.Error("上传文件失败：" + err.Message);
             };
         }
+        public void Upload1()
+        {
+            Receiver _receive = new Receiver();
+            //接收文件成功
+            _receive.OnSuccess = (data) =>
+            {
+                //此处，有需要的情况下，执行数据库操作
+                LogHelper.Info(string.Format("新文件名{0},旧文件名{1}", data.NewName, data.OldName));
+            };
+            _receive.OnError = (err) =>
+            {
+                LogHelper.Error("上传文件失败：" + err.Message);
+            };
+        }
         #endregion
 
         #region 测试代码

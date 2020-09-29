@@ -76,10 +76,10 @@
                                 <th>摘要</th>
                                 <th>相关会员编号</th>
                                 <th>相关会员姓名</th>
-                                <th>金额</th>
-                                @*<th>实际金额</th>*@
-                                @*<th>购物币</th>*@
-                                @*<th>收益</th>*@
+                               
+                                <th>应发</th>
+                                <th>税</th>
+                                <th>实发</th>
                             </tr>
                         </thead>
                         <tbody></tbody>
@@ -150,9 +150,9 @@
                     { data: 'Comment' },
                     { data: 'RefMemberCode' },
                     { data: 'RefNickName' },
-                    //{ data: 'Amount' },
-                    //{ data: 'Poundage' },
-                    { data: 'Amount' }
+                    { data: 'Amount' },
+                    { data: 'Poundage' },
+                    { data: 'RealAmount' }
                 ]
             });
             return table;

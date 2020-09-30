@@ -84,7 +84,7 @@
 
 <script>
     function showDialog() {
-       
+
         var isHasEmpty = false;
         var form = $("#form1");
         var isHasEmpty = false;
@@ -106,8 +106,15 @@
 
                     setTimeout(function () {
                         //跳转登录页面
-                        window.location.href = "/mobile/mobilecenter/address";
-                    }, 2000);
+                        if ('@DB.ShopOrder.Any(a => a.State == 1 && a.MemberCode == curUser.Code)'=='True')
+                        {
+                            window.location.href = "/Mobile/mobilecenter/Bill?type=1";
+                        }
+                        else
+                        {
+                            window.location.href = "@Url_Mobile.GetIndex()";
+                        }
+                        }, 2000);
                 } else {
                     alert(data.msg);
                 }

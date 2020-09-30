@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Web.Mvc;
 using Business;
 
@@ -30,7 +31,25 @@ namespace Web.Areas.Admin_DataStatis.Controllers
             {
                 mid = DB.Member_Info.FindEntity(a => a.Code == code).MemberId;
             }
-            var list = DB.Fin_Info.getDataSource(mid, startTime, end, key, out total, start, length);
+            var list = DB.Fin_Info.getDataSource(mid, startTime, end, key, out total, start, length).ToList()
+                 .Select(a => new
+                 {
+                     a.FinId,
+                     a.MemberId,
+                     a.MemberCode,
+                     a.RealAmount,
+                     a.RefMemberCode,
+                     a.RefMemberId,
+                     a.RefNickName,
+                     a.NickName,
+                     a.Amount,
+                     a.CreateTime,
+                     a.Poundage,
+                     a.FamousBrandFund,
+                     a.Comment,
+                     a.TypeName,
+                     IsJieSuan = a.IsSettlement.Value ? "已结算" : "未结算"
+                 }).ToList();
 
             return ToPage(list, total, start, length, draw);
         }

@@ -91,7 +91,7 @@ namespace Business.Implementation
 
                 member.Commission += mFin.RealAmount;
                 member.CommissionSum += mFin.RealAmount;
-                if(typeName=="分红奖")
+                if (typeName == "分红奖")
                 {
                     member.FHSum = 0;
                 }
@@ -100,7 +100,7 @@ namespace Business.Implementation
                     member.LAmount = 0;
                 }
                 DB.Fin_LiuShui.AddLS(member.MemberId, mFin.RealAmount.Value, mFin.TypeName);
-                var r = DB.Member_Info.Where(a => a.MemberId == member.MemberId).Update(a => new Member_Info() { LAmount=member.LAmount,FHSum=member.FHSum, Commission = member.Commission, CommissionSum = member.CommissionSum, ShopCoins = member.ShopCoins });
+                var r = DB.Member_Info.Where(a => a.MemberId == member.MemberId).Update(a => new Member_Info() { LAmount = member.LAmount, FHSum = member.FHSum, Commission = member.Commission, CommissionSum = member.CommissionSum, ShopCoins = member.ShopCoins });
                 json.IsSuccess = r > 0;
                 if (json.IsSuccess == false)
                 {
@@ -132,6 +132,10 @@ namespace Business.Implementation
                 //DaiLi(curUser, ysheng, yshi, yxian, order.Type);
                 //推广 平级  超越
                 JiCha(curUser, order.RealCongXiao);
+
+                PingJi(curUser, order.RealCongXiao);
+
+                ChaoYue(curUser, order.RealCongXiao);
                 //加业绩
                 UpdateAmount(curUser, order.RealCongXiao);
                 //升级
@@ -155,8 +159,8 @@ namespace Business.Implementation
 
 
                 //突出贡献级别升级
-                 recommendid = curUser.MemberId;
-                 flag1 = true;
+                recommendid = curUser.MemberId;
+                flag1 = true;
                 while (flag1)
                 {
                     Member_Info RemCem = DB.Member_Info.Where(a => a.MemberId == recommendid).FirstOrDefault();
@@ -205,11 +209,11 @@ namespace Business.Implementation
                 {
                     var recommendlist = DB.Member_Info.Where(a => a.RecommendId == rModel.MemberId).OrderBy(a => a.CreateTime);
 
-                  
+
                     //高级会员数量
                     foreach (var item in recommendlist)
                     {
-                        if(DB.Member_Info.Any(a => a.RPosition.StartsWith(rModel.RPosition) && a.MemberLevelId>=2 ))
+                        if (DB.Member_Info.Any(a => a.RPosition.StartsWith(rModel.RPosition) && a.MemberLevelId >= 2))
                         {
                             zhitui++;
                         }
@@ -217,7 +221,7 @@ namespace Business.Implementation
                 }
 
                 //伞下业绩要大于每一层的
-                if ((level.TeamAward <= sanxia && level.LayerPeng <= zhitui && rModel.MemberLevelId <= count) || (count==1 && rModel.MemberLevelId <= count))
+                if ((level.TeamAward <= sanxia && level.LayerPeng <= zhitui && rModel.MemberLevelId <= count) || (count == 1 && rModel.ActiveAmount > 0 && rModel.MemberLevelId <= count))
                 {
 
                     rModel.MemberLevelId = count;
@@ -241,20 +245,20 @@ namespace Business.Implementation
             var zhitui = 0;
             foreach (var item in recommendlist)
             {
-                if (DB.Member_Info.Any(a => a.RPosition.StartsWith(rModel.RPosition) && a.MemberLevelId ==3))
+                if (DB.Member_Info.Any(a => a.RPosition.StartsWith(rModel.RPosition) && a.MemberLevelId == 3))
                 {
                     zhitui++;
                 }
             }
-            if (zhitui>=DB.XmlConfig.XmlSite.ReCount)
+            if (zhitui >= DB.XmlConfig.XmlSite.ReCount)
             {
 
                 rModel.IsLockFen = true;
                 DB.Member_Info.Update(rModel);
-              
+
             }
 
-          
+
         }
         public string getService(int? serviceLevel)
         {
@@ -291,78 +295,282 @@ namespace Business.Implementation
             Member_Info upper = DB.Member_Info.FindEntity(member.RecommendId); //上级会员
 
             decimal Rote = 0m;
+
+            decimal JCRote = 0m;
+            //平级超越各一次机会
+        
+            while (upper != null)
+            {
+
+
+                if (upper.MemberLevelId == 0)
+                {
+                    upper.MemberLevelId = 1;
+                }
+
+                //真实的比例
+                decimal activefee = 0;
+                //当前的人比例
+                decimal nowactivefee = 0m;
+                //上个人的比例
+                decimal roteactivefee = 0;
+
+                nowactivefee = DB.Sys_Level.FindEntity(upper.MemberLevelId).RecAward1.Value;
+
+                if (Rote > 0)
+                {
+                    roteactivefee = DB.Sys_Level.FindEntity(Rote).RecAward1.Value;
+                }
+                string comment = "推广奖";
+                string typename = "推广奖";
+                //算级差
+                if (nowactivefee - roteactivefee > 0)
+                {
+                    activefee = nowactivefee - roteactivefee;
+                    comment = upper.MemberLevelName + "级差奖";
+                }
+                //else if ((nowactivefee - roteactivefee) == 0 && ispingji == true/*&& Rote == 7*/)
+                //{
+
+                //    if (Rote == 2 && upper.MemberLevelId == 2)
+                //    {
+                //        activefee = DB.XmlConfig.XmlSite.ZZP;
+                //    }
+                //    else if (Rote == 3 && upper.MemberLevelId == 3)
+                //    {
+                //        activefee = DB.XmlConfig.XmlSite.GGP;
+                //    }
+                //    else
+                //    {
+                //        activefee = 0;
+                //    }
+                //    if (activefee > 0)
+                //    {
+                //        ispingji = false;
+                //    }
+                //    typename = "平级奖";
+                //    comment = upper.MemberLevelName + "平级奖";
+                //}
+                //else if ((nowactivefee - roteactivefee) < 0 && ischaoyue == true/*&& Rote == 7*/)
+                //{
+
+                //    if (Rote == 2 && upper.MemberLevelId == 1)
+                //    {
+                //        activefee = DB.XmlConfig.XmlSite.CZC;
+                //    }
+                //    else if (Rote == 3 && upper.MemberLevelId == 2)
+                //    {
+                //        activefee = DB.XmlConfig.XmlSite.ZGC;
+                //    }
+                //    else
+                //    {
+                //        activefee = 0;
+                //    }
+                //    if (activefee > 0)
+                //    {
+                //        ischaoyue = false;
+                //    }
+                //    typename = "超越奖";
+                //    comment = upper.MemberLevelName + "超越奖";
+                //}
+
+                decimal amount = activefee / 100m * money;
+
+                if (amount > 0)
+                {
+                    json = InsertFin(upper, member, amount, typename, comment);
+                    Rote = Convert.ToInt32(upper.MemberLevelId);
+
+                }
+
+
+
+
+
+                upper = DB.Member_Info.FindEntity(upper.RecommendId);
+            }
+
+
+
+            return json;
+        }
+
+
+        internal JsonHelp PingJi(Member_Info member, decimal money)
+        {
+            JsonHelp json = new JsonHelp() { IsSuccess = true, Msg = "级差奖分配出错" };
+            Member_Info upper = DB.Member_Info.FindEntity(member.RecommendId); //上级会员
+
+            decimal Rote = 0m;
+
+            decimal JCRote = 0m;
             //平级超越各一次机会
             bool ispingji = true;
+            while (upper != null)
+            {
+
+
+                if (upper.MemberLevelId == 0)
+                {
+                    upper.MemberLevelId = 1;
+                }
+               
+                //真实的比例
+                decimal activefee = 0;
+                //当前的人比例
+                decimal nowactivefee = 0m;
+                //上个人的比例
+                decimal roteactivefee = 0;
+
+                nowactivefee = DB.Sys_Level.FindEntity(upper.MemberLevelId).RecAward1.Value;
+
+                if (Rote > 0)
+                {
+                    roteactivefee = DB.Sys_Level.FindEntity(Rote).RecAward1.Value;
+                }
+                string comment = "推广奖";
+                string typename = "推广奖";
+                //算级差
+                if ((nowactivefee - roteactivefee) == 0 && ispingji == true/*&& Rote == 7*/)
+                {
+
+                    if (Rote == 2 && upper.MemberLevelId == 2)
+                    {
+                        activefee = DB.XmlConfig.XmlSite.ZZP;
+                    }
+                    else if (Rote == 3 && upper.MemberLevelId == 3)
+                    {
+                        activefee = DB.XmlConfig.XmlSite.GGP;
+                    }
+                    else
+                    {
+                        activefee = 0;
+                    }
+                    if (activefee > 0)
+                    {
+                        ispingji = false;
+                    }
+                    typename = "平级奖";
+                    comment = upper.MemberLevelName + "平级奖";
+                }
+                //else if ((nowactivefee - roteactivefee) < 0 && ischaoyue == true/*&& Rote == 7*/)
+                //{
+
+                //    if (Rote == 2 && upper.MemberLevelId == 1)
+                //    {
+                //        activefee = DB.XmlConfig.XmlSite.CZC;
+                //    }
+                //    else if (Rote == 3 && upper.MemberLevelId == 2)
+                //    {
+                //        activefee = DB.XmlConfig.XmlSite.ZGC;
+                //    }
+                //    else
+                //    {
+                //        activefee = 0;
+                //    }
+                //    if (activefee > 0)
+                //    {
+                //        ischaoyue = false;
+                //    }
+                //    typename = "超越奖";
+                //    comment = upper.MemberLevelName + "超越奖";
+                //}
+
+                decimal amount = activefee / 100m * money;
+
+                if (amount > 0)
+                {
+                    json = InsertFin(upper, member, amount, typename, comment);
+
+                }
+
+                Rote = Convert.ToInt32(upper.MemberLevelId);
+
+                if(!ispingji)
+                {
+                    break;
+                }
+
+                upper = DB.Member_Info.FindEntity(upper.RecommendId);
+            }
+
+
+
+            return json;
+        }
+
+        internal JsonHelp ChaoYue(Member_Info member, decimal money)
+        {
+            JsonHelp json = new JsonHelp() { IsSuccess = true, Msg = "级差奖分配出错" };
+            Member_Info upper = DB.Member_Info.FindEntity(member.RecommendId); //上级会员
+
+            decimal Rote = 0m;
+
+            decimal JCRote = 0m;
+            //平级超越各一次机会
             bool ischaoyue = true;
             while (upper != null)
             {
 
-                if (upper.MemberLevelId > 0)
+
+                if (upper.MemberLevelId == 0)
                 {
-                    //真实的比例
-                    decimal activefee = 0;
-                    //当前的人比例
-                    decimal nowactivefee = 0m;
-                    //上个人的比例
-                    decimal roteactivefee = 0;
+                    upper.MemberLevelId = 1;
+                }
+              
+                //真实的比例
+                decimal activefee = 0;
+                //当前的人比例
+                decimal nowactivefee = 0m;
+                //上个人的比例
+                decimal roteactivefee = 0;
 
-                    nowactivefee = DB.Sys_Level.FindEntity(upper.MemberLevelId).RecAward1.Value;
+                nowactivefee = DB.Sys_Level.FindEntity(upper.MemberLevelId).RecAward1.Value;
 
-                    if (Rote > 0)
+                if (Rote > 0)
+                {
+                    roteactivefee = DB.Sys_Level.FindEntity(Rote).RecAward1.Value;
+                }
+                string comment = "推广奖";
+                string typename = "推广奖";
+               if ((nowactivefee - roteactivefee) < 0 && ischaoyue == true/*&& Rote == 7*/)
+                {
+
+                    if (Rote == 2 && upper.MemberLevelId == 1)
                     {
-                        roteactivefee = DB.Sys_Level.FindEntity(Rote).RecAward1.Value;
+                        activefee = DB.XmlConfig.XmlSite.CZC;
                     }
-                    string comment = "推广奖";
-                    string typename = "推广奖";
-                    //算级差
-                    if (nowactivefee - roteactivefee > 0)
+                    else if (Rote == 3 && upper.MemberLevelId == 2)
                     {
-                        activefee = nowactivefee - roteactivefee;
-                        ispingji = true;
-                        comment = upper.MemberLevelName + "级差奖";
+                        activefee = DB.XmlConfig.XmlSite.ZGC;
                     }
-                    else if ((nowactivefee - roteactivefee) == 0 && ispingji == true/*&& Rote == 7*/)
+                    else
                     {
-                        ispingji = false;
-                        if (Rote == 2 && upper.MemberLevelId == 2)
-                        {
-                            activefee = DB.XmlConfig.XmlSite.ZZP;
-                        }
-                        if (Rote == 3 && upper.MemberLevelId == 3)
-                        {
-                            activefee = DB.XmlConfig.XmlSite.GGP;
-                        }
-                        typename = "平级奖";
-                        comment = upper.MemberLevelName + "平级奖";
+                        activefee = 0;
                     }
-                    else if ((nowactivefee - roteactivefee) < 0 && ischaoyue == true/*&& Rote == 7*/)
+                    if (activefee > 0)
                     {
                         ischaoyue = false;
-                        if (Rote == 2 && upper.MemberLevelId == 1)
-                        {
-                            activefee = DB.XmlConfig.XmlSite.CZC;
-                        }
-                        if (Rote == 3 && upper.MemberLevelId == 2)
-                        {
-                            activefee = DB.XmlConfig.XmlSite.ZGC;
-                        }
-                        typename = "超越奖";
-                        comment = upper.MemberLevelName + "超越奖";
                     }
+                    typename = "超越奖";
+                    comment = upper.MemberLevelName + "超越奖";
+                }
 
-                    decimal amount = activefee / 100m * money;
+                decimal amount = activefee / 100m * money;
 
-                    if (amount > 0)
-                    {
-                        json = InsertFin(upper, member, amount, typename, comment);
-
-                    }
-                    if (typename != "超越奖")
-                    {
-                        Rote = Convert.ToInt32(upper.MemberLevelId);
-                    }
+                if (amount > 0)
+                {
+                    json = InsertFin(upper, member, amount, typename, comment);
 
                 }
+
+                Rote = Convert.ToInt32(upper.MemberLevelId);
+
+                if (!ischaoyue)
+                {
+                    break;
+                }
+
                 upper = DB.Member_Info.FindEntity(upper.RecommendId);
             }
 
@@ -526,7 +734,7 @@ namespace Business.Implementation
             var Recommend = DB.Member_Info.FindEntity(member.RecommendId);
             if (Recommend != null)
             {
-                decimal? amount =DB.XmlConfig.XmlSite.DaiLiAmount * DB.XmlConfig.XmlSite.DaiLiTuiJian / 100m;
+                decimal? amount = DB.XmlConfig.XmlSite.DaiLiAmount * DB.XmlConfig.XmlSite.DaiLiTuiJian / 100m;
                 if (amount > 0)
                 {
                     DB.Jiang.InsertFin(Recommend, member, amount.Value, "代理推荐奖", "代理推荐奖");

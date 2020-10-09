@@ -56,21 +56,33 @@ namespace Business
                 m = DB.ShopProductCategory.FindEntity(m.PID);
 
             }
+            var guigeproduct = DB.GuiGeProduct_Info.Where(a => a.ProductId == shopproduct.ID && a.SName == m.ID);
 
-            var YPrice = DB.GuiGeProduct_Info.Where(a => a.ProductId == shopproduct.ID && a.SName == m.ID).Min(a => (decimal?)a.LingShou) ?? 0;
+            var YPrice = 0m;
+            if (guigeproduct != null)
+            {
+                YPrice = DB.GuiGeProduct_Info.Where(a => a.ProductId == shopproduct.ID && a.SName == m.ID).Min(a => (decimal?)a.LingShou) ?? 0;
+
+            }
             return YPrice;
         }
 
         public decimal GetYouHuiPrice(ShopProduct shopproduct)
         {
             var m = DB.ShopProductCategory.FindEntity(shopproduct.CategoryID);
+           
             while (m.Layer != 2)
             {
                 m = DB.ShopProductCategory.FindEntity(m.PID);
 
             }
+           var guigeproduct=  DB.GuiGeProduct_Info.Where(a => a.ProductId == shopproduct.ID && a.SName == m.ID);
 
-            var SPrice = DB.GuiGeProduct_Info.Where(a => a.ProductId == shopproduct.ID && a.SName == m.ID).Min(a => (decimal?)a.YouHui) ?? 0;
+            var SPrice = 0m;
+            if (guigeproduct != null)
+            {
+                SPrice= DB.GuiGeProduct_Info.Where(a => a.ProductId == shopproduct.ID && a.SName == m.ID).Min(a => (decimal?)a.YouHui) ?? 0;
+            }
             return SPrice;
         }
         public decimal GetPeiHuoPrice(ShopProduct shopproduct)

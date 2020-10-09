@@ -676,6 +676,7 @@ namespace Business.Implementation
                 entity.RAmount = 0;
                 entity.FHSum = 0;
                 entity.InteractionAmount = 0;
+                entity.IsLockFen = false;
                 entity.FamousBrandFund = 0;
                 entity.IsNullActive = false;
                 entity.IsSub = false;

@@ -200,7 +200,12 @@ namespace Web.Areas.ShopAdmin.Controllers
 
             if(ids.Contains(321))
             {
-                json.Msg = "积分专区不可删除";
+                json.Msg = "拼团专区不可删除";
+                return Json(json);
+            }
+            if (DB.ShopProduct.Any(a => ids.Contains(a.CategoryID.Value))  || DB.ShopProduct.Any(a => ids.Contains(a.CategoryID1.Value)))
+            {
+                json.Msg = "专区有产品不可以删除";
                 return Json(json);
             }
 

@@ -6,8 +6,69 @@
     //获取当前登录用户
     Member_Info curUser = User_Shop.GetMember_Info();
     Layout = "~/Views/Shared/_LayoutPageMy0915.cshtml";
-    var url = Request.Url.AbsoluteUri.ToString().Replace("mobile/mobilecenter/link", "") + "mobile/memberlogin/register/" + curUser.Pwd3;
+
+
+
+    var url = "";
+    if (ViewBag.isPhone != null)
+    {
+        url = Request.Url.AbsoluteUri.ToString().Replace("mobile/mobilecenter/link?isPhone=true", "") + "mobile/memberlogin/register/" + curUser.Pwd3;
+    }
+    else
+    {
+        url = Request.Url.AbsoluteUri.ToString().Replace("mobile/mobilecenter/link", "") + "mobile/memberlogin/register/" + curUser.Pwd3;
+    }
+
 }
+<style>
+    .bill {
+        background: #fff;
+    }
+
+    footer {
+        display: none;
+    }
+
+    .hbImg {
+        width: 100%;
+        display: block;
+    }
+
+    .test {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    canvas {
+        width: 150%;
+    }
+
+
+    .erweima {
+        position: fixed;
+        margin-left: 29%;
+        border-radius: unset;
+        width: 22% !important;
+        bottom: 34% !important;
+        background: white;
+        width: 80px;
+        height: 80px;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+    }
+
+    .bottom {
+        background: white;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        padding: 10px;
+        margin: 20px auto;
+    }
+</style>
 <div class="container topBg">
     <!-- 头部导航 -->
     <div class="header" style="box-shadow: 0 0 10px rgba(1, 73, 206,.2);">
@@ -22,38 +83,186 @@
         </ul>
     </div>
     <div class="invitationBg">
-        <div class="invitationBox">
-            <p class="top">你的专属邀请码</p>
-            <div id="invitationQrcode"></div>
-            <p class="hr"></p>
-            <p class="copyTop">推广链接</p>
-            <p class="copy_content">@url</p>
-            <div class="btnbox">
-                <a class="copyM btn_org" data-clipboard-action="copy" data-clipboard-target=".copy_content">复制</a>
+
+        <div class="test" style="width: 100%;height:95%;background-size: 100% 100%;position:relative;">
+            <div class="invitationEwm uploaderClick xiazai" style="width: 100%;
+    height: 20px;
+    position: fixed;
+    bottom: 0px;
+
+    /*opacity: 0.5;*/
+    border-radius: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;">
+
             </div>
+            <img class="hbImg" src="../../../../assets/pages/img/beijing.png" style="height:99%" />
+            <div class="bottom">
+
+                <!--二维码-->
+                <div class="invitationEwm erweima">
+                    <div id="qrcode"></div>
+                </div>
+
+            </div>
+            <p style="position:fixed;margin-left: 23%;border-radius:unset;width:54%;bottom:19%;display:flex;font-size:10px">快去分享您的邀请码吧,让更多的好友加入【聚世堂】,您也可以获得更丰厚的奖励</p>
+            <p style="position:fixed;margin-left: 21%;border-radius:unset;width:56%;bottom:27%;color:red;font-size:20px;text-align:center">邀请码:@curUser.Code</p>
+
+            <p class="copy_content" hidden>@url</p>
+            <a class="copyM btn_org" data-clipboard-action="copy" style="position:fixed;margin-left: 28%;border-radius:unset;width:44%;bottom:14%;line-height:0.55rem;height:0.55rem" data-clipboard-target=".copy_content">复制链接分享好友</a>
         </div>
+        @*<div class="invitationBox">
+                <p class="top">你的专属邀请码</p>
+                <div id="invitationQrcode"></div>
+                <p class="hr"></p>
+                <p class="copyTop">推广链接</p>
+                <p class="copy_content">@url</p>
+                <div class="btnbox">
+                    <a class="copyM btn_org" data-clipboard-action="copy" data-clipboard-target=".copy_content">复制</a>
+                </div>
+            </div>*@
     </div>
 
     <div class="bgColor"></div>
 </div>
 
 
+<script src="https://cdn.bootcss.com/html2canvas/0.5.0-beta4/html2canvas.js"></script>
+
+<div id="imgDiv" style="position: absolute;display:none;">
+    <img class="imgDiv_img" src="" style="width: 100%;" />
+</div>
 <script src="~/assets/jnwz200915/js/qrcode.min.js"></script>
 <script src="~/assets/jnwz200915/js/clipboard.min.js"></script>
 <script src="~/assets/jnwz200915/js/utf.js"></script>
 <script>
-    $("#invitationQrcode").qrcode({
+    $(function () {
+        let winH = $(window).height();
+        console.log(winH);
+        if (winH<600) {
+            $('.erweima').css({"bottom":"0px"});
+            }
+            if (winH > 800) {
+            $('.erweima').css({ "bottom": "40px" });
+            $('.xinxi').css({ "bottom": "40px" });
+        }
+    })
+    $("#qrcode").qrcode({
         render: "canvas", //设置渲染方式，有table和canvas
         text: '@url', //扫描二维码后自动跳向该链接
         width: "120", //二维码的宽度
         height: "120", //二维码的高度
-        background: "#ffffff", //二维码的后景色
+        background: "white", //二维码的后景色
         foreground: "#000000", //二维码的前景色
         //src: 'images/logo.png', //二维码中间的图片
     });
+    $(function () {
+        $('.xiazai').click(function () {
+            $('html,body').animate({ scrollTop: '0px' }, 800);
+            $('.uploaderClick').hide();
+            //setTimeout(() => {
 
-    $('.copyM').click(function () {
-        var clipboard = new ClipboardJS('.copyM');
-        layer.msg('复制成功');
-    })
+            const dom = document.querySelector(".test")
+            // 创建一个新的canvas
+            const Canvas = document.createElement('canvas');
+            const width = document.body.offsetWidth;  // 可见屏幕的宽
+            const height = document.body.offsetHeight;  // 可见屏幕的高
+            const scale = window.devicePixelRatio;  // 设备的devicePixelRatio
+            // 将Canvas画布放大scale倍，然后放在小的屏幕里，解决模糊问题
+            Canvas.width = width * scale;
+            Canvas.height = height * scale;
+            //Canvas.getContext('2d').scale(scale / 3, scale / 3);
+                        Canvas.getContext('2d').scale(scale , scale );
+            console.log(width, height, scale);
+            html2canvas(dom, {
+                canvas: Canvas,
+                scale,
+                useCORS: true,
+                logging: true,
+                width: width + 'px',
+                hegiht: height + 'px',
+            }).then(function (canvas) {
+                var imgUri = canvas.toDataURL("../../../../assets/pages/img/png").replace("../../../../assets/pages/img/png",
+                    "../../../../assets/pages/img/octet-stream"); // 获取生成的图片的url
+                $(".imgDiv_img").attr("src", imgUri)
+                if ('@ViewBag.isPhone' == 'true') {
+                    //判断是否app下载
+                    let base64Img = imgUri;
+                    // 转成图片文件
+                    let imgFile = dataURLtoFile(base64Img);
+                    console.log(imgFile);
+
+                    var formData = new FormData();
+                    formData.append("File", imgFile);//需要上传的多个参数
+
+                    $.ajax({
+                        url: '@Url.Action("UpLoadTu")',
+                        data: formData,
+                        type: "post",
+                        //ajax2.0可以不用设置请求头，但是jq帮我们自动设置了，这样的话需要我们自己取消掉
+                        contentType: false,
+                        //取消帮我们格式化数据，是什么就是什么
+                        processData: false,
+                        success: function (data) {
+
+                            callNative.download(data);
+
+                        }
+                    });
+                } else {
+                    downloadFile("推广海报", imgUri);
+                    $('.uploaderClick').show();
+                }
+
+            })
+            //}, 1000)
+        });
+        function dataURLtoFile(dataurl, filename = 'file') {
+            let arr = dataurl.split(',')
+            let mime = arr[0].match(/:(.*?);/)[1]
+            let suffix = mime.split('/')[1]
+            let bstr = atob(arr[1])
+            let n = bstr.length
+            let u8arr = new Uint8Array(n)
+            while (n--) {
+                u8arr[n] = bstr.charCodeAt(n)
+            }
+            return new File([u8arr], `${filename}.${suffix}`, {
+                type: mime
+            })
+        }
+        $('.copyM').click(function () {
+            var clipboard = new ClipboardJS('.copyM');
+            layer.msg('复制成功');
+        })
+        //下载
+        function downloadFile(fileName, content) {
+            let aLink = document.createElement('a');
+            let blob = base64ToBlob(content); //new Blob([content]);
+
+            let evt = document.createEvent("HTMLEvents");
+            evt.initEvent("click", true, true);//initEvent 不加后两个参数在FF下会报错  事件类型，是否冒泡，是否阻止浏览器的默认行为
+            aLink.download = fileName;
+            aLink.href = URL.createObjectURL(blob);
+
+            // aLink.dispatchEvent(evt);
+            aLink.click()
+        }
+        //base64转blob
+        function base64ToBlob(code) {
+            let parts = code.split(';base64,');
+            let contentType = parts[0].split(':')[1];
+            let raw = window.atob(parts[1]);
+            let rawLength = raw.length;
+
+            let uInt8Array = new Uint8Array(rawLength);
+
+            for (let i = 0; i < rawLength; ++i) {
+                uInt8Array[i] = raw.charCodeAt(i);
+            }
+            return new Blob([uInt8Array], { type: contentType });
+        }
+    });
+
 </script>

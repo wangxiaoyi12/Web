@@ -50,9 +50,10 @@
                                 <th>级别名称</th>
 
                                 <th>推广奖比例(%)</th>
+                                <th>复销奖比例(%)</th>
                                 <th>团队业绩</th>
                                 <th>直推/伞下会员个数</th>
-                             
+
                             </tr>
                         </thead>
                         <tbody>
@@ -64,8 +65,9 @@
                                             <td><input type="hidden" name="" id="LevelId" value="@item.LevelId">@item.LevelId</td>
                                             <td><input type="text" class="form-control" name="" id="LevelName" value="@item.LevelName" /></td>
 
-                                           
+
                                             <td><input type="text" class="form-control" name="" id="RecAward1" value="@item.RecAward1" /></td>
+                                            <td><input type="text" class="form-control" name="" id="RecAward2" value="@item.RecAward2" /></td>
                                             <td><input type="text" class="form-control" name="" id="TeamAward" value="@item.TeamAward" /></td>
                                             <td><input type="text" class="form-control" name="" id="LayerPeng" value="@item.LayerPeng" /></td>
                                         </tr>
@@ -90,16 +92,17 @@
                 var LevelId = tdArr.eq(0).find("input").val();//ID
                 var LevelName = tdArr.eq(1).find("input").val();//级别名称
                 var RecAward1 = tdArr.eq(2).find("input").val();//  投资金额
+                var RecAward2 = tdArr.eq(3).find("input").val();//  投资金额
                 //var RecAward1 = tdArr.eq(3).find("input").val();//ID
                 //var FindPointMoney = tdArr.eq(4).find("input").val();//级别名称
                 //var FindPointLayer = tdArr.eq(5).find("input").val();//ID
                 //var MinInvestment = tdArr.eq(6).find("input").val();//级别名称
                 //var MinLevelId = tdArr.eq(7).find("input").val();//ID
-             
-                var TeamAward = tdArr.eq(3).find("input").val();//  投资金额
-                var LayerPeng = tdArr.eq(4).find("input").val();//  投资金额
-              
-                sub_tr += LevelId + "," + LevelName + "," + RecAward1 + "," + TeamAward + "," + LayerPeng + "&";
+
+                var TeamAward = tdArr.eq(4).find("input").val();//  投资金额
+                var LayerPeng = tdArr.eq(5).find("input").val();//  投资金额
+
+                sub_tr += LevelId + "," + LevelName + "," + RecAward1 + "," + RecAward2 + "," + TeamAward + "," + LayerPeng + "&";
             });
             //提交数据
             $.ajax({

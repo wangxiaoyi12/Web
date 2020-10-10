@@ -66,6 +66,35 @@ namespace Web.Areas.Mobile.Controllers
                 return User_Shop.GetMember_Info();
             }
         }
+        public ActionResult UpLoadTu(string File, string path = "/upload/qrimg/")
+        {
+            JsonHelp json = new JsonHelp(true);
+            //上传和返回(保存到数据库中)的路径
+            var tempPath = Server.MapPath(path);
+            if (!Directory.Exists(tempPath))
+            {
+                Directory.CreateDirectory(tempPath);//不存在就创建目录 
+            }
+            if (Request.Files.Count <= 0) return Json(json);
+            var imgFile = Request.Files["file"];
+            //创建图片新的名称
+            var nameImg = DateTime.Now.ToString("yyyyMMddHHmmssfff");
+            //获得上传图片的路径
+            var strPath = imgFile.FileName;
+            //获得上传图片的类型(后缀名)
+            var type = strPath.Substring(strPath.LastIndexOf(".", StringComparison.Ordinal) + 1).ToLower(); ;
+
+            //拼写数据库保存的相对路径字符串
+            // savepath = "..\\" + path + "\\";
+            path += nameImg + "." + type;
+            //拼写上传图片的路径
+            var uppath = Server.MapPath(path);
+            // uppath += nameImg + "." + type;
+            //上传图片
+            imgFile.SaveAs(uppath);
+
+            return Json(json.Msg = path);
+        }
         public ActionResult Index(string isPhone)
         {
             ViewBag.isPhone = isPhone;
@@ -750,8 +779,9 @@ namespace Web.Areas.Mobile.Controllers
 
             return View(model);
         }
-        public ActionResult Link()
+        public ActionResult Link(string isPhone)
         {
+            ViewBag.isPhone = isPhone;
             var model = DB.Member_Info.FindEntity(CurrentUser.MemberId);
             ViewBag.m = model;
 

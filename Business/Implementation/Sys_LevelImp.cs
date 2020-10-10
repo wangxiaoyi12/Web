@@ -33,14 +33,15 @@ namespace Business.Implementation
                 Sys_Level entity = DB.Sys_Level.FindEntity(Convert.ToInt32(data[0]));
                 entity.LevelName = data[1];
                 entity.RecAward1 = Convert.ToDecimal(data[2]);
+                entity.RecAward2 = Convert.ToDecimal(data[3]);
                 //entity.RecAward1 = Convert.ToInt32(data[3]);
                 //entity.FindPointMoney = Convert.ToInt32(data[4]);
                 //entity.FindPointLayer = Convert.ToInt32(data[5]);
                 //entity.MinInvestment = Convert.ToInt32(data[6]);
                 //entity.MinLevelId = Convert.ToInt32(data[7]);
                 //entity.TeamAwardRange = Convert.ToDecimal(data[8]);
-                entity.TeamAward = Convert.ToDecimal(data[3]);
-                entity.LayerPeng = Convert.ToDecimal(data[4]);
+                entity.TeamAward = Convert.ToDecimal(data[4]);
+                entity.LayerPeng = Convert.ToDecimal(data[5]);
               
                 LevList.Add(entity);
             }

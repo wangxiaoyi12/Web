@@ -73,6 +73,7 @@
                                 <th><input type="checkbox" id='checkAll'></th>
                                 <th>会员编号</th>
                                 <th>姓名</th>
+                                <th>复销奖</th>
                                 <th>推广奖</th>
                                 @*<th>一代平级奖</th>
         <th>二代平级奖</th>*@
@@ -101,6 +102,7 @@
                                 <th>0</th>
                                 @*<th>0</th>
         <th>0</th>*@
+                                <th>0</th>
                                 <th>0</th>
                                 <th>0</th>
                                 <th>0</th>
@@ -142,6 +144,7 @@
             },
             { data: 'MemberCode' },
             { data: 'NickName' },
+            { data: '复销奖' },
             { data: '推广奖' },
                 //{ data: '一代平级奖' },
                 //    { data: '二代平级奖' },
@@ -211,21 +214,23 @@
                         dataType: "json",
                         success: function (entity) {
                             var total = 0;
-                            $(tfoot).find('th').eq(1).html(entity.推广奖).css("color", "red");
+                            $(tfoot).find('th').eq(1).html(entity.复销奖).css("color", "red");
+                            $(tfoot).find('th').eq(2).html(entity.推广奖).css("color", "red");
                             //$(tfoot).find('th').eq(2).html(entity.一代平级奖).css("color", "red");
                             //$(tfoot).find('th').eq(3).html(entity.二代平级奖).css("color", "red");
-                            $(tfoot).find('th').eq(2).html(entity.平级奖).css("color", "red");
-                            $(tfoot).find('th').eq(3).html(entity.超越奖).css("color", "red");
+                            $(tfoot).find('th').eq(3).html(entity.平级奖).css("color", "red");
+                            $(tfoot).find('th').eq(4).html(entity.超越奖).css("color", "red");
 
-                            $(tfoot).find('th').eq(4).html(entity.分红奖).css("color", "red");
-                            $(tfoot).find('th').eq(5).html(entity.突出贡献奖).css("color", "red");
-                            $(tfoot).find('th').eq(6).html(entity.代理推荐奖).css("color", "red");
-                            $(tfoot).find('th').eq(7).html(entity.代理津贴).css("color", "red");
-                            $(tfoot).find('th').eq(8).html(entity.拼团奖).css("color", "red");
+                            $(tfoot).find('th').eq(5).html(entity.分红奖).css("color", "red");
+                            $(tfoot).find('th').eq(6).html(entity.突出贡献奖).css("color", "red");
+                            $(tfoot).find('th').eq(7).html(entity.代理推荐奖).css("color", "red");
+                            $(tfoot).find('th').eq(8).html(entity.代理津贴).css("color", "red");
+                            $(tfoot).find('th').eq(9).html(entity.拼团奖).css("color", "red");
 
-                            $(tfoot).find('th').eq(9).html(entity.小计).css("color", "red");
-                            $(tfoot).find('th').eq(10).html(entity.税).css("color", "red");
-                            $(tfoot).find('th').eq(11).html(entity.实际金额).css("color", "red");
+                            $(tfoot).find('th').eq(10).html(entity.小计).css("color", "red");
+                            $(tfoot).find('th').eq(11).html(entity.税).css("color", "red");
+                            $(tfoot).find('th').eq(12).html(entity.实际金额).css("color", "red");
+
 
                         }
                     });

@@ -89,7 +89,7 @@ namespace Business.Implementation
                     a.Key.GroupDate,
 
 
-
+                    复销奖 = a.Where(p => p.TypeName == "复销奖").Sum(p => p.Amount) ?? 0,
                     推广奖 = a.Where(p => p.TypeName == "推广奖").Sum(p => p.Amount) ?? 0,
                     一代平级奖 = a.Where(p => p.TypeName == "一代平级奖").Sum(p => p.Amount) ?? 0,
                     超越奖 = a.Where(p => p.TypeName == "超越奖").Sum(p => p.Amount) ?? 0,
@@ -166,6 +166,7 @@ namespace Business.Implementation
 
                     GroupDate = new DateTime(1900, 1, 1).AddDays(item.GroupDate).ToString("yyyy-MM-dd"),
                     一代平级奖 = a.Where(p => p.TypeName == "一代平级奖").Sum(p => p.Amount) ?? 0,
+                    复销奖 = a.Where(p => p.TypeName == "复销奖").Sum(p => p.Amount) ?? 0,
                     超越奖 = a.Where(p => p.TypeName == "超越奖").Sum(p => p.Amount) ?? 0,
                     推广奖 = a.Where(p => p.TypeName == "推广奖").Sum(p => p.Amount) ?? 0,
                     平级奖 = a.Where(p => p.TypeName == "平级奖").Sum(p => p.Amount) ?? 0,
@@ -259,6 +260,7 @@ namespace Business.Implementation
                     MemberId = item.MemberId,
                     NickName = item.NickName,
                     推广奖 = a.Where(p => p.TypeName == "推广奖").Sum(p => p.Amount) ?? 0,
+                    复销奖 = a.Where(p => p.TypeName == "复销奖").Sum(p => p.Amount) ?? 0,
                     平级奖 = a.Where(p => p.TypeName == "平级奖").Sum(p => p.Amount) ?? 0,
                     一代平级奖 = a.Where(p => p.TypeName == "一代平级奖").Sum(p => p.Amount) ?? 0,
                     超越奖 = a.Where(p => p.TypeName == "超越奖").Sum(p => p.Amount) ?? 0,
@@ -422,6 +424,7 @@ namespace Business.Implementation
             }
             var r = DB.Fin_Info.Where().Take(1).Select(a => new
             {
+                复销奖 = query.Where(p => p.TypeName == "复销奖").Sum(p => p.Amount) ?? 0,
                 推广奖 = query.Where(p => p.TypeName == "推广奖").Sum(p => p.Amount) ?? 0,
                 平级奖 = query.Where(p => p.TypeName == "平级奖").Sum(p => p.Amount) ?? 0,
                 分红奖 = query.Where(p => p.TypeName == "分红奖").Sum(p => p.Amount) ?? 0,

@@ -70,7 +70,7 @@ namespace Business.Implementation
             mFin.RefNickName = refMember.NickName;
             mFin.CreateTime = DateTime.Now;
             mFin.GroupDate = (int)(mFin.CreateTime.Value - new DateTime(1900, 1, 1)).TotalDays;
-            if (mFin.Comment == "中级会员级差奖" || mFin.Comment == "高级会员级差奖")
+            if (mFin.Comment == "中级会员级差奖" || mFin.Comment == "高级会员级差奖" || mFin.TypeName == "代理推荐奖" || mFin.TypeName == "拼团奖")
             {
                 mFin.IsSettlement = false;
 
@@ -146,8 +146,13 @@ namespace Business.Implementation
                     Member_Info RemCem = DB.Member_Info.Where(a => a.MemberId == recommendid).FirstOrDefault();
                     if (RemCem != null)
                     {
+                        bool istui = false;
+                        if(curUser.RecommendCode==RemCem.Code)
+                        {
+                            istui = true;
+                        }
                         //进行升级
-                        GetShengJi(RemCem);
+                        GetShengJi(RemCem, istui);
                         recommendid = RemCem.RecommendId;
                     }
                     else
@@ -185,7 +190,7 @@ namespace Business.Implementation
             }
         }
 
-        public void GetShengJi(Member_Info rModel)
+        public void GetShengJi(Member_Info rModel,bool istui)
         {
 
             //满足条件升级
@@ -213,15 +218,15 @@ namespace Business.Implementation
                     //高级会员数量
                     foreach (var item in recommendlist)
                     {
-                        if (DB.Member_Info.Any(a => a.RPosition.StartsWith(rModel.RPosition) && a.MemberLevelId >= 2))
+                        if (DB.Member_Info.Any(a => a.RPosition.StartsWith(item.RPosition) && a.MemberLevelId >= 2))
                         {
                             zhitui++;
                         }
                     }
                 }
 
-                //伞下业绩要大于每一层的
-                if ((level.TeamAward <= sanxia && level.LayerPeng <= zhitui && rModel.MemberLevelId <= count) || (count == 1 && rModel.ActiveAmount > 0 && rModel.MemberLevelId <= count))
+                //伞下业绩要大于每一层的   推荐人是一定会成为正式会员的
+                if ((level.TeamAward <= sanxia && level.LayerPeng <= zhitui && rModel.MemberLevelId <= count) || (count == 1 && (istui || rModel.ActiveAmount > 0) && rModel.MemberLevelId <= count))
                 {
 
                     rModel.MemberLevelId = count;
@@ -245,7 +250,7 @@ namespace Business.Implementation
             var zhitui = 0;
             foreach (var item in recommendlist)
             {
-                if (DB.Member_Info.Any(a => a.RPosition.StartsWith(rModel.RPosition) && a.MemberLevelId == 3))
+                if (DB.Member_Info.Any(a => a.RPosition.StartsWith(item.RPosition) && a.MemberLevelId == 3))
                 {
                     zhitui++;
                 }
@@ -292,7 +297,7 @@ namespace Business.Implementation
         internal JsonHelp JiCha(Member_Info member, decimal money)
         {
             JsonHelp json = new JsonHelp() { IsSuccess = true, Msg = "级差奖分配出错" };
-            Member_Info upper = DB.Member_Info.FindEntity(member.RecommendId); //上级会员
+            Member_Info upper = DB.Member_Info.FindEntity(member.MemberId); //上级会员
 
             decimal Rote = 0m;
 
@@ -323,6 +328,16 @@ namespace Business.Implementation
                 }
                 string comment = "推广奖";
                 string typename = "推广奖";
+
+
+                if(member.MemberId==upper.MemberId)
+                {
+                    comment = "复销奖";
+                    typename = "复销奖";
+                    nowactivefee = DB.Sys_Level.FindEntity(upper.MemberLevelId).RecAward2.Value;
+                }
+
+
                 //算级差
                 if (nowactivefee - roteactivefee > 0)
                 {
@@ -399,7 +414,7 @@ namespace Business.Implementation
         internal JsonHelp PingJi(Member_Info member, decimal money)
         {
             JsonHelp json = new JsonHelp() { IsSuccess = true, Msg = "级差奖分配出错" };
-            Member_Info upper = DB.Member_Info.FindEntity(member.RecommendId); //上级会员
+            Member_Info upper = DB.Member_Info.FindEntity(member.MemberId); //上级会员
 
             decimal Rote = 0m;
 
@@ -502,7 +517,7 @@ namespace Business.Implementation
         internal JsonHelp ChaoYue(Member_Info member, decimal money)
         {
             JsonHelp json = new JsonHelp() { IsSuccess = true, Msg = "级差奖分配出错" };
-            Member_Info upper = DB.Member_Info.FindEntity(member.RecommendId); //上级会员
+            Member_Info upper = DB.Member_Info.FindEntity(member.MemberId); //上级会员
 
             decimal Rote = 0m;
 

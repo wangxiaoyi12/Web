@@ -89,7 +89,7 @@ namespace Business.Implementation
             else if (mFin.IsSettlement.Value)
             {
 
-                member.Commission += mFin.RealAmount;
+                member.Coins += mFin.RealAmount;
                 member.CommissionSum += mFin.RealAmount;
                 if (typeName == "分红奖")
                 {
@@ -99,8 +99,8 @@ namespace Business.Implementation
                 {
                     member.LAmount = 0;
                 }
-                DB.Fin_LiuShui.AddLS(member.MemberId, mFin.RealAmount.Value, mFin.TypeName);
-                var r = DB.Member_Info.Where(a => a.MemberId == member.MemberId).Update(a => new Member_Info() { LAmount = member.LAmount, FHSum = member.FHSum, Commission = member.Commission, CommissionSum = member.CommissionSum, ShopCoins = member.ShopCoins });
+                DB.Fin_LiuShui.AddLS(member.MemberId, mFin.RealAmount.Value, mFin.TypeName,"奖金");
+                var r = DB.Member_Info.Where(a => a.MemberId == member.MemberId).Update(a => new Member_Info() { LAmount = member.LAmount, FHSum = member.FHSum, Coins = member.Coins, CommissionSum = member.CommissionSum, ShopCoins = member.ShopCoins });
                 json.IsSuccess = r > 0;
                 if (json.IsSuccess == false)
                 {

@@ -19,9 +19,9 @@ namespace Business.Implementation
         /// <param name="end">结束日期</param>
         /// <param name="key">关键字</param>
         /// <returns></returns>
-        public List<Fin_LiuShui> getDataSource(string id, DateTime? start, DateTime? end, string key, out int total, int _start, int pageSize)
+        public List<Fin_LiuShui> getDataSource(string id, DateTime? start, DateTime? end, string key, out int total, int _start, int pageSize,string Type)
         {
-            var query = DB.Fin_LiuShui.Where(p=>p.Type== "货币流水");
+            var query = DB.Fin_LiuShui.Where(p=>p.Type== Type);
             if (!string.IsNullOrEmpty(id))
             {
                 query = query.Where(a => a.MemberId == id);
@@ -135,14 +135,14 @@ namespace Business.Implementation
             return data;
         }
         #endregion
-        public void AddLS(string memberid,decimal amount,string comment)
+        public void AddLS(string memberid,decimal amount,string comment,string type="余额")
         {
             var m = DB.Member_Info.FindEntity(memberid);
             Fin_LiuShui _liushui = new Fin_LiuShui();
             _liushui.MemberId = m.MemberId;
             _liushui.Code = m.Code;
             _liushui.NickName = m.NickName;
-            _liushui.Type = "货币流水";
+            _liushui.Type = type;
             _liushui.Comment = comment;
             _liushui.Amount = amount;
             _liushui.CreateTime = DateTime.Now;

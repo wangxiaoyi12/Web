@@ -25,13 +25,18 @@
     }
     else if (id == 4)
     {
-        type = "团队业绩";
+        type = "突出贡献业绩";
         amount = curUser.LAmount.Value;
     }
     else if (id == 5)
     {
         type = "我的业绩";
         amount = curUser.LAmount.Value;
+    }
+    else if (id == 6)
+    {
+        type = "奖金";
+        amount = curUser.Coins.Value;
     }
     ////获取数量
     //int daifukuanCount = DB.ShopOrder.GetCount(curUser.MemberId, 1);
@@ -59,9 +64,9 @@
     </div>
     <ul class="eWalletList">
         @{
-            var liushui = DB.Fin_LiuShui.Where(a => a.MemberId == curUser.MemberId && a.Type=="货币流水").OrderByDescending(a => a.id).Take(40);
+            var liushui = DB.Fin_LiuShui.Where(a => a.MemberId == curUser.MemberId && a.Type== type).OrderByDescending(a => a.id).Take(40);
         }
-        @if (id == 1)
+        @if (id == 1 || id==6)
         {
             foreach (var item in liushui)
             {

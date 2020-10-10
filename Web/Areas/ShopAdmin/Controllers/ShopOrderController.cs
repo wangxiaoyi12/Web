@@ -281,6 +281,13 @@ namespace Web.Areas.ShopAdmin.Controllers
             return Json(json);
         }
 
+        public ActionResult ShouHuo(string id)
+        {
+            var json = new JsonHelp();
+            json= DB.ShopOrder.ShouHuo(id);
+          
+            return Json(json);
+        }
 
         //修改订单邮费
         public ActionResult UpdatePost(string id, decimal amount)

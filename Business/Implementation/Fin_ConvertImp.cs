@@ -83,11 +83,11 @@ namespace Business.Implementation
 
                     }
 
-                    if (entity.ConvertType == "收益转推广奖")
+                    if (entity.ConvertType == "奖金转余额")
                     {
-                        if (entity.Amount > model.Commission)
+                        if (entity.Amount > model.Coins)
                         {
-                            throw new Exception("可用收益额度不足!");
+                            throw new Exception("奖金额度不足!");
 
                         }
                      
@@ -100,11 +100,12 @@ namespace Business.Implementation
                         {  //流水账单
                             Fin_LiuShui _liushui = new Fin_LiuShui();
                             //更新会员表的收益,电子币
-                            if (entity.ConvertType == "收益转推广奖")
+                            if (entity.ConvertType == "奖金转余额")
                             {
-                                model.Commission -= entity.Amount;
-                                model.ShopCoins += entity.Amount;
-
+                                model.Coins -= entity.Amount;
+                                model.Commission += entity.Amount;
+                                DB.Fin_LiuShui.AddLS(model.MemberId, -entity.Amount.Value, "奖金转余额", "奖金");
+                                DB.Fin_LiuShui.AddLS(model.MemberId, entity.Amount.Value, "奖金转余额");
                             }
                        
 
@@ -112,7 +113,7 @@ namespace Business.Implementation
                             json.Status = "y";
                             json.Msg = "操作成功";
                             //添加操作日志
-                            DB.SysLogs.setMemberLog(Enums.EventType.Add, string.Format("收益转换，操作人：[{0}]，金额：[{1}]，操作成功", entity.NickName, entity.Amount));
+                            DB.SysLogs.setMemberLog(Enums.EventType.Add, string.Format("货币转换，操作人：[{0}]，金额：[{1}]，操作成功", entity.NickName, entity.Amount));
                         }
                     }
                     tran.Complete();

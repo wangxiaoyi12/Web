@@ -24,7 +24,14 @@
             </div>
             <div class="txtBox">
                 <p>@curUser.NickName <span>@curUser.MemberLevelName</span></p>
-                <p>@curUser.Code</p>
+                <p style="display: inline-block;
+    font-size: .25rem;
+    color: #FF0000;
+    padding: .07rem .2rem;
+    background: #fff;
+    border-radius: 1rem;
+    margin: .12rem 0;">@curUser.Code</p> <br/>
+                <p >@curUser.RecommendCode</p>
             </div>
         </div>
     </div>
@@ -34,6 +41,12 @@
                 <a href="/mobile/mobilecenter/liushui/1">
                     <div class="picBox"><img src="~/assets/jnwz200915/images/userList1-1.png"></div>
                     <p>余额</p>
+                </a>
+            </li>
+            <li class="OptListli">
+                <a href="/mobile/mobilecenter/liushui/6">
+                    <div class="picBox"><img src="~/assets/jnwz200915/images/userList1-4.png"></div>
+                    <p>奖金</p>
                 </a>
             </li>
             <li class="OptListli">
@@ -48,23 +61,13 @@
                     <p>分红业绩</p>
                 </a>
             </li>
-            <li class="OptListli">
-                <a href="/mobile/mobilecenter/liushui/4">
-                    <div class="picBox"><img src="~/assets/jnwz200915/images/userList1-4.png"></div>
-                    <p>突出贡献业绩</p>
-                </a>
-            </li>
+            
         </ul>
     </div>
     <div class="userListBox ">
-        <p>我的订单 @*<a href="@Url.Action("Bill", new { type = 0 })">全部</a>*@</p>
+        <p>我的订单 <a href="@Url.Action("Bill", new { type = 0 })">全部</a></p>
         <ul class="OptList4 userList">
-            <li class="OptListli">
-                <a href="@Url.Action("Bill", new { type = 0 })">
-                    <div class="picBox"><img src="~/assets/jnwz200915/images/userList2-4.png"></div>
-                    <p>全部</p>
-                </a>
-            </li>
+
             <li class="OptListli">
                 <a href="@Url.Action("Bill", new { type = 1 })">
                     <div class="picBox"><img src="~/assets/jnwz200915/images/userList2-1.png"></div>
@@ -83,7 +86,12 @@
                     <p>已发货</p>
                 </a>
             </li>
-
+            <li class="OptListli">
+                <a href="@Url.Action("Bill", new { type = 10 })">
+                    <div class="picBox"><img src="~/assets/jnwz200915/images/userList2-4.png"></div>
+                    <p>已收货</p>
+                </a>
+            </li>
         </ul>
     </div>
     @*<div class="userListBox">
@@ -166,6 +174,12 @@
         <p>我的服务</p>
         <ul class="OptList4 userList">
             <li class="OptListli">
+                <a href="/mobile/mobilecenter/liushui/4">
+                    <div class="picBox"><img src="~/assets/jnwz200915/images/userList4-1.png"></div>
+                    <p>突出贡献业绩</p>
+                </a>
+            </li>
+            <li class="OptListli">
                 <a href="/mobile/mobilecenter/address">
                     <div class="picBox"><img src="~/assets/jnwz200915/images/userList5-1.png"></div>
                     <p>收货地址</p>
@@ -232,6 +246,18 @@
                 </a>
             </li>
             <li class="OptListli">
+                <a href="/mobile/mobilecenter/transfer">
+                    <div class="picBox"><img src="~/assets/jnwz200915/images/userList4-2.png"></div>
+                    <p>会员互转</p>
+                </a>
+            </li>
+            <li class="OptListli">
+                <a href="/mobile/mobilecenter/zhuanhuan">
+                    <div class="picBox"><img src="~/assets/jnwz200915/images/userList4-4.png"></div>
+                    <p>货币转换</p>
+                </a>
+            </li>
+            <li class="OptListli">
                 <a href="/mobile/mobilecenter/promotion">
                     <div class="picBox"><img src="~/assets/jnwz200915/images/userList5-11.png"></div>
                     <p>我的好友</p>
@@ -244,7 +270,7 @@
                 </a>
             </li>
             <li class="OptListli">
-                <a  href="@Url.Action("Info")">
+                <a href="@Url.Action("Info")">
                     <div class="picBox"><img src="~/assets/jnwz200915/images/userList5-12.png"></div>
                     <p>个人资料</p>
                 </a>

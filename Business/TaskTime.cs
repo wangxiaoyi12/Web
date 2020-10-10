@@ -161,9 +161,9 @@ namespace Business
             foreach (var item in list)
             {
                 Member_Info model = DB.Member_Info.FindEntity(item.MemberId);
-                model.Commission += item.RealAmount;
+                model.Coins += item.RealAmount;
                 model.CommissionSum += item.RealAmount;
-                DB.Fin_LiuShui.AddLS(model.MemberId, item.RealAmount.Value, item.TypeName);
+                DB.Fin_LiuShui.AddLS(model.MemberId, item.RealAmount.Value, item.TypeName,"奖金");
                 DB.Member_Info.Update(model);
                 Fin_Info finmodel = DB.Fin_Info.FindEntity(item.FinId);
                 finmodel.IsSettlement = true;

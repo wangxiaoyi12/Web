@@ -1,0 +1,49 @@
+﻿
+@using Business
+@using DataBase
+
+@{
+    ViewBag.Title = "我要充值";
+    //获取当前登录用户
+    Member_Info curUser = User_Shop.GetMember_Info();
+    Layout = "~/Views/Shared/_LayoutPageMy0915.cshtml";
+    var remit = DB.Fin_Transfer.Where(a => a.FromMemberId == curUser.MemberId || a.ToMemberId==curUser.MemberId).OrderByDescending(a => a.TransferId);
+}
+<div class="container topBg">
+    <!-- 头部导航 -->
+    <div class="header" style="box-shadow: 0 0 10px rgba(1, 73, 206,.2);">
+        <ul>
+            <li class="header-left" onclick="GetIndex()">
+                <i class="iconfont icon-fanhui"></i>
+            </li>
+            <li>转账记录</li>
+            <li class="header-right">
+
+            </li>
+        </ul>
+    </div>
+    <ul class="withdrawDepositJlList">
+        @foreach (var item in remit)
+        {
+            <li>
+                <div>
+                    <p class="bsft_bold">@item.CreateTime.Value.ToString("MM-dd HH:mm")</p>
+                    @if (item.ToMemberId == curUser.MemberId)
+                    {
+                        <p class="bsclr_gay">+@item.Amount</p>
+                    }
+                    else
+                    {
+                        <p class="bsclr_gay">-@item.Amount</p>
+                    }
+                    <p class="bsclr_red">@item.TransferType</p>
+                </div>
+               
+            </li>
+
+        }
+     
+    </ul>
+
+    <div class="bgColor"></div>
+</div>

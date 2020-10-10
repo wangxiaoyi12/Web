@@ -159,6 +159,7 @@
                         <p class="top">@item.Title</p>
                         <p class="ctn">￥<span>@DB.ShopProduct.GetYouHuiPrice(item)</span><span>会员价</span></p>
                         <p class="btm">零售价:@DB.ShopProduct.GetLingShouPrice(item)</p>
+                        <p class="btm" style="color:black">产品积分:@DB.ShopProduct.GetPeiHuoPrice(item)</p>
                     </div>
                 </a>
             </li>

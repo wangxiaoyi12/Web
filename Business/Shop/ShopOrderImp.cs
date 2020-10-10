@@ -287,6 +287,48 @@ namespace Business
                 }
             }
         }
+        private static readonly object obj1 = new object();
+        public JsonHelp ShouHuo(string id)
+        {
+            var json = new JsonHelp();
+            var order = DB.ShopOrder.FindEntity(id);
+            if (order != null)
+            {
+                lock (obj1)
+                {
+                    if (order.State == ShopEnum.OrderState.Finish.GetHashCode())
+                    {
+                        json.Msg = "确认收货，不能重复操作";
+                        return json;
+                    }
+                    using (var tran = DB.Member_Info.BeginTransaction)
+                    {
+                        order.State = ShopEnum.OrderState.Finish.GetHashCode();
+                     
+                        order.FinishTime = DateTime.Now;
+                      
+
+                        json.IsSuccess = DB.ShopOrder.Update(order);
+                        if (json.IsSuccess)
+                        {
+                            //发放服务费
+                            //json = DB.Jiang.Service(order);
+                            if (json.IsSuccess == false)
+                            {
+                                json.Msg = "收货失败";
+                                return json;
+                            }
+                            tran.Complete();
+                            json.Msg = "收货成功";
+                            return json;
+                        }
+                    }
+                }
+
+            }
+            json.Msg = "收货失败";
+            return json;
+        }
 
         /// <summary>
         /// 产生订单编号

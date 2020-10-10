@@ -146,7 +146,7 @@ namespace Web.Controllers
         public JsonResult IsExistActivedMemberYQ()
         {
             var code = Request["param"];
-            var exist = DB.Member_Info.Where(p => p.Pwd3 == code && p.IsActive == "已激活").Select(a => new { a.NickName }).FirstOrDefault();
+            var exist = DB.Member_Info.Where(p => p.Code == code && p.IsActive == "已激活").Select(a => new { a.NickName }).FirstOrDefault();
             if (exist != null)
             {
                 return Json(new { status = "y", info = "会员名字：" + exist.NickName });

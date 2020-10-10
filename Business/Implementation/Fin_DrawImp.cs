@@ -88,9 +88,9 @@ namespace Business.Implementation
                             throw new Exception("提现金额要大于0!");
 
                         }
-                        if (entity.DrawAmount > model.Commission)
+                        if (entity.DrawAmount > model.Coins)
                         {
-                            throw new Exception("提现金额不能大于余额!");
+                            throw new Exception("提现金额不能大于奖金!");
 
                         }
                         var min = DB.XmlConfig.XmlSite.MinAmount;  //提现最小金额
@@ -115,8 +115,8 @@ namespace Business.Implementation
                             if (Insert(entity))
                             {
                                 //更新会员表的收益,
-                                model.Commission -= entity.DrawAmount;
-                                DB.Fin_LiuShui.AddLS(model.MemberId, entity.DrawAmount.Value, "提现申请");
+                                model.Coins -= entity.DrawAmount;
+                                DB.Fin_LiuShui.AddLS(model.MemberId, -entity.DrawAmount.Value, "提现申请","奖金");
                                 DB.Member_Info.Update(model);
 
                                 //添加操作日志
@@ -202,8 +202,8 @@ namespace Business.Implementation
                     }
                     else if (type == 2)
                     {
-                        member.Commission = member.Commission + Draw.DrawAmount;
-                        DB.Fin_LiuShui.AddLS(member.MemberId, Draw.DrawAmount.Value, "提现驳回");
+                        member.Coins = member.Coins + Draw.DrawAmount;
+                        DB.Fin_LiuShui.AddLS(member.MemberId, Draw.DrawAmount.Value, "提现驳回","奖金");
                         if (DB.Member_Info.Update(member))
                         {
                             Draw.DrawState = "已驳回";
@@ -272,7 +272,7 @@ namespace Business.Implementation
                                     json.Msg = "删除失败，请刷新页面重试";
                                     return json;
                                 }
-                                m.Commission = m.Commission + item.DrawAmount;
+                                m.Coins = m.Coins + item.DrawAmount;
                                 if (!DB.Member_Info.Update(m))
                                 {
                                     DB.Rollback();

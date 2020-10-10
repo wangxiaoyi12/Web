@@ -16,7 +16,7 @@
             <i class="fa fa-angle-right"></i>
         </li>
         <li>
-            <a href="/Admin_Finance/LiuShui/Index"><span>流水账单管理</span></a>
+            <a href="/Admin_Finance/LiuShui/Index"><span>@(Request["Type"])流水账单管理</span></a>
         </li>
     </ul>
 </div>
@@ -28,7 +28,7 @@
         <div class="portlet box green">
             <div class="portlet-title">
                 <div class="caption">
-                    <i class="fa fa-database"></i>流水账单管理列表
+                    <i class="fa fa-database"></i>@(Request["Type"])流水账单管理列表
                 </div>
                 @*<div class="tools">
                         <a style="color:white" onclick="ToExcel()" title="导出Excel"> <i class="fa fa-sign-out"></i>导出Excel </a>
@@ -158,7 +158,8 @@
                             key: $("#keyword").val(),
                             start: e.start,
                             length: e.length,
-                            draw: e.draw
+                            draw: e.draw,
+                            Type:'@Request["Type"]'
                         }
                     }
                 },

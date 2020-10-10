@@ -99,11 +99,11 @@ namespace Business.Implementation
                     //        return json;
                     //    }
                     //}
-                    if (entity.TransferType == "报单积分互转")
+                    if (entity.TransferType == "余额互转")
                     {
-                        if (fm.Coins < entity.Amount)
+                        if (fm.Commission < entity.Amount)
                         {
-                            json.Msg = "报单积分不足，不能转账！";
+                            json.Msg = "余额不足，不能转账！";
                             return json;
                         }
                     }
@@ -125,18 +125,18 @@ namespace Business.Implementation
                     //    return json;
                     //}
                     #endregion
-                    var min = DB.XmlConfig.XmlSite.MinAmountHuZ;  //提现最小金额
-                    var Multiple = DB.XmlConfig.XmlSite.MultipleHuZ; //提现金额是这个的整数倍
-                    if (entity.Amount < min)
-                    {
-                        json.Msg = "最小互转金额" + min + "！";
-                        return json;
-                    }
-                    if (entity.Amount % Multiple != 0)
-                    {
-                        json.Msg = "互转倍数为" + Multiple + "！";
-                        return json;
-                    }
+                    //var min = DB.XmlConfig.XmlSite.MinAmountHuZ;  //提现最小金额
+                    //var Multiple = DB.XmlConfig.XmlSite.MultipleHuZ; //提现金额是这个的整数倍
+                    //if (entity.Amount < min)
+                    //{
+                    //    json.Msg = "最小互转金额" + min + "！";
+                    //    return json;
+                    //}
+                    //if (entity.Amount % Multiple != 0)
+                    //{
+                    //    json.Msg = "互转倍数为" + Multiple + "！";
+                    //    return json;
+                    //}
                     if (entity.TransferId == 0)
                     {
                         entity.ToMemberId = tm.MemberId;
@@ -146,26 +146,26 @@ namespace Business.Implementation
                         entity.CreateTime = DateTime.Now;
                         if (Insert(entity))
                         {
-                            if (entity.TransferType == "报单积分互转")
+                            if (entity.TransferType == "余额互转")
                             {
-                                fm.Coins = fm.Coins - entity.Amount;
-                                tm.Coins = tm.Coins + entity.Amount;
+                                fm.Commission = fm.Commission - entity.Amount;
+                                tm.Commission = tm.Commission + entity.Amount;
                                 DB.Member_Info.Update(fm, tm);
                                 //流水账单
                                 Fin_LiuShui _liushui = new Fin_LiuShui();
                                 _liushui.MemberId = fm.MemberId;
                                 _liushui.Code = fm.Code;
                                 _liushui.NickName = fm.NickName;
-                                _liushui.Type = "流水账单";
-                                _liushui.Comment = "报单积分互转(-)";
-                                _liushui.Amount = entity.Amount;
+                                _liushui.Type = "余额";
+                                _liushui.Comment = "余额互转";
+                                _liushui.Amount = -entity.Amount;
                                 _liushui.CreateTime = DateTime.Now;
                                 DB.Fin_LiuShui.Insert(_liushui);
                                 _liushui.MemberId = tm.MemberId;
                                 _liushui.Code = tm.Code;
                                 _liushui.NickName = tm.NickName;
-                                _liushui.Type = "流水账单";
-                                _liushui.Comment = "报单积分互转(+)";
+                                _liushui.Type = "余额";
+                                _liushui.Comment = "余额互转";
                                 _liushui.Amount = entity.Amount;
                                 _liushui.CreateTime = DateTime.Now;
                                 DB.Fin_LiuShui.Insert(_liushui);

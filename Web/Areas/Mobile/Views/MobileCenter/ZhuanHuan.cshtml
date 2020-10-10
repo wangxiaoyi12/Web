@@ -2,7 +2,7 @@
 @using DataBase
 
 @{
-    ViewBag.Title = "我要提现";
+    ViewBag.Title = "货币转换";
     //获取当前登录用户
     Member_Info curUser = User_Shop.GetMember_Info();
     Layout = "~/Views/Shared/_LayoutPageMy0915.cshtml";
@@ -15,9 +15,9 @@
             <li class="header-left" onclick="history.back(-1)">
                 <i class="iconfont icon-fanhui"></i>
             </li>
-            <li>我要提现</li>
+            <li>货币转换</li>
             <li class="header-right">
-                <a href="/mobile/mobilecenter/drawlist" class="bsclr_gay">提现记录</a>
+                <a href="/mobile/mobilecenter/zhuanhuanlist" class="bsclr_gay">转换记录</a>
             </li>
         </ul>
     </div>
@@ -28,26 +28,21 @@
             <span>余额</span>
             <input class="bsclr_org" type="text" name="" value="@curUser.Commission" id="" readonly="">
         </li>
-    </ul>
-    <ul class="baseIlsList">
         <li>
-            <span>银行名称</span>
-            <input type="text" name="" value="@curUser.BankName" id="" placeholder="请输入银行名称">
+            <span>奖金</span>
+            <input class="bsclr_org" type="text" name="" value="@curUser.Coins" id="" readonly="">
         </li>
         <li>
-            <span>银行开户人</span>
-            <input type="text" name="" value="@curUser.BankAccount" id="" placeholder="请输入银行开户人">
-        </li>
-        <li>
-            <span>银行卡号</span>
-            <input type="text" name="" value="@curUser.BankCode" id="" placeholder="请输入银行卡号">
+            <span>转换类型</span>
+            <input class="bsclr_org" type="text" name="" value="奖金转余额" id="" readonly="">
         </li>
     </ul>
+   
     <ul class="baseIlsList">
- 
+
         <li>
-            <span>请输入提现数量</span>
-            <input type="number" name="DrawAmount" id="DrawAmount" placeholder="请输入数量">
+            <span>请输入转换数量</span>
+            <input type="number" name="Amount" id="Amount" placeholder="请输入数量">
         </li>
         <li>
             <span>支付密码</span>
@@ -55,7 +50,7 @@
         </li>
     </ul>
     <div class="btnbox">
-        <a onclick="showDialog()" class="btn_org">提现</a>
+        <a onclick="showDialog()" class="btn_org">转换</a>
     </div>
     <ul class="headSelect" style="bottom:1rem">
         <li>相机</li>
@@ -67,14 +62,13 @@
 </div>
 <script>
     function showDialog() {
-        var thisBox = $("#DrawAmount").val();
+        var thisBox = $("#Amount").val();
         if (thisBox.length <= 0) {
             show("请输入数量");
             thisBox.focus();
 
             return false;
-        }
-        var pwdthisBox = $("#PayPwd").val();
+        } var pwdthisBox = $("#PayPwd").val();
         if (pwdthisBox.length <= 0) {
             show("请输入支付密码");
             pwdthisBox.focus();
@@ -83,33 +77,33 @@
         }
         $(".btn_org").hide();
         //提交保存
-        $.post('/mobile/mobilecenter/ToDraw', { DrawAmount: thisBox, PayPwd: $("#PayPwd").val() }, function (data) {
+        $.post('/mobile/mobilecenter/ToZhuanHuan', { Amount: thisBox, PayPwd: $("#PayPwd").val()  }, function (data) {
             if (data.status == 1) {
                 show(data.msg);
 
                 setTimeout(function () {
                     //跳转登录页面
-                    window.location.href = '/mobile/mobilecenter/drawlist';
+                    window.location.href = '/mobile/mobilecenter/zhuanhuanlist';
                 }, 2000);
             } else {
                 show(data.msg); $(".btn_org").show();
             }
         });
     }
-    $('.headLi').click(function () {
-        $('.productDetailArtBg').show();
-        $('.headSelect').slideDown(200);
-    })
-    $('.cancel,.productDetailArtBg').click(function () {
-        $('.headSelect').slideUp(200);
-        $('.productDetailArtBg').hide();
-    });
+    //$('.headLi').click(function () {
+    //    $('.productDetailArtBg').show();
+    //    $('.headSelect').slideDown(200);
+    //})
+    //$('.cancel,.productDetailArtBg').click(function () {
+    //    $('.headSelect').slideUp(200);
+    //    $('.productDetailArtBg').hide();
+    //});
     layui.use('upload', function () {
         var $ = layui.jquery,
             upload = layui.upload;
         //普通图片上传
         var uploadInst = upload.render({
-            elem: '#photo-btn' //绑定元素
+            elem: '.headLi' //绑定元素
             , url: "/mobile/mobilecenter/SaveImage"
             , exts: 'jpg|png|gif|bmp|jpeg'
             , number: 1

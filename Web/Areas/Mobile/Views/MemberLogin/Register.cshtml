@@ -52,7 +52,9 @@
                 <i class="iconfont icon-yanzhengma"></i>
                 <input type="text" name="smscode" id="smscode" value="" placeholder="请输入验证码" />
                 <div class="btnbox">
-                    <button id="smsBtn" class="btn_org">发送</button>
+                    <img id="imgVerify" src="/Ajax/ValidateCode" title="看不清？点击更换" onclick="this.src = this.src + '?'" style="vertical-align:middle;position:absolute;margin: .5rem 0 .3rem 0;    width: 94%; border: none;  height: .85rem;" />
+
+                    @*<button id="smsBtn" class="btn_org">发送</button>*@
                 </div>
             </li>
         </ul>
@@ -212,7 +214,7 @@
         //var data = form.serialize();
         show('正在提交...');
         $('#zc').hide();
-        $.post('@Url.Action("save_one")', { Code: $("#Code").val(), NickName: $("#NickName").val(), LoginPwd: $("#LoginPwd").val(), Pwd2: $("#Pwd2").val(), RecommendCode: $("#RecommendCode").val() }, function (data) {
+        $.post('@Url.Action("save_one")', { Code: $("#Code").val(), NickName: $("#NickName").val(), LoginPwd: $("#LoginPwd").val(), Pwd2: $("#Pwd2").val(), RecommendCode: $("#RecommendCode").val(), smscode: $("#smscode").val() }, function (data) {
             if (data.status == 1) {
                 show('操作成功');
                 setTimeout(function () {

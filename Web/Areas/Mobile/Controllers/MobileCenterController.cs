@@ -1,4 +1,5 @@
-﻿using Business.Implementation;
+﻿using Business;
+using Business.Implementation;
 using Common;
 using DataBase;
 using System;
@@ -103,8 +104,8 @@ namespace Web.Areas.Mobile.Controllers
         }
         public ActionResult Cash(double Longitude = 0, double Latitude = 0)
         {
-            var query = DB.Member_Info.Where(q => q.IsServiceCenter=="是");
-        
+            var query = DB.Member_Info.Where(q => q.IsServiceCenter == "是");
+
             if (Longitude > 0)
             {
                 query = query.OrderByDistance(Longitude, Latitude);
@@ -202,10 +203,21 @@ namespace Web.Areas.Mobile.Controllers
         {
             try
             {
+
+                //if (DB.XmlConfig.XmlSite.IsJiHuo)
+                //{
+                var code = Session["smscode"] as string;
+                if (string.IsNullOrEmpty(code))
+                    throw new Exception("验证码过期");
+                if (code != entity.OpenBank)
+                    throw new Exception("验证码不正确");
+
+                //}
+
                 Member_Info model = User_Shop.GetMember_Info();
 
                 //完善资料
-                model.Mobile = "";
+                model.Mobile = entity.Mobile;
                 model.NickName = entity.NickName;
 
 
@@ -246,23 +258,24 @@ namespace Web.Areas.Mobile.Controllers
             JsonHelp result = new JsonHelp(true, "操作成功");
             try
             {
+                if (DB.XmlConfig.XmlSite.IsJiHuo)
+                {
+                    var code = Session["smscode"] as string;
+                    if (string.IsNullOrEmpty(code))
+                        throw new Exception("验证码过期");
+                    if (code != oldPwd)
+                        throw new Exception("验证码不正确");
+
+                }
                 Member_Info model = User_Shop.GetMember_Info();
                 if (type == 1)
                 {
-                    if (!string.IsNullOrEmpty(model.LoginPwd))
-                    {
-                        if (model.LoginPwd != Common.CryptHelper.DESCrypt.Encrypt(oldPwd))
-                            throw new Exception("旧密码不正确");
-                    }
+
                     model.LoginPwd = Common.CryptHelper.DESCrypt.Encrypt(pwd);
                 }
                 else
                 {
-                    if (!string.IsNullOrEmpty(model.Pwd2))
-                    {
-                        if (model.Pwd2 != Common.CryptHelper.DESCrypt.Encrypt(oldPwd))
-                            throw new Exception("旧密码不正确");
-                    }
+
                     model.Pwd2 = Common.CryptHelper.DESCrypt.Encrypt(pwd);
                 }
                 if (DB.Member_Info.Update(model) == false)
@@ -449,6 +462,12 @@ namespace Web.Areas.Mobile.Controllers
                     stateList.Add(20);
                     stateList.Add(-35);
                 }
+                else if (type == 10)//已完成
+                {
+                    stateList.Add(10);
+                    stateList.Add(20);
+                    stateList.Add(-35);
+                }
                 query = query.Where(q => stateList.Contains(q.State));
             }
 
@@ -461,6 +480,13 @@ namespace Web.Areas.Mobile.Controllers
             return PartialView(list);
         }
         #endregion
+        public ActionResult ShouHuo(string id)
+        {
+            var json = new JsonHelp();
+            json = DB.ShopOrder.ShouHuo(id);
+
+            return Json(json);
+        }
 
         #region 购物流程
         /// <summary>
@@ -480,7 +506,7 @@ namespace Web.Areas.Mobile.Controllers
         public ActionResult AddressDetail(int id)
         {
             var address = DB.ShopMyAddress.FindEntity(id);
-            if(id==0)
+            if (id == 0)
             {
                 address = new ShopMyAddress();
             }
@@ -515,7 +541,36 @@ namespace Web.Areas.Mobile.Controllers
 
             return View();
         }
-        public ActionResult ToConvert(decimal Qty, string PayPwd, string TranType)
+
+        public ActionResult ZhuanHuan()
+        {
+            ViewBag.m = DB.Member_Info.FindEntity(CurrentUser.MemberId);
+
+            return View();
+        }
+
+        public ActionResult ZhuanHuanList()
+        {
+            ViewBag.m = DB.Member_Info.FindEntity(CurrentUser.MemberId);
+
+            return View();
+        }
+        public ActionResult Transfer()
+        {
+            ViewBag.m = DB.Member_Info.FindEntity(CurrentUser.MemberId);
+
+            return View();
+        }
+
+        public ActionResult TransferList()
+        {
+            ViewBag.m = DB.Member_Info.FindEntity(CurrentUser.MemberId);
+
+            return View();
+        }
+
+
+        public ActionResult ToZhuanHuan(decimal Amount, string PayPwd)
         {
             try
             {
@@ -527,8 +582,8 @@ namespace Web.Areas.Mobile.Controllers
                     MemberId = member.MemberId,
                     MemberCode = member.Code,
                     NickName = member.NickName,
-                    Amount = Qty,
-                    ConvertType = TranType,
+                    Amount = Amount,
+                    ConvertType = "奖金转余额",
                     CreateTime = DateTime.Now
                 };
                 DB.Fin_Convert.Save(Pwd2, entity);
@@ -540,7 +595,41 @@ namespace Web.Areas.Mobile.Controllers
             }
 
         }
+        public ActionResult ToTransfer(decimal Amount, string PayPwd, string ToMemberCode)
+        {
+            try
+            {
+                var Pwd2 = Common.CryptHelper.DESCrypt.Encrypt(PayPwd);
+                var member = DB.Member_Info.FindEntity(CurrentUser.MemberId);
+                var Poundage = 0;
+                var entity = new Fin_Transfer()
+                {
+                    FromMemberId = member.MemberId,
+                    FromMemberCode = member.Code,
+                    FromNickName = member.NickName,
+                    Amount = Amount,
+                    TransferType = "余额互转",
+                    CreateTime = DateTime.Now,
+                    ToMemberCode = ToMemberCode
 
+                };
+                JsonHelp json= DB.Fin_Transfer.Save(Pwd2, entity);
+                if(!json.IsSuccess)
+                {
+                    return Error(json.Msg);
+                }
+                else
+                {
+                    return Success("操作成功");
+                }
+              
+            }
+            catch (Exception ex)
+            {
+                return Error(ex);
+            }
+
+        }
         public ActionResult SaveService()
         {
             try
@@ -588,7 +677,7 @@ namespace Web.Areas.Mobile.Controllers
         {
             try
             {
-             
+
                 var model = DB.Member_Info.FindEntity(CurrentUser.MemberId);
 
                 var entity = new Fin_Remit();
@@ -598,7 +687,7 @@ namespace Web.Areas.Mobile.Controllers
                 entity.BankName = model.BankName;
                 entity.BankAccount = model.BankAccount;
                 entity.BankCode = model.BankCode;
-                entity.OpenBank = model.OpenBank;       
+                entity.OpenBank = model.OpenBank;
                 entity.ServiceCenterCode = "";
 
 
@@ -606,7 +695,7 @@ namespace Web.Areas.Mobile.Controllers
                 entity.MemberId = model.MemberId;
                 entity.MemberCode = model.Code;
                 entity.NickName = model.NickName;
-         
+
                 var help = DB.Fin_Remit.Save(entity);
                 if (help.Status == "n")
                 {
@@ -670,7 +759,7 @@ namespace Web.Areas.Mobile.Controllers
         }
         public ActionResult LiuShui(int id)
         {
-         
+
             ViewBag.id = id;
 
             return View();
@@ -854,8 +943,8 @@ namespace Web.Areas.Mobile.Controllers
             try
             {
                 Member_Info model = DB.Member_Info.FindEntity(CurrentUser.MemberId);
-               
-            
+
+
                 model.AppellationLeveName = img;
                 DB.Member_Info.Update(model);
                 return Success("操作成功");

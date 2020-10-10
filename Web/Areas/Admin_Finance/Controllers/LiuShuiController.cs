@@ -14,10 +14,10 @@ namespace Web.Areas.Admin_Finance.Controllers
         }
        
         #region 查询       
-        public string getDataSource(DateTime? startTime, DateTime? end, string key, int start, int length, int draw)
+        public string getDataSource(DateTime? startTime, DateTime? end, string key, int start, int length, int draw,string Type)
         {
             var total = 0;
-            var list = DB.Fin_LiuShui.getDataSource(null, startTime, end, key, out total, start, length);
+            var list = DB.Fin_LiuShui.getDataSource(null, startTime, end, key, out total, start, length, Type);
 
             return ToPage(list, total, start, length, draw);
         }

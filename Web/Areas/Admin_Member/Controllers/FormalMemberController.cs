@@ -54,7 +54,7 @@ namespace Web.Areas.Admin_Member.Controllers
             }
             var addCommission = Convert.ToDecimal(Request["AddCommission"]);
             var addCommissionSum = Convert.ToDecimal(Request["AddCommissionSum"]);
-            var addCoins = 0;// Convert.ToDecimal(Request["AddCoins"]);
+            var addCoins =  Convert.ToDecimal(Request["AddCoins"]);
 
             var addShopCoins = 0;// Convert.ToDecimal(Request["AddShopCoins"]);
             var addScores = 0;// Convert.ToDecimal(Request["AddScores"]);
@@ -93,7 +93,7 @@ namespace Web.Areas.Admin_Member.Controllers
                 }
                 if (addCoins != 0)
                 {
-                    DB.SysLogs.setAdminLog("Edit", "增减会员[" + oldM.Code + "]报单积分，数量：[" + addCoins + "]，操作成功");
+                    DB.SysLogs.setAdminLog("Edit", "增减会员[" + oldM.Code + "]奖金，数量：[" + addCoins + "]，操作成功");
                 }
                 if (addShopCoins != 0)
                 {
@@ -139,6 +139,7 @@ namespace Web.Areas.Admin_Member.Controllers
                      a.MemberId,
                      a.Mobile,
                      a.NickName,
+                     a.Coins,
                      a.ActiveTime,
                      a.RecommendCode,
                      a.UpperCode,

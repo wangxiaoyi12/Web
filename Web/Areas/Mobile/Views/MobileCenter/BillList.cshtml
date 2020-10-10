@@ -16,21 +16,25 @@
 
 
                 <li class="verifyOrderProduct myOrderProduct">
-                    <div class="top">
-                        <div class="picBox"></div>
-                        @if (item.State == ShopEnum.OrderState.FaHuo.GetHashCode()) //待付款
-                        {
-                            <p class="state bsclr_org">已发货</p>
-                        }
-                        else if (item.State == ShopEnum.OrderState.Submit.GetHashCode()) //待付款
-                        {
-                            <p class="state bsclr_org">待付款</p>
-                        }
-                        else if (item.State == ShopEnum.OrderState.Pay.GetHashCode()) //待付款
-                        {
-                            <p class="state bsclr_org">待发货</p>
-                        }
-                    </div>
+                            <div class="top">
+                                <div class="picBox"></div>
+                                @if (item.State == ShopEnum.OrderState.FaHuo.GetHashCode()) //待付款
+                                {
+                                    <p class="state bsclr_org">已发货</p>
+                                }
+                                else if (item.State == ShopEnum.OrderState.Submit.GetHashCode()) //待付款
+                                {
+                                    <p class="state bsclr_org">待付款</p>
+                                }
+                                else if (item.State == ShopEnum.OrderState.Pay.GetHashCode()) //待付款
+                                {
+                                    <p class="state bsclr_org">待发货</p>
+                                }
+                                else if (item.State == ShopEnum.OrderState.Finish.GetHashCode()) //待付款
+                                {
+                                <p class="state bsclr_org">已收货</p>
+                                }
+                            </div>
                     <dl>
                         @foreach (var orItem in orderproducts)
                         {
@@ -54,7 +58,7 @@
                     </dl>
                     <div class="btm">
                         <p class="sum">合计：<span>￥@item.RealAmount</span></p>
-                        @if (item.State == ShopEnum.OrderState.FaHuo.GetHashCode()) //待付款
+                        @if (item.State == ShopEnum.OrderState.FaHuo.GetHashCode() || item.State == ShopEnum.OrderState.Finish.GetHashCode()) //待付款
                         {
                             <p class="specification">物流公司:@DB.ShopExpress.FindEntity(item.ExpressID).Name</p>
                             <p class="specification">物流编号:@item.ExpressCode</p>
@@ -70,7 +74,7 @@
                             {
                                 @*<a class="btn btn-success btn-xs" href="http://www.kuaidi100.com/">物流查询</a>*@
 
-                                @*<a href="@Url.Action("TakeGoods",new { guid=item.GUID})" class="btn btn-success btn-xs">确认收货</a>*@
+                                <a onclick="shouhuo('@item.GUID')" class="btn btn-success btn-xs">确认收货</a>
                             }
                             @*<a href="">评价</a>*@
                         </div>
@@ -81,3 +85,46 @@
         }
     </ul>
 </div>
+<script>
+
+    //询问框
+    function shouhuo(id) {
+        layer.confirm('您确定要进行确认收货吗？', {
+            btn: ['确定', '取消'] //按钮
+        }, function () {
+           $.post("/mobile/mobilecenter/ShouHuo", { id: id }, function (d) {
+                    if (d.Status == "y") {
+                        //alert("成功提示", d.Msg, function () {
+                        //    window.location.reload();
+                        //});
+                        showurl(d.Msg,'@Url.Action("Bill", new { type = 10 })')
+                    } else {
+                        showurl(d.Msg,'@Url.Action("Bill", new { type = 3 })')
+                    }
+
+
+                });
+        }, function () {
+            //layer.msg('也可以这样', {
+            //    time: 20000, //20s后自动关闭
+            //    btn: ['明白了', '知道了']
+            //});
+        });
+    }
+    @*function shouhuo(id) {
+            confirm("确认执行此操作吗？", "您确定要进行确认收货吗？", function () {
+                $.post("/mobile/mobilecenter/ShouHuo", { id: id }, function (d) {
+                    if (d.Status == "y") {
+                        //alert("成功提示", d.Msg, function () {
+                        //    window.location.reload();
+                        //});
+                        showurl(d.Msg,'@Url.Action("Bill", new { type = 4 })')
+                    } else {
+                        showurl(d.Msg,'@Url.Action("Bill", new { type = 3 })')
+                    }
+
+
+                });
+            });
+        }*@
+</script>

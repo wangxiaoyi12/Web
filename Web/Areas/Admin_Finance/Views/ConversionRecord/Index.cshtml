@@ -71,8 +71,8 @@
                                 <th>会员编号</th>
                                 <th>姓名</th>
                                 <th>转换金额</th>
-                                <th>手续费</th>
-                                <th>实际金额</th>
+                                @*<th>手续费</th>
+                                <th>实际金额</th>*@
                                 <th>转换类型</th>
                                 <th>转换时间</th>
                             </tr>
@@ -143,12 +143,12 @@
                         }
                     }
                 },
-                columnDefs: [
-                   { "searchable": false, "targets": 0 },//第一列禁用搜索
-                   { "orderable": false, "targets": 0 }, //第一列禁用排序
-                   { "searchable": false, "targets": 7 },//第四列禁用搜索
-                   { "orderable": false, "targets": 7 }, //第四列禁用排序
-                ],
+                //columnDefs: [
+                //   { "searchable": false, "targets": 0 },//第一列禁用搜索
+                //   { "orderable": false, "targets": 0 }, //第一列禁用排序
+                //   { "searchable": false, "targets": 7 },//第四列禁用搜索
+                //   { "orderable": false, "targets": 7 }, //第四列禁用排序
+                //],
                 columns: [//绑定数据
                     {
                         data: 'ConvertId',
@@ -159,8 +159,8 @@
                     { data: 'MemberCode' },
                     { data: 'NickName' },
                     { data: 'Amount' },
-                    { data: 'Poundage' },
-                            { data: 'SAmount' },
+                    //{ data: 'Poundage' },
+                    //        { data: 'SAmount' },
                     { data: 'ConvertType' },
                     { data: 'CreateTime' }
                 ]

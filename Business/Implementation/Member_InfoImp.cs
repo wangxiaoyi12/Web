@@ -590,27 +590,28 @@ namespace Business.Implementation
                 entity.MemberId = Guid.NewGuid().ToString();
                 entity.LastLogin = DateTime.Now;
                 #region 检验数据                   
-                var list = DB.Member_Info.Where(a => a.Code == entity.Code || a.Pwd3 == entity.RecommendCode || a.Code == entity.UpperCode || a.Code == entity.ServiceCenterCode).ToList();
+                var list = DB.Member_Info.Where(a => a.Code == entity.Code || a.Code == entity.RecommendCode || a.Code == entity.UpperCode || a.Code == entity.ServiceCenterCode).ToList();
                 //1. code不为空，不重复
-                if (string.IsNullOrEmpty(entity.Code))
+                //if (string.IsNullOrEmpty(entity.Code))
+                //{
+                //    json.Msg = "会员编号不能为空";
+                //    return json;
+                //}
+                //else if (Any(a => a.Code == entity.Code))
+                //{
+                //    json.Msg = "会员编号已存在！";
+                //    return json;
+                //}
+                entity.Mobile = entity.Code;
+                entity.Code = RndNum(6);
+                while (Any(a => a.Code == entity.Code))
                 {
-                    json.Msg = "会员编号不能为空";
-                    return json;
-                }
-                else if (Any(a => a.Code == entity.Code))
-                {
-                    json.Msg = "会员编号已存在！";
-                    return json;
-                }
-                entity.Pwd3 = RndNum(6);
-                while (Any(a => a.Pwd3 == entity.Pwd3))
-                {
-                    entity.Pwd3 = RndNum(6);
+                    entity.Code = RndNum(6);
                 }
 
                 //2.推荐人，分公司，安置人 是否正确,位置是否被占用
                 var upper = list.FirstOrDefault(a => a.Code == entity.UpperCode);
-                var rem = list.FirstOrDefault(a => a.Pwd3 == entity.RecommendCode);
+                var rem = list.FirstOrDefault(a => a.Code == entity.RecommendCode);
                 var center = list.FirstOrDefault(a => a.Code == entity.ServiceCenterCode && a.IsServiceCenter == "是");
                 if (rem == null)
                 {
@@ -730,7 +731,7 @@ namespace Business.Implementation
                 model.BankName = entity.BankName;
                 model.OpenBank = entity.OpenBank;
 
-                model.Mobile = entity.Mobile;
+              
                 model.QQ = entity.QQ;
                 model.PostAddress = entity.PostAddress;
                 model.Alipay = entity.Alipay;
@@ -823,31 +824,11 @@ namespace Business.Implementation
                         DB.Fin_LiuShui.Insert(_liushui);
 
                     }
-                    if (AddCoins > 0)
+                    if (AddCoins !=0)
                     {
-                        //流水账单                    
-                        _liushui.MemberId = model.MemberId;
-                        _liushui.Code = model.Code;
-                        _liushui.NickName = model.NickName;
-                        _liushui.Type = "充值账单";
-                        _liushui.Comment = "报单积分(+)";
-                        _liushui.Amount = AddCoins;
-                        _liushui.CreateTime = DateTime.Now;
-                        DB.Fin_LiuShui.Insert(_liushui);
+                        DB.Fin_LiuShui.AddLS(model.MemberId, AddCoins, "后台增减奖金","奖金");
                     }
-                    else if (AddCoins < 0)
-                    {
-                        //流水账单                    
-                        _liushui.MemberId = model.MemberId;
-                        _liushui.Code = model.Code;
-                        _liushui.NickName = model.NickName;
-                        _liushui.Type = "充值账单";
-                        _liushui.Comment = "报单积分(-)";
-                        _liushui.Amount = AddCoins;
-                        _liushui.CreateTime = DateTime.Now;
-                        DB.Fin_LiuShui.Insert(_liushui);
-                    }
-
+          
                     if (AddShopCoins > 0)
                     {
                         //流水账单                    
@@ -1667,7 +1648,7 @@ namespace Business.Implementation
             }
             if (!string.IsNullOrEmpty(key))
             {
-                query = query.Where(a => a.Code.Contains(key) || a.NickName.Contains(key) || a.Mobile.Contains(key));
+                query = query.Where(a => a.Code.Contains(key) || a.NickName.Contains(key) || a.Pwd3.Contains(key) || a.Mobile.Contains(key));
             }
             if (!string.IsNullOrEmpty(id))
             {

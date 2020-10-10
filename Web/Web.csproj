@@ -2922,6 +2922,10 @@
     <Content Include="Areas\Mobile\Views\MobileCenter\Convert - 复制.cshtml" />
     <Content Include="Areas\Mobile\Views\MobileCenter\Draw - 复制.cshtml" />
     <Content Include="Areas\Mobile\Views\MobileCenter\DrawList - 复制.cshtml" />
+    <Content Include="Areas\Mobile\Views\MobileCenter\ZhuanHuan.cshtml" />
+    <Content Include="Areas\Mobile\Views\MobileCenter\ZhuanHuanList.cshtml" />
+    <Content Include="Areas\Mobile\Views\MobileCenter\Transfer.cshtml" />
+    <Content Include="Areas\Mobile\Views\MobileCenter\TransferList.cshtml" />
     <None Include="assets\scripts\jquery.validate-vsdoc.js" />
     <Content Include="assets\scripts\jquery.validate.js" />
     <Content Include="assets\scripts\jquery.validate.min.js" />

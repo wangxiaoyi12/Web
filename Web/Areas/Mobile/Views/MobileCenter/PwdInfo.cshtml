@@ -15,6 +15,12 @@
         .infoPage .list-group-item:first-child {
             /*line-height: 50px;*/
         }
+        .modal-backdrop.in{
+            display:none;
+        }
+        .modal-dialog{
+            margin-top:50px;
+        }
     </style>
 }
 
@@ -169,7 +175,8 @@
                                 <span class="input-group-addon">
                                     <span class="glyphicon glyphicon-lock text-danger"></span>
                                 </span>
-                                <input type="password" name="OldPwd" id="OldPwd" class="form-control" placeholder="输入旧密码">
+                                <input type="hidden" value="@curUser.Mobile" name="Mobile" id="Mobile"/>
+                                <input type="text" name="OldPwd" style="width:70%;height:.85rem" id="OldPwd" class="form-control" placeholder="输入验证码">    <button id="smsBtn" style="width:30%"  class="btn_org">发送</button>
                             </div>
                         </li>
                         <li class="list-group-item">
@@ -200,6 +207,46 @@
 </div>
 @Html.Partial("_FooterMy")
 <script>
+    $('#smsBtn').click(function () {
+
+        var Code = $('input[name="Mobile"]');
+        var mobile = Code.val();
+        if (mobile.length <= 0) {
+            //Code.focus();
+            show('请输入手机号码');
+            return false;
+        }
+        else {
+            if (Regex.PhoneNumber(mobile) == false) {
+                //Code.focus();
+                show('手机号格式不正确');
+                return false;
+            }
+        }
+
+        var thisBtn = $(this);
+        thisBtn.attr('disabled', true);
+        var number = 60;
+        //发送验证码
+        $.post('/mobile/memberlogin/SendSms', { mobile: mobile }, function (data) {
+            if (data.status == 1) {
+                show('验证码发送成功');
+                var timer = setInterval(function () {
+                    if (number == 0) {
+                        clearInterval(timer);
+                        number = 60;
+                        thisBtn.attr('disabeld', false);
+                    } else {
+                        number--;
+                        thisBtn.html(number + '秒');
+                    }
+                }, 1000);
+            } else {
+                show(data.msg);
+                thisBtn.attr('disabled', false)
+            }
+        });
+    });
     $(function () {
         //修改密码
         //$('#loginModal').modal('show');
@@ -286,42 +333,7 @@
                 }
             });
         });
-        $(function () {
-            //头像上传
-            $("#GoodsImage").diyUpload({
-                url: "/Admin_BasicSettings/SysParameters/SaveImage",
-                auto: true,//是否默认上传
-                title: "Images",
-                extensions: "gif,jpg,jpeg,bmp,png",
-                mimeTypes: "image/*",
-                fileNumLimit: 1,
-                thumb: {
-                    width: 110,
-                    height: 110,
-
-                    // 图片质量，只有type为`image/jpeg`的时候才有效。
-                    quality: 70,
-
-                    // 是否允许放大，如果想要生成小图的时候不失真，此选项应该设置为false.
-                    allowMagnify: false,
-
-                    // 是否允许裁剪。
-                    crop: true,
-                    // 为空的话则保留原有图片格式。
-                    // 否则强制转换成指定的类型。
-                    type: "image/jpeg"
-                },
-                success: function (data) {
-                    var url = $("#img").val();
-                    //$("#ImgUrl").val(url + data._raw + "&");
-                    $("#img").val(data._raw);
-                    console.info(data);
-                },
-                error: function (err) {
-                    console.info(err);
-                }
-            });
-        });
+       
     });
 
     function showDialog() {

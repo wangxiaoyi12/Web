@@ -1,4 +1,5 @@
 ﻿using Aop.Api.Domain;
+using Business;
 using Common;
 using Common.CryptHelper;
 using DataBase;
@@ -50,7 +51,7 @@ namespace Web.Areas.Mobile.Controllers
             try
             {
                 Password = DESCrypt.Encrypt(Password);
-                Member_Info model = DB.Member_Info.FindEntity(q => q.Code == UserName && q.LoginPwd == Password);
+                Member_Info model = DB.Member_Info.FindEntity(q =>( q.Code == UserName || q.Mobile==UserName) && q.LoginPwd == Password);
                 if (model != null)
                 {
                     if (model.IsLock == "是")
@@ -231,21 +232,31 @@ namespace Web.Areas.Mobile.Controllers
         /// </summary>
         /// <param name="target"></param>
         /// <returns></returns>
-        public ActionResult Save_One(string Code,string NickName,string LoginPwd,string Pwd2,string RecommendCode)
+        public ActionResult Save_One(string Code,string NickName,string LoginPwd,string Pwd2,string RecommendCode, string smscode)
         {
             try
             {
                 LogOperate.Write("注册开始：" + CookieHelper.GetCookieValue("headimgurl"));
                 //判断手机验证码
-                if (DB.XmlConfig.XmlSite.IsJiHuo)
-                {
-                    string code = Session["smscode"] as string;
-                    if (string.IsNullOrEmpty(code))
-                        throw new Exception("验证码过期");
-                    if (code != ReqHelper.GetString("smscode"))
-                        throw new Exception("验证码不正确");
+                //if (DB.XmlConfig.XmlSite.IsJiHuo)
+                //{
+                //    string code = Session["smscode"] as string;
+                //    if (string.IsNullOrEmpty(code))
+                //        throw new Exception("验证码过期");
+                //    if (code != ReqHelper.GetString("smscode"))
+                //        throw new Exception("验证码不正确");
 
-                }
+                //}
+
+                //if (DB.XmlConfig.XmlSite.IsJiHuo)
+                //{
+                var code = Tools.getCookie("gif");
+                if (string.IsNullOrEmpty(code))
+                    throw new Exception("验证码过期");
+                if (code != smscode)
+                    throw new Exception("验证码不正确");
+
+                //}
                 var DataBase = new Member_Info();
                 DataBase.Code = Code;
                 DataBase.NickName = NickName;
@@ -356,7 +367,7 @@ namespace Web.Areas.Mobile.Controllers
                 //    //LogHelper.Info($"{smsType}，短信发送失败[{mobile}]，原因：{msg}");
                 //};
                 //_sms.Send(mobile, content);
-                DB.Member_Info.SendSMS1(mobile, msg);
+                //暂定DB.Member_Info.SendSMS1(mobile, msg);
                 //return Json(json);
                 //ZgwjSmsHelper _sms = ZgwjSmsHelper.Create();
                 //ZTSMS _sms = new ZTSMS("31359", "JNWZ200915", "JNWZ200915", "【物来惠商城】");

@@ -5,7 +5,11 @@
     var member = User_Shop.GetMember_Info();
 }
 
-
+<style>
+    .picBox{
+        height:unset;
+    }
+</style>
 
 <div class="myOrderCtnAct">
     <ul>
@@ -17,7 +21,7 @@
 
                 <li class="verifyOrderProduct myOrderProduct">
                             <div class="top">
-                                <div class="picBox" style="height:unset"></div>
+                                <div class="picBox" style="height: unset"></div>
                                 @if (item.State == ShopEnum.OrderState.FaHuo.GetHashCode()) //待付款
                                 {
                                     <p class="state bsclr_org">已发货</p>

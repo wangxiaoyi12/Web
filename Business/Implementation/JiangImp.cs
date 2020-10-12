@@ -226,7 +226,7 @@ namespace Business.Implementation
                 }
 
                 //伞下业绩要大于每一层的   推荐人是一定会成为正式会员的
-                if ((level.TeamAward <= sanxia && level.LayerPeng <= zhitui && rModel.MemberLevelId <= count) || (count == 1 && (istui || rModel.ActiveAmount > 0) && rModel.MemberLevelId <= count))
+                if ((level.TeamAward <= sanxia && level.LayerPeng <= zhitui && rModel.MemberLevelId <= count  && count!=1) || (count == 1 && (istui || rModel.ActiveAmount > 0) && rModel.MemberLevelId <= count))
                 {
 
                     rModel.MemberLevelId = count;

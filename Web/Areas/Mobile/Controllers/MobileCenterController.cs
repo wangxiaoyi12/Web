@@ -233,15 +233,15 @@ namespace Web.Areas.Mobile.Controllers
             try
             {
 
-                //if (DB.XmlConfig.XmlSite.IsJiHuo)
-                //{
-                var code = Session["smscode"] as string;
+                if (DB.XmlConfig.XmlSite.IsJiHuo)
+                {
+                    var code = Session["smscode"] as string;
                 if (string.IsNullOrEmpty(code))
                     throw new Exception("验证码过期");
                 if (code != entity.OpenBank)
                     throw new Exception("验证码不正确");
 
-                //}
+                }
 
                 Member_Info model = User_Shop.GetMember_Info();
 

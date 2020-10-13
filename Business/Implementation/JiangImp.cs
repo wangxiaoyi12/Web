@@ -500,8 +500,10 @@ namespace Business.Implementation
 
                 }
 
-                Rote = Convert.ToInt32(upper.MemberLevelId);
-
+                if (upper.MemberLevelId >= 2 && Rote == 0)
+                {
+                    Rote = Convert.ToInt32(upper.MemberLevelId);
+                }
                 if(!ispingji)
                 {
                     break;

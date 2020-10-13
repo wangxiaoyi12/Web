@@ -31,12 +31,14 @@
                     @if (item.ToMemberId == curUser.MemberId)
                     {
                         <p class="bsclr_gay">+@item.Amount</p>
+                        <p class="bsclr_red">对方编号:@item.FromMemberCode</p>
                     }
                     else
                     {
                         <p class="bsclr_gay">-@item.Amount</p>
+                        <p class="bsclr_red">对方编号:@item.ToMemberCode</p>
                     }
-                    <p class="bsclr_red">@item.TransferType</p>
+
                 </div>
                
             </li>

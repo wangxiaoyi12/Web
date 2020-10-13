@@ -76,7 +76,7 @@
             <li class="header-left" onclick="history.back(-1)">
                 <i class="iconfont icon-fanhui"></i>
             </li>
-            <li>推广中心</li>
+            <li id="b">推广中心</li>
             <li class="header-right">
 
             </li>
@@ -85,7 +85,7 @@
     <div class="invitationBg" style="position:static">
 
         <div class="test" style="width: 100%;height:100%;background-size: 100% 100%;position:relative;">
-         
+
             <img class="hbImg" src="../../../../assets/pages/img/beijing.png" style="height:100%" />
 
 
@@ -100,7 +100,7 @@
             <p class="copy_content" style="opacity:0;top:0px;position:fixed;margin-left: 23%;border-radius:unset;width:54%;bottom:59%;display:flex;font-size:10px">@url</p>
             <a class="copyM btn_org" data-clipboard-action="copy" style="position:absolute;margin-left: 28%;border-radius:unset;width:44%;bottom:14%;line-height:0.55rem;height:0.55rem" data-clipboard-target=".copy_content">复制链接分享好友</a>
 
-            <a class="xiazai" style="position:absolute;border-radius:unset;width:100%;bottom:0%;line-height:1rem;height:0.55rem" ></a>
+            <a class="xiazai" style="position:absolute;border-radius:unset;width:100%;bottom:0%;line-height:1rem;height:0.55rem"></a>
         </div>
         @*<div class="invitationBox">
                 <p class="top">你的专属邀请码</p>
@@ -175,6 +175,7 @@
                 var imgUri = canvas.toDataURL("../../../../assets/pages/img/png").replace("../../../../assets/pages/img/png",
                     "../../../../assets/pages/img/octet-stream"); // 获取生成的图片的url
                 $(".imgDiv_img").attr("src", imgUri)
+
                 if ('@ViewBag.isPhone' == 'true') {
                     //判断是否app下载
                     let base64Img = imgUri;
@@ -227,16 +228,39 @@
         })
         //下载
         function downloadFile(fileName, content) {
-            let aLink = document.createElement('a');
-            let blob = base64ToBlob(content); //new Blob([content]);
 
-            let evt = document.createEvent("HTMLEvents");
-            evt.initEvent("click", true, true);//initEvent 不加后两个参数在FF下会报错  事件类型，是否冒泡，是否阻止浏览器的默认行为
-            aLink.download = fileName;
-            aLink.href = URL.createObjectURL(blob);
+            //判断是否app下载
+            let base64Img = content;
+            // 转成图片文件
+            let imgFile = dataURLtoFile(base64Img);
+            console.log(imgFile);
 
-            // aLink.dispatchEvent(evt);
-            aLink.click()
+            var formData = new FormData();
+            formData.append("File", imgFile);//需要上传的多个参数
+
+            $.ajax({
+                url: '@Url.Action("UpLoadTu")',
+                data: formData,
+                type: "post",
+                //ajax2.0可以不用设置请求头，但是jq帮我们自动设置了，这样的话需要我们自己取消掉
+                contentType: false,
+                //取消帮我们格式化数据，是什么就是什么
+                processData: false,
+                success: function (data) {
+
+                    var url = data;
+                    // 将图片的src属性作为URL地址
+                    var a = document.createElement('a');
+                    var event = new MouseEvent('click');
+
+                    a.download = '0001'; //下载图片名称  test
+                    a.href = url;
+                    //执行下载
+                    a.dispatchEvent(event);
+
+                }
+            });
+
         }
         //base64转blob
         function base64ToBlob(code) {

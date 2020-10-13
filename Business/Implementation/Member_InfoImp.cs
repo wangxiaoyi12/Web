@@ -602,6 +602,12 @@ namespace Business.Implementation
                 //    json.Msg = "会员编号已存在！";
                 //    return json;
                 //}
+                if (DB.Member_Info.Any(a => a.Mobile == entity.Mobile))
+                {
+                    json.Msg = "手机号已存在！";
+                    return json;
+
+                }
                 entity.Mobile = entity.Code;
                 entity.Code = RndNum(6);
                 while (Any(a => a.Code == entity.Code))
@@ -731,7 +737,7 @@ namespace Business.Implementation
                 model.BankName = entity.BankName;
                 model.OpenBank = entity.OpenBank;
 
-              
+
                 model.QQ = entity.QQ;
                 model.PostAddress = entity.PostAddress;
                 model.Alipay = entity.Alipay;
@@ -768,6 +774,13 @@ namespace Business.Implementation
                     else
                     {
                         model.MemberLevelName = entity.MemberLevelName;
+                    }
+
+                    if (DB.Member_Info.Any(a => a.Mobile == entity.Mobile && a.MemberId != entity.MemberId))
+                    {
+                        json.Msg = "手机号已存在！";
+                        return json;
+
                     }
                     //if (entity.IsServiceCenter != "否")
                     //{
@@ -824,11 +837,11 @@ namespace Business.Implementation
                         DB.Fin_LiuShui.Insert(_liushui);
 
                     }
-                    if (AddCoins !=0)
+                    if (AddCoins != 0)
                     {
-                        DB.Fin_LiuShui.AddLS(model.MemberId, AddCoins, "后台增减奖金","奖金");
+                        DB.Fin_LiuShui.AddLS(model.MemberId, AddCoins, "后台增减奖金", "奖金");
                     }
-          
+
                     if (AddShopCoins > 0)
                     {
                         //流水账单                    
@@ -979,7 +992,7 @@ namespace Business.Implementation
                 {
                     //开启事务，可以不使用事务,也可以使用多个事务
                     //db.BeginTran();
-                    if (DB.Member_Info.Any(a => id.Contains(a.RecommendId) || a.Commission>0) || id.Contains("C3B57B68-3BBF-45DA-9B16-B3BE88F2A535") )
+                    if (DB.Member_Info.Any(a => id.Contains(a.RecommendId) || a.Commission > 0) || id.Contains("C3B57B68-3BBF-45DA-9B16-B3BE88F2A535"))
                     {
                         json.Msg = "不可删除已推荐过会员或者余额大于0的记录";
                         return json;
@@ -1095,7 +1108,7 @@ namespace Business.Implementation
                 }
                 else
                 {
-                    Recommend= DB.Member_Info.FindEntity(Recommend.RecommendId);
+                    Recommend = DB.Member_Info.FindEntity(Recommend.RecommendId);
                 }
             }
             return null;
@@ -1622,16 +1635,16 @@ namespace Business.Implementation
         /// <param name="_start">开始条数</param>
         /// <param name="pageSize">分页大小</param>
         /// <returns></returns>
-        public IQueryable<Member_Info> getSearchList(string id, DateTime? start, DateTime? end, string key, string IsActive, out int total, int _start, int pageSize,string Type="")
+        public IQueryable<Member_Info> getSearchList(string id, DateTime? start, DateTime? end, string key, string IsActive, out int total, int _start, int pageSize, string Type = "")
         {
             var query = DB.Member_Info.Where();
             if (start != null)
             {
                 query = query.Where(a => a.CreateTime >= start);
             }
-            if(Type=="普通")
+            if (Type == "普通")
             {
-                query = query.Where(a => a.MemberLevelId==0);
+                query = query.Where(a => a.MemberLevelId == 0);
             }
             if (Type == "正式")
             {

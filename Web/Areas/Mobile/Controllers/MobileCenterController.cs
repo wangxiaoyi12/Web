@@ -243,6 +243,11 @@ namespace Web.Areas.Mobile.Controllers
 
                 }
 
+                if(DB.Member_Info.Any(a=>a.Mobile==entity.Mobile && a.MemberId != entity.MemberId))
+                {
+                    throw new Exception("手机号已存在");
+
+                }
                 Member_Info model = User_Shop.GetMember_Info();
 
                 //完善资料

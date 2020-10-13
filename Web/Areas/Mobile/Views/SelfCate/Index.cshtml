@@ -3,9 +3,9 @@
     string Id = ReqHelper.GetString("id");
     if (Id == "")
     {
-        Id = "8";
+        Id = "325";
     }
-
+    var banner = DB.ShopSlide.Where(a => a.Type == 1).ToList();
 }
 <!DOCTYPE html>
 <html>
@@ -26,6 +26,12 @@
     <style>
         .header{
             position:unset !important;
+        }
+        .index-sw img {
+            width: 100%;
+            height: 100%;
+            display: block;
+            border-radius: .1rem;
         }
         .round_icon {
             width: 34px;
@@ -91,12 +97,28 @@
             </div>
         </div>
     </header>
-    <div class="content controler" style="height: 87%;   ">
+    <div class="content controler index-sw" style="height: 20%;   ">
+        <div class="swiper-container">
+            <div class="swiper-wrapper">
+                @foreach (var item in banner)
+                {
+                    <div class="swiper-slide">
+                        <a><img class="indexLImg" src="@item.Img" alt=""></a>
+                    </div>
+                }
+
+            </div>
+        </div>
+        <div class="swiper-paginationBox">
+            <div class="swiper-pagination"></div>
+        </div>
+    </div>
+    <div class="content controler" style="height: 67%;   ">
         <ul class="parent-tab wp">
-            @{  var all = DB.ShopProductCategory.Where().Select(a => new { a.ID, a.PID, a.Logo, a.Name, a.Sort })
-                    .OrderBy(a => a.Sort).ToList();
-                var type2 = all.Where(a => a.PID == null).Select(a => new { a.ID, a.Name }).ToList();
-                var type22 = all.Where(a => a.PID == null && a.ID == Convert.ToInt32(Id)).Select(a => new { a.ID, a.Name }).ToList();
+            @{ var all = DB.ShopProductCategory.Where(a => true).Select(a => new { a.ID, a.PID, a.Logo, a.Name, a.Sort })
+                     .OrderBy(a => a.Sort).ToList();
+                var type2 = all.Where(a => a.PID == 321).Select(a => new { a.ID, a.Name }).ToList();
+                var type22 = all.Where(a => a.PID == 321 && a.ID == Convert.ToInt32(Id)).Select(a => new { a.ID, a.Name }).ToList();
                 foreach (var item in type2)
                 {
                     if (item.ID.ToString() == Id)
@@ -129,67 +151,119 @@
         </ul>
         <div class="sub-tab wp">
             <ul>
-                @{  foreach (var item in type22)
+                @{ foreach (var item in type22)
                     {
                         var type3 = all.Where(a => a.PID == item.ID);
 
-                        <li class="parent-item">
-                            <div class="parent-tab-t">@item.Name </div>
+                        <li class="parent-item" style="padding:0.28rem">
+
                             <ol class="parent-tab-c clearfix">
                                 @{
                                     foreach (var item3 in type3)
                                     {
-                                        <li class="sub-tab-c-item">
+                                        <li class="sub-tab-c-item" style="margin-top:unset;width:100%">
 
-                                            @if (item3.ID == 345)
-                                            {
-                                                <a href="/mobile/mobilecenter/oneindex">
-                                                    <img class="round_icon" src="@item3.Logo">
-                                                    <p class="tab-name">@item3.Name</p>
-                                                </a>
-                                            }
-                                            else
-                                            {
-                                                <a href="/mobile/selfproduct?classid=@item3.ID">
-                                                    <img class="round_icon" src="@item3.Logo">
-                                                    <p class="tab-name">@item3.Name</p>
-                                                </a>
-                                            }
+                                            <a href="/mobile/selfproduct?classid=@item3.ID">
+                                                <img class="round_icon" src="@item3.Logo" style="width:100%;height:100%;border-radius:unset">
+
+                                            </a>
+
                                         </li>
                                     }
                                 }
                             </ol>
                         </li>
-                                    }
+                    }
                 }
             </ul>
         </div>
     </div>
     @Html.Partial("_Footer")
-
+    <script src="~/assets/jnwz200915/js/swiper.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="~/assets/jnwz200915/css/swiper.min.css" />
     <script type="text/javascript">
-		(function () {
-			var menuitems = document.querySelectorAll(".menuitem");
-			var _href = window.location.href;
+        (function () {
+            var menuitems = document.querySelectorAll(".menuitem");
+            var _href = window.location.href;
 
-			//console.log(_href);
+            //console.log(_href);
 
-			var i = 0, l = menuitems.length, str;
+            var i = 0, l = menuitems.length, str;
 
-			for (; i < l; i++) {
+            for (; i < l; i++) {
 
-				str = menuitems[i].firstChild.href;
+                str = menuitems[i].firstChild.href;
 
-				if (_href.indexOf(str) >= 0) {
-					//console.log(str);
-					menuitems[i].classList.add('curr');
-					return;
-				}
-			}
-		})();
+                if (_href.indexOf(str) >= 0) {
+                    //console.log(str);
+                    menuitems[i].classList.add('curr');
+                    return;
+                }
+            }
+        })();
     </script>
     <script src="~/assets/global/plugins/jquery.min.js" type="text/javascript"></script>
     <script>
+        // banner
+        var swiper = new Swiper('.index-sw .swiper-container', {
+            slidesPerView: 1,
+            spaceBetween: 0,
+            centeredSlides: true,
+            loop: true, // 无限循环
+            autoplay: {
+                delay: 4000,
+                disableOnInteraction: false,
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+        });
+        var leftSwiper = new Swiper('.OptList2-leftSwiper .swiper-container', {
+            slidesPerView: 1,
+            spaceBetween: 0,
+            loop: true, // 无限循环
+            autoplay: {
+                delay: 4000,
+                disableOnInteraction: false,
+            },
+            pagination: {
+                el: '.swiper-paginationLeft',
+                clickable: true,
+            },
+        });
+
+        var rightSwiper = new Swiper('.OptList2-rightSwiper .swiper-container', {
+            slidesPerView: 1,
+            spaceBetween: 0,
+            loop: true, // 无限循环
+            autoplay: {
+                delay: 4000,
+                disableOnInteraction: false,
+            },
+            pagination: {
+                el: '.swiper-paginationRight',
+                clickable: true,
+            },
+        });
+
+        // news
+        var swiper2 = new Swiper('.cont .swiper-container', {
+            spaceBetween: 0,
+            centeredSlides: true,
+            loop: true, // 无限循环
+            autoplay: {
+                delay: 4000, //设置时间
+                disableOnInteraction: false,
+            },
+            direction: 'vertical',
+            pagination: {
+                el: '.cont .swiper-pagination',
+                paginationClickable: true,
+                spaceBetween: 20
+            },
+
+        });
 		$(function () {
 			//@("初始化")
 			$(".parent-tab>li").eq(0).addClass("");

@@ -269,6 +269,10 @@ namespace Web.Areas.Shop.Controllers
                 var category = DB.ShopProduct.GetCategoryId2(product.CategoryID.Value);
                 var guigeproduct = DB.GuiGeName.Where(a => a.CName == category.Name).Count();
 
+                if(product.CategoryID1.Value==DB.XmlConfig.XmlSite.Scores && Count!=1)
+                {
+                    throw new Exception("拼团专区只能买一个");
+                }
 
 
                 string[] strlist = guige.Split('_');

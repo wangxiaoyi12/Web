@@ -11,87 +11,94 @@
     //int daifahuoCount = DB.ShopOrder.GetCount(curUser.MemberId, 2);
     //int daishouhuoCount = DB.ShopOrder.GetCount(curUser.MemberId, 3);
 }
-<div class="container topBg">
-    <!-- 头部导航 -->
-    <div class="header" style="box-shadow: 0 0 10px rgba(1, 73, 206,.2);">
-        <ul>
-            <li class="header-left" onclick="history.back(-1)">
-                <i class="iconfont icon-fanhui"></i>
-            </li>
-            <li>用户资料</li>
-            <li class="header-right">
+    <div class="container topBg">
+        <!-- 头部导航 -->
+        <div class="header" style="box-shadow: 0 0 10px rgba(1, 73, 206,.2);">
+            <ul>
+                <li class="header-left" onclick="history.back(-1)">
+                    <i class="iconfont icon-fanhui"></i>
+                </li>
+                <li>用户资料</li>
+                <li class="header-right">
 
-            </li>
-        </ul>
-    </div>
-    <!-- 列表 -->
-    <form id="form1">
-        <ul class="baseIlsList">
-            <li>
-                <span>手机号</span>
-                <input type="text" name="Mobile" value="@curUser.Mobile" id="Mobile">
+                </li>
+            </ul>
+        </div>
+        <!-- 列表 -->
+        <form id="form1">
+            <ul class="baseIlsList">
+                <li>
+                    <span>手机号</span>
+                    <input type="text" name="Mobile" value="@curUser.Mobile" id="Mobile">
 
-            </li>
+                </li>
 
-            <li>
-                <span>真实姓名</span>
-                <input type="text" name="NickName" value="@curUser.NickName" id="NickName">
+                <li>
+                    <span>真实姓名</span>
+                    <input type="text" name="NickName" value="@curUser.NickName" id="NickName">
 
-            </li>
+                </li>
 
 
-            <li>
-                <span>身份证号码</span>
-                <input type="text" name="IdCode" value="@curUser.IdCode" id="IdCode">
-            </li>
-        </ul>
-        <ul class="baseIlsList">
-            <li class="bankLi">
-                <span>银行名称</span>
+                <li>
+                    <span>身份证号码</span>
+                    <input type="text" name="IdCode" value="@curUser.IdCode" id="IdCode">
+                </li>
+            </ul>
+            <ul class="baseIlsList">
+                <li class="bankLi">
+                    <span>银行名称</span>
 
-                <select name="BankName" id="BankName" class="form-control select2" nullmsg="" errormsg="请选择银行名称">
-                    <option value="">请选择银行...</option>
-                    @{
-                        foreach (var item in ViewData["Banks"] as dynamic)
-                        {
-                            if (curUser.BankName == item.BasicDataName)
+                    <select name="BankName" id="BankName" class="form-control select2" nullmsg="" errormsg="请选择银行名称">
+                        <option value="">请选择银行...</option>
+                        @{
+                            foreach (var item in ViewData["Banks"] as dynamic)
                             {
-                                <option value="@item.BasicDataName" selected="selected">@item.BasicDataName</option>
-                            }
-                            else
-                            {
-                                <option value="@item.BasicDataName">@item.BasicDataName</option>
+                                if (curUser.BankName == item.BasicDataName)
+                                {
+                                    <option value="@item.BasicDataName" selected="selected">@item.BasicDataName</option>
+                                }
+                                else
+                                {
+                                    <option value="@item.BasicDataName">@item.BasicDataName</option>
+                                }
                             }
                         }
-                    }
-                </select>
+                    </select>
 
-            </li>
-            <li>
-                <span>银行户名</span>
-                <input type="text" name="BankAccount" id="@curUser.BankAccount" value="@curUser.BankAccount" placeholder="未填写">
-            </li>
-            <li>
-                <span>银行账号</span>
-                <input type="text" name="BankCode" id="@curUser.BankCode" value="@curUser.BankCode" placeholder="未填写">
-                <!-- <i class="iconfont icon-jiufuqianbaoicon07"></i> -->
-            </li>
-            <li>
-                <input type="text" name="OpenBank" style="width:65%;height:.85rem" id="OpenBank" class="form-control" placeholder="输入验证码">
-                <button id="smsBtn" style="width:30%" class="btn_org">
-                    发送
-                </button>
-            </li>
-        </ul>
-    </form>
-    <div class="btnbox">
-        @if (curUser.IsDL == "否")
-        {
+                </li>
+                <li>
+                    <span>银行户名</span>
+                    <input type="text" name="BankAccount" id="@curUser.BankAccount" value="@curUser.BankAccount" placeholder="未填写">
+                </li>
+                <li>
+                    <span>银行账号</span>
+                    <input type="text" name="BankCode" id="@curUser.BankCode" value="@curUser.BankCode" placeholder="未填写">
+                    <!-- <i class="iconfont icon-jiufuqianbaoicon07"></i> -->
+                </li>
+                <li>
+                    <input type="text" name="OpenBank" style="width:65%;height:.85rem" id="OpenBank" class="form-control" placeholder="输入验证码">
+                    <button id="smsBtn" style="width:30%" class="btn_org">
+                        发送
+                    </button>
+                </li>
+            </ul>
+        </form>
+        <div class="btnbox">
+            @if (curUser.IsDL == "是")
+            {
+                <span style="color:red">您已修改过个人资料，再次点击只对手机号进行保存</span>
+            }
+           
+
+        </div>
+        <div class="btnbox">
+          
             <a onclick="showDialog()" class="btn_org">点击保存</a>
-        }
+
+        </div>
+        <div class="bgColor"></div>
     </div>
-    <div class="bgColor"></div>
-</div>
 <script>
     $('#smsBtn').click(function () {
 

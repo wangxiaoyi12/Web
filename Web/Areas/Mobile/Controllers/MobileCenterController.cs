@@ -246,17 +246,20 @@ namespace Web.Areas.Mobile.Controllers
                 Member_Info model = User_Shop.GetMember_Info();
 
                 //完善资料
+              
                 model.Mobile = entity.Mobile;
-                model.NickName = entity.NickName;
+                if (model.IsDL != "是")
+                {
+                    model.NickName = entity.NickName;
 
 
-                model.IdCode = entity.IdCode;
-                model.IsDL = "是";
+                    model.IdCode = entity.IdCode;
+                    model.IsDL = "是";
 
-                model.BankAccount = entity.BankAccount;
-                model.BankCode = entity.BankCode;
-                model.BankName = entity.BankName;
-
+                    model.BankAccount = entity.BankAccount;
+                    model.BankCode = entity.BankCode;
+                    model.BankName = entity.BankName;
+                }
 
                 if (DB.Member_Info.Update(model) == false)
                     throw new Exception("修改会员信息失败");
@@ -546,7 +549,7 @@ namespace Web.Areas.Mobile.Controllers
         }
         public ActionResult BonusList(int skipCount = 0)
         {
-            var query = DB.Fin_Info.Where(q => q.MemberId == CurrentUserID && q.IsSettlement == true);
+            var query = DB.Fin_Info.Where(q => q.MemberId == CurrentUserID );
             //分页
             query = query.OrderByDescending(q => q.CreateTime);
 

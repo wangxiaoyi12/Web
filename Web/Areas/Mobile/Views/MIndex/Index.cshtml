@@ -6,7 +6,7 @@
     Layout = "~/Views/Shared/_LayoutPageIndex0915.cshtml";
 
     var newlist = DB.News_Info.ToList();
-    var banner = DB.ShopSlide.ToList();
+    var banner = DB.ShopSlide.Where(a=>a.Type==2).ToList();
     var shopproductrecommend = DB.ShopProduct.Where(a=>a.IsRecommend && a.IsEnable == true && a.IsNew == false).ToList();
     string keywords = ReqHelper.GetString("keywords");
     var category1 = DB.ShopProductCategory.Where(a => a.Layer == 1).OrderBy(a=>a.Sort).Take(4).ToList();
@@ -174,6 +174,7 @@
 
 </div>
 <div class="bgColor"></div>
+
 <script>
     const oldList = [1, 2, 3, 4, 5, 6, 7]
 

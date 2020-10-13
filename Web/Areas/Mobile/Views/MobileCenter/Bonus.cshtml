@@ -7,7 +7,7 @@
     //获取当前登录用户
     Member_Info curUser = User_Shop.GetMember_Info();
     Layout = "~/Views/Shared/_LayoutPageMy0915.cshtml";
-    var remit = DB.Fin_Info.Where(a => a.MemberId == curUser.MemberId && a.IsSettlement==true).OrderByDescending(a => a.FinId);
+    var remit = DB.Fin_Info.Where(a => a.MemberId == curUser.MemberId ).OrderByDescending(a => a.FinId);
 }
 <div class="container topBg">
     <!-- 头部导航 -->
@@ -28,7 +28,7 @@
         <li>
             <div>
                 <p class="bsft_bold">@item.CreateTime.Value.ToString("MM-dd HH:mm")</p>
-                <p class="bsclr_gay"></p>
+                <p class="bsclr_gay"><b>@(item.IsSettlement==true?"已结算":"未结算")</b></p>
                 <p class="bsclr_red">@item.TypeName</p>
             </div>
             <div>

@@ -70,7 +70,7 @@ namespace Business.Implementation
             mFin.RefNickName = refMember.NickName;
             mFin.CreateTime = DateTime.Now;
             mFin.GroupDate = (int)(mFin.CreateTime.Value - new DateTime(1900, 1, 1)).TotalDays;
-            if (mFin.Comment == "中级会员级差奖" || mFin.Comment == "高级会员级差奖" || mFin.TypeName == "代理推荐奖" || mFin.TypeName == "拼团奖")
+            if (mFin.Comment == "中级会员级差奖" || mFin.Comment == "高级会员级差奖" || mFin.TypeName == "代理推荐奖" || mFin.TypeName == "拼团奖" || mFin.TypeName == "平级奖" || mFin.TypeName == "超越奖")
             {
                 mFin.IsSettlement = false;
 
@@ -185,7 +185,7 @@ namespace Business.Implementation
             }
             else
             {   //产生拼团奖
-                GouW(curUser, order.RealCongXiao, product.CanTuanBiLi);
+                GouW(curUser, order.RealCongXiao, product.CanTuanBiLi,product.ID);
 
             }
         }
@@ -308,7 +308,7 @@ namespace Business.Implementation
             {
 
 
-                if (upper.MemberLevelId == 0)
+                if (upper.MemberLevelId == 0 && upper.MemberId!=member.MemberId)
                 {
                     upper.MemberLevelId = 1;
                 }
@@ -319,9 +319,10 @@ namespace Business.Implementation
                 decimal nowactivefee = 0m;
                 //上个人的比例
                 decimal roteactivefee = 0;
-
-                nowactivefee = DB.Sys_Level.FindEntity(upper.MemberLevelId).RecAward1.Value;
-
+                if (upper.MemberLevelId > 0)
+                {
+                    nowactivefee = DB.Sys_Level.FindEntity(upper.MemberLevelId).RecAward1.Value;
+                }
                 if (Rote > 0)
                 {
                     roteactivefee = DB.Sys_Level.FindEntity(Rote).RecAward1.Value;
@@ -329,8 +330,8 @@ namespace Business.Implementation
                 string comment = "推广奖";
                 string typename = "推广奖";
 
-
-                if(member.MemberId==upper.MemberId)
+                //第一次不拿自己的
+                if(member.MemberId==upper.MemberId && member.MemberLevelId>0)
                 {
                     comment = "复销奖";
                     typename = "复销奖";
@@ -579,8 +580,10 @@ namespace Business.Implementation
 
                 }
 
-                Rote = Convert.ToInt32(upper.MemberLevelId);
-
+                if (upper.MemberLevelId >= 2)
+                {
+                    Rote = Convert.ToInt32(upper.MemberLevelId);
+                }
                 if (!ischaoyue)
                 {
                     break;
@@ -757,37 +760,47 @@ namespace Business.Implementation
             }
             return json;
         }
-        public JsonHelp GouW(Member_Info member, decimal? money, string CanTuanBiLi)
+        public JsonHelp GouW(Member_Info member, decimal? money, string CanTuanBiLi,int ID)
         {
             JsonHelp json = new JsonHelp() { IsSuccess = true, Msg = "" };
             var Recommend = DB.Member_Info.FindEntity(member.RecommendId);
             if (Recommend != null)
             {
                 var cantuanbilistr = CanTuanBiLi.Split('|');
-                var recommendlist = DB.Member_Info.Where(a => a.RecommendId == Recommend.MemberId).OrderBy(a => a.CreateTime);
+                var recommendlist = DB.Member_Info.Where(a => a.RecommendId == Recommend.MemberId).Select(a=>a.MemberId);
 
-                int i = 1;
-                //判断是第几个人
-                foreach (var item in recommendlist)
+                var recommendorderlist = DB.ShopOrder.Where(a => a.MemberID == Recommend.MemberId && a.State >= 2).OrderByDescending(a => a.PayTime);
+                var recommendorder = new List<ShopOrder>();
+                foreach (var item in recommendorderlist)
                 {
-                    if (item.MemberId == member.MemberId)
+                    if (item.ShopOrderProducts.FirstOrDefault().ProductID == ID)
                     {
-                        break;
+                        recommendorder.Add(item);
                     }
-                    else
+                 
+                }
+                var firstrecommendorder = recommendorder.OrderByDescending(a => a.PayTime).FirstOrDefault();
+                if (firstrecommendorder != null)
+                {
+                    var order = DB.ShopOrder.Where(a => recommendlist.Contains(a.MemberID) && a.State >= 2 && a.PayTime>= firstrecommendorder.PayTime);
+                    int i = 0;
+                    foreach (var item in order)
                     {
-                        i++;
+                        if (item.ShopOrderProducts.FirstOrDefault().ProductID == ID)
+                        {
+                            i++;
+                        }
                     }
-                }
-                var bili = 0m;
-                if (i <= cantuanbilistr.Count())
-                {
-                    bili = Convert.ToDecimal(cantuanbilistr[i - 1]);
-                }
-                decimal? amount = money * bili / 100m;
-                if (amount > 0)
-                {
-                    DB.Jiang.InsertFin(Recommend, member, amount.Value, "拼团奖", "拼团奖");
+                    var bili = 0m;
+                    if (i <= cantuanbilistr.Count())
+                    {
+                        bili = Convert.ToDecimal(cantuanbilistr[i - 1]);
+                    }
+                    decimal? amount = money * bili / 100m;
+                    if (amount > 0)
+                    {
+                        DB.Jiang.InsertFin(Recommend, member, amount.Value, "拼团奖", "拼团奖");
+                    }
                 }
             }
             return json;

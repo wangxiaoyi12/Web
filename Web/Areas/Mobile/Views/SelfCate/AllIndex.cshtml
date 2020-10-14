@@ -3,9 +3,9 @@
     string Id = ReqHelper.GetString("id");
     if (Id == "")
     {
-        Id = "325";
+        Id = "8";
     }
-    var banner = DB.ShopSlide.Where(a => a.Type == 1).ToList();
+
 }
 <!DOCTYPE html>
 <html>
@@ -24,15 +24,6 @@
     <link href="~/assets/global/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <meta content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=0" name="viewport">
     <style>
-        .header{
-            position:unset !important;
-        }
-        .index-sw img {
-            width: 100%;
-            height: 100%;
-            display: block;
-            border-radius: .1rem;
-        }
         .round_icon {
             width: 34px;
             height: 34px;
@@ -42,29 +33,45 @@
             justify-content: center;
             overflow: hidden;
         }
+        .content .parent-tab {
+            width: 2rem;
+            height: 85%;
+            background-color: #eef0f3;
+            overflow-y: auto;
+            margin-top: 10%;
+        }
+        .content .sub-tab {
+            height: 85%;
+            margin-top: 10%;
+        }
         .foot-con a {
-    display: block;
-    width: 25%;
-    float: left;
-    text-align: center;
-    font-size: 12px;
-    position: relative;
-}.foot-con_2 a, .foot-con_2 .text, .foot-con_2 .glyphicon {
-    color: #999;
-}
- .foot-con .glyphicon {
-    width: 28px;
-    height: 32px;
-    margin-top: 3px;
-    display: inline-block;
-    font-size: 15px;
-    line-height: 28px;
-    /*color: rgba(157,157,157,0.6);*/
-}.foot-con .text {
-    display: block;
-    line-height: 1;
-    margin-top: -3px;
-}
+            display: block;
+            width: 20%;
+            float: left;
+            text-align: center;
+            font-size: 12px;
+            position: relative;
+        }
+
+        .foot-con_2 a, .foot-con_2 .text, .foot-con_2 .glyphicon {
+            color: #999;
+        }
+
+        .foot-con .glyphicon {
+            width: 28px;
+            height: 32px;
+            margin-top: 3px;
+            display: inline-block;
+            font-size: 15px;
+            line-height: 28px;
+            /*color: rgba(157,157,157,0.6);*/
+        }
+
+        .foot-con .text {
+            display: block;
+            line-height: 1;
+            margin-top: -3px;
+        }
     </style>
     <script>
 		(function (doc, win) {
@@ -89,36 +96,20 @@
 </head>
 
 <body>
-    @*<header class="header">
+    <header class="header">
         <div class="fix_nav">
             <div class="nav_inner">
                 <a class="nav-left back-icon" href="javascript:history.back();">@("返回")</a>
                 <div class="tit">@("分类")</div>
             </div>
         </div>
-    </header>*@
-    <div class="content controler index-sw" style="height: 20%;   ">
-        <div class="swiper-container">
-            <div class="swiper-wrapper">
-                @foreach (var item in banner)
-                {
-                    <div class="swiper-slide">
-                        <a><img class="indexLImg" src="@item.Img" alt=""></a>
-                    </div>
-                }
-
-            </div>
-        </div>
-        <div class="swiper-paginationBox">
-            <div class="swiper-pagination"></div>
-        </div>
-    </div>
-    <div class="content controler" style="height: 67%;   ">
+    </header>
+    <div class="content controler">
         <ul class="parent-tab wp">
-            @{ var all = DB.ShopProductCategory.Where(a => true).Select(a => new { a.ID, a.PID, a.Logo, a.Name, a.Sort })
-                     .OrderBy(a => a.Sort).ToList();
-                var type2 = all.Where(a => a.PID == 321).Select(a => new { a.ID, a.Name }).ToList();
-                var type22 = all.Where(a => a.PID == 321 && a.ID == Convert.ToInt32(Id)).Select(a => new { a.ID, a.Name }).ToList();
+            @{ var all = DB.ShopProductCategory.Where().Select(a => new { a.ID, a.PID, a.Logo, a.Name, a.Sort })
+                    .OrderBy(a => a.Sort).ToList();
+                var type2 = all.Where(a => a.PID == null).Select(a => new { a.ID, a.Name }).ToList();
+                var type22 = all.Where(a => a.PID == null && a.ID == Convert.ToInt32(Id)).Select(a => new { a.ID, a.Name }).ToList();
                 foreach (var item in type2)
                 {
                     if (item.ID.ToString() == Id)
@@ -129,7 +120,7 @@
                         }
                         else
                         {
-                            <li id="type1" class="active" onclick="location.href='/mobile/selfcate?id=@item.ID'"> @item.Name </li>
+                            <li id="type1" class="active" onclick="location.href='/mobile/allindex?id=@item.ID'"> @item.Name </li>
                         }
                     }
                     else
@@ -141,7 +132,7 @@
                         else
                         {
 
-                            <li id="type1" onclick="location.href='/mobile/selfcate?id=@item.ID'">@item.Name</li>
+                            <li id="type1" onclick="location.href='/mobile/selfcate/allindex?id=@item.ID'">@item.Name</li>
                         }
                     }
 
@@ -155,20 +146,29 @@
                     {
                         var type3 = all.Where(a => a.PID == item.ID);
 
-                        <li class="parent-item" style="padding:0.28rem">
-
+                        <li class="parent-item">
+                            <div class="parent-tab-t">@item.Name </div>
                             <ol class="parent-tab-c clearfix">
                                 @{
                                     foreach (var item3 in type3)
                                     {
-                                        <li class="sub-tab-c-item" style="margin-top:unset;width:100%">
+                                                                <li class="sub-tab-c-item" style="width:33%">
 
-                                            <a href="/mobile/selfproduct?classid=@item3.ID">
-                                                <img class="round_icon" src="@item3.Logo" style="width:100%;height:100%;border-radius:unset">
-
-                                            </a>
-
-                                        </li>
+                                                                    @if (item3.ID == 345)
+                                                                    {
+                                                                        <a href="/mobile/mobilecenter/oneindex">
+                                                                            <img class="round_icon" src="@item3.Logo" style="width:1.2rem;height:1.2rem">
+                                                                            <p class="tab-name">@item3.Name</p>
+                                                                        </a>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <a href="/mobile/selfproduct?classid=@item3.ID">
+                                                                            <img class="round_icon" src="@item3.Logo" style="width:1.2rem;height:1.2rem">
+                                                                            <p class="tab-name">@item3.Name</p>
+                                                                        </a> 
+                                                                    }
+                                                                </li>
                                     }
                                 }
                             </ol>
@@ -178,9 +178,8 @@
             </ul>
         </div>
     </div>
-    @Html.Partial("_Footer")
-    <script src="~/assets/jnwz200915/js/swiper.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="~/assets/jnwz200915/css/swiper.min.css" />
+    @Html.Partial("_AllFooter")
+
     <script type="text/javascript">
         (function () {
             var menuitems = document.querySelectorAll(".menuitem");
@@ -204,66 +203,6 @@
     </script>
     <script src="~/assets/global/plugins/jquery.min.js" type="text/javascript"></script>
     <script>
-        // banner
-        var swiper = new Swiper('.index-sw .swiper-container', {
-            slidesPerView: 1,
-            spaceBetween: 0,
-            centeredSlides: true,
-            loop: true, // 无限循环
-            autoplay: {
-                delay: 4000,
-                disableOnInteraction: false,
-            },
-            pagination: {
-                el: '.swiper-pagination',
-                clickable: true,
-            },
-        });
-        var leftSwiper = new Swiper('.OptList2-leftSwiper .swiper-container', {
-            slidesPerView: 1,
-            spaceBetween: 0,
-            loop: true, // 无限循环
-            autoplay: {
-                delay: 4000,
-                disableOnInteraction: false,
-            },
-            pagination: {
-                el: '.swiper-paginationLeft',
-                clickable: true,
-            },
-        });
-
-        var rightSwiper = new Swiper('.OptList2-rightSwiper .swiper-container', {
-            slidesPerView: 1,
-            spaceBetween: 0,
-            loop: true, // 无限循环
-            autoplay: {
-                delay: 4000,
-                disableOnInteraction: false,
-            },
-            pagination: {
-                el: '.swiper-paginationRight',
-                clickable: true,
-            },
-        });
-
-        // news
-        var swiper2 = new Swiper('.cont .swiper-container', {
-            spaceBetween: 0,
-            centeredSlides: true,
-            loop: true, // 无限循环
-            autoplay: {
-                delay: 4000, //设置时间
-                disableOnInteraction: false,
-            },
-            direction: 'vertical',
-            pagination: {
-                el: '.cont .swiper-pagination',
-                paginationClickable: true,
-                spaceBetween: 20
-            },
-
-        });
 		$(function () {
 			//@("初始化")
 			$(".parent-tab>li").eq(0).addClass("");

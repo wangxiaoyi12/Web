@@ -29,18 +29,17 @@ white-space: nowrap;
             </div>
             <div class="bottom" style="margin-left:1%">
                 <span class="text-danger  pull-left">
-                    <span>
+                    @*<span>
                         零售价: ￥@DB.ShopProduct.GetLingShouPrice(item)
 
-                    </span><br />
+                    </span><br />*@
                     <span>
-                        会员价: ￥@DB.ShopProduct.GetYouHuiPrice(item)
-
-                    </span><br />
-                    <span>
-                        产品积分: ￥@DB.ShopProduct.GetPeiHuoPrice(item)
+                       ￥@DB.ShopProduct.GetYouHuiPrice(item)
 
                     </span>
+                   <span style="padding:.03rem .05rem;border: 1px solid rgb(216, 69, 22);font-weight:bold;font-size:.30rem;background:rgb(255, 201, 184)">@DB.ShopProduct.GetPeiHuoPrice(item) 积分</span>
+
+               
                 </span>
                 @*<span class="pull-right">
                         <span class="text-danger">@(item.Sales)</span>@("人已购买")

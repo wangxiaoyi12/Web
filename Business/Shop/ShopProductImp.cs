@@ -48,7 +48,7 @@ namespace Business
             return KuCun;
         }
 
-        public decimal GetLingShouPrice(ShopProduct shopproduct)
+        public int GetLingShouPrice(ShopProduct shopproduct)
         {
             var m = DB.ShopProductCategory.FindEntity(shopproduct.CategoryID);
             while (m.Layer != 2 && m.PID != m.ID)
@@ -64,10 +64,11 @@ namespace Business
                 YPrice = DB.GuiGeProduct_Info.Where(a => a.ProductId == shopproduct.ID && a.SName == m.ID).Min(a => (decimal?)a.LingShou) ?? 0;
 
             }
-            return YPrice;
+            return Convert.ToInt32(YPrice);
+            //return YPrice;
         }
 
-        public decimal GetYouHuiPrice(ShopProduct shopproduct)
+        public int GetYouHuiPrice(ShopProduct shopproduct)
         {
             var m = DB.ShopProductCategory.FindEntity(shopproduct.CategoryID);
            
@@ -83,9 +84,9 @@ namespace Business
             {
                 SPrice= DB.GuiGeProduct_Info.Where(a => a.ProductId == shopproduct.ID && a.SName == m.ID).Min(a => (decimal?)a.YouHui) ?? 0;
             }
-            return SPrice;
+            return Convert.ToInt32( SPrice);
         }
-        public decimal GetPeiHuoPrice(ShopProduct shopproduct)
+        public int GetPeiHuoPrice(ShopProduct shopproduct)
         {
             var m = DB.ShopProductCategory.FindEntity(shopproduct.CategoryID);
             while (m.Layer != 2 && m.PID != m.ID)
@@ -95,7 +96,7 @@ namespace Business
             }
 
             var SPrice = DB.GuiGeProduct_Info.Where(a => a.ProductId == shopproduct.ID && a.SName == m.ID).Min(a => (decimal?)a.PeiHuo) ?? 0;
-            return SPrice;
+            return Convert.ToInt32(SPrice);
         }
         public ShopProductCategory GetCategoryId2(int CategoryID)
         {

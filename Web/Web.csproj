@@ -2926,6 +2926,8 @@
     <Content Include="Areas\Mobile\Views\MobileCenter\ZhuanHuanList.cshtml" />
     <Content Include="Areas\Mobile\Views\MobileCenter\Transfer.cshtml" />
     <Content Include="Areas\Mobile\Views\MobileCenter\TransferList.cshtml" />
+    <Content Include="Areas\Mobile\Views\SelfCate\AllIndex.cshtml" />
+    <Content Include="Areas\Mobile\Views\Shared\_AllFooter.cshtml" />
     <None Include="assets\scripts\jquery.validate-vsdoc.js" />
     <Content Include="assets\scripts\jquery.validate.js" />
     <Content Include="assets\scripts\jquery.validate.min.js" />
@@ -3557,6 +3559,7 @@
     <Content Include="Views\Shared\_LayoutPageCategory0915.cshtml" />
     <Content Include="Views\Shared\_LayoutPageCart0915.cshtml" />
     <Content Include="Views\Shared\_LayoutPageMy0915.cshtml" />
+    <Content Include="Views\Shared\_LayoutPageAllCategory0915.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

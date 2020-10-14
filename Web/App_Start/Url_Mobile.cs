@@ -241,6 +241,10 @@ namespace System.Web
         {
             return GetController2("cate");
         }
+        public static string GetAllCategory()
+        {
+            return GetController("selfcate/allindex");
+        }
         #endregion
 
         #region 个人中心

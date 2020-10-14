@@ -14,6 +14,10 @@ namespace Web.Areas.Mobile.Controllers
         {
             return View();
         }
+        public ActionResult AllIndex()
+        {
+            return View();
+        }
         public PartialViewResult GetClass()
         {
             ViewBag.ShopID = Request["ShopID"];

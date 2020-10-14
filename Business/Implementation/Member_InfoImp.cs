@@ -607,13 +607,14 @@ namespace Business.Implementation
                 //    json.Msg = "会员编号已存在！";
                 //    return json;
                 //}
+              
+                entity.Mobile = entity.Code;
                 if (DB.Member_Info.Any(a => a.Mobile == entity.Mobile))
                 {
                     json.Msg = "手机号已存在！";
                     return json;
 
                 }
-                entity.Mobile = entity.Code;
                 entity.Code = RndNum(6);
                 while (Any(a => a.Code == entity.Code))
                 {

@@ -13,7 +13,7 @@ namespace Business
         public GuiGeProduct_Info GetSPrice(ShopProduct shopproduct, string guige)
         {
             var cateid = GetCategoryId2(shopproduct.CategoryID.Value);
-            if (cateid != null)
+            if (cateid != null )
             {
                 var SPrice = DB.GuiGeProduct_Info.Where(a => a.ProductId == shopproduct.ID && a.SName == cateid.ID && a.SComment == guige).FirstOrDefault();
                 return SPrice;
@@ -26,7 +26,7 @@ namespace Business
         public decimal GetYiShou(ShopProduct shopproduct)
         {
             var m = DB.ShopProductCategory.FindEntity(shopproduct.CategoryID);
-            while (m.Layer != 2)
+            while (m.Layer != 2 && m.PID != m.ID)
             {
                 m = DB.ShopProductCategory.FindEntity(m.PID);
 
@@ -38,7 +38,7 @@ namespace Business
         public decimal GetKuCun(ShopProduct shopproduct)
         {
             var m = DB.ShopProductCategory.FindEntity(shopproduct.CategoryID);
-            while (m.Layer != 2)
+            while (m.Layer != 2 && m.PID != m.ID)
             {
                 m = DB.ShopProductCategory.FindEntity(m.PID);
 
@@ -51,7 +51,7 @@ namespace Business
         public decimal GetLingShouPrice(ShopProduct shopproduct)
         {
             var m = DB.ShopProductCategory.FindEntity(shopproduct.CategoryID);
-            while (m.Layer != 2)
+            while (m.Layer != 2 && m.PID != m.ID)
             {
                 m = DB.ShopProductCategory.FindEntity(m.PID);
 
@@ -71,7 +71,7 @@ namespace Business
         {
             var m = DB.ShopProductCategory.FindEntity(shopproduct.CategoryID);
            
-            while (m.Layer != 2)
+            while (m.Layer != 2 && m.PID!=m.ID)
             {
                 m = DB.ShopProductCategory.FindEntity(m.PID);
 
@@ -88,7 +88,7 @@ namespace Business
         public decimal GetPeiHuoPrice(ShopProduct shopproduct)
         {
             var m = DB.ShopProductCategory.FindEntity(shopproduct.CategoryID);
-            while (m.Layer != 2)
+            while (m.Layer != 2 && m.PID != m.ID)
             {
                 m = DB.ShopProductCategory.FindEntity(m.PID);
 
@@ -102,7 +102,7 @@ namespace Business
             var m = DB.ShopProductCategory.FindEntity(CategoryID);
             if (m != null)
             {
-                while (m.Layer != 2)
+                while (m.Layer != 2 && m.PID != m.ID)
                 {
                     m = DB.ShopProductCategory.FindEntity(m.PID);
 

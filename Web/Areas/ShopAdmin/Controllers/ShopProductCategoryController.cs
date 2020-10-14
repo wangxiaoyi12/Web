@@ -154,10 +154,16 @@ namespace Web.Areas.ShopAdmin.Controllers
                 }
                 else
                 {
+
                     if (entity.PID != 0)
                     {
                         var p = DB.ShopProductCategory.Where(a => a.ID == entity.PID).Select(a => a.Layer).FirstOrDefault();
                         entity.Layer = p + 1;
+                        if(entity.PID==entity.ID)
+                        {
+                            json.Msg = "子级不能与父级id一致";
+                            return Json(json);
+                        }
                     }
                     else
                     {

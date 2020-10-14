@@ -4,6 +4,7 @@ using EntityFramework.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.SMSHelper;
 using System.Text;
@@ -154,6 +155,9 @@ namespace Business.Implementation
         }
         #endregion
 
+        public void DeleteFile(string path) {
+            File.Delete(path);
+        }
         #region 图表
 
         #region 获得本月的业绩趋势图
@@ -163,6 +167,7 @@ namespace Business.Implementation
         /// <returns></returns>
         public string getActiveMemberLine()
         {
+         
             DataSet ds = new DataSet();
             var data = FindSqlToJson(@"select SUM(ActiveAmount) as count,DATEPART(DAY,ActiveTime)  as activetime from Member_Info 
                                             where DATEDIFF(Month, ActiveTime, GETDATE()) = 0 group by DATEPART(DAY, ActiveTime) order by ActiveTime desc");

@@ -66,7 +66,7 @@ namespace Web.Areas.Mobile.Controllers
                 return User_Shop.GetMember_Info();
             }
         }
-        public ActionResult UpLoadTu(string File, string path = "/upload/qrimg/")
+        public ActionResult UpLoadTu(string File1, string path = "/upload/Link/")
         {
             JsonHelp json = new JsonHelp(true);
             //上传和返回(保存到数据库中)的路径
@@ -75,9 +75,16 @@ namespace Web.Areas.Mobile.Controllers
             {
                 Directory.CreateDirectory(tempPath);//不存在就创建目录 
             }
+            else//清空文件夹
+            {
+                foreach (string var in Directory.GetFiles(tempPath))
+                {
+                    DB.Member_Info.DeleteFile(var);
+                }
+            }
             if (Request.Files.Count <= 0) return Json(json);
             var imgFile = Request.Files["file"];
-            //创建图片新的名称
+             //创建图片新的名称
             var nameImg = DateTime.Now.ToString("yyyyMMddHHmmssfff");
             //获得上传图片的路径
             var strPath = imgFile.FileName;

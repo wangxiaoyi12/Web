@@ -172,6 +172,7 @@
                 width: width + 'px',
                 hegiht: height + 'px',
             }).then(function (canvas) {
+               
                 var imgUri = canvas.toDataURL("../../../../assets/pages/img/png").replace("../../../../assets/pages/img/png",
                     "../../../../assets/pages/img/octet-stream"); // 获取生成的图片的url
                 $(".imgDiv_img").attr("src", imgUri)
@@ -181,8 +182,9 @@
                     let base64Img = imgUri;
                     // 转成图片文件
                     let imgFile = dataURLtoFile(base64Img);
-                    console.log(imgFile);
 
+                    console.log(imgFile);
+                  
                     var formData = new FormData();
                     formData.append("File", imgFile);//需要上传的多个参数
 
@@ -201,6 +203,9 @@
                         }
                     });
                 } else {
+                    let maxRatio = 0.75 // 大图比率
+                    let minRatio = 0.8 // 小图比率
+                    let imgQulity = 0.5 // 图像质量
                     downloadFile("推广海报", imgUri);
                     $('.uploaderClick').show();
                 }
@@ -233,6 +238,7 @@
             let base64Img = content;
             // 转成图片文件
             let imgFile = dataURLtoFile(base64Img);
+          
             console.log(imgFile);
 
             var formData = new FormData();

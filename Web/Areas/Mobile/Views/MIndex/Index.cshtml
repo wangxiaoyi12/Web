@@ -6,23 +6,69 @@
     Layout = "~/Views/Shared/_LayoutPageIndex0915.cshtml";
 
     var newlist = DB.News_Info.ToList();
-    var banner = DB.ShopSlide.Where(a=>a.Type==2).ToList();
-    var shopproductrecommend = DB.ShopProduct.Where(a=>a.IsRecommend && a.IsEnable == true && a.IsNew == false).ToList();
+    var banner = DB.ShopSlide.Where(a => a.Type == 2).ToList();
+
+    var shopproductcategory = new List<ShopProductCategory>();
+
+    shopproductcategory.Add(new ShopProductCategory() { ID = 0, Name = "首页" });
+    shopproductcategory.AddRange(DB.ShopProductCategory.Where(a => a.Layer == 1 && a.ID!=DB.XmlConfig.XmlSite.Scores).OrderBy(a => a.Sort));
+
+    var shopproductrecommend = DB.ShopProduct.Where(a => a.IsRecommend && a.IsEnable == true && a.IsNew == false).OrderBy(a => a.Sort).Take(12).ToList();
+
+    var categoryid = Request["Id"];
+    var categoryidint = 0;
+    if (!string.IsNullOrEmpty(categoryid))
+    {
+        if (categoryid != "0")
+        {
+            categoryidint = Convert.ToInt32(categoryid);
+            shopproductrecommend = DB.ShopProduct.Where(a => a.IsRecommend && a.IsEnable == true && a.CategoryID1 == categoryidint && a.IsNew == false).OrderBy(a => a.Sort).Take(10).ToList();
+        }
+    }
+
     string keywords = ReqHelper.GetString("keywords");
-    var category1 = DB.ShopProductCategory.Where(a => a.Layer == 1).OrderBy(a=>a.Sort).Take(4).ToList();
+    var category1 = DB.ShopProductCategory.Where(a => a.Layer == 1).OrderBy(a => a.Sort).Take(4).ToList();
 }
 
 <div class="container">
     <div class="indexHeader">
-        <div class="searchBox">
-            <form action="/mobile/selfproduct/index" method="get" id="searchform" name="searchform">
-                
-                    <input placeholder="请输入您要搜索的商品名称" type="text" value="@keywords" name="keywords" id="keywords" >
+        <div class="ctn">
+            <img src="~/assets/jnwz200915/images/Logo.png">
+            <div class="searchBox">
+                <form action="/mobile/selfproduct/index" method="get" id="searchform" name="searchform">
 
-                    <i class="iconfont icon-hricon33"  onclick="searchproduct();" ></i>
-           
+                    <input placeholder="请输入您要搜索的商品名称" type="text" value="@keywords" name="keywords" id="keywords">
+
+                    <i class="iconfont icon-hricon33" onclick="searchproduct();"></i>
+
                 </form>
+            </div>
         </div>
+    </div>
+    <div class="indexHeader_standUp"></div>
+    <!-- 切换 -->
+    <div class="indexTab">
+
+        @foreach (var item in shopproductcategory)
+        {
+            if (item.ID == categoryidint)
+            {
+                <div class="indexTabAct">
+                    <a  href="/Mobile/MIndex/Index?Id=@item.ID">
+                        <p>@item.Name</p>
+                    </a>
+                </div>
+            }
+            else
+            {
+                <div >
+                    <a href="/Mobile/MIndex/Index?Id=@item.ID">
+                        <p>@item.Name</p>
+                    </a>
+                </div>
+            }
+        }
+
     </div>
     <!-- 轮播 -->
     <div class="index-sw">
@@ -56,7 +102,7 @@
             </a>
         </li>
         <li class="OptListli">
-            <a  href="/mobile/mobilecenter/link">
+            <a href="/mobile/mobilecenter/link">
                 <div class="picBox"><img src="~/assets/jnwz200915/images/indexList1_3.png"></div>
                 <p>我要分享</p>
             </a>
@@ -67,7 +113,7 @@
                 <p>申请代理</p>
             </a>
         </li>
-        @for(int i = 0; i < category1.Count; i++)
+        @for (int i = 0; i < category1.Count; i++)
         {
             <li class="OptListli">
                 <a href="@Url_Mobile.GetProduct(category1[i])">
@@ -77,8 +123,8 @@
             </li>
         }
 
-    
-       
+
+
     </ul>
     <!-- 两个专区和公告 -->
     <div class="indexListBox">
@@ -96,39 +142,39 @@
                                 </a>
                             </div>
                         }
-                       
+
                     </div>
                 </div>
             </div>
         </div>
         @*<ul class="OptList2">
-            <li class="OptListli OptList2-leftSwiper">
-                <div class="swiper-container">
-                    <div class="swiper-wrapper">
-                        <div class="swiper-slide">
-                            <div class="picBox"><img src="~/assets/jnwz200915/images/indexList2_2.png"></div>
+                <li class="OptListli OptList2-leftSwiper">
+                    <div class="swiper-container">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide">
+                                <div class="picBox"><img src="~/assets/jnwz200915/images/indexList2_2.png"></div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="picBox"><img src="~/assets/jnwz200915/images/indexList2_1.png"></div>
+                            </div>
                         </div>
-                        <div class="swiper-slide">
-                            <div class="picBox"><img src="~/assets/jnwz200915/images/indexList2_1.png"></div>
-                        </div>
+                        <div class="swiper-pagination swiper-paginationLeft"></div>
                     </div>
-                    <div class="swiper-pagination swiper-paginationLeft"></div>
-                </div>
-            </li>
-            <li class="OptListli OptList2-rightSwiper">
-                <div class="swiper-container">
-                    <div class="swiper-wrapper">
-                        <div class="swiper-slide">
-                            <div class="picBox"><img src="~/assets/jnwz200915/images/indexList2_1.png"></div>
+                </li>
+                <li class="OptListli OptList2-rightSwiper">
+                    <div class="swiper-container">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide">
+                                <div class="picBox"><img src="~/assets/jnwz200915/images/indexList2_1.png"></div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="picBox"><img src="~/assets/jnwz200915/images/indexList2_2.png"></div>
+                            </div>
                         </div>
-                        <div class="swiper-slide">
-                            <div class="picBox"><img src="~/assets/jnwz200915/images/indexList2_2.png"></div>
-                        </div>
+                        <div class="swiper-pagination swiper-paginationRight"></div>
                     </div>
-                    <div class="swiper-pagination swiper-paginationRight"></div>
-                </div>
-            </li>
-        </ul>*@
+                </li>
+            </ul>*@
         <!-- <ul class="OptList2">
             <li class="OptListli">
                 <a href="">
@@ -149,26 +195,29 @@
         </ul> -->
 
     </div>
-    <ul class="indexList">
-        @foreach (var item in shopproductrecommend)
-        {
-            <li class="indexListLi">
-                <a href="@Url_Mobile.GetProduct(item)">
-                    <div class="picBox"><img src="@item.Image"></div>
-                    <div class="txt">
-                        <p class="top">@item.Title</p>
-                        <p class="ctn">￥<span>@DB.ShopProduct.GetYouHuiPrice(item)</span><span style="font-weight:bold;padding:.03rem .05rem; font-size:.30rem;background:rgb(255, 201, 184)">@DB.ShopProduct.GetPeiHuoPrice(item) 积分</span></p>
-                        @*<p class="btm">零售价:@DB.ShopProduct.GetLingShouPrice(item)</p>*@
-                        @*<p class="btm" style="color:black">产品积分:@DB.ShopProduct.GetPeiHuoPrice(item)</p>*@
-                    </div>
-                </a>
-            </li>
-        }
+    <div class="indexTabCtn">
+        <div class="indexTabCtnAct">
+            <ul class="indexList">
+                @foreach (var item in shopproductrecommend)
+                {
+                    <li class="indexListLi">
+                        <a href="@Url_Mobile.GetProduct(item)">
+                            <div class="picBox"><img src="@item.Image"></div>
+                            <div class="txt">
+                                <p class="top">@item.Title</p>
+                                <p class="ctn">￥<span>@DB.ShopProduct.GetYouHuiPrice(item)</span><span style="font-weight:bold;padding:.03rem .05rem; font-size:.30rem;background:rgb(255, 201, 184)">@DB.ShopProduct.GetPeiHuoPrice(item) 积分</span></p>
+                                @*<p class="btm">零售价:@DB.ShopProduct.GetLingShouPrice(item)</p>*@
+                                @*<p class="btm" style="color:black">产品积分:@DB.ShopProduct.GetPeiHuoPrice(item)</p>*@
+                            </div>
+                        </a>
+                    </li>
+                }
 
-      
-    </ul>
-    @*<p class="indexListJJJ">加载更多</p>*@
 
+            </ul>
+            @*<p class="indexListJJJ">加载更多</p>*@
+        </div>
+    </div>
     <!-- 底部 -->
     <div class="pd_btm"></div>
 
@@ -256,7 +305,7 @@
         },
 
     });
- 
+
     function searchproduct() {
         var keyword = document.getElementById("keywords").value;
         if (keyword == undefined || keyword == null || keyword == "") {
@@ -265,4 +314,6 @@
         }
         document.getElementById("searchform").submit();
     }
+    tabs('.indexTab>div', 'indexTabAct', '.indexTabCtn>div', 'indexTabCtnAct')
+
 </script>

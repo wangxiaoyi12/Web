@@ -5,36 +5,93 @@
     height: 3.5rem;
     background-image: url(../images/bg_indexTop.png);
     background-size: 100% 100%;
+    z-index: -10;
 }
 
-    .indexHeader .searchBox {
-        width: 95%;
-        margin: .2rem auto;
-        border-radius: .5rem;
-        padding: .12rem .2rem;
-        background: #fff;
+.indexHeader_standUp {
+    position: relative;
+    z-index: -11;
+    height: 0.78rem;
+}
+
+.indexHeader .ctn {
+    display: flex;
+    align-items: center;
+    width: 95%;
+    margin: .2rem auto;
+}
+
+    .indexHeader .ctn > img {
+        width: 28%;
+        margin-right: 2%;
     }
 
-        .indexHeader .searchBox a {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+.indexHeader .searchBox {
+    width: 70%;
+    border-radius: .5rem;
+    padding: .12rem .2rem;
+    margin: 0;
+    background: #fff;
+}
+
+    .indexHeader .searchBox a {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+.indexHeader input {
+    width: 80%;
+    padding: 0 .1rem;
+    color: #929EB2;
+    flex: 1;
+}
+
+.indexHeader i {
+    color: #929EB2;
+}
+
+/* 分类切换 */
+.indexTab {
+    display: flex;
+    width: auto;
+    overflow-x: auto;
+}
+
+    .indexTab > div {
+        padding: .2rem .1rem .3rem .1rem;
+    }
+
+        .indexTab > div p {
+            white-space: nowrap;
+            color: #FDF2F0;
+            font-size: .3rem;
+            font-weight: bold;
+            position: relative;
         }
 
-    .indexHeader input {
-        width: 80%;
-        padding: 0 .3rem;
-        color: #929EB2;
+    .indexTab > .indexTabAct p::before {
+        content: '';
+        position: absolute;
+        bottom: -.1rem;
+        width: 100%;
+        height: 0.04rem;
+        border-radius: 1rem;
+        background: linear-gradient(to right,#FEA5B3,#FE6B99);
     }
 
-    .indexHeader i {
-        color: #929EB2;
-    }
+.indexTabCtn > div {
+    display: none;
+}
+
+.indexTabCtn > .indexTabCtnAct {
+    display: block;
+}
+
 
 /* 轮播 */
 .index-sw {
     position: relative;
-    margin-top: 1.1rem;
 }
 
     .index-sw img {

@@ -82,7 +82,7 @@ namespace Web.Areas.ShopAdmin.Controllers
             else
             {
                 entity = DB.ShopProduct.Where(a => a.ID == id).FirstOrDefault();
-                if (entity.ShopProductCategory != null)
+                if (entity.ShopProductCategory1 != null)
                 {
                     if (entity.ShopProductCategory.Layer == 1)
                     {
@@ -90,12 +90,14 @@ namespace Web.Areas.ShopAdmin.Controllers
                     }
                     if (entity.ShopProductCategory.Layer == 2)
                     {
-                        ViewBag.C1 = entity.ShopProductCategory.ShopProductCategory2.ID;
+                        ViewBag.C1 = entity.ShopProductCategory.PID;
                     }
                     if (entity.ShopProductCategory.Layer == 3)
                     {
-                        ViewBag.C1 = entity.ShopProductCategory.ShopProductCategory2.ShopProductCategory2.ID;
+                        var p = DB.ShopProductCategory.FindEntity(entity.ShopProductCategory.PID);
+                        ViewBag.C1 = p.PID;
                     }
+                 
                 }
                 var imgs = DB.ShopProductImage.Where(a => a.ProductID == id).Select(a => new { a.URL, a.ThumURL }).ToList();
                 if (imgs.Count > 0)

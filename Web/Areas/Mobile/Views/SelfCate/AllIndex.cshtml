@@ -108,7 +108,7 @@
         <ul class="parent-tab wp">
             @{ var all = DB.ShopProductCategory.Where().Select(a => new { a.ID, a.PID, a.Logo, a.Name, a.Sort })
                     .OrderBy(a => a.Sort).ToList();
-                var type2 = all.Where(a => a.PID == null).Select(a => new { a.ID, a.Name }).ToList();
+                var type2 = all.Where(a => a.PID == null && a.ID!=DB.XmlConfig.XmlSite.Scores).Select(a => new { a.ID, a.Name }).ToList();
                 var type22 = all.Where(a => a.PID == null && a.ID == Convert.ToInt32(Id)).Select(a => new { a.ID, a.Name }).ToList();
                 foreach (var item in type2)
                 {

@@ -33,6 +33,11 @@
             display: block;
             border-radius: .1rem;
         }
+        .content .parent-tab .active {
+            background-color: #fff;
+            border: none;
+            color: red;
+        }
         .round_icon {
             width: 34px;
             height: 34px;
@@ -97,7 +102,7 @@
             </div>
         </div>
     </header>*@
-    <div class="content controler index-sw" style="height: 20%;   ">
+    <div class="content controler index-sw" style="height: 25%;   ">
         <div class="swiper-container">
             <div class="swiper-wrapper">
                 @foreach (var item in banner)
@@ -113,7 +118,7 @@
             <div class="swiper-pagination"></div>
         </div>
     </div>
-    <div class="content controler" style="height: 67%;   ">
+    <div class="content controler" style="height: 72%;   ">
         <ul class="parent-tab wp">
             @{ var all = DB.ShopProductCategory.Where(a => true).Select(a => new { a.ID, a.PID, a.Logo, a.Name, a.Sort })
                      .OrderBy(a => a.Sort).ToList();

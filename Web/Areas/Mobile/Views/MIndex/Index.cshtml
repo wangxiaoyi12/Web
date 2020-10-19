@@ -13,7 +13,7 @@
     shopproductcategory.Add(new ShopProductCategory() { ID = 0, Name = "首页" });
     shopproductcategory.AddRange(DB.ShopProductCategory.Where(a => a.Layer == 1 && a.ID!=DB.XmlConfig.XmlSite.Scores).OrderBy(a => a.Sort));
 
-    var shopproductrecommend = DB.ShopProduct.Where(a => a.IsRecommend && a.IsEnable == true && a.IsNew == false).OrderBy(a => a.Sort).Take(12).ToList();
+    var shopproductrecommend = DB.ShopProduct.Where(a => a.IsRecommend && a.IsEnable == true && a.IsNew == false).OrderBy(a => a.Sort).ToList();
 
     var categoryid = Request["Id"];
     var categoryidint = 0;
@@ -33,7 +33,7 @@
 <div class="container">
     <div class="indexHeader">
         <div class="ctn">
-            <img src="~/assets/jnwz200915/images/Logo.png">
+            <img src="@DB.XmlConfig.XmlSite.imgZhi">
             <div class="searchBox">
                 <form action="/mobile/selfproduct/index" method="get" id="searchform" name="searchform">
 

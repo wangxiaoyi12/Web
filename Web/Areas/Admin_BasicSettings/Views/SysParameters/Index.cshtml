@@ -45,465 +45,491 @@
                     OnSuccess = "SubAjax.Success"
                 }, new { @class = "form-horizontal", @role = "form", @id = "commentForm" }))
                 {
-                    <div class="form-body">
-                        <div class="form-group">
-                            <label class="col-md-2 control-label"><span style="color:red">*</span>系统名称：</label>
-                            <div class="col-md-4">
-                                <input type="text" name="webname" value="@Model.webname" class="form-control" placeholder="请输入系统名称" datatype="*" nullmsg="">
-                            </div>
-                            <span></span>
+                <div class="form-body">
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><span style="color:red">*</span>系统名称：</label>
+                        <div class="col-md-4">
+                            <input type="text" name="webname" value="@Model.webname" class="form-control" placeholder="请输入系统名称" datatype="*" nullmsg="">
                         </div>
-                        <div class="form-group">
-                            <label class="col-md-2 control-label"><span style="color:red">*</span>公司名称：</label>
-                            <div class="col-md-4">
-                                <input type="text" name="webcompany" value="@Model.webcompany" class="form-control" placeholder="请输入公司名称" datatype="*">
-                            </div>
-                            <span></span>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-2 control-label"><span style="color:red">*</span>公司银行账户：</label>
-                            <div class="col-md-4">
-                                <input type="text" name="YinHang" value="@Model.YinHang" class="form-control" placeholder="请输入银行账户" datatype="*">
-                            </div>
-                            <span></span>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-2 control-label"><span style="color:red">*</span>公司银行名称：</label>
-                            <div class="col-md-4">
-                                <input type="text" name="YinHangName" value="@Model.YinHangName" class="form-control" placeholder="请输入银行名称" datatype="*">
-                            </div>
-                            <span></span>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-2 control-label"><span style="color:red">*</span>公司银行开户人姓名：</label>
-                            <div class="col-md-4">
-                                <input type="text" name="YinHangBankName" value="@Model.YinHangBankName" class="form-control" placeholder="请输入公司银行开户人姓名" datatype="*">
-                            </div>
-                            <span></span>
-                        </div>
-                        <hr />
-                        <div class="note note-danger">
-                            <p>@("平级超越奖设置")</p>
-                        </div>
-
-
-                        <div class="form-group">
-                            <label class="col-md-2 control-label"><span style="color:red">*</span>中级培养中级平级奖：</label>
-                            <div class="col-md-4">
-                                <input type="text" name="ZZP" value="@Model.ZZP" class="form-control" placeholder="请输入中级培养中级平级奖" datatype="*" nullmsg="">
-                            </div>
-                            <span></span>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-2 control-label"><span style="color:red">*</span>中级培养高级超越奖：</label>
-                            <div class="col-md-4">
-                                <input type="text" name="ZGC" value="@Model.ZGC" class="form-control" placeholder="请输入中级培养高级超越奖" datatype="*" nullmsg="">
-                            </div>
-                            <span></span>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-2 control-label"><span style="color:red">*</span>高级培养高级平级奖：</label>
-                            <div class="col-md-4">
-                                <input type="text" name="GGP" value="@Model.GGP" class="form-control" placeholder="请输入高级培养高级平级奖" datatype="*" nullmsg="">
-                            </div>
-                            <span></span>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-2 control-label"><span style="color:red">*</span>初级培养中级超越奖：</label>
-                            <div class="col-md-4">
-                                <input type="text" name="CZC" value="@Model.CZC" class="form-control" placeholder="请输入初级培养中级超越奖" datatype="*" nullmsg="">
-                            </div>
-                            <span></span>
-                        </div>
-                        <hr />
-
-                        @* <div class="form-group">
-                               <label class="col-md-2 control-label">上传支付宝二维码：</label>
-                                <div class="col-md-4">
-                                    <input type="hidden" id="imgZhi" name="imgZhi" value="@Model.imgZhi" />
-                                    <div id="GoodsImages"></div>
-                                    @{
-                                        if (Model.imgZhi != null)
-                                        {
-                                            foreach (var item in Model.imgZhi.TrimEnd('&').Split('&'))
-                                            {
-                                                <text>
-                                                    <div class="col-md-4 responsive-1024">
-                                                        <div id="preview-pane">
-                                                            <div class="preview-container">
-                                                                <img width="110" height="110" src="@item.ToString()" class="jcrop-preview" alt="Preview">
-                                                            </div>
-                                                        </div>
+                        <span></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">上传系统logo：</label>
+                        <div class="col-md-4">
+                            <input type="hidden" id="imgZhi" name="imgZhi" value="@Model.imgZhi" />
+                            <div id="GoodsImages"></div>
+                            @{
+                                if (Model.imgZhi != null)
+                                {
+                                    foreach (var item in Model.imgZhi.TrimEnd('&').Split('&'))
+                                    {
+                                        <text>
+                                            <div class="col-md-4 responsive-1024">
+                                                <div id="preview-pane">
+                                                    <div class="preview-container">
+                                                        <img width="110" height="110" src="@item.ToString()" class="jcrop-preview" alt="Preview">
                                                     </div>
-                                                </text>
-                                            }
-                                        }
+                                                </div>
+                                            </div>
+                                        </text>
                                     }
-                                </div>
-                                <span></span>
-                            </div>
+                                }
+                            }
+                        </div>
+                        <span></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><span style="color:red">*</span>公司名称：</label>
+                        <div class="col-md-4">
+                            <input type="text" name="webcompany" value="@Model.webcompany" class="form-control" placeholder="请输入公司名称" datatype="*">
+                        </div>
+                        <span></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><span style="color:red">*</span>公司银行账户：</label>
+                        <div class="col-md-4">
+                            <input type="text" name="YinHang" value="@Model.YinHang" class="form-control" placeholder="请输入银行账户" datatype="*">
+                        </div>
+                        <span></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><span style="color:red">*</span>公司银行名称：</label>
+                        <div class="col-md-4">
+                            <input type="text" name="YinHangName" value="@Model.YinHangName" class="form-control" placeholder="请输入银行名称" datatype="*">
+                        </div>
+                        <span></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><span style="color:red">*</span>公司银行开户人姓名：</label>
+                        <div class="col-md-4">
+                            <input type="text" name="YinHangBankName" value="@Model.YinHangBankName" class="form-control" placeholder="请输入公司银行开户人姓名" datatype="*">
+                        </div>
+                        <span></span>
+                    </div>
+                    <hr />
+                    <div class="note note-danger">
+                        <p>@("平级超越奖设置")</p>
+                    </div>
 
 
-                            <div class="form-group">
-                                <label class="col-md-2 control-label">上传微信二维码：</label>
-                                <div class="col-md-4">
-                                    <input type="hidden" id="img" name="img" value="@Model.img" />
-                                    <div id="GoodsImage"></div>
-                                    @{
-                                        if (Model.img != null)
-                                        {
-                                            foreach (var item in Model.img.TrimEnd('&').Split('&'))
-                                            {
-                                                <text>
-                                                    <div class="col-md-4 responsive-1024">
-                                                        <div id="preview-pane">
-                                                            <div class="preview-container">
-                                                                <img width="110" height="110" src="@item.ToString()" class="jcrop-preview" alt="Preview">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </text>
-                                            }
-                                        }
-                                    }
-                                </div>
-                                <span></span>
-                            </div>*@
-                        @*<div class="form-group">
-                                <label class="col-md-2 control-label"><span style="color:red">*</span>支付宝名称：</label>
-                                <div class="col-md-4">
-                                    <input type="text" name="ZhiFuBName" value="@Model.ZhiFuBName" class="form-control" placeholder="请输入支付宝名称" datatype="*">
-                                </div>
-                                <span></span>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-2 control-label"><span style="color:red">*</span>支付宝账户：</label>
-                                <div class="col-md-4">
-                                    <input type="text" name="ZhiFuB" value="@Model.ZhiFuB" class="form-control" placeholder="请输入支付宝账户" datatype="*">
-                                </div>
-                                <span></span>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-2 control-label"><span style="color:red">*</span>银行账户：</label>
-                                <div class="col-md-4">
-                                    <input type="text" name="YinHang" value="@Model.YinHang" class="form-control" placeholder="请输入银行账户" datatype="*">
-                                </div>
-                                <span></span>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-2 control-label"><span style="color:red">*</span>银行名称：</label>
-                                <div class="col-md-4">
-                                    <input type="text" name="YinHangName" value="@Model.YinHangName" class="form-control" placeholder="请输入银行名称" datatype="*">
-                                </div>
-                                <span></span>
-                            </div>*@
-                        @*<div class="form-group">
-                                <label class="col-md-2 control-label"><span style="color:red">*</span>分享消费奖1代(元)：</label>
-                                <div class="col-md-4">
-                                    <input type="text" name="FenXiang1" value="@Model.FenXiang1" class="form-control" placeholder="请输入分享消费奖" datatype="*">
-                                </div>
-                                <span></span>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-2 control-label"><span style="color:red">*</span>分享消费奖2代(元)：</label>
-                                <div class="col-md-4">
-                                    <input type="text" name="FenXiang2" value="@Model.FenXiang2" class="form-control" placeholder="请输入分享消费奖" datatype="*">
-                                </div>
-                                <span></span>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-2 control-label"><span style="color:red">*</span>辅导奖(%)：</label>
-                                <div class="col-md-4">
-                                    <input type="text" name="FuDao" value="@Model.FuDao" class="form-control" placeholder="请输入辅导奖" datatype="*">
-                                </div>
-                                <span></span>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-2 control-label"><span style="color:red">*</span>每日返利：</label>
-                                <div class="col-md-4">
-                                    <input type="text" name="MeiRiFanL" value="@Model.MeiRiFanL" class="form-control" placeholder="请输入每日返利" datatype="*">
-                                </div>
-                                <span></span>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-2 control-label"><span style="color:red">*</span>推广购物：</label>
-                                <div class="col-md-4">
-                                    <input type="text" name="GouWuFanL" value="@Model.GouWuFanL" class="form-control" placeholder="请输入推广购物" datatype="*">
-                                </div>
-                                <span></span>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-2 control-label"><span style="color:red">*</span>领导奖1代：</label>
-                                <div class="col-md-4">
-                                    <input type="text" name="LingDao1" value="@Model.LingDao1" class="form-control" placeholder="请输入领导奖1代" datatype="*">
-                                </div>
-                                <span></span>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-2 control-label"><span style="color:red">*</span>领导奖2代：</label>
-                                <div class="col-md-4">
-                                    <input type="text" name="LingDao2" value="@Model.LingDao2" class="form-control" placeholder="请输入领导奖2代" datatype="*">
-                                </div>
-                                <span></span>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-2 control-label"><span style="color:red">*</span>领导奖3代：</label>
-                                <div class="col-md-4">
-                                    <input type="text" name="LingDao3" value="@Model.LingDao3" class="form-control" placeholder="请输入领导奖3代" datatype="*">
-                                </div>
-                                <span></span>
-                            </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><span style="color:red">*</span>中级培养中级平级奖：</label>
+                        <div class="col-md-4">
+                            <input type="text" name="ZZP" value="@Model.ZZP" class="form-control" placeholder="请输入中级培养中级平级奖" datatype="*" nullmsg="">
+                        </div>
+                        <span></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><span style="color:red">*</span>中级培养高级超越奖：</label>
+                        <div class="col-md-4">
+                            <input type="text" name="ZGC" value="@Model.ZGC" class="form-control" placeholder="请输入中级培养高级超越奖" datatype="*" nullmsg="">
+                        </div>
+                        <span></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><span style="color:red">*</span>高级培养高级平级奖：</label>
+                        <div class="col-md-4">
+                            <input type="text" name="GGP" value="@Model.GGP" class="form-control" placeholder="请输入高级培养高级平级奖" datatype="*" nullmsg="">
+                        </div>
+                        <span></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><span style="color:red">*</span>初级培养中级超越奖：</label>
+                        <div class="col-md-4">
+                            <input type="text" name="CZC" value="@Model.CZC" class="form-control" placeholder="请输入初级培养中级超越奖" datatype="*" nullmsg="">
+                        </div>
+                        <span></span>
+                    </div>
+                    <hr />
 
-                            <div class="form-group">
-                                <label class="col-md-2 control-label"><span style="color:red">*</span>重消：</label>
-                                <div class="col-md-4">
-                                    <input type="text" name="ChongXiao" value="@Model.ChongXiao" class="form-control" placeholder="请输入重消" datatype="*">
+                    @* <div class="form-group">
+           <label class="col-md-2 control-label">上传支付宝二维码：</label>
+            <div class="col-md-4">
+                <input type="hidden" id="imgZhi" name="imgZhi" value="@Model.imgZhi" />
+                <div id="GoodsImages"></div>
+                @{
+                    if (Model.imgZhi != null)
+                    {
+                        foreach (var item in Model.imgZhi.TrimEnd('&').Split('&'))
+                        {
+                            <text>
+                                <div class="col-md-4 responsive-1024">
+                                    <div id="preview-pane">
+                                        <div class="preview-container">
+                                            <img width="110" height="110" src="@item.ToString()" class="jcrop-preview" alt="Preview">
+                                        </div>
+                                    </div>
                                 </div>
-                                <span></span>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-2 control-label"><span style="color:red">*</span>报单补助--直营店(%)：</label>
-                                <div class="col-md-4">
-                                    <input type="text" name="ZhiYingD" value="@Model.ZhiYingD" class="form-control" placeholder="请输入直营店" datatype="*">
-                                </div>
-                                <span></span>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-2 control-label"><span style="color:red">*</span>报单补助--专卖店(%)：</label>
-                                <div class="col-md-4">
-                                    <input type="text" name="ZhuanMaiD" value="@Model.ZhuanMaiD" class="form-control" placeholder="请输入专卖店" datatype="*">
-                                </div>
-                                <span></span>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-2 control-label"><span style="color:red">*</span>转换倍数：</label>
-                                <div class="col-md-4">
-                                    <input type="text" name="RecAwardRate2" value="@Model.RecAwardRate2" class="form-control" placeholder="请输入转换倍数" datatype="*">
-                                </div>
-                                <span></span>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-2 control-label"><span style="color:red">*</span>转换最小金额：</label>
-                                <div class="col-md-4">
-                                    <input type="text" name="RecAwardRate3" value="@Model.RecAwardRate3" class="form-control" placeholder="请输入转换最小金额" datatype="*">
-                                </div>
-                                <span></span>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-2 control-label"><span style="color:red">*</span>分红(%)：</label>
-                                <div class="col-md-4">
-                                    <input type="text" name="DayMaxTotalAmountFlower" value="@Model.DayMaxTotalAmountFlower" class="form-control" placeholder="请输入分红" datatype="*">
-                                </div>
-                                <span></span>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-2 control-label"><span style="color:red">*</span>平级奖层数：</label>
-                                <div class="col-md-4">
-                                    <input type="text" name="RecAwardMaxRate34" value="@Model.RecAwardMaxRate34" class="form-control" placeholder="请输入平级奖" datatype="*">
-                                </div>
-                                <span></span>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-2 control-label"><span style="color:red">*</span>激活扣报单积分(%)：</label>
-                                <div class="col-md-4">
-                                    <input type="text" name="ManagerAwardRate" value="@Model.ManagerAwardRate" class="form-control" placeholder="请输入激活扣报单积分" datatype="*">
-                                </div>
-                                <span></span>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-2 control-label"><span style="color:red">*</span>激活扣收益(%)：</label>
-                                <div class="col-md-4">
-                                    <input type="text" name="StockPrice" value="@Model.StockPrice" class="form-control" placeholder="请输入激活扣收益">
-                                </div>
-                                <span></span>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-2 control-label"><span style="color:red">*</span>服务奖1代(%)：</label>
-                                <div class="col-md-4">
-                                    <input type="text" name="FuWuJiang1" value="@Model.FuWuJiang1" class="form-control" placeholder="请输入服务奖">
-                                </div>
-                                <span></span>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-2 control-label"><span style="color:red">*</span>服务奖2代(%)：</label>
-                                <div class="col-md-4">
-                                    <input type="text" name="FuWuJiang2" value="@Model.FuWuJiang2" class="form-control" placeholder="请输入服务奖">
-                                </div>
-                                <span></span>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-2 control-label"><span style="color:red">*</span>服务奖3代(%)：</label>
-                                <div class="col-md-4">
-                                    <input type="text" name="FuWuJiang3" value="@Model.FuWuJiang3" class="form-control" placeholder="请输入服务奖">
-                                </div>
-                                <span></span>
-                            </div>
-                            <hr />*@
-                        @*<div class="form-group">
-                                <label class="col-md-2 control-label"><span style="color:red">*</span>互转倍数：</label>
-                                <div class="col-md-4">
-                                    <input type="text" name="MultipleHuZ" value="@Model.MultipleHuZ" class="form-control" placeholder="请输入互转倍数" datatype="*">
-                                </div>
-                                <span></span>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-2 control-label"><span style="color:red">*</span>最小互转金额：</label>
-                                <div class="col-md-4">
-                                    <input type="text" name="MinAmountHuZ" value="@Model.MinAmountHuZ" class="form-control" placeholder="请输入最小互转金额" datatype="*">
-                                </div>
-                                <span></span>
-                            </div>*@
-                        <div class="form-group">
-                            <label class="col-md-2 control-label"><span style="color:red">*</span>分红奖比例(%)：</label>
-                            <div class="col-md-4">
-                                <input type="text" name="FenHongBi" value="@Model.FenHongBi" class="form-control" placeholder="请输入分红奖比例" datatype="*">
-                            </div>
-                            <span></span>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-2 control-label"><span style="color:red">*</span>突出贡献职称推广高级会员个数：</label>
-                            <div class="col-md-4">
-                                <input type="text" name="ReCount" value="@Model.ReCount" class="form-control" placeholder="请输入突出贡献职称推广高级会员个数" datatype="*">
-                            </div>
-                            <span></span>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-2 control-label"><span style="color:red">*</span>突出贡献比例(%)：</label>
-                            <div class="col-md-4">
-                                <input type="text" name="TuChuBiLi" value="@Model.TuChuBiLi" class="form-control" placeholder="请输入突出贡献比例(%)" datatype="*">
-                            </div>
-                            <span></span>
-                        </div>
+                            </text>
+                        }
+                    }
+                }
+            </div>
+            <span></span>
+        </div>
 
-                        <div class="form-group">
-                            <label class="col-md-2 control-label"><span style="color:red">*</span>代理推荐奖比例(%)：</label>
-                            <div class="col-md-4">
-                                <input type="text" name="DaiLiTuiJian" value="@Model.DaiLiTuiJian" class="form-control" placeholder="请输入代理推荐奖比例(%)" datatype="*">
-                            </div>
-                            <span></span>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-2 control-label"><span style="color:red">*</span>代理金额：</label>
-                            <div class="col-md-4">
-                                <input type="text" name="DaiLiAmount" value="@Model.DaiLiAmount" class="form-control" placeholder="请输入代理金额" datatype="*">
-                            </div>
-                            <span></span>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-2 control-label"><span style="color:red">*</span>代理津贴：</label>
-                            <div class="col-md-4">
-                                <input type="text" name="DaiLiJinTie" value="@Model.DaiLiJinTie" class="form-control" placeholder="请输入代理津贴(%)" datatype="*">
-                            </div>
-                            <span></span>
-                        </div>
 
-                        <div class="form-group">
-                            <label class="col-md-2 control-label"><span style="color:red">*</span>拼团专区id：</label>
-                            <div class="col-md-4">
-                                <input type="text" name="Scores" value="@Model.Scores" class="form-control" placeholder="请输入拼团专区id" datatype="*">
-                            </div>
-                            <span></span>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-2 control-label"><span style="color:red">*</span>提现倍数：</label>
-                            <div class="col-md-4">
-                                <input type="text" name="Multiple" value="@Model.Multiple" class="form-control" placeholder="请输入提现倍数" datatype="*">
-                            </div>
-                            <span></span>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-2 control-label"><span style="color:red">*</span>最小提现金额：</label>
-                            <div class="col-md-4">
-                                <input type="text" name="MinAmount" value="@Model.MinAmount" class="form-control" placeholder="请输入最小提现金额" datatype="*">
-                            </div>
-                            <span></span>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-2 control-label"><span style="color:red">*</span>提现手续费：</label>
-                            <div class="col-md-4">
-                                <input type="text" name="DrawPoundage" value="@Model.DrawPoundage" class="form-control" placeholder="请输入提现手续费" datatype="*">
-                            </div>
-                            <span></span>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-2 control-label"><span style="color:red">*</span>选择提现时间(1234560)：</label>
-                            <div class="col-md-4">
+        <div class="form-group">
+            <label class="col-md-2 control-label">上传微信二维码：</label>
+            <div class="col-md-4">
+                <input type="hidden" id="img" name="img" value="@Model.img" />
+                <div id="GoodsImage"></div>
+                @{
+                    if (Model.img != null)
+                    {
+                        foreach (var item in Model.img.TrimEnd('&').Split('&'))
+                        {
+                            <text>
+                                <div class="col-md-4 responsive-1024">
+                                    <div id="preview-pane">
+                                        <div class="preview-container">
+                                            <img width="110" height="110" src="@item.ToString()" class="jcrop-preview" alt="Preview">
+                                        </div>
+                                    </div>
+                                </div>
+                            </text>
+                        }
+                    }
+                }
+            </div>
+            <span></span>
+        </div>*@
+                    @*<div class="form-group">
+            <label class="col-md-2 control-label"><span style="color:red">*</span>支付宝名称：</label>
+            <div class="col-md-4">
+                <input type="text" name="ZhiFuBName" value="@Model.ZhiFuBName" class="form-control" placeholder="请输入支付宝名称" datatype="*">
+            </div>
+            <span></span>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label"><span style="color:red">*</span>支付宝账户：</label>
+            <div class="col-md-4">
+                <input type="text" name="ZhiFuB" value="@Model.ZhiFuB" class="form-control" placeholder="请输入支付宝账户" datatype="*">
+            </div>
+            <span></span>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label"><span style="color:red">*</span>银行账户：</label>
+            <div class="col-md-4">
+                <input type="text" name="YinHang" value="@Model.YinHang" class="form-control" placeholder="请输入银行账户" datatype="*">
+            </div>
+            <span></span>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label"><span style="color:red">*</span>银行名称：</label>
+            <div class="col-md-4">
+                <input type="text" name="YinHangName" value="@Model.YinHangName" class="form-control" placeholder="请输入银行名称" datatype="*">
+            </div>
+            <span></span>
+        </div>*@
+                    @*<div class="form-group">
+            <label class="col-md-2 control-label"><span style="color:red">*</span>分享消费奖1代(元)：</label>
+            <div class="col-md-4">
+                <input type="text" name="FenXiang1" value="@Model.FenXiang1" class="form-control" placeholder="请输入分享消费奖" datatype="*">
+            </div>
+            <span></span>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label"><span style="color:red">*</span>分享消费奖2代(元)：</label>
+            <div class="col-md-4">
+                <input type="text" name="FenXiang2" value="@Model.FenXiang2" class="form-control" placeholder="请输入分享消费奖" datatype="*">
+            </div>
+            <span></span>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label"><span style="color:red">*</span>辅导奖(%)：</label>
+            <div class="col-md-4">
+                <input type="text" name="FuDao" value="@Model.FuDao" class="form-control" placeholder="请输入辅导奖" datatype="*">
+            </div>
+            <span></span>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label"><span style="color:red">*</span>每日返利：</label>
+            <div class="col-md-4">
+                <input type="text" name="MeiRiFanL" value="@Model.MeiRiFanL" class="form-control" placeholder="请输入每日返利" datatype="*">
+            </div>
+            <span></span>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label"><span style="color:red">*</span>推广购物：</label>
+            <div class="col-md-4">
+                <input type="text" name="GouWuFanL" value="@Model.GouWuFanL" class="form-control" placeholder="请输入推广购物" datatype="*">
+            </div>
+            <span></span>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label"><span style="color:red">*</span>领导奖1代：</label>
+            <div class="col-md-4">
+                <input type="text" name="LingDao1" value="@Model.LingDao1" class="form-control" placeholder="请输入领导奖1代" datatype="*">
+            </div>
+            <span></span>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label"><span style="color:red">*</span>领导奖2代：</label>
+            <div class="col-md-4">
+                <input type="text" name="LingDao2" value="@Model.LingDao2" class="form-control" placeholder="请输入领导奖2代" datatype="*">
+            </div>
+            <span></span>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label"><span style="color:red">*</span>领导奖3代：</label>
+            <div class="col-md-4">
+                <input type="text" name="LingDao3" value="@Model.LingDao3" class="form-control" placeholder="请输入领导奖3代" datatype="*">
+            </div>
+            <span></span>
+        </div>
 
-                                <input type="text" name="DrawName" value="@Model.DrawName" class="form-control" placeholder="请输入选择提现时间" datatype="*">
+        <div class="form-group">
+            <label class="col-md-2 control-label"><span style="color:red">*</span>重消：</label>
+            <div class="col-md-4">
+                <input type="text" name="ChongXiao" value="@Model.ChongXiao" class="form-control" placeholder="请输入重消" datatype="*">
+            </div>
+            <span></span>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label"><span style="color:red">*</span>报单补助--直营店(%)：</label>
+            <div class="col-md-4">
+                <input type="text" name="ZhiYingD" value="@Model.ZhiYingD" class="form-control" placeholder="请输入直营店" datatype="*">
+            </div>
+            <span></span>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label"><span style="color:red">*</span>报单补助--专卖店(%)：</label>
+            <div class="col-md-4">
+                <input type="text" name="ZhuanMaiD" value="@Model.ZhuanMaiD" class="form-control" placeholder="请输入专卖店" datatype="*">
+            </div>
+            <span></span>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label"><span style="color:red">*</span>转换倍数：</label>
+            <div class="col-md-4">
+                <input type="text" name="RecAwardRate2" value="@Model.RecAwardRate2" class="form-control" placeholder="请输入转换倍数" datatype="*">
+            </div>
+            <span></span>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label"><span style="color:red">*</span>转换最小金额：</label>
+            <div class="col-md-4">
+                <input type="text" name="RecAwardRate3" value="@Model.RecAwardRate3" class="form-control" placeholder="请输入转换最小金额" datatype="*">
+            </div>
+            <span></span>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label"><span style="color:red">*</span>分红(%)：</label>
+            <div class="col-md-4">
+                <input type="text" name="DayMaxTotalAmountFlower" value="@Model.DayMaxTotalAmountFlower" class="form-control" placeholder="请输入分红" datatype="*">
+            </div>
+            <span></span>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label"><span style="color:red">*</span>平级奖层数：</label>
+            <div class="col-md-4">
+                <input type="text" name="RecAwardMaxRate34" value="@Model.RecAwardMaxRate34" class="form-control" placeholder="请输入平级奖" datatype="*">
+            </div>
+            <span></span>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label"><span style="color:red">*</span>激活扣报单积分(%)：</label>
+            <div class="col-md-4">
+                <input type="text" name="ManagerAwardRate" value="@Model.ManagerAwardRate" class="form-control" placeholder="请输入激活扣报单积分" datatype="*">
+            </div>
+            <span></span>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label"><span style="color:red">*</span>激活扣收益(%)：</label>
+            <div class="col-md-4">
+                <input type="text" name="StockPrice" value="@Model.StockPrice" class="form-control" placeholder="请输入激活扣收益">
+            </div>
+            <span></span>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label"><span style="color:red">*</span>服务奖1代(%)：</label>
+            <div class="col-md-4">
+                <input type="text" name="FuWuJiang1" value="@Model.FuWuJiang1" class="form-control" placeholder="请输入服务奖">
+            </div>
+            <span></span>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label"><span style="color:red">*</span>服务奖2代(%)：</label>
+            <div class="col-md-4">
+                <input type="text" name="FuWuJiang2" value="@Model.FuWuJiang2" class="form-control" placeholder="请输入服务奖">
+            </div>
+            <span></span>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label"><span style="color:red">*</span>服务奖3代(%)：</label>
+            <div class="col-md-4">
+                <input type="text" name="FuWuJiang3" value="@Model.FuWuJiang3" class="form-control" placeholder="请输入服务奖">
+            </div>
+            <span></span>
+        </div>
+        <hr />*@
+                    @*<div class="form-group">
+            <label class="col-md-2 control-label"><span style="color:red">*</span>互转倍数：</label>
+            <div class="col-md-4">
+                <input type="text" name="MultipleHuZ" value="@Model.MultipleHuZ" class="form-control" placeholder="请输入互转倍数" datatype="*">
+            </div>
+            <span></span>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label"><span style="color:red">*</span>最小互转金额：</label>
+            <div class="col-md-4">
+                <input type="text" name="MinAmountHuZ" value="@Model.MinAmountHuZ" class="form-control" placeholder="请输入最小互转金额" datatype="*">
+            </div>
+            <span></span>
+        </div>*@
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><span style="color:red">*</span>分红奖比例(%)：</label>
+                        <div class="col-md-4">
+                            <input type="text" name="FenHongBi" value="@Model.FenHongBi" class="form-control" placeholder="请输入分红奖比例" datatype="*">
+                        </div>
+                        <span></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><span style="color:red">*</span>突出贡献职称推广高级会员个数：</label>
+                        <div class="col-md-4">
+                            <input type="text" name="ReCount" value="@Model.ReCount" class="form-control" placeholder="请输入突出贡献职称推广高级会员个数" datatype="*">
+                        </div>
+                        <span></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><span style="color:red">*</span>突出贡献比例(%)：</label>
+                        <div class="col-md-4">
+                            <input type="text" name="TuChuBiLi" value="@Model.TuChuBiLi" class="form-control" placeholder="请输入突出贡献比例(%)" datatype="*">
+                        </div>
+                        <span></span>
+                    </div>
 
-                            </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><span style="color:red">*</span>代理推荐奖比例(%)：</label>
+                        <div class="col-md-4">
+                            <input type="text" name="DaiLiTuiJian" value="@Model.DaiLiTuiJian" class="form-control" placeholder="请输入代理推荐奖比例(%)" datatype="*">
                         </div>
-                        <div class="form-group">
-                            <label class="col-md-2 control-label"><span style="color:red">*</span>税金比例：</label>
-                            <div class="col-md-4">
-                                <input type="text" name="Poundage" value="@Model.Poundage" class="form-control" placeholder="请输入税金" datatype="*">
-                            </div>
-                            <span></span>
+                        <span></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><span style="color:red">*</span>代理金额：</label>
+                        <div class="col-md-4">
+                            <input type="text" name="DaiLiAmount" value="@Model.DaiLiAmount" class="form-control" placeholder="请输入代理金额" datatype="*">
                         </div>
-                        <div class="form-group">
-                            <label class="col-md-2 control-label"><span style="color:red">*</span>短信开关：</label>
-                            <div class="col-md-4">
+                        <span></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><span style="color:red">*</span>代理津贴：</label>
+                        <div class="col-md-4">
+                            <input type="text" name="DaiLiJinTie" value="@Model.DaiLiJinTie" class="form-control" placeholder="请输入代理津贴(%)" datatype="*">
+                        </div>
+                        <span></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><span style="color:red">*</span>拼团专区id：</label>
+                        <div class="col-md-4">
+                            <input type="text" name="Scores" value="@Model.Scores" class="form-control" placeholder="请输入拼团专区id" datatype="*">
+                        </div>
+                        <span></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><span style="color:red">*</span>提现倍数：</label>
+                        <div class="col-md-4">
+                            <input type="text" name="Multiple" value="@Model.Multiple" class="form-control" placeholder="请输入提现倍数" datatype="*">
+                        </div>
+                        <span></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><span style="color:red">*</span>最小提现金额：</label>
+                        <div class="col-md-4">
+                            <input type="text" name="MinAmount" value="@Model.MinAmount" class="form-control" placeholder="请输入最小提现金额" datatype="*">
+                        </div>
+                        <span></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><span style="color:red">*</span>提现手续费：</label>
+                        <div class="col-md-4">
+                            <input type="text" name="DrawPoundage" value="@Model.DrawPoundage" class="form-control" placeholder="请输入提现手续费" datatype="*">
+                        </div>
+                        <span></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><span style="color:red">*</span>选择提现时间(1234560)：</label>
+                        <div class="col-md-4">
+
+                            <input type="text" name="DrawName" value="@Model.DrawName" class="form-control" placeholder="请输入选择提现时间" datatype="*">
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><span style="color:red">*</span>税金比例：</label>
+                        <div class="col-md-4">
+                            <input type="text" name="Poundage" value="@Model.Poundage" class="form-control" placeholder="请输入税金" datatype="*">
+                        </div>
+                        <span></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><span style="color:red">*</span>短信开关：</label>
+                        <div class="col-md-4">
+                            <label class="mt-radio">
+                                <input type="radio" name="IsJiHuo" checked="checked" value="true" @(Model.IsJiHuo == true ? "checked" : "")>  开
+                                <span></span>
+                            </label>
+                            <label class="mt-radio">
+                                <input type="radio" name="IsJiHuo" value="false" @(Model.IsJiHuo == false ? "checked" : "")> 关
+                                <span></span>
+                            </label>
+                        </div>
+                        <span></span>
+                    </div>
+                    @*<div class="form-group" hidden>
+            <label class="col-md-2 control-label"><span style="color:red">*</span>收益是否秒结：</label>
+            <div class="col-md-4">
+                <label class="mt-radio">
+                    <input type="radio" name="IsMiaoJie" checked="checked" value="true" @(Model.IsMiaoJie == true ? "checked" : "")>  是
+                    <span></span>
+                </label>
+                <label class="mt-radio">
+                    <input type="radio" name="IsMiaoJie" value="false" @(Model.IsMiaoJie == false ? "checked" : "")> 否
+                    <span></span>
+                </label>
+            </div>
+            <span></span>
+        </div>*@
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><span style="color:red">*</span>系统开关：</label>
+                        <div class="col-md-4">
+                            <div class="mt-radio-inline">
                                 <label class="mt-radio">
-                                    <input type="radio" name="IsJiHuo" checked="checked" value="true" @(Model.IsJiHuo == true ? "checked" : "")>  开
+                                    <input type="radio" name="webstatus" checked="checked" value="开启" @(Model.webstatus == "开启" ? "checked" : "")> 开启
                                     <span></span>
                                 </label>
                                 <label class="mt-radio">
-                                    <input type="radio" name="IsJiHuo" value="false" @(Model.IsJiHuo == false ? "checked" : "")> 关
+                                    <input type="radio" name="webstatus" value="维护" @(Model.webstatus == "维护" ? "checked" : "")> 维护
+                                    <span></span>
+                                </label>
+                                <label class="mt-radio">
+                                    <input type="radio" name="webstatus" value="关闭" @(Model.webstatus == "关闭" ? "checked" : "")> 关闭
                                     <span></span>
                                 </label>
                             </div>
-                            <span></span>
                         </div>
-                        @*<div class="form-group" hidden>
-                                <label class="col-md-2 control-label"><span style="color:red">*</span>收益是否秒结：</label>
-                                <div class="col-md-4">
-                                    <label class="mt-radio">
-                                        <input type="radio" name="IsMiaoJie" checked="checked" value="true" @(Model.IsMiaoJie == true ? "checked" : "")>  是
-                                        <span></span>
-                                    </label>
-                                    <label class="mt-radio">
-                                        <input type="radio" name="IsMiaoJie" value="false" @(Model.IsMiaoJie == false ? "checked" : "")> 否
-                                        <span></span>
-                                    </label>
-                                </div>
-                                <span></span>
-                            </div>*@
-                        <div class="form-group">
-                            <label class="col-md-2 control-label"><span style="color:red">*</span>系统开关：</label>
-                            <div class="col-md-4">
-                                <div class="mt-radio-inline">
-                                    <label class="mt-radio">
-                                        <input type="radio" name="webstatus" checked="checked" value="开启" @(Model.webstatus == "开启" ? "checked" : "")> 开启
-                                        <span></span>
-                                    </label>
-                                    <label class="mt-radio">
-                                        <input type="radio" name="webstatus" value="维护" @(Model.webstatus == "维护" ? "checked" : "")> 维护
-                                        <span></span>
-                                    </label>
-                                    <label class="mt-radio">
-                                        <input type="radio" name="webstatus" value="关闭" @(Model.webstatus == "关闭" ? "checked" : "")> 关闭
-                                        <span></span>
-                                    </label>
-                                </div>
-                            </div>
-                            <span></span>
+                        <span></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><span style="color:red">*</span>维护/关闭提示：</label>
+                        <div class="col-md-6">
+                            <textarea id="container" name="webclosereason" placeholder="请输入维护/关闭提示">@Model.webclosereason</textarea>
                         </div>
-                        <div class="form-group">
-                            <label class="col-md-2 control-label"><span style="color:red">*</span>维护/关闭提示：</label>
-                            <div class="col-md-6">
-                                <textarea id="container" name="webclosereason" placeholder="请输入维护/关闭提示">@Model.webclosereason</textarea>
-                            </div>
-                            <span></span>
-                        </div>
-                        <div class="form-actions">
-                            <div class="row">
-                                <div class="col-md-offset-3 col-md-9">
-                                    <button type="submit" id="SubSave" class="btn green"><i class="fa fa-check"></i><span>保 存</span></button>
-                                    <button type="button" class="btn default" onclick="window.history.back()"><i class="fa fa-mail-reply"></i>返回</button>
-                                </div>
+                        <span></span>
+                    </div>
+                    <div class="form-actions">
+                        <div class="row">
+                            <div class="col-md-offset-3 col-md-9">
+                                <button type="submit" id="SubSave" class="btn green"><i class="fa fa-check"></i><span>保 存</span></button>
+                                <button type="button" class="btn default" onclick="window.history.back()"><i class="fa fa-mail-reply"></i>返回</button>
                             </div>
                         </div>
                     </div>
+                </div>
                 }
             </div>
         </div>

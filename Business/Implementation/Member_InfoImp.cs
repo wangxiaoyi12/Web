@@ -742,7 +742,7 @@ namespace Business.Implementation
                 model.BankCode = entity.BankCode;
                 model.BankName = entity.BankName;
                 model.OpenBank = entity.OpenBank;
-
+              
 
                 model.QQ = entity.QQ;
                 model.PostAddress = entity.PostAddress;
@@ -967,6 +967,13 @@ namespace Business.Implementation
 
                 if (DB.Member_Info.Update(model))
                 {
+                    var rec = DB.Member_Info.Where(a => a.RecommendId == model.MemberId &&  a.MemberId!=model.MemberId).ToList();
+                    foreach (var item in rec)
+                    {
+                        var recommendmodel = DB.Member_Info.FindEntity(item.MemberId);
+                        recommendmodel.RecommendName = model.NickName;
+                        DB.Member_Info.Update(recommendmodel);
+                    }
                     json.Status = "y";
                     json.Msg = "修改成功";
                     //添加操作日志

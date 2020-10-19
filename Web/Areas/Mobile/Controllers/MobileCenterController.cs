@@ -84,7 +84,7 @@ namespace Web.Areas.Mobile.Controllers
             }
             if (Request.Files.Count <= 0) return Json(json);
             var imgFile = Request.Files["file"];
-             //创建图片新的名称
+            //创建图片新的名称
             var nameImg = DateTime.Now.ToString("yyyyMMddHHmmssfff");
             //获得上传图片的路径
             var strPath = imgFile.FileName;
@@ -243,27 +243,34 @@ namespace Web.Areas.Mobile.Controllers
                 if (DB.XmlConfig.XmlSite.IsJiHuo)
                 {
                     var code = Session["smscode"] as string;
-                if (string.IsNullOrEmpty(code))
-                    throw new Exception("验证码过期");
-                if (code != entity.OpenBank)
-                    throw new Exception("验证码不正确");
+                    if (string.IsNullOrEmpty(code))
+                        throw new Exception("验证码过期");
+                    if (code != entity.OpenBank)
+                        throw new Exception("验证码不正确");
 
                 }
-
-                if(DB.Member_Info.Any(a=>a.Mobile==entity.Mobile && a.MemberId != entity.MemberId))
+                Member_Info model = User_Shop.GetMember_Info();
+                if (DB.Member_Info.Any(a => a.Mobile == entity.Mobile && a.MemberId != model.MemberId))
                 {
                     throw new Exception("手机号已存在");
 
                 }
-                Member_Info model = User_Shop.GetMember_Info();
+
 
                 //完善资料
-              
+
                 model.Mobile = entity.Mobile;
                 if (model.IsDL != "是")
                 {
                     model.NickName = entity.NickName;
 
+                    var rec = DB.Member_Info.Where(a => a.RecommendId == model.MemberId && a.MemberId!=model.MemberId).ToList();
+                    foreach (var item in rec)
+                    {
+                        var recommendmodel = DB.Member_Info.FindEntity(item.MemberId);
+                        recommendmodel.RecommendName = model.NickName;
+                        DB.Member_Info.Update(recommendmodel);
+                    }
 
                     model.IdCode = entity.IdCode;
                     model.IsDL = "是";
@@ -561,7 +568,7 @@ namespace Web.Areas.Mobile.Controllers
         }
         public ActionResult BonusList(int skipCount = 0)
         {
-            var query = DB.Fin_Info.Where(q => q.MemberId == CurrentUserID );
+            var query = DB.Fin_Info.Where(q => q.MemberId == CurrentUserID);
             //分页
             query = query.OrderByDescending(q => q.CreateTime);
 
@@ -657,8 +664,8 @@ namespace Web.Areas.Mobile.Controllers
                     ToMemberCode = ToMemberCode
 
                 };
-                JsonHelp json= DB.Fin_Transfer.Save(Pwd2, entity);
-                if(!json.IsSuccess)
+                JsonHelp json = DB.Fin_Transfer.Save(Pwd2, entity);
+                if (!json.IsSuccess)
                 {
                     return Error(json.Msg);
                 }
@@ -666,7 +673,7 @@ namespace Web.Areas.Mobile.Controllers
                 {
                     return Success("操作成功");
                 }
-              
+
             }
             catch (Exception ex)
             {

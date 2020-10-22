@@ -9,6 +9,10 @@
     string keywords = ReqHelper.GetString("keywords");
     //2.分类
     int? classid = ReqHelper.GetInt("classid");
+    if(classid==0)
+    {
+        classid = null;
+    }
     //商家ID
     int? ShopID = ReqHelper.GetInt("ShopID");
     ShopProductCategory classModel = classid == null ? null : DB.ShopProductCategory.FindEntity(classid);

@@ -36,10 +36,28 @@ namespace Web.Areas.Mobile.Controllers
             var query = DB.ShopProduct.Where(a=>a.IsNew==false);
             if (classid != null)
             {
-                ShopProductCategory cate = DB.ShopProductCategory.FindEntity(classid.Value);
-                List<int> childID = DB.ShopProductCategory.GetChildIDList(cate);
-                childID.Add(classid.Value);
-                query = query.Where(q => q.CategoryID != null && childID.Contains(q.CategoryID.Value));
+                if (classid != 0)
+                {
+                    ShopProductCategory cate = DB.ShopProductCategory.FindEntity(classid.Value);
+                    List<int> childID = DB.ShopProductCategory.GetChildIDList(cate);
+                    childID.Add(classid.Value);
+                    query = query.Where(q => q.CategoryID != null && childID.Contains(q.CategoryID.Value));
+                }
+                else
+                {
+                    ShopProductCategory cate = DB.ShopProductCategory.FindEntity(DB.XmlConfig.XmlSite.Scores);
+                    List<int> childID = DB.ShopProductCategory.GetChildIDList(cate);
+                    childID.Add(Convert.ToInt32( DB.XmlConfig.XmlSite.Scores));
+                    query = query.Where(q => q.CategoryID != null && !childID.Contains(q.CategoryID.Value));
+                }
+            }
+            else
+            {
+                    ShopProductCategory cate = DB.ShopProductCategory.FindEntity(DB.XmlConfig.XmlSite.Scores);
+                    List<int> childID = DB.ShopProductCategory.GetChildIDList(cate);
+                    childID.Add(Convert.ToInt32(DB.XmlConfig.XmlSite.Scores));
+                    query = query.Where(q => q.CategoryID != null && !childID.Contains(q.CategoryID.Value));
+                
             }
             if (brandid != null)
                 query = query.Where(q => q.BrandID == brandid);

@@ -946,6 +946,7 @@ namespace Business.Implementation
                         DB.Fin_LiuShui.Insert(_liushui);
                     }
                     model.IsLock = entity.IsLock;
+                    model.Mobile = entity.Mobile;
                     model.Commission += AddCommission;
                     model.CommissionSum += AddCommissionSum;
                     model.Coins += AddCoins;

@@ -109,7 +109,7 @@
                                     <span></span>
                                 </div>
                                 @*@if (ViewBag.code == "admin")
-                                    {*@
+        {*@
                                 <div class="form-group">
                                     <label class="col-md-2 control-label"><span style="color:red">*</span>商品类别：</label>
                                     <div class="col-md-2">
@@ -137,78 +137,78 @@
                                         <select id="category2" name="CategoryID" onchange="changeC2()" class="form-control select2" datatype="*">
                                             <option value="">请选择...</option>
                                             @*@{
-                                                    foreach (KeyValuePair<int, string> item in ViewBag.List)
-                                                    {
-                                                        if (Model.CategoryID == item.Key)
-                                                        {
-                                                            <option value="@item.Key" selected="selected">@item.Value</option>
-                                                        }
-                                                        else
-                                                        {
-                                                            <option value="@item.Key">@item.Value</option>
-                                                        }
-                                                    }
-                                                }*@
+                        foreach (KeyValuePair<int, string> item in ViewBag.List)
+                        {
+                            if (Model.CategoryID == item.Key)
+                            {
+                                <option value="@item.Key" selected="selected">@item.Value</option>
+                            }
+                            else
+                            {
+                                <option value="@item.Key">@item.Value</option>
+                            }
+                        }
+                    }*@
                                         </select>
                                     </div>
                                     <span></span>
                                 </div>
                                 @*}
-                                    else
-                                    {
-                                        <div class="form-group">
-                                            <label class="col-md-2 control-label"><span style="color:red">*</span>商品类别：</label>
-                                            <div class="col-md-2">
-                                                <select id="category" name="CategoryID1" onchange="changeC1()" class="form-control select2" datatype="*">
-                                                    <option value="">请选择...</option>
-                                                    @{
-                                                        foreach (KeyValuePair<int, string> item in ViewBag.List8)
-                                                        {
-                                                            if (ViewBag.C1 == item.Key)
-                                                            {
-                                                                <option value="@item.Key" selected="selected">@item.Value</option>
-                                                            }
-                                                            else
-                                                            {
-                                                                <option value="@item.Key">@item.Value</option>
-                                                            }
-                                                        }
-                                                    }
-                                                </select>
+        else
+        {
+            <div class="form-group">
+                <label class="col-md-2 control-label"><span style="color:red">*</span>商品类别：</label>
+                <div class="col-md-2">
+                    <select id="category" name="CategoryID1" onchange="changeC1()" class="form-control select2" datatype="*">
+                        <option value="">请选择...</option>
+                        @{
+                            foreach (KeyValuePair<int, string> item in ViewBag.List8)
+                            {
+                                if (ViewBag.C1 == item.Key)
+                                {
+                                    <option value="@item.Key" selected="selected">@item.Value</option>
+                                }
+                                else
+                                {
+                                    <option value="@item.Key">@item.Value</option>
+                                }
+                            }
+                        }
+                    </select>
 
 
-                                            </div>
+                </div>
 
-                                            <div class="col-md-2">
-                                                <select id="category2" name="CategoryID" class="form-control select2" datatype="*">
-                                                    <option value="">请选择...</option>
-                                                </select>
-                                            </div>
-                                            <span></span>
-                                        </div>
-                                                        }*@
+                <div class="col-md-2">
+                    <select id="category2" name="CategoryID" class="form-control select2" datatype="*">
+                        <option value="">请选择...</option>
+                    </select>
+                </div>
+                <span></span>
+            </div>
+                            }*@
                                 @*<div class="form-group">
-                                        <label class="col-md-2 control-label"><span style="color:red"></span>所属品牌：</label>
-                                        <div class="col-md-4">
-                                            <select name="BrandID" class="form-control select2">
-                                                <option value="">请选择...</option>
-                                                @{
-                                                    foreach (KeyValuePair<int, string> item in ViewBag.Brand)
-                                                    {
-                                                        if (Model.BrandID == item.Key)
-                                                        {
-                                                            <option value="@item.Key" selected="selected">@item.Value</option>
-                                                        }
-                                                        else
-                                                        {
-                                                            <option value="@item.Key">@item.Value</option>
-                                                        }
-                                                    }
-                                                }
-                                            </select>
-                                        </div>
-                                        <span></span>
-                                    </div>*@
+            <label class="col-md-2 control-label"><span style="color:red"></span>所属品牌：</label>
+            <div class="col-md-4">
+                <select name="BrandID" class="form-control select2">
+                    <option value="">请选择...</option>
+                    @{
+                        foreach (KeyValuePair<int, string> item in ViewBag.Brand)
+                        {
+                            if (Model.BrandID == item.Key)
+                            {
+                                <option value="@item.Key" selected="selected">@item.Value</option>
+                            }
+                            else
+                            {
+                                <option value="@item.Key">@item.Value</option>
+                            }
+                        }
+                    }
+                </select>
+            </div>
+            <span></span>
+        </div>*@
 
                                 <div class="form-group ">
                                     <label class="col-md-2 control-label"><span style="color:red"></span>运费：</label>
@@ -230,6 +230,13 @@
                                     <label class="col-md-2 control-label"><span style="color:red"></span>参团比例('|'分割)：</label>
                                     <div class="col-md-4">
                                         <input type="text" name="CanTuanBiLi" value="@Model.CanTuanBiLi" class="form-control" nullmsg="请输入参团比例">
+                                    </div>
+                                    <span></span>
+                                </div>
+                                <div class="form-group" id="JiRen">
+                                    <label class="col-md-2 control-label"><span style="color:red"></span>参团人数：</label>
+                                    <div class="col-md-4">
+                                        <input type="text" name="Activity" value="@Model.Activity" class="form-control" nullmsg="请输入参团人数">
                                     </div>
                                     <span></span>
                                 </div>
@@ -261,15 +268,15 @@
                                             </label>
                                         </div>
                                         @*<div class="col-md-3">
-                                                <label>
-                                                    <input type="checkbox" name="IsNew" value="True" @(Model.IsNew == true ? "checked=\"checked\")" : "")> 活动专区
-                                                </label>
-                                            </div>*@
+                    <label>
+                        <input type="checkbox" name="IsNew" value="True" @(Model.IsNew == true ? "checked=\"checked\")" : "")> 活动专区
+                    </label>
+                </div>*@
                                         @*<div class="col-md-3">
-                                                <label>
-                                                    <input type="checkbox" name="IsHot" value="True" @(Model.IsHot == true ? "checked=\"checked\")" : "")> 点赞商品
-                                                </label>
-                                            </div>*@
+                    <label>
+                        <input type="checkbox" name="IsHot" value="True" @(Model.IsHot == true ? "checked=\"checked\")" : "")> 点赞商品
+                    </label>
+                </div>*@
                                     </div>
                                     <span></span>
                                 </div>
@@ -580,9 +587,11 @@
             if (id ==@DB.XmlConfig.XmlSite.Scores) {
                 $("#CT").show();
                 $("#BiLi").show();
+                $("#JiRen").show();
             } else {
                 $("#CT").hide();
                 $("#BiLi").hide();
+                $("#JiRen").hide();
             }
           
             $.post("/Ajax/GetCategory2", { id: id }, function (d) {

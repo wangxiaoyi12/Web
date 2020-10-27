@@ -30,16 +30,23 @@ white-space: nowrap;
             <div class="bottom" style="margin-left:1%">
                 <span class="text-danger  pull-left">
                     @*<span>
-                        零售价: ￥@DB.ShopProduct.GetLingShouPrice(item)
+            零售价: ￥@DB.ShopProduct.GetLingShouPrice(item)
 
-                    </span><br />*@
+        </span><br />*@
                     <span>
-                       ￥@DB.ShopProduct.GetYouHuiPrice(item)
+                        ￥@DB.ShopProduct.GetYouHuiPrice(item)
 
                     </span>
-                   <span style="padding:.03rem .05rem;border: 1px solid rgb(216, 69, 22);font-weight:bold;font-size:12px;background:rgb(255, 201, 184)">@DB.ShopProduct.GetPeiHuoPrice(item) 积分</span>
+                    @if (item.CategoryID1 == DB.XmlConfig.XmlSite.Scores)
+                    {
+                        <span style="padding:.03rem .05rem;border: 1px solid rgb(216, 69, 22);font-weight:bold;font-size:12px;background:rgb(255, 201, 184)">@item.Activity</span>
+                    }
+                    else
+                    {
+                        <span style="padding:.03rem .05rem;border: 1px solid rgb(216, 69, 22);font-weight:bold;font-size:12px;background:rgb(255, 201, 184)">@DB.ShopProduct.GetPeiHuoPrice(item) 积分</span>
 
-               
+                    }
+
                 </span>
                 @*<span class="pull-right">
                         <span class="text-danger">@(item.Sales)</span>@("人已购买")

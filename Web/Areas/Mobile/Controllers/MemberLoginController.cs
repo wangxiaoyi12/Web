@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 
 using System.Linq;
+using System.SMSHelper;
 using System.Web;
 using System.Web.Mvc;
 using Wechat;
@@ -238,23 +239,23 @@ namespace Web.Areas.Mobile.Controllers
             {
                 LogOperate.Write("注册开始：" + CookieHelper.GetCookieValue("headimgurl"));
                 //判断手机验证码
-                //if (DB.XmlConfig.XmlSite.IsJiHuo)
-                //{
-                //    string code = Session["smscode"] as string;
-                //    if (string.IsNullOrEmpty(code))
-                //        throw new Exception("验证码过期");
-                //    if (code != ReqHelper.GetString("smscode"))
-                //        throw new Exception("验证码不正确");
-
-                //}
-
-                //if (DB.XmlConfig.XmlSite.IsJiHuo)
-                //{
-                var code = Tools.getCookie("gif");
+                if (DB.XmlConfig.XmlSite.IsJiHuo)
+                {
+                    string code = Session["smscode"] as string;
                 if (string.IsNullOrEmpty(code))
                     throw new Exception("验证码过期");
-                if (code != smscode)
+                if (code != ReqHelper.GetString("smscode"))
                     throw new Exception("验证码不正确");
+
+                }
+
+                //if (DB.XmlConfig.XmlSite.IsJiHuo)
+                //{
+                //var code = Tools.getCookie("gif");
+                //if (string.IsNullOrEmpty(code))
+                //    throw new Exception("验证码过期");
+                //if (code != smscode)
+                //    throw new Exception("验证码不正确");
 
                 //}
                 var DataBase = new Member_Info();
@@ -350,23 +351,32 @@ namespace Web.Areas.Mobile.Controllers
 
 
                 JsonHelp json = new JsonHelp() { Status = "y", Msg = "发送成功" };
+
+                if(DB.SysLogs.Count(a=>a.Description==mobile +"发送短信")>=3)
+                {
+                    return Error("今天的短信发送次数过多，请明日操作");
+                }
+
                 string code = new Random().Next(100000, 999999).ToString();
-                string msg = $"【物来惠商城】注册短信验证码为:{code}。请及时提交以完成注册。";
+                string content = $"注册短信验证码为:{code}。请及时操作。";
                 Session["smscode"] = code;
                 //    isSuccess = true;
 
-                //ZTSMS _sms = new ZTSMS("676767", "bjyz200506", "Bjyz200506", "【云享商城】");
-                //_sms.OnSuccess = (count, remain) =>
-                //{
-                //    Console.WriteLine("短信发送成功" + count);
-                //    //LogHelper.Info($"{smsType}，短信发送成功[{mobile}]，当前余额：{remain}");
-                //};
-                //_sms.OnError = (msg) =>
-                //{
-                //    Console.WriteLine($"短信发送失败[{mobile}]，原因：{msg}");
-                //    //LogHelper.Info($"{smsType}，短信发送失败[{mobile}]，原因：{msg}");
-                //};
-                //_sms.Send(mobile, content);
+                ZTSMS _sms = new ZTSMS("676767", "jnwz200915", "Jnwz200915", "【聚世堂商城】");
+                _sms.OnSuccess = (count, remain) =>
+                {
+                    Console.WriteLine("短信发送成功" + count);
+                    //LogHelper.Info($"{smsType}，短信发送成功[{mobile}]，当前余额：{remain}");
+                };
+                _sms.OnError = (msg) =>
+                {
+                    Console.WriteLine($"短信发送失败[{mobile}]，原因：{msg}");
+                    //LogHelper.Info($"{smsType}，短信发送失败[{mobile}]，原因：{msg}");
+                };
+                _sms.Send(mobile, content);
+
+                DB.SysLogs.setSysLogsData1("00", "短信注册", "Edit", mobile + "发送短信");
+
                 //暂定DB.Member_Info.SendSMS1(mobile, msg);
                 //return Json(json);
                 //ZgwjSmsHelper _sms = ZgwjSmsHelper.Create();
@@ -384,7 +394,7 @@ namespace Web.Areas.Mobile.Controllers
                 ////发送短信验证码
                 //_sms.Send(mobile, msg);
                 //if (isSuccess)
-                    return Success(code);
+                return Success(code);
                 //return Error("发送失败");
             }
             catch (Exception ex)

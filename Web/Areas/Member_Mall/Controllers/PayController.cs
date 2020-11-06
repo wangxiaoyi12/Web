@@ -132,14 +132,14 @@ namespace Web.Areas.Member_Mall.Controllers
                         order.State = ShopEnum.OrderState.Pay.GetHashCode();
                         DB.ShopOrder.Update(order);
                         var member = DB.Member_Info.FindEntity(order.MemberID);
-                        //DB.Jiang.GiveJiang(member, order);
+                        DB.Jiang.GiveJiang(DB.Member_Info.FindEntity(order.MemberID), order);
 
                     }
-                    Response.Write("<script language='JavaScript'>location.href='http://www.zhwlh.com/mobile/mobilecenter/bill';</script>");
+                    Response.Write("<script language='JavaScript'>location.href='http://www.jst1314.cn/mobile/mobilecenter/bill';</script>");
                 }
                 else
                 {
-                    Response.Write("<script language='JavaScript'>window.open('http://www.zhwlh.com/mobile/mobilecenter/bill');</script>");
+                    Response.Write("<script language='JavaScript'>window.open('http://www.jst1314.cn/mobile/mobilecenter/bill');</script>");
                 }
             }
             return View();
@@ -261,7 +261,7 @@ namespace Web.Areas.Member_Mall.Controllers
                     DB.ShopOrder.Update(order);
                     LogHelper.Error("改完");
                     var member = DB.Member_Info.FindEntity(order.MemberID);
-                    //DB.Jiang.GiveJiang(member, order);
+                    DB.Jiang.GiveJiang(DB.Member_Info.FindEntity(order.MemberID), order);
                     LogHelper.Error("结束");
 
                 }
@@ -276,7 +276,7 @@ namespace Web.Areas.Member_Mall.Controllers
                 Response.End();
 
             }
-            //Response.Write("<script language='JavaScript'>location.href='http://www.zhwlh.com/mobile/mobilecenter/bill';</script>");
+            //Response.Write("<script language='JavaScript'>location.href='http://www.jst1314.cn/mobile/mobilecenter/bill';</script>");
             return View();
 
 
@@ -340,10 +340,10 @@ namespace Web.Areas.Member_Mall.Controllers
 
                 AlipayTradeWapPayRequest request = new AlipayTradeWapPayRequest();
                 //设置支付完成同步回调地址
-                //request.SetReturnUrl("http://www.zhwlh.com/Member_Mall/Pay/Recevie?ordercode=" + orderModel.BillCode);
-                request.SetReturnUrl("http://www.zhwlh.com/mobile/mobilecenter/bill");
+                //request.SetReturnUrl("http://www.jst1314.cn/Member_Mall/Pay/Recevie?ordercode=" + orderModel.BillCode);
+                request.SetReturnUrl("http://www.jst1314.cn/mobile/mobilecenter/bill");
                 //设置支付完成异步通知接收地址
-                request.SetNotifyUrl("http://www.zhwlh.com/Member_Mall/Pay/Recevie");
+                request.SetNotifyUrl("http://www.jst1314.cn/Member_Mall/Pay/Recevie");
                 // 将业务model载入到request
                 request.SetBizModel(alipaymodel);
                 AlipayTradeWapPayResponse response = null;
@@ -423,9 +423,9 @@ namespace Web.Areas.Member_Mall.Controllers
 
                 AlipayTradeWapPayRequest request = new AlipayTradeWapPayRequest();
                 //设置支付完成同步回调地址
-                request.SetReturnUrl("http://www.zhwlh.com/member_finance/remit/index");
+                request.SetReturnUrl("http://www.jst1314.cn/member_finance/remit/index");
                 //设置支付完成异步通知接收地址
-                request.SetNotifyUrl("http://www.zhwlh.com/Member_Mall/Pay/RemitRecevie");
+                request.SetNotifyUrl("http://www.jst1314.cn/Member_Mall/Pay/RemitRecevie");
                 // 将业务model载入到request
                 request.SetBizModel(alipaymodel);
                 AlipayTradeWapPayResponse response = null;

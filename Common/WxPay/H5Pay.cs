@@ -19,12 +19,12 @@ namespace WxPayAPI
             data.SetValue("time_expire", DateTime.Now.AddMinutes(10).ToString("yyyyMMddHHmmss"));
             //data.SetValue("time_start", DateTime.Now.ToString("yyyyMMddHHmmss"));
             //data.SetValue("time_expire", DateTime.Now.AddMinutes(10).ToString("yyyyMMddHHmmss"));
-            data.SetValue("scene_info", "{'h5_info':{'type':'Wap','wap_url':'www.zhwlh.com','wap_name':'会员商城'}}");//场景信息   
+            data.SetValue("scene_info", "{'h5_info':{'type':'Wap','wap_url':'www.jst1314.cn','wap_name':'会员商城'}}");//场景信息   
             WxPayData result = WxPayApi.UnifiedOrder(data);//调用统一下单接口    
             string url = result.GetValue("mweb_url").ToString();//获得统一下单接口返回的链接   
             Log.Info(this.GetType().ToString(), "Get H5 pay url : " + url);
-            Log.Info(this.GetType().ToString(), url + "&redirect_url=http%3A%2F%2Fwww.zhwlh.com/mobile/mobilecenter/bill");
-            url = url + "&redirect_url=http%3A%2F%2Fwww.zhwlh.com/mobile/mobilecenter/bill";
+            Log.Info(this.GetType().ToString(), url + "&redirect_url=http%3A%2F%2Fwww.jst1314.cn/mobile/mobilecenter/bill");
+            url = url + "&redirect_url=http%3A%2F%2Fwww.jst1314.cn/mobile/mobilecenter/bill";
             return url;
         }
 

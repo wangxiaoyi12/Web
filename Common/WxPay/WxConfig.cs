@@ -19,13 +19,13 @@ namespace WxPayAPI.lib
         */
 
         public string GetAppID(){
-            return "wx2d985fa6a1b4d368";
+            return "wxc77de72e72db5554";
         }
         public string GetMchID(){
-            return "1529542711";
+            return "1603741832";
         }
         public string GetKey(){
-            return "700A810kTaau6o15AVqw2udwfoxI3r46";
+            return "700A810kTaau6o15AVqw2udwfoxI3r47";
         }
         public string GetAppSecret(){
             return "d694f97d7310f4088c790e9f1e4913c2";
@@ -52,7 +52,7 @@ namespace WxPayAPI.lib
         /* 支付结果通知回调url，用于商户接收支付结果
         */
         public string GetNotifyUrl(){
-            return "http://www.zhwlh.com/Member_Mall/Pay/WXRecevie";
+            return "http://www.jst1314.cn/Member_Mall/Pay/WXRecevie";
         }
 
         //=======【商户系统后台机器IP】===================================== 

@@ -391,7 +391,9 @@ namespace Web.Areas.Mobile.Controllers
 
                 JsonHelp json = new JsonHelp() { Status = "y", Msg = "发送成功" };
 
-                if(DB.SysLogs.Count(a=>a.Description==mobile +"发送短信")>=3)
+
+                var date = DateTime.Now.Date;
+                if(DB.SysLogs.Count(a=>a.Description==mobile +"发送短信" &&  a.CreateTime >= date) >=3)
                 {
                     return Error("今天的短信发送次数过多，请明日操作");
                 }

@@ -2,7 +2,7 @@
 @using Common
 
 @{
-    ViewBag.Title = "注册";
+    ViewBag.Title = "忘记密码";
     Layout = "~/Views/Shared/_LayoutPage0915.cshtml";
 
     var Article_Info = DB.Article_Info.FindEntity(3);
@@ -24,17 +24,14 @@
                 <i class="iconfont icon-yonghu"></i>
                 <input type="text" name="Code" id="Code" value="" placeholder="请输入手机号" required />
             </li>
+           
             <li>
-                <i class="iconfont icon-yonghu"></i>
-                <input type="text" name="NickName" id="NickName" value="" placeholder="请输入姓名" required />
+                <i class="iconfont icon-mima"></i>
+                <input type="password" name="LoginPwd" id="LoginPwd" value="" placeholder="新密码" required />
             </li>
             <li>
                 <i class="iconfont icon-mima"></i>
-                <input type="password" name="LoginPwd" id="LoginPwd" value="" placeholder="登录密码" required />
-            </li>
-            <li>
-                <i class="iconfont icon-mima"></i>
-                <input type="password" name="LoginPwdC" id="LoginPwdC" value="" placeholder="确认登录密码" required />
+                <input type="password" name="LoginPwdC" id="LoginPwdC" value="" placeholder="确认新密码" required />
             </li>
             <li>
                 <i class="iconfont icon-zhifumima"></i>
@@ -60,10 +57,10 @@
         </ul>
 
         <div class="protocol">
-            <input type="checkbox" id="read"><p>我已阅读并同意<span class="protocolBtn">注册协议</span></p>
+            <input type="checkbox" id="read"><p>我已阅读并同意<span class="protocolBtn">忘记密码协议</span></p>
         </div>
         <div class="btnbox">
-            <button id="zc" class="btn_org">注册</button>
+            <button id="zc" class="btn_org">保存</button>
         </div>
         <div class="loginTitle">
             <div></div>
@@ -84,7 +81,7 @@
 <script>
         $('.protocolBtn').click(function () {
             layer.open({
-                title: '注册协议'
+                title: '忘记密码协议'
                 , content:'@Html.Raw(Article_Info.Comment)'
             });
         })
@@ -129,11 +126,11 @@
             }
         });
     });
-    //注册按钮点击事件
+    //忘记密码按钮点击事件
     $('#zc').click(function () {
 
         if (!$("#read").is(":checked")) {
-            show('请阅读勾选注册协议！');
+            show('请阅读勾选忘记密码协议！');
             return false;
         }
         //验证处理
@@ -241,7 +238,7 @@
         //        show('正在提交...');
         //        $.post('/mobile/mobilelogin/save_one', data, function (data) {
         //            if (data.status == 1) {
-        //                show('注册成功');
+        //                show('忘记密码成功');
         //                show3();
         //            } else {
         //                show(data.msg);

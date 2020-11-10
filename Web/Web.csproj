@@ -2218,6 +2218,8 @@
     <Content Include="assets\mobile\images\huigou.png" />
     <Content Include="assets\mobile\images\huizhang.png" />
     <Content Include="assets\mobile\images\icon.png" />
+    <Content Include="assets\mobile\images\icon_wx.png" />
+    <Content Include="assets\mobile\images\icon_zfb.png" />
     <Content Include="assets\mobile\images\indexlogo.png" />
     <Content Include="assets\mobile\images\left.png" />
     <Content Include="assets\mobile\images\lianghe.png" />
@@ -2252,6 +2254,7 @@
     <Content Include="assets\mobile\images\Search.png" />
     <Content Include="assets\mobile\images\sou.png" />
     <Content Include="assets\mobile\images\tuiguang.png" />
+    <Content Include="assets\mobile\images\userList2-1.png" />
     <Content Include="assets\mobile\images\wxlogo.png" />
     <Content Include="assets\mobile\images\xi10.jpg" />
     <Content Include="assets\mobile\images\xi20.jpg" />
@@ -2928,6 +2931,7 @@
     <Content Include="Areas\Mobile\Views\MobileCenter\TransferList.cshtml" />
     <Content Include="Areas\Mobile\Views\SelfCate\AllIndex.cshtml" />
     <Content Include="Areas\Mobile\Views\Shared\_AllFooter.cshtml" />
+    <Content Include="Areas\Mobile\Views\MemberLogin\Pwd.cshtml" />
     <None Include="assets\scripts\jquery.validate-vsdoc.js" />
     <Content Include="assets\scripts\jquery.validate.js" />
     <Content Include="assets\scripts\jquery.validate.min.js" />

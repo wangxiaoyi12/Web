@@ -23,6 +23,15 @@ namespace Web.Areas.Mobile.Controllers
         public ActionResult Index()
         {
             ViewBag.webstatus = DB.XmlConfig.XmlSite.webstatus;
+            HttpCookie cookies = Request.Cookies["platform"];
+            //判断是否有cookie值，有的话就读取出来
+            if (cookies != null && cookies.HasKeys)
+            {
+                ViewBag.LogName = cookies["LogName"];
+                ViewBag.PassWord = cookies["PassWord"];
+                //tbxPwd.Attributes.Add("value", cookies["PassWord"]);
+                ViewBag.chkState = "on";
+            }
             //if (Url_Mobile.IsWechat())
             //{
             //    string openid = CookieHelper.GetCookieValue("openid");
@@ -47,10 +56,12 @@ namespace Web.Areas.Mobile.Controllers
         /// <summary>
         /// 登录验证
         /// </summary>
-        public JsonResult CheckUser(string UserName, string Password, string ValidateCode = null)
+        public JsonResult CheckUser(string UserName, string Password, string chkState, string ValidateCode = null)
         {
             try
             {
+
+                var oldpwd = Password;
                 Password = DESCrypt.Encrypt(Password);
                 Member_Info model = DB.Member_Info.FindEntity(q =>( q.Code == UserName || q.Mobile==UserName) && q.LoginPwd == Password);
                 if (model != null)
@@ -70,6 +81,19 @@ namespace Web.Areas.Mobile.Controllers
                     //}
                     //if (DB.XmlConfig.XmlSite.webstatus == "维护" || DB.XmlConfig.XmlSite.webstatus == "关闭")
                     //    throw new Exception("系统" + DB.XmlConfig.XmlSite.webstatus + "");
+                    if (chkState == "on")//记录cookie值
+                    {
+                        HttpCookie cookie = new HttpCookie("platform");
+                        cookie.Values.Add("PassWord", oldpwd);
+                        cookie.Values.Add("LogName", UserName);
+                        cookie.Expires = System.DateTime.Now.AddDays(7.0);
+                        Response.Cookies.Add(cookie);
+                    }
+                    else
+                    {
+                        if (Response.Cookies["platform"] != null)
+                            Response.Cookies["platform"].Expires = DateTime.Now;
+                    }
 
                     //保存信息到客户端
                     User_Shop.SetUser(model);
@@ -220,6 +244,21 @@ namespace Web.Areas.Mobile.Controllers
                 ViewBag.autoCode = id;
                 #endregion
                
+
+                return View();
+            }
+            catch (Exception ex)
+            {
+                return Content(ex.Message);
+            }
+        }
+        public ActionResult Pwd()
+        {
+            try
+            {
+
+              
+
 
                 return View();
             }

@@ -25,12 +25,22 @@
                     <ul class="loginList">
                         <li>
                             <i class="iconfont icon-yonghu"></i>
-                            <input type="text" name="UserName" id="UserName" value="" placeholder="请输入账号" />
+                            <input type="text" name="UserName" id="UserName" value="@ViewBag.LogName" placeholder="请输入账号" />
                         </li>
                         <li>
                             <i class="iconfont icon-mima"></i>
-                            <input type="password" name="Password" id="Password" value="" placeholder="请输入密码" />
+                            <input type="password" name="Password" id="Password" value="@ViewBag.PassWord" placeholder="请输入密码" />
                         </li>
+                      
+                            @if (ViewBag.chkState == "on")
+                            {
+                                <input type="checkbox" style="width:14px;margin-left: 10px;-webkit-appearance:checkbox" name="chkState" checked /><span style="color:black">记住账号密码</span>
+                            }
+                            else
+                            {
+                                <input type="checkbox" style="width:14px;margin-left: 10px;-webkit-appearance:checkbox" name="chkState" /><span style="color:black">记住账号密码</span>
+                            }
+                     
                     </ul>
                     <div class="btnbox">
                         <button class="btn_org" id="btnLogin">登录</button>
@@ -41,7 +51,7 @@
                         <div></div>
                     </div>
                     <div class="btnbox">
-                        <a href="/mobile/memberlogin/register" class="btn_gay">去注册</a>
+                        <a href="/mobile/memberlogin/register" class="btn_gay">去注册</a> &nbsp;&nbsp;&nbsp;
                     </div>
                 </div>
             </div>

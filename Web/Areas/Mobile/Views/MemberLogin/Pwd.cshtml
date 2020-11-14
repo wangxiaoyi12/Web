@@ -33,18 +33,7 @@
                 <i class="iconfont icon-mima"></i>
                 <input type="password" name="LoginPwdC" id="LoginPwdC" value="" placeholder="确认新密码" required />
             </li>
-            <li>
-                <i class="iconfont icon-zhifumima"></i>
-                <input type="password" name="Pwd2" id="Pwd2" value="" placeholder="支付密码" required />
-            </li>
-            <li>
-                <i class="iconfont icon-zhifumima"></i>
-                <input type="password" name="Pwd2C" id="Pwd2C" value="" placeholder="确认支付密码" required />
-            </li>
-            <li>
-                <i class="iconfont icon-yonghu"></i>
-                <input type="text" name="RecommendCode" id="RecommendCode" value="@ViewBag.autoCode" placeholder="请输入邀请码" required />
-            </li>
+      
             <li class="codeBox">
                 <i class="iconfont icon-yanzhengma"></i>
                 <input type="text" name="smscode" id="smscode" value="" placeholder="请输入验证码" />
@@ -56,9 +45,7 @@
             </li>
         </ul>
 
-        <div class="protocol">
-            <input type="checkbox" id="read"><p>我已阅读并同意<span class="protocolBtn">忘记密码协议</span></p>
-        </div>
+       
         <div class="btnbox">
             <button id="zc" class="btn_org">保存</button>
         </div>
@@ -107,7 +94,7 @@
         thisBtn.attr('disabled', true);
         var number = 60;
         //发送验证码
-        $.post('@Url.Action("SendSms")', { mobile: mobile }, function (data) {
+        $.post('@Url.Action("SendSms")', { mobile: mobile, Type: "密码"}, function (data) {
             if (data.status == 1) {
                 show('验证码发送成功');
                 var timer = setInterval(function () {
@@ -129,10 +116,10 @@
     //忘记密码按钮点击事件
     $('#zc').click(function () {
 
-        if (!$("#read").is(":checked")) {
-            show('请阅读勾选忘记密码协议！');
-            return false;
-        }
+        //if (!$("#read").is(":checked")) {
+        //    show('请阅读勾选忘记密码协议！');
+        //    return false;
+        //}
         //验证处理
         var Code = $('#Code');
         var code = Code.val();
@@ -141,13 +128,7 @@
             show('请填写正确手机号');
             return false;
         }
-        //真实姓名
-        var NickName = $('input[name="NickName"]');
-        if (NickName.val().length <= 0) {
-            //NickName.focus();
-            show('请输入姓名');
-            return false;
-        }
+       
 
 
         //密码
@@ -172,27 +153,7 @@
         }
 
 
-        //支付密码
-        var Pwd2 = $('input[name="Pwd2"]');
-        var pwd2 = Pwd2.val();
-        if (pwd2.length <= 0) {
-            //Pwd2.focus();
-            show('请输入登录支付密码');
-            return false;
-        }
-        // 确认支付密码
-        var Pwd2C = $('input[name="Pwd2C"]');
-        var pwd2c = Pwd2C.val();
-        if (pwd2c.length <= 0) {
-            //Pwd2C.focus();
-            show('请再次输入登录支付密码');
-            return false;
-        } else if (pwd2c != pwd2) {
-            //Pwd2C.focus();
-            show('两次输入支付密码不一致');
-            return false;
-        }
-
+   
         //手机号
         var Code = $('input[name="Code"]');
         if (Code.parents('.list-group-item').hasClass('hidden') == false) {
@@ -211,11 +172,11 @@
         //var data = form.serialize();
         show('正在提交...');
         $('#zc').hide();
-        $.post('@Url.Action("save_one")', { Code: $("#Code").val(), NickName: $("#NickName").val(), LoginPwd: $("#LoginPwd").val(), Pwd2: $("#Pwd2").val(), RecommendCode: $("#RecommendCode").val(), smscode: $("#smscode").val() }, function (data) {
+        $.post('@Url.Action("savepwd_one")', { Code: $("#Code").val(), LoginPwd: $("#LoginPwd").val(), smscode: $("#smscode").val() }, function (data) {
             if (data.status == 1) {
                 show('操作成功');
                 setTimeout(function () {
-                    location.href = "http://app.jst1314.cn";
+                    location.href = "/";
                 }, 2000);
 
             } else {

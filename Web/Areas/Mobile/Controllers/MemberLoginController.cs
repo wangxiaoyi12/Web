@@ -63,7 +63,7 @@ namespace Web.Areas.Mobile.Controllers
 
                 var oldpwd = Password;
                 Password = DESCrypt.Encrypt(Password);
-                Member_Info model = DB.Member_Info.FindEntity(q =>( q.Code == UserName || q.Mobile==UserName) && q.LoginPwd == Password);
+                Member_Info model = DB.Member_Info.FindEntity(q => (q.Code == UserName || q.Mobile == UserName) && q.LoginPwd == Password);
                 if (model != null)
                 {
                     if (model.IsLock == "是")
@@ -230,7 +230,7 @@ namespace Web.Areas.Mobile.Controllers
             {
 
                 //获取推荐人对象
-         
+
 
 
                 #region 自动生成Code  HY+N倍随机数字
@@ -243,7 +243,7 @@ namespace Web.Areas.Mobile.Controllers
                 //}
                 ViewBag.autoCode = id;
                 #endregion
-               
+
 
                 return View();
             }
@@ -257,7 +257,7 @@ namespace Web.Areas.Mobile.Controllers
             try
             {
 
-              
+
 
 
                 return View();
@@ -272,7 +272,7 @@ namespace Web.Areas.Mobile.Controllers
         /// </summary>
         /// <param name="target"></param>
         /// <returns></returns>
-        public ActionResult Save_One(string Code,string NickName,string LoginPwd,string Pwd2,string RecommendCode, string smscode)
+        public ActionResult Save_One(string Code, string NickName, string LoginPwd, string Pwd2, string RecommendCode, string smscode)
         {
             try
             {
@@ -281,10 +281,10 @@ namespace Web.Areas.Mobile.Controllers
                 if (DB.XmlConfig.XmlSite.IsJiHuo)
                 {
                     string code = Session["smscode"] as string;
-                if (string.IsNullOrEmpty(code))
-                    throw new Exception("验证码过期");
-                if (code != ReqHelper.GetString("smscode"))
-                    throw new Exception("验证码不正确");
+                    if (string.IsNullOrEmpty(code))
+                        throw new Exception("验证码过期");
+                    if (code != ReqHelper.GetString("smscode"))
+                        throw new Exception("验证码不正确");
 
                 }
 
@@ -341,7 +341,34 @@ namespace Web.Areas.Mobile.Controllers
                 return Error(ex);
             }
         }
+        public ActionResult savepwd_one(string Code, string LoginPwd, string smscode)
+        {
+            if (DB.XmlConfig.XmlSite.IsJiHuo)
+            {
+                string code = Session["smscode"] as string;
+                if (string.IsNullOrEmpty(code))
+                    throw new Exception("验证码过期");
+                if (code != ReqHelper.GetString("smscode"))
+                    throw new Exception("验证码不正确");
 
+            }
+
+            var m = DB.Member_Info.FindEntity(a => a.Mobile == Code);
+            if (m != null)
+            {
+
+
+                m.LoginPwd = LoginPwd.ToEncrypt();
+                DB.Member_Info.Update(m);
+                return Success("修改成功");
+
+            }
+            else
+            {
+                return Success("手机号不存在");
+            }
+            return Success("修改成功");
+        }
         /// <summary>
         /// 处理成功
         /// </summary>
@@ -382,7 +409,7 @@ namespace Web.Areas.Mobile.Controllers
         #endregion
 
         //发送短信验证码
-        public JsonResult SendSms(string mobile)
+        public JsonResult SendSms(string mobile,string Type)
         {
             try
             {
@@ -391,9 +418,16 @@ namespace Web.Areas.Mobile.Controllers
 
                 JsonHelp json = new JsonHelp() { Status = "y", Msg = "发送成功" };
 
+                if(Type=="密码")
+                {
+                    if(!DB.Member_Info.Any(a=>a.Mobile==mobile))
+                    {
+                        return Error("会员不存在，不可发送短信");
+                    }
+                }
 
                 var date = DateTime.Now.Date;
-                if(DB.SysLogs.Count(a=>a.Description==mobile +"发送短信" &&  a.CreateTime >= date) >=3)
+                if (DB.SysLogs.Count(a => a.Description == mobile + "发送短信" && a.CreateTime >= date) >= 3)
                 {
                     return Error("今天的短信发送次数过多，请明日操作");
                 }

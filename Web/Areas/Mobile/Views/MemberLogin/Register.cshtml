@@ -110,7 +110,7 @@
         thisBtn.attr('disabled', true);
         var number = 60;
         //发送验证码
-        $.post('@Url.Action("SendSms")', { mobile: mobile }, function (data) {
+        $.post('@Url.Action("SendSms")', { mobile: mobile,Type:"注册" }, function (data) {
             if (data.status == 1) {
                 show('验证码发送成功');
                 var timer = setInterval(function () {

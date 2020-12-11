@@ -95,6 +95,10 @@ namespace Business
                     List<ShopOrder> orderList = query.ToList();
                     foreach (var order in orderList)
                     {
+                        if (order.State != 1)
+                        {
+                            throw new Exception("订单不是待支付订单不可支付");
+                        }
                         Fin_LiuShui _liushui = new Fin_LiuShui();
                         //1.修改订单状态
                         order.PayState = ShopEnum.OrderPayState.Pay.GetHashCode();

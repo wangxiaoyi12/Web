@@ -264,7 +264,7 @@ namespace Web.Areas.Mobile.Controllers
                 {
                     model.NickName = entity.NickName;
 
-                    var rec = DB.Member_Info.Where(a => a.RecommendId == model.MemberId && a.MemberId!=model.MemberId).ToList();
+                    var rec = DB.Member_Info.Where(a => a.RecommendId == model.MemberId && a.MemberId != model.MemberId).ToList();
                     foreach (var item in rec)
                     {
                         var recommendmodel = DB.Member_Info.FindEntity(item.MemberId);
@@ -894,6 +894,13 @@ namespace Web.Areas.Mobile.Controllers
                 }
                 if (orderList.Count <= 0)
                     throw new Exception("获取订单信息失败");
+                var orderid = orderList.First();
+                var query = DB.ShopOrder.Where(q => q.GUID == orderid).FirstOrDefault();
+                if (query.State != 1)
+                {
+                    throw new Exception("订单不是待支付订单不可支付");
+                }
+
                 DB.ShopOrder.UpdateOrderInfo(orderList, addressid, remark, isziti, paytype);
 
                 if (paytype == "余额")
@@ -977,6 +984,10 @@ namespace Web.Areas.Mobile.Controllers
             try
             {
                 ShopOrder model = DB.ShopOrder.FindEntity(orderid);
+                if (model.State != 1)
+                {
+                    throw new Exception("订单不是待支付订单不可取消");
+                }
                 if (model == null)
                     throw new Exception("获取订单信息失败");
                 model.State = ShopEnum.OrderState.Cancel.GetHashCode();

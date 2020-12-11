@@ -53,8 +53,8 @@ namespace Web.Areas.SysManage.Controllers
                     expend_mm = db.Fin_Info.Where(a => a.CreateTime >= start_month && a.CreateTime < end_month).Sum(a => a.RealAmount),
                     expend_yy = db.Fin_Info.Where(a => a.CreateTime >= start_year && a.CreateTime < end_year).Sum(a => a.RealAmount),
 
-                    Active_y = db.Member_Info.Count(p => p.IsActive == "已激活"),
-                    Active_n = db.Member_Info.Count(p => p.IsActive == "未激活"),
+                    Active_y = db.Sys_Msg.Count(p => p.State == 0),
+                    Active_n = db.ShopOrders.Count(p => p.State == 2),
                     Drawcount = db.Fin_Draw.Count(p => p.DrawState == "未发放"),
                     Remitcount = db.Fin_Remit.Count(p => p.RemitState == "申请中")
                 }).FirstOrDefault();

@@ -148,6 +148,12 @@ namespace Web.Areas.Shop.Controllers
         {
             try
             {
+                //var orderid = orderList.First();
+                var query = DB.ShopOrder.Where(q => q.GUID == orderid).FirstOrDefault();
+                if (query.State != 1)
+                {
+                    return Error(("订单不是待支付订单不可支付"));
+                }
                 if (DB.ShopOrder.Calcute(CurrentUser, orderid,""))
                 {
                     return Success("结算成功");

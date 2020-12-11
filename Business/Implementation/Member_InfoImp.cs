@@ -1006,7 +1006,7 @@ namespace Business.Implementation
                 {
                     //开启事务，可以不使用事务,也可以使用多个事务
                     //db.BeginTran();
-                    if (DB.Member_Info.Any(a => id.Contains(a.RecommendId) || a.Commission > 0) || id.Contains("C3B57B68-3BBF-45DA-9B16-B3BE88F2A535"))
+                    if (DB.Member_Info.Any(a => id.Contains(a.RecommendId) && a.Commission > 0) || id.Contains("C3B57B68-3BBF-45DA-9B16-B3BE88F2A535"))
                     {
                         json.Msg = "不可删除已推荐过会员或者余额大于0的记录";
                         return json;

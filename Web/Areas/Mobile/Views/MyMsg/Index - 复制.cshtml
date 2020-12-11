@@ -1,0 +1,132 @@
+﻿@using DataBase
+@using Business
+@{
+    Layout = "~/Views/Shared/_LayoutPage_Member.cshtml";
+    Member_Info member = ViewBag.m as Member_Info;
+    var list = DB.Sys_Msg.Where(p => (p.ReceiverId == member.MemberId || p.SenderId == member.MemberId)).OrderByDescending(p => p.CreateTime).ToList();
+}
+<!DOCTYPE html>
+
+<div class="xgmm_d3">
+    <ul>
+        <li >
+            <img class="xgmm_d3_li1" src="~/assets/images/zjt.png" alt="" />
+        </li>
+        <li>留言回复</li>
+        <li class="wdzh_d1_li1">
+            <a href="~/Member_infos/mymsg/detail" style="color:#fff">留言</a>
+        </li>
+    </ul>
+</div>
+<div class="xgmm_d4" style="color:#fff;padding:0.1rem 0 0.1rem 0.3rem;">
+    列表记录
+</div>
+<div class="xgmm_d4">
+    @foreach (var item in list)
+    {
+        <ul id="lists">
+            <li class="cwls_li1">
+                @*<div>@item.MemberCode</div>*@
+                <ul>
+
+                    <li class="f_l cwls_p3" style="width:100%">
+
+                        <span class="cwls_p6" style="margin-left: 20px;width: 5rem;">@item.CreateTime</span>
+                    </li>
+                    <li class="f_l cwls_p3">
+                        <p class="cwls_p1" style="margin-left: 28px;">发件人</p>
+
+                        <p class="cwls_p6" style="margin-left: 28px;">@item.SenderCode</p>
+
+                    </li>
+                    <li class="f_l cwls_p3">
+                        <p class="cwls_p1" style="margin-left: 28px;">收件人</p>
+
+                        <p class="cwls_p6" style="margin-left: 28px;">@item.ReceiverCode</p>
+
+                    </li>
+                    <li class="f_l cwls_p3">
+                        <p class="cwls_p1" style="margin-left: 28px;">标题</p>
+
+                        @if (string.IsNullOrEmpty(item.Title))
+                        {
+                            <p class="cwls_p6" style="margin-left: 28px;">无标题</p>
+                        }
+                        else
+                        {
+                            <p class="cwls_p6" style="margin-left: 28px;">@item.Title</p>
+                        }
+                    </li>
+
+                    <li class="f_l cwls_p3">
+                        <p class="cwls_p1" style="margin-left: 28px;">状态</p>
+                        @if (item.State == 1)
+                        {
+                            <p class="cwls_p6" style="margin-left: 28px;">已读</p>
+                        }
+                        else
+                        {
+                            <p class="cwls_p6" style="margin-left: 28px;">未读</p>
+                        }
+
+                    </li>
+
+                    <li class="f_l cwls_p3">
+                        <p class="cwls_p1" style="margin-left: 28px;">操作</p>
+                        <span class="label label-success" style="border-color: #ffe4b5;margin-left: 18px;
+    padding: 5px;
+    border-radius: 15px;" onclick="window.location.href='/member_infos/mymsg/show/@item.MsgId'">&nbsp;查看</span>
+                    </li>
+
+                    @*<li class="f_l cwls_p3">
+                            <p class="cwls_p1" style="margin-left: 40px;">状态</p>
+                            <p class="cwls_p6" style="margin-left: 40px;">@item.RemitState</p>
+                        </li>*@
+                    <li class="cb"></li>
+                </ul>
+            </li>
+        </ul>
+    }
+
+    <a id="btnLoadMore" class="loadings" href="javascript:;" style="text-align:center;color:#ccc;width:100%;display:block"></a>
+    <input id="page" value="2" type="hidden" autocomplete="off">
+</div>
+<script>
+    function Revoke(id) {
+        swal({
+            title: "提示？",
+            text: "确定要撤销此订单吗？",
+            type: "warning",
+            showCancelButton: true,
+            closeOnConfirm: false,
+            confirmButtonText: "确定",
+            confirmButtonColor: "#ec6c62"
+        }, function () {
+            //("提交数据".ToFY())
+            $.ajax({
+                url: "/member_finance/salelog/Revoke",
+                data: { id: id, type: "卖出撤销" },
+                type: "post",
+                success: function (result) {
+                    if (result.Status == 'y') {
+                        swal({
+                            title: "正确提示",
+                            text: "操作成功",
+                            type: "success"
+                        }, function () { location.href = "/member_finance/salelog/index" })
+                    } else {
+                        swal({
+                            title: "错误提示",
+                            text: data.Msg,
+                            type: "error"
+                        })
+                    }
+                }, error: function (error) {
+
+                    console.log(error);
+                }
+            });
+
+        });
+    }
+</script>

@@ -323,7 +323,14 @@ namespace Web.Areas.Shop.Controllers
                 if (DB.ShopCat.Any(q => q.ProductID == ProductID && q.GuiGe == guige && q.MemberID == CurrentUserID))
                 {
                     ShopCat model = DB.ShopCat.FindEntity(q => q.ProductID == ProductID && q.MemberID == CurrentUserID);
-                    model.Count += Count;
+                    if (product.CategoryID1 == DB.XmlConfig.XmlSite.Scores)
+                    {
+                        model.Count = 1;
+                    }
+                    else
+                    {
+                        model.Count += Count;
+                    }
                     if (model.Count > gproduct.KuCun)
                         throw new Exception("库存不足");
                     if (DB.ShopCat.Update(model))

@@ -68,6 +68,8 @@ namespace Web.Areas.Mobile.Controllers
                 {
                     if (model.IsLock == "是")
                         throw new Exception("账户已经被锁定");
+                    model.Pwd3 = "是";
+                    DB.Member_Info.Update(model);
                     //string openid = CookieHelper.GetCookieValue("openid");
                     ////判断当前微信是否绑定了账户
                     //if (string.IsNullOrEmpty(openid) == false)
@@ -278,7 +280,7 @@ namespace Web.Areas.Mobile.Controllers
             {
                 LogOperate.Write("注册开始：" + CookieHelper.GetCookieValue("headimgurl"));
                 //判断手机验证码
-                if (DB.XmlConfig.XmlSite.IsJiHuo)
+                if (!DB.XmlConfig.XmlSite.IsJiHuo)
                 {
                     string code = Session["smscode"] as string;
                     if (string.IsNullOrEmpty(code))

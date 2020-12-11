@@ -45,7 +45,6 @@ namespace DataBase
         public virtual DbSet<Sys_BasicType> Sys_BasicType { get; set; }
         public virtual DbSet<Sys_Employee> Sys_Employee { get; set; }
         public virtual DbSet<Sys_Level> Sys_Level { get; set; }
-        public virtual DbSet<Sys_Msg> Sys_Msg { get; set; }
         public virtual DbSet<Sys_Navigation> Sys_Navigation { get; set; }
         public virtual DbSet<Sys_Role> Sys_Role { get; set; }
         public virtual DbSet<Sys_Role_Nav> Sys_Role_Nav { get; set; }
@@ -89,6 +88,7 @@ namespace DataBase
         public virtual DbSet<ShopProductCategory> ShopProductCategories { get; set; }
         public virtual DbSet<Member_Info> Member_Info { get; set; }
         public virtual DbSet<Fin_Remit> Fin_Remit { get; set; }
+        public virtual DbSet<Sys_Msg> Sys_Msg { get; set; }
     
         public virtual int UP_PageView(string tbname, string fieldKey, Nullable<int> pageCurrent, Nullable<int> pageSize, string fieldShow, string fieldOrder, string whereString, ObjectParameter recordCount)
         {

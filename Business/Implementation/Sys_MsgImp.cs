@@ -97,6 +97,7 @@ namespace Business.Implementation
             entity.SenderId = sender.MemberId;
             entity.SenderName = sender.NickName;
             entity.ReceiverId = receiver.MemberId;
+            entity.ReadTime = DateTime.Now;
             entity.ReceiverName = receiver.NickName;
             if (entity.MsgId == 0)
             {

@@ -68,6 +68,10 @@ namespace DataBase
     	/// <summary>  
     	/// 阅读时间  
     	/// </summary>
-        public Nullable<System.DateTime> ReadTime { get; set; }
+        public System.DateTime ReadTime { get; set; }
+    	/// <summary>  
+    	///   
+    	/// </summary>
+        public string Image { get; set; }
     }
 }

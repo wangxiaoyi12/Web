@@ -51,9 +51,9 @@ namespace Web.Controllers
         {
             TaskTime t = new TaskTime();
             //分红奖
-            t.FenHong();
+            //t.FenHong();
             //突出贡献奖
-            t.TuChu();
+            //t.TuChu();
             //发放奖金
             t.FaFang();
             return PartialView();

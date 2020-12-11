@@ -20,43 +20,63 @@
             OnComplete = "dig.Complete"
         }, new { @class = "login-form", autocomplete = "off" }))
         {
-            <div class="container loginContainer">
-                <div class="loginBox">
-                    <ul class="loginList">
-                        <li>
-                            <i class="iconfont icon-yonghu"></i>
-                            <input type="text" name="UserName" id="UserName" value="@ViewBag.LogName" placeholder="请输入账号" />
-                        </li>
-                        <li>
-                            <i class="iconfont icon-mima"></i>
-                            <input type="password" name="Password" id="Password" value="@ViewBag.PassWord" placeholder="请输入密码" />
-                        </li>
-                      
-                            @if (ViewBag.chkState == "on")
-                            {
-                                <input type="checkbox" style="width:14px;margin-left: 10px;-webkit-appearance:checkbox" name="chkState" checked /><span style="color:black">记住账号密码</span>
-                            }
-                            else
-                            {
-                                <input type="checkbox" style="width:14px;margin-left: 10px;-webkit-appearance:checkbox" name="chkState" /><span style="color:black">记住账号密码</span>
-                            }
-                     
-                    </ul>
-                    <div class="btnbox">
-                        <button class="btn_org" id="btnLogin">登录</button>
-                    </div>
-                    <div class="loginTitle">
-                        <div></div>
-                        <p>没有账号？</p>
-                        <div></div>
-                    </div>
-                    <div class="btnbox">
-                        <a href="/mobile/memberlogin/register" class="btn_gay">去注册</a> &nbsp;&nbsp;&nbsp;  <a href="/mobile/memberlogin/pwd" class="btn_gay">找回密码</a> &nbsp;&nbsp;&nbsp;
-                    </div>
+<div class="container loginContainer">
+    <div class="loginBox">
+        <ul class="loginList">
+            <li>
+                <i class="iconfont icon-yonghu"></i>
+                <input type="text" name="UserName" id="UserName" value="@ViewBag.LogName" placeholder="请输入账号" />
+            </li>
+            <li>
+                <i class="iconfont icon-mima"></i>
+                <input type="password" name="Password" id="Password" value="@ViewBag.PassWord" placeholder="请输入密码" />
+            </li>
+
+            @if (ViewBag.chkState == "on")
+            {
+                <input type="checkbox" style="width:14px;margin-left: 10px;-webkit-appearance:checkbox" name="chkState" checked />
+                <span style="color:black">记住账号密码</span>
+            }
+            else
+            {
+                <input type="checkbox" style="width:14px;margin-left: 10px;-webkit-appearance:checkbox" name="chkState" />
+                <span style="color:black">记住账号密码</span>
+            }
+
+        </ul>
+        <div class="btnbox">
+            <button class="btn_org" id="btnLogin">登录</button>
+        </div>
+        <div class="loginTitle">
+            <div></div>
+            <p>没有账号？</p>
+            <div></div>
+        </div>
+        <div class="btnbox">
+            <a href="/mobile/memberlogin/register" class="btn_gay">去注册</a> &nbsp;&nbsp;&nbsp;  <a href="/mobile/memberlogin/pwd" class="btn_gay">找回密码</a> &nbsp;&nbsp;&nbsp;
+
+           
+
+
+        </div>
+        <div class="loginTitle" style="display:block;text-align:center">
+            <p>网址www.jst1314.cn</p>
+            <p>ICP备案【鲁ICP备2020041913】</p>
+        </div>
+
+        </div>
+
+    </div>
+           
+            <div class="loginBg">
+
+            </div>
+            <div class="bgColor">
+                <div>
+
                 </div>
             </div>
-            <div class="loginBg"></div>
-            <div class="bgColor"></div>
+
         }
     }
 }
@@ -68,7 +88,7 @@
     });
 </script>
 <script type="text/javascript">
-    
+
         var dig = {
             Loading: function () {
                 $("#btnLogin").attr("disabled", true).find("span").html("@("正在登录中")...");

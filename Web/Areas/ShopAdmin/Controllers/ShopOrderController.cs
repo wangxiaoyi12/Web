@@ -345,55 +345,45 @@ namespace Web.Areas.ShopAdmin.Controllers
         /// <returns></returns>
         public ActionResult ToExcel(DateTime? startTime, DateTime? end, string key, int? state)
         {
-            int total = 0;
-            var query = DB.ShopOrder.Where();
+            string usercode = CurrentUser.LoginName;
 
-            if (string.IsNullOrEmpty(key) == false)
-                query = query.Where(a =>
-                a.NickName.Contains(key)
+            var shopid = 1;
+            if (end != null) end = end.Value.AddDays(1);
+            var objList = DB.ShopOrder.Where(a =>
+           a.ShopID == shopid
+            && (string.IsNullOrEmpty(key) ? true :
+            (a.NickName.Contains(key)
             || a.MemberCode.Contains(key)
             || a.OrderCode == key
             || a.OrderType == key
             || a.GUID == key
-            || (a.ShopOrderProducts.Any(c => c.Name.Contains(key)))
-            );
-
-            string usercode = CurrentUser.LoginName;
-            if (usercode != "admin")
-                query = query.Where(q => q.StoreCode == usercode);
-
-            if (startTime != null)
-                query = query.Where(q => q.SubmitTime >= startTime);
-            if (end != null)
-                query = query.Where(q => q.SubmitTime < end);
-            if (state != null)
-                query = query.Where(q => q.State == state);
-
-            List<ShopOrderExcel> objList = new List<ShopOrderExcel>();
-
-            query = query.OrderByDescending(q => q.SubmitTime);
-            var list = query.Take(100000).ToList();
-            foreach (var item in list)
-            {
-                var orderPro = item.ShopOrderProducts.FirstOrDefault();
-                objList.Add(new ShopOrderExcel()
-                {
-                    GUID = item.GUID,
-                    MemberCode = item.MemberCode,
-                    Reciver = item.Receiver,
-                    PostAddress = item.PostAddress,
-                    Tel = item.Tel,
-                    SubmitTime = item.SubmitTime,
-                    ProductName = orderPro == null ? "" : string.Join("/", item.ShopOrderProducts.Select(q => q.Name + "*" + q.Count)),
-                    //Count = orderPro == null ? 0 : orderPro.Count
-                    PayWay = Enums.ToObject<ShopEnum.PayType>(Convert.ToInt32(item.PayWay)).ToString(),
-                    PayAmount = item.PayWay == "1" ? $"购物币{item.RealCongXiao}+积分{item.RealScore}" : item.PayWay == "2" ? $"现金{item.RealCongXiao}+积分{item.RealScore}" : item.RealAmount.ToString(),
-                    ExpressCode = item.ExpressCode,
-                    ExpressName = item.ShopExpress == null ? "" : item.ShopExpress.Name,
-                    StoreCode = item.StoreCode,
-                    OperateCode = item.OperateCode
-                });
-            }
+            || (a.ShopOrderProducts.Any(c => c.Name.Contains(key)
+            ))))
+               && (state == null ? true : a.State == state)
+               //&& (category == null ? true : a.ShopOrderProducts.Select(b => b.ca) == category)
+               && (startTime == null ? true : a.SubmitTime >= startTime)
+               && (end == null ? true : a.SubmitTime < end))
+                 .Select(a => new
+                 {
+                     a.GUID,
+                     PayState = a.PayState == 1 ? "已支付" : "未支付",
+                     a.MemberCode,
+                     a.OrderCode,
+                     a.OrderType,
+                     a.PayWay,
+                     a.PayTime,
+                     a.State,
+                     a.IsZiTi,
+                     a.Tel,
+                     ExpressID = a.ShopExpress.Name,
+                     a.RealAmount,
+                     a.Postage,
+                     a.StoreCode,
+                     AllCount = a.ShopOrderProducts.Select(q => q.Count).DefaultIfEmpty().Sum(),
+                     a.ZongDay,
+                     a.YiDay,
+                     a.Type
+                 }).ToList();
             if (objList.Count <= 0)
                 return Content("导出列表为空");
 

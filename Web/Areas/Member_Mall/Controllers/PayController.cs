@@ -125,7 +125,7 @@ namespace Web.Areas.Member_Mall.Controllers
 
                     var order = DB.ShopOrder.Where(a => a.OrderCode == code).FirstOrDefault();
                     LogHelper.Error("回调4" + trade_status);
-                    if (order.State == 1)
+                    if (order.State == 1 && (trade_status== "TRADE_SUCCESS" || trade_status == "TRADE_FINISHED"))
                     {
                         order.PayState = ShopEnum.OrderPayState.Pay.GetHashCode();
                         order.PayTime = DateTime.Now;
@@ -249,10 +249,10 @@ namespace Web.Areas.Member_Mall.Controllers
                 string code = notifyData.GetValue("out_trade_no").ToString();
                 LogHelper.Error("回调3-" + code);
 
-
+                
                 var order = DB.ShopOrder.Where(a => a.OrderCode == code).FirstOrDefault();
                 LogHelper.Error("回调4" + order.State);
-                if (order.State == 1)
+                if (order.State == 1 )
                 {
                     LogHelper.Error("改前");
                     order.PayState = ShopEnum.OrderPayState.Pay.GetHashCode();

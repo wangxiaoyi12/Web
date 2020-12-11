@@ -1,0 +1,72 @@
+﻿
+@using Business
+@using DataBase
+
+@{
+    ViewBag.Title = "留言记录";
+    //获取当前登录用户
+    Member_Info curUser = User_Shop.GetMember_Info();
+    Layout = "~/Views/Shared/_LayoutPageMy0915.cshtml";
+    var list = DB.Sys_Msg.Where(p => (p.ReceiverId == curUser.MemberId || p.SenderId == curUser.MemberId)).OrderByDescending(p => p.MsgId).ToList();
+}
+<div class="container topBg">
+    <!-- 头部导航 -->
+    <div class="header" style="box-shadow: 0 0 10px rgba(1, 73, 206,.2);">
+        <ul>
+            <li class="header-left" onclick="GetIndex()">
+                <i class="iconfont icon-fanhui"></i>
+            </li>
+            <li>留言回复</li>
+            <li class="header-right">
+                <a href="/mobile/mymsg/detail" class="bsclr_gay">我要留言</a>
+            </li>
+        </ul>
+    </div>
+    <ul class="withdrawDepositJlList">
+        @foreach (var item in list)
+        {
+        <li>
+            <div>
+                <p class="bsft_bold" style="text-align:left">@item.CreateTime.Value.ToString("MM-dd HH:mm")</p>
+
+
+                @*@if (item.SenderId == curUser.MemberId)
+                {
+
+                    <p class="bsft_bold" style="color:black;width:50%;text-align:left">对方编号:@item.ReceiverCode</p>
+
+                }
+                else
+                {
+
+                    <p class="bsft_bold" style="color:black;width:50%;text-align:left">对方编号:@item.SenderCode</p>
+                }*@
+
+            </div>
+            <div>
+                @if (item.State == 1)
+                {
+
+                    <p class="bsclr_red">状态:已读</p>
+                }
+                else
+                {
+
+                    <p class="bsclr_red">状态:未读</p>
+                }
+            
+                <p class="bsft_bold">标题:@item.Title</p>
+                <p>
+                    <span class="label label-success bsclr_red" style="border-color: #ffe4b5;
+    padding: 5px;
+    border-radius: 15px;" onclick="window.location.href='/mobile/mymsg/show/@item.MsgId'">&nbsp;查看</span>
+                </p>
+            </div>
+        </li>
+
+        }
+
+    </ul>
+
+    <div class="bgColor"></div>
+</div>

@@ -302,7 +302,7 @@ namespace Web.Controllers
         public JsonResult IsExistCode()
         {
             var p = Request["param"];
-            var mycode = Tools.getCookie("gif");
+            var mycode = Session["smscode"] as string;
             if (!string.IsNullOrEmpty(mycode))
             {
                 if (p.ToLower() == mycode.ToLower())
@@ -320,7 +320,8 @@ namespace Web.Controllers
         {
             string code = "";
             System.IO.MemoryStream ms = new verify_code().Create(out code);
-            Tools.setCookie("gif", code);//验证码存储在Session中，供验证。  
+            Session["smscode"] = code;
+            //验证码存储在Session中，供验证。  
             Response.ClearContent();//清空输出流 
             return File(ms.ToArray(), @"image/png");
         }

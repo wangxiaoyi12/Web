@@ -214,7 +214,7 @@ namespace Business
 
                             order.OrderType = "报单订单";
                         }
-                    
+                        order.StoreCode = "未发放";
                         order.RealShopping += totalScore;//零售价
                         order.RealScore += totalScore;//优惠价
 

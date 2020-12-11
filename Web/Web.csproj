@@ -2187,6 +2187,7 @@
     <Content Include="assets\layouts\layout\scripts\demo.min.js" />
     <Content Include="assets\layouts\layout\scripts\layout.js" />
     <Content Include="assets\layouts\layout\scripts\layout.min.js" />
+    <Content Include="assets\mobile\css\app.css" />
     <Content Include="assets\mobile\css\bootstrap.css" />
     <Content Include="assets\mobile\css\Default.css" />
     <Content Include="assets\mobile\css\login.css" />
@@ -2218,6 +2219,7 @@
     <Content Include="assets\mobile\images\huigou.png" />
     <Content Include="assets\mobile\images\huizhang.png" />
     <Content Include="assets\mobile\images\icon.png" />
+    <Content Include="assets\mobile\images\icon_gb.png" />
     <Content Include="assets\mobile\images\icon_wx.png" />
     <Content Include="assets\mobile\images\icon_zfb.png" />
     <Content Include="assets\mobile\images\indexlogo.png" />
@@ -2932,6 +2934,17 @@
     <Content Include="Areas\Mobile\Views\SelfCate\AllIndex.cshtml" />
     <Content Include="Areas\Mobile\Views\Shared\_AllFooter.cshtml" />
     <Content Include="Areas\Mobile\Views\MemberLogin\Pwd.cshtml" />
+    <Content Include="Areas\Admin_Infos\Views\AdminMsg\Detail.cshtml" />
+    <Content Include="Areas\Admin_Infos\Views\AdminMsg\Index.cshtml" />
+    <Content Include="Areas\Admin_Infos\Views\AdminMsg\Show.cshtml" />
+    <Content Include="Areas\Admin_Infos\Views\AdminMsg\Total.cshtml" />
+    <Content Include="Areas\Admin_Infos\Views\web.config" />
+    <Content Include="Areas\Mobile\Views\MyMsg\Detail - 复制.cshtml" />
+    <Content Include="Areas\Mobile\Views\MyMsg\Detail.cshtml" />
+    <Content Include="Areas\Mobile\Views\MyMsg\Index - 复制.cshtml" />
+    <Content Include="Areas\Mobile\Views\MyMsg\Index.cshtml" />
+    <Content Include="Areas\Mobile\Views\MyMsg\Show - 复制.cshtml" />
+    <Content Include="Areas\Mobile\Views\MyMsg\Show.cshtml" />
     <None Include="assets\scripts\jquery.validate-vsdoc.js" />
     <Content Include="assets\scripts\jquery.validate.js" />
     <Content Include="assets\scripts\jquery.validate.min.js" />
@@ -3371,6 +3384,8 @@
     <Compile Include="Areas\Admin_Finance\Controllers\TransferController.cs" />
     <Compile Include="Areas\Admin_Information\Admin_InformationAreaRegistration.cs" />
     <Compile Include="Areas\Admin_Information\Controllers\NewsController.cs" />
+    <Compile Include="Areas\Admin_Infos\Admin_InfosAreaRegistration.cs" />
+    <Compile Include="Areas\Admin_Infos\Controllers\AdminMsgController.cs" />
     <Compile Include="Areas\Admin_MallManage\Admin_MallManageAreaRegistration.cs" />
     <Compile Include="Areas\Admin_MallManage\Controllers\GoodsManageController.cs" />
     <Compile Include="Areas\Admin_MallManage\Controllers\OrderController.cs" />
@@ -3418,6 +3433,7 @@
     <Compile Include="Areas\Mobile\Controllers\MIndexController.cs" />
     <Compile Include="Areas\Mobile\Controllers\MobileBaseController.cs" />
     <Compile Include="Areas\Mobile\Controllers\MobileCenterController.cs" />
+    <Compile Include="Areas\Mobile\Controllers\MyMsgController.cs" />
     <Compile Include="Areas\Mobile\Controllers\SelfBrandController.cs" />
     <Compile Include="Areas\Mobile\Controllers\SelfCateController.cs" />
     <Compile Include="Areas\Mobile\Controllers\SelfProductController.cs" />
@@ -3580,6 +3596,9 @@
     <Folder Include="Areas\Admin_Finance\Views\Shared\" />
     <Folder Include="Areas\Admin_Information\Models\" />
     <Folder Include="Areas\Admin_Information\Views\Shared\" />
+    <Folder Include="Areas\Admin_Infos\Models\" />
+    <Folder Include="Areas\Admin_Infos\Views\AdminMsg\Shared\" />
+    <Folder Include="Areas\Admin_Infos\Views\Shared\" />
     <Folder Include="Areas\Admin_MallManage\Models\" />
     <Folder Include="Areas\Admin_MallManage\Views\Shared\" />
     <Folder Include="Areas\Admin_Member\Models\" />

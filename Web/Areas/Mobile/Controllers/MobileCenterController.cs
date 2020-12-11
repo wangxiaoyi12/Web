@@ -526,7 +526,7 @@ namespace Web.Areas.Mobile.Controllers
             ViewBag.recordCount = query.Count();
             query = query.OrderByDescending(q => q.SubmitTime);
             List<ShopOrder> list = query.Skip(skipCount)
-                .Take(8)
+                .Take(100000)
                 .ToList();
             return PartialView(list);
         }

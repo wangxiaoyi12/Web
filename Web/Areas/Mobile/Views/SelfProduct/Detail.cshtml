@@ -66,9 +66,14 @@
             </div>
             <div class="details">
                 @*<span class="vipPrice">会员价</span>*@<p class="price"><span id="YouHui">￥@DB.ShopProduct.GetYouHuiPrice(product)</span> <span class="resalePrice" id="KuCun">库存:@DB.ShopProduct.GetKuCun(product)</span></p>
+                @if (product.CategoryID1 != DB.XmlConfig.XmlSite.Scores)
+                {
+                    <p class="bsclr_gay" style="color:red">积分<span id="PeiHuo" style="color:red">@DB.ShopProduct.GetPeiHuoPrice(product)</span></p>
+
+                }
                 <p class="bsclr_gay">原价<s id="LingShou">￥@DB.ShopProduct.GetLingShouPrice(product)</s></p>
-                <p class="txt">@product.Title</p>
-            </div>
+                    <p class="txt">@product.Title</p>
+                </div>
             <!-- 商品属性 -->
             <ul class="productDetailArt">
                 @{
@@ -167,13 +172,23 @@
         </li>
 
     </ul>
-    <div class="addCar cartBtn" data-id="@product.ID">
-        <a>加入购物车</a>
-        <span class="carAnimation"></span>
-    </div>
-    <div class="promptlyBuy buyNowBtn" data-id="@product.ID">
-        <a>立即购买</a>
-    </div>
+    @if (product.CategoryID1.Value != DB.XmlConfig.XmlSite.Scores)
+    {
+        <div class="addCar cartBtn" data-id="@product.ID">
+            <a>加入购物车</a>
+            <span class="carAnimation"></span>
+        </div>
+        <div class="promptlyBuy buyNowBtn" data-id="@product.ID">
+            <a>立即购买</a>
+        </div>
+    }
+    else
+    {
+        <div class="promptlyBuy buyNowBtn" style="width:75%" data-id="@product.ID">
+            <a>立即购买</a>
+        </div>
+    }
+
 </div>
 
 <div class="bgColor"></div>
@@ -236,6 +251,7 @@
             $("#YouHui").html("￥"+yearArray[1]);
             $("#PeiHuo").html(yearArray[2]);
             $("#KuCun").html("@("库存"):" + yearArray[3]);
+          
             $("#guige").val(str);
 
         })

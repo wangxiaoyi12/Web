@@ -984,7 +984,8 @@
           <Property Name="Title" Type="nvarchar" MaxLength="50" />
           <Property Name="Comment" Type="nvarchar" MaxLength="200" />
           <Property Name="CreateTime" Type="datetime" />
-          <Property Name="ReadTime" Type="datetime" />
+          <Property Name="ReadTime" Type="datetime" Nullable="false" />
+          <Property Name="Image" Type="nvarchar" MaxLength="200" />
         </EntityType>
         <EntityType Name="Sys_Navigation">
           <Key>
@@ -1851,24 +1852,6 @@
           <Property Name="LingDao4_6" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="LingDao7_9" Type="Decimal" Precision="18" Scale="2" />
         </EntityType>
-        <EntityType Name="Sys_Msg">
-          <Key>
-            <PropertyRef Name="MsgId" />
-          </Key>
-          <Property Name="MsgId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="MsgType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="SenderId" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="SenderCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="SenderName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="ReceiverId" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="ReceiverCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="ReceiverName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="State" Type="Int32" />
-          <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Comment" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="CreateTime" Type="DateTime" Precision="3" />
-          <Property Name="ReadTime" Type="DateTime" Precision="3" />
-        </EntityType>
         <EntityType Name="Sys_Navigation">
           <Key>
             <PropertyRef Name="id" />
@@ -1948,7 +1931,6 @@
           <EntitySet Name="Sys_BasicType" EntityType="Self.Sys_BasicType" />
           <EntitySet Name="Sys_Employee" EntityType="Self.Sys_Employee" />
           <EntitySet Name="Sys_Level" EntityType="Self.Sys_Level" />
-          <EntitySet Name="Sys_Msg" EntityType="Self.Sys_Msg" />
           <EntitySet Name="Sys_Navigation" EntityType="Self.Sys_Navigation" />
           <EntitySet Name="Sys_Role" EntityType="Self.Sys_Role" />
           <EntitySet Name="Sys_Role_Nav" EntityType="Self.Sys_Role_Nav" />
@@ -2111,6 +2093,7 @@
           </AssociationSet>
           <EntitySet Name="Member_Info" EntityType="DbMallModel.Member_Info" />
           <EntitySet Name="Fin_Remit" EntityType="DbMallModel.Fin_Remit" />
+          <EntitySet Name="Sys_Msg" EntityType="DbMallModel.Sys_Msg" />
           </EntityContainer>
         <EntityType Name="ShopArticle">
           <Key>
@@ -3200,6 +3183,25 @@
           <Property Name="ConfirmEmpName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Image" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="Sys_Msg">
+          <Key>
+            <PropertyRef Name="MsgId" />
+          </Key>
+          <Property Name="MsgId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MsgType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SenderId" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="SenderCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="SenderName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ReceiverId" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ReceiverCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ReceiverName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="State" Type="Int32" />
+          <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Comment" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="CreateTime" Type="DateTime" Precision="3" />
+          <Property Name="ReadTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Image" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3488,25 +3490,6 @@
                 <ScalarProperty Name="GlobalAward" ColumnName="GlobalAward" />
                 <ScalarProperty Name="DuiPeng" ColumnName="DuiPeng" />
                 <ScalarProperty Name="LayerPeng" ColumnName="LayerPeng" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Sys_Msg">
-            <EntityTypeMapping TypeName="DbMallModel.Sys_Msg">
-              <MappingFragment StoreEntitySet="Sys_Msg">
-                <ScalarProperty Name="MsgId" ColumnName="MsgId" />
-                <ScalarProperty Name="MsgType" ColumnName="MsgType" />
-                <ScalarProperty Name="SenderId" ColumnName="SenderId" />
-                <ScalarProperty Name="SenderCode" ColumnName="SenderCode" />
-                <ScalarProperty Name="SenderName" ColumnName="SenderName" />
-                <ScalarProperty Name="ReceiverId" ColumnName="ReceiverId" />
-                <ScalarProperty Name="ReceiverCode" ColumnName="ReceiverCode" />
-                <ScalarProperty Name="ReceiverName" ColumnName="ReceiverName" />
-                <ScalarProperty Name="State" ColumnName="State" />
-                <ScalarProperty Name="Title" ColumnName="Title" />
-                <ScalarProperty Name="Comment" ColumnName="Comment" />
-                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
-                <ScalarProperty Name="ReadTime" ColumnName="ReadTime" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -4308,6 +4291,26 @@
                 <ScalarProperty Name="MemberCode" ColumnName="MemberCode" />
                 <ScalarProperty Name="MemberId" ColumnName="MemberId" />
                 <ScalarProperty Name="RemitId" ColumnName="RemitId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Sys_Msg">
+            <EntityTypeMapping TypeName="DbMallModel.Sys_Msg">
+              <MappingFragment StoreEntitySet="Sys_Msg">
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="ReadTime" ColumnName="ReadTime" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="Comment" ColumnName="Comment" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="ReceiverName" ColumnName="ReceiverName" />
+                <ScalarProperty Name="ReceiverCode" ColumnName="ReceiverCode" />
+                <ScalarProperty Name="ReceiverId" ColumnName="ReceiverId" />
+                <ScalarProperty Name="SenderName" ColumnName="SenderName" />
+                <ScalarProperty Name="SenderCode" ColumnName="SenderCode" />
+                <ScalarProperty Name="SenderId" ColumnName="SenderId" />
+                <ScalarProperty Name="MsgType" ColumnName="MsgType" />
+                <ScalarProperty Name="MsgId" ColumnName="MsgId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

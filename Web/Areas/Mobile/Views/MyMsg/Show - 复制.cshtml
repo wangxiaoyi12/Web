@@ -1,0 +1,127 @@
+﻿@using Business;
+@using DataBase;
+@model DataBase.Sys_Msg
+@{
+    Layout = "~/Views/Shared/_LayoutPage_Member1.cshtml";
+
+}
+
+
+<style>
+    .tx_d3_inp2 {
+        background: none;
+        border: 0;
+        width: 4.5rem;
+        text-align: end;
+    }
+</style>
+
+<div class="xgmm_d3">
+    <ul>
+        <li onclick="history.back(-1)">
+            <img class="xgmm_d3_li1" src="~/assets/images/zjt.png" alt="" />
+        </li>
+        <li>发消息</li>
+        <li class="wdzh_d1_li1">
+            @*<a href="~/Member_Finance/convert/index" style="color:#fff">我要购买EP</a>*@
+        </li>
+    </ul>
+</div>
+<form action="" class="myform" id="form1">
+
+    <div class="xgmm_d4">
+        <ul>
+
+
+
+            <li class="tx_d3_li3">
+                发件人编号<input type="text" readonly required class="tx_d3_inp2" style="margin-right:10px;float:right" value="@Model.SenderCode" />
+            </li>
+            <li class="tx_d3_li3">
+                收件人编号<input type="text" readonly required class="tx_d3_inp2" style="margin-right:10px;float:right" value="@Model.ReceiverCode" />
+            </li>
+
+            <li class="tx_d3_li3">
+                标题<input type="text" required readonly name="Title" id="Title" class="tx_d3_inp2" value="@Model.Title" style="margin-right:10px;float:right" />
+            </li>
+            <li class="tx_d3_li3" style="height: 2.82rem;">
+                留言图片    <img src="@Model.Image" style="width:1.44rem;">
+
+            </li>
+            <li class="tx_d3_li3">
+                内容<textarea type="text" readonly style="background:#20232c;color:#ffe4b5;width:100%" id="Comment" name="Comment" rows="5" class="form-control">@Model.Comment</textarea>
+
+            </li>
+
+
+
+    </div>
+    <div class="blank" style="height:3.4rem;"></div>
+    <div class="tx_d1">
+        @if (ViewBag.IsHiddenReply == false)
+        {
+            <button class="tx_b1" type="button" onclick="window.location.href = '/Member_Infos/MyMsg/Detail/@(Model.MsgId)'">回复</button>
+        }
+    </div>
+</form>
+@section scripts{
+    <script language="javascript">
+        window.load = function () {
+            document.getElementById('Pwd2').value = 'password';
+        };
+        @*$('#form1').on('submit', function () {
+            var btn = $(this).find('subimt');
+            btn.prop('disabled', true);
+
+            //提交处理
+            $.post('@Url.Action("Save")', $(this).serialize(), function (data) {
+                // console.info(data);
+                if (data.Status == 'y') {
+                    swal({
+                        title: "正确提示",
+                        text: data.Msg,
+                        type: "success"
+                    }, function () { location.href = "/Member_Finance/convert/index" })
+                } else {
+                    swal({
+                        title: "错误提示",
+                        text: data.Msg,
+                        type: "error"
+                    })
+                }
+                btn.prop('disabled', false);
+            });
+            return false;
+        });*@
+
+        function BuyShuLiang() {
+            var count = $("#BuyAmount").val();
+            var Price = $("#Price2").val();
+            $("#BuyCoins").val(count * Price);
+
+        }
+        function buy() {
+            $(".tx_b1").prop('disabled', true);
+
+
+            $.post("@ViewBag.Path/Save", { Title: $("#Title").val(), Comment: $("#Comment").val() }, function (data) {
+                if (data.Status == 'y') {
+                    swal({
+                        title: "正确提示",
+                        text: "发送成功",
+                        type: "success"
+                    }, function () { location.href = "/member_infos/mymsg/index" })
+                } else {
+                    swal({
+                        title: "错误提示",
+                        text: data.Msg,
+                        type: "error"
+                    })
+                }
+                $(".tx_b1").prop('disabled', false);
+
+            })
+        }
+    </script>
+}
+

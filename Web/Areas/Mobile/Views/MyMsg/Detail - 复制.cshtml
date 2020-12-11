@@ -1,0 +1,92 @@
+﻿@model DataBase.Sys_Msg
+@{
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+}
+<!-- BEGIN PAGE BAR -->
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="/SysManage/Desk/Index">@("首页".ToFY())</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#"><span>@("信息管理".ToFY())</span></a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="/Member_Infos/MyMsg/Index"><span>@("回复".ToFY())/@("留言".ToFY())</span></a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#"><span>@("回复".ToFY())</span></a>
+        </li>
+    </ul>
+</div>
+<!-- END PAGE BAR -->
+<!-- BEGIN PAGE CONTENT -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet light bordered">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="font-green-sharp fa fa-user"></i>
+                    <span class="caption-subject font-green-sharp bold uppercase">@ViewBag.Title<span>@("发消息".ToFY())</span></span>
+                </div>
+            </div>
+            <div class="portlet-body">
+                @using (Ajax.BeginForm("Save", null, new AjaxOptions()
+                {
+                    HttpMethod = "Post",
+                    OnBegin = "SubAjax.Loading",
+                    OnComplete = "SubAjax.Complate",
+                    OnFailure = "SubAjax.Failure",
+                    OnSuccess = "SubAjax.Success"
+                }, new { @class = "form-horizontal", @role = "form", @id = "commentForm" }))
+                {
+                    <div class="form-body">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red">*</span>@("发件人编号".ToFY())：</label>
+                            <div class="col-md-4">
+                                <input type="hidden" name="MsgId" value="@Model.MsgId" />
+                                <input type="hidden" name="SenderCode" value="@Model.SenderCode" />                              
+                                <label class="control-label">@Model.SenderCode</label>
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red">*</span>@("收件人编号".ToFY())：</label>
+                            <div class="col-md-4">
+                                <input type="text" name="ReceiverCode" value="@Model.ReceiverCode" ajaxurl="/Ajax/IsExistMember" class="form-control" nullmsg="@("请输入收件人编号".ToFY())" datatype="*1-20" errormsg="@("收件人编号不正确".ToFY())">
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red">*</span>@("标题".ToFY())：</label>
+                            <div class="col-md-4">
+                                <input type="text" name="Title" value="@Model.Title" class="form-control" nullmsg="@("请输入标题".ToFY())" datatype="*" errormsg="@("请输入标题".ToFY())">
+                            </div>
+                            <span></span>
+                        </div>                        
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red"></span>@("内容".ToFY())：</label>
+                            <div class="col-md-4">
+                                <textarea type="text" name="Comment" rows="10" class="form-control" datatype="*1-500" errormsg="@("内容在".ToFY())500@("字以内".ToFY())">@Model.Comment</textarea>
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-actions">
+                            <div class="row">
+                                <div class="col-md-offset-3 col-md-9">
+                                    <button type="submit" id="SubSave" class="btn green"><i class="fa fa-check"></i><span>@("保存".ToFY())</span></button>
+                                    <button type="button" class="btn default" onclick="window.history.back()"><i class="fa fa-mail-reply"></i>@("返回".ToFY())</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                                        }
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END PAGE CONTENT -->
+

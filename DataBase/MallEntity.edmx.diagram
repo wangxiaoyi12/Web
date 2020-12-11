@@ -23,7 +23,6 @@
         <EntityTypeShape EntityType="DbMallModel.Sys_BasicType" Width="1.5" PointX="19.75" PointY="14.75" IsExpanded="true" />
         <EntityTypeShape EntityType="DbMallModel.Sys_Employee" Width="1.5" PointX="19.75" PointY="17.75" IsExpanded="true" />
         <EntityTypeShape EntityType="DbMallModel.Sys_Level" Width="1.5" PointX="20.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="DbMallModel.Sys_Msg" Width="1.5" PointX="10.75" PointY="20.75" IsExpanded="true" />
         <EntityTypeShape EntityType="DbMallModel.Sys_Navigation" Width="1.5" PointX="21.75" PointY="5.75" IsExpanded="true" />
         <EntityTypeShape EntityType="DbMallModel.Sys_Role" Width="1.5" PointX="21.75" PointY="10.75" IsExpanded="true" />
         <EntityTypeShape EntityType="DbMallModel.Sys_Role_Nav" Width="1.5" PointX="21.75" PointY="13.75" IsExpanded="true" />
@@ -93,6 +92,7 @@
         <AssociationConnector Association="DbMallModel.FK_SHOPPROD_REFERENCE_SHOPPROD15" />
         <EntityTypeShape EntityType="DbMallModel.Member_Info" Width="1.5" PointX="23.375" PointY="24.75" />
         <EntityTypeShape EntityType="DbMallModel.Fin_Remit" Width="1.5" PointX="0.75" PointY="4.75" />
+        <EntityTypeShape EntityType="DbMallModel.Sys_Msg" Width="1.5" PointX="16.375" PointY="12.75" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

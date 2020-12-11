@@ -147,11 +147,11 @@ namespace Business
         {
             DateTime dt = DateTime.Now.Date;
 
-            //if (DB.SysLogs.Any(a => a.Description == "奖金发放" && a.CreateTime >= dt))
-            //{
-            //    LogHelper.Info(dt + "已经执行过奖金发放功能");
-            //    return;
-            //}
+            if (DB.SysLogs.Any(a => a.Description == "奖金发放" && a.CreateTime >= dt))
+            {
+                LogHelper.Info(dt + "已经执行过奖金发放功能");
+                return;
+            }
             //if (DateTime.Now.DayOfWeek == DayOfWeek.Monday )
             //{
             //     LogHelper.Info(dt + "今天不是周一不发放奖金");

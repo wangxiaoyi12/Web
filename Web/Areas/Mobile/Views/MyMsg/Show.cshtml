@@ -1,0 +1,173 @@
+﻿@using Business;
+@using DataBase;
+@model DataBase.Sys_Msg
+@{
+    Layout = "~/Views/Shared/_LayoutPageMy0915.cshtml";
+}
+
+
+
+
+<div class="container topBg">
+    <div class="header" style="box-shadow: 0 0 10px rgba(1, 73, 206,.2);">
+        <ul>
+            <li class="header-left" onclick="history.back(-1)">
+                <i class="iconfont icon-fanhui"></i>
+            </li>
+            <li>消息详情</li>
+            <li class="header-right">
+                <a href="/mobile/mymsg/index" class="bsclr_gay">消息记录</a>
+            </li>
+        </ul>
+    </div>
+    <form id="form1">
+        <ul class="baseIlsList">
+
+
+
+            <li>
+                <span>发件人编号</span>
+                <input type="text" name="SenderCode" value="@Model.SenderCode" placeholder="请输入发件人编号" readonly id="SenderCode">
+            </li>
+            <li>
+                <span>收件人编号</span>
+                <input type="text" name="ReceiverCode" value="@Model.ReceiverCode"  placeholder="请输入收件人编号" readonly id="SenderCode">
+            </li>
+            <li>
+                <span>标题</span>
+                <input type="text" name="Title" value="@Model.Title" readonly placeholder="请输入标题" id="Title">
+            </li>
+            <li class="headLi">
+                <span>留言图片</span>
+                <img class="layui-upload-img"  style="width:2rem" src="@Url_Mobile.GetTouXiang(Model.Image)" id="previewBox">
+            </li>
+            <li>
+                <span>内容</span>
+                <textarea type="text" readonly style="    border-width: 1px;
+    border-style: solid;background-color:white;color:black;border-color:gray;width:70%" id="Comment" name="Comment" rows="5" class="form-control">@Model.Comment</textarea>
+
+            </li>
+
+        </ul>
+
+        @*<div class="btnbox">
+
+            <a onclick="showDialog()" class="btn_org">保存</a>
+
+        </div>*@
+        <ul class="headSelect">
+            <li>相机</li>
+            <li id="photo-btn">选择图片</li>
+            <li class="cancel">取消</li>
+        </ul>
+        <div class="productDetailArtBg"></div>
+        <div class="bgColor"></div>
+    </form>
+</div>
+
+
+
+<script language="javascript">
+
+        layui.use('upload', function () {
+            var $ = layui.jquery,
+                upload = layui.upload;
+            //普通图片上传
+            var uploadInst = upload.render({
+                elem: '.headLi' //绑定元素
+                , url: "/mobile/mobilecenter/SaveImage"
+                , exts: 'jpg|png|gif|bmp|jpeg'
+                , number: 1
+                , before: function (obj) {
+                    //预读本地文件，需要IE9及以上版本
+                    obj.preview(function (index, file, result) {
+                        $('#previewBox').attr('src', result); //图片链接（base64）
+                        $('.headSelect').slideUp(200);
+                        $('.productDetailArtBg').hide();
+                    });
+                }
+                //, acceptMime: 'image/jpg, image/png'
+                , done: function (data) {
+                    //如果上传失败
+                    if (data.Code != 0) {
+                        return layer.msg(data.Message);
+                    }
+                    //上传成功
+                    else {
+                        //设置图片地址
+                        $("#Image").val(data.Data.src);
+                        return layer.msg("图片上传成功");
+                    }
+                }
+                , error: function (err) {
+                    console.info(err);
+                }
+            });
+
+        });
+        window.load = function () {
+            document.getElementById('Pwd2').value = 'password';
+        };
+        @*$('#form1').on('submit', function () {
+            var btn = $(this).find('subimt');
+            btn.prop('disabled', true);
+
+            //提交处理
+            $.post('@Url.Action("Save")', $(this).serialize(), function (data) {
+                // console.info(data);
+                if (data.Status == 'y') {
+                    swal({
+                        title: "正确提示",
+                        text: data.Msg,
+                        type: "success"
+                    }, function () { location.href = "/Member_Finance/convert/index" })
+                } else {
+                    swal({
+                        title: "错误提示",
+                        text: data.Msg,
+                        type: "error"
+                    })
+                }
+                btn.prop('disabled', false);
+            });
+            return false;
+        });*@
+
+        function BuyShuLiang() {
+            var count = $("#BuyAmount").val();
+            var Price = $("#Price2").val();
+            $("#BuyCoins").val(count * Price);
+
+        }
+  function showDialog() {
+
+        var isHasEmpty = false;
+        var form = $("#form1");
+        var isHasEmpty = false;
+        form.find('input[type="text"]').each(function () {
+            var thisBox = $(this);
+            if (thisBox.val().length <= 0) {
+                thisBox.focus();
+                isHasEmpty = true;
+                return false;
+            }
+        });
+
+        if (isHasEmpty == false) {
+            $(".btn_org").hide();
+            //提交保存
+            $.post('/mobile/mymsg/Save', form.serialize(), function (data) {
+                show("留言成功");
+
+                    setTimeout(function () {
+                        //跳转登录页面
+                        window.location.href = '/mobile/mymsg/index';
+                    }, 2000);
+            });
+        }
+
+
+    }
+</script>
+
+

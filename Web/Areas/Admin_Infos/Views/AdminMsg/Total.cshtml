@@ -1,0 +1,134 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+    var Path = "/Admin_Infos/AdminMsg/";
+    var title = ("留言消息");
+}
+
+<!-- BEGIN PAGE BAR -->
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="/SysManage/home/Index">@("首页")</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#"><span>@("信息管理")</span></a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="/Admin_Infos/AdminMsg/Index"><span>@("回复")/@("留言")</span></a>
+        </li>
+    </ul>
+</div>
+<!-- END PAGE BAR -->
+<!-- BEGIN PAGE CONTENT -->
+<div class="row">
+    <!-- BEGIN SAMPLE TABLE PORTLET-->
+    <div class="col-md-12">
+        <div class="portlet box green">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-database"></i>@(title)@("列表")
+                </div>
+                <div class="tools">
+                    <a href="javascript:;" class="collapse"> </a>
+                    <a href="javascript:;" class="reload"> </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="table-responsive">
+                    <div class="table-toolbar col-md-3">
+                        <div class="btn-group">
+@*@if (ViewBag.LoginName != "chakan")
+{
+                            <a  href="@(Path)Detail" class="btn green">
+                                <i class="fa fa-plus"></i> @("发消息")
+                            </a>
+                           
+}*@
+                        </div>
+                    </div>
+                    <form class="form form-horizontal form-inline col-md-9">
+                        <fieldset>
+                            <div class="control-group">
+                                <div class="text-right">
+                                    <div class="input-group col-md-5">
+                                        <input type="text" class="form-control" placeholder="@("搜索关键字")" id="keyword" />
+                                        <span class="input-group-btn">
+                                            <a class="btn btn-default" href="javascript:searchList();">
+                                                <span class="glyphicon glyphicon-search"></span>
+                                            </a>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+                <div class="table-responsive">
+                    <table id="datatable" class="table table-striped table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th style="width:3%"><input type="checkbox" id='checkAll'></th>
+                                <th>@("移动手机号码")</th>
+                                <th>@("姓名")</th>
+                                <th>@("留言时间")</th>
+                                <th style="width:40%">@("操作")</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END SAMPLE TABLE PORTLET-->
+</div>
+
+@section scripts {
+    <script type="text/javascript">
+        var oTable;
+        var idField = "SenderCode";
+        var path = "@Path";
+        var dataSource = path + "getDataSourceTotal";
+        var searchData = function (e) {
+            return {
+                key: $("#keyword").val(),
+                start: e.start,
+                length: e.length,
+                draw: e.draw
+            }
+        };
+        var columns = [//"绑定数据"
+            {
+                data: idField,
+                createdCell: function (nTd, sData, oData, iRow, iCol) {
+                    $(nTd).html("<input type='checkbox' name='checkList' value='" + sData + "'>");
+                }
+            },
+            { data: 'SenderCode' },
+            { data: 'SenderName' },
+            { data: 'CreateTime' },
+
+            {
+                data: idField,
+                createdCell: function (nTd, sData, oData, iRow, iCol) {
+
+                    if (oData.State == 0) {//未读
+                        $(nTd).html("<a href='@(Path)Index?SenderCode=" + oData.SenderCode + "&type=留言'  class='btn red btn-xs redd'><i class='fa fa-edit'></i> @("查看留言")</a>&nbsp;")
+                                  .append("<a href='@(Path)Index?SenderCode=" + oData.SenderCode + "&type=回复'  class='btn green btn-xs redd'><i class='fa fa-edit'></i> @("查看回复")</a>&nbsp;")
+
+                    } else {
+                        $(nTd).html("<a href='@(Path)Index?SenderCode=" + oData.SenderCode + "&type=留言'  class='btn green btn-xs redd'><i class='fa fa-edit'></i> @("查看留言")</a>&nbsp;")
+                                  .append("<a href='@(Path)Index?SenderCode=" + oData.SenderCode + "&type=回复'  class='btn green btn-xs redd'><i class='fa fa-edit'></i> @("查看回复")</a>&nbsp;")
+     
+                    }
+                 }
+        }
+        ];
+        function searchList() {
+            oTable.ajax.reload(null, false);
+        }
+    </script>
+    <script src="~/assets/scripts/myListPage.js"></script>
+}

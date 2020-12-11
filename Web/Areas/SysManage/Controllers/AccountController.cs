@@ -38,7 +38,7 @@ namespace Web.Areas.SysManage.Controllers
             {
                 var code = Request.Form["code"];
                 var rememberme = Request.Form["remember"];
-                var mycode = Tools.getCookie("gif");
+                string mycode = Session["smscode"] as string;
                 if (!string.IsNullOrEmpty(mycode))
                 {
                     if (!string.IsNullOrEmpty(code) && code.ToLower() == mycode.ToLower())
@@ -96,7 +96,7 @@ namespace Web.Areas.SysManage.Controllers
             {
                 var code = Request.Form["code"];
                 var rememberme = Request.Form["remember"];
-                var mycode = Tools.getCookie("gif");
+                string mycode = Session["smscode"] as string;
                 if (!string.IsNullOrEmpty(mycode))
                 {
                     if (!string.IsNullOrEmpty(code) && code.ToLower() == mycode.ToLower())

@@ -1,0 +1,145 @@
+﻿@model DataBase.Sys_Msg
+@{
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+
+}
+<!-- BEGIN PAGE BAR -->
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="/SysManage/home/Index">@("首页")</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#"><span>@("信息管理")</span></a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="/Admin_Infos/AdminMsg//Index"><span>@("回复")/@("留言")</span></a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#"><span>@("回复")</span></a>
+        </li>
+    </ul>
+</div>
+<!-- END PAGE BAR -->
+<!-- BEGIN PAGE CONTENT -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet light bordered">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="font-green-sharp fa fa-user"></i>
+                    <span class="caption-subject font-green-sharp bold uppercase">@ViewBag.Title<span>@("发消息")</span></span>
+                </div>
+            </div>
+            <div class="portlet-body">
+                @using (Ajax.BeginForm("Save", null, new AjaxOptions()
+                {
+                    HttpMethod = "Post",
+                    OnBegin = "SubAjax.Loading",
+                    OnComplete = "SubAjax.Complate",
+                    OnFailure = "SubAjax.Failure",
+                    OnSuccess = "SubAjax.Success"
+                }, new { @class = "form-horizontal", @role = "form", @id = "commentForm" }))
+                {
+                    <div class="form-body">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red">*</span>@("发件人编号")：</label>
+                            <div class="col-md-4">
+                                <input type="hidden" name="MsgId" value="@Model.MsgId" />
+                                <input type="hidden" name="SenderCode" value="@Model.SenderCode" />
+                                <label class="control-label">@Model.SenderCode</label>
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red">*</span>收件人编号：</label>
+                            <div class="col-md-4">
+                                <input type="text" name="ReceiverCode" value="@Model.ReceiverCode" ajaxurl="/Ajax/IsExistMember" class="form-control" nullmsg="请输入收件人编号" datatype="*1-20" errormsg="收件人编号不正确">
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red">*</span>@("标题")：</label>
+                            <div class="col-md-4">
+                                <input type="text" name="Title" value="@Model.Title" class="form-control" nullmsg="@("请输入标题")" datatype="*" errormsg="@("请输入标题")">
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">@("留言图片")：</label>
+                            <div class="col-md-4">
+                                <div class="layui-upload" style="width: 80px; height:80px; display:inline-block; margin-top:0;margin-right:10px">
+                                    <div class="layui-upload-list" id="photo-btn1">
+                                        <img class="layui-upload-img" id="demo2" src="@Url_Mobile.GetTouXiang("")" style="width: 100%;" >
+                                        <input type="hidden" id="Image" name="Image" value="" />
+                                    </div>
+                                </div>
+                            </div>
+                            <span></span>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"><span style="color:red"></span>@("内容")：</label>
+                            <div class="col-md-4">
+                                <textarea type="text" name="content" rows="10" class="form-control" datatype="*1-500" errormsg="@("内容在")500@("字以内")">@Model.Comment</textarea>
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="form-actions">
+                            <div class="row">
+                                <div class="col-md-offset-3 col-md-9">
+                                    @if (ViewBag.LoginName != "chakan")
+                                    {
+                                        <button type="submit" id="SubSave" class="btn green"><i class="fa fa-check"></i><span>@("保") @("存")</span></button>
+                                    }
+                                    <button type="button" class="btn default" onclick="window.history.back()"><i class="fa fa-mail-reply"></i>@("返回")</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script src="~/assets/global/plugins/diyUpload/js/webuploader.html5only.min.js"></script>
+    <script src="~/assets/global/plugins/diyUpload/js/diyUpload.js"></script>
+    <link href="~/assets/global/plugins/diyUpload/css/webuploader.css" rel="stylesheet" />
+    <link href="~/assets/mobilex/trade/layui/css/layui.css" rel="stylesheet" />
+    <script src="~/assets/mobilex/trade/layui/layui.js"></script>
+    <!-- END PAGE CONTENT -->
+    <script>
+
+        layui.use('upload', function () {
+            var $ = layui.jquery
+                , upload = layui.upload;
+            upload.render({
+                elem: '#photo-btn1'
+                , url: '/ajax/SaveImage/'
+                , accept: "file"
+                , done: function (res, index, upload) {
+                    document.getElementById('demo2').src = res.ReUrl;
+                    //$("#demo2").val(res.ReUrl);
+                    //return layer.msg(res.ReUrl);
+                    if (res.Status != "y") {
+                        return layer.msg('上传失败');
+                    } else {
+
+                        $("#Image").val(res.ReUrl);
+                        return layer.msg('上传成功');
+                    }
+                }
+                //, success: function (data) {
+                //    $("#Vedio").val(data._raw);
+                //  //console.log(res)
+                //}
+            });
+        });
+    </script>
+
+}

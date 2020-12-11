@@ -1,0 +1,95 @@
+﻿@model DataBase.Sys_Msg
+@{
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+}
+<!-- BEGIN PAGE BAR -->
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="/SysManage/home/Index">@("首页")</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#"><span>@("信息管理")</span></a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="/Admin_Infos/AdminMsg/Index"><span>@("回复")/@("留言")</span></a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#"><span>@("发消息")</span></a>
+        </li>
+    </ul>
+</div>
+<!-- END PAGE BAR -->
+<!-- BEGIN PAGE CONTENT -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet light bordered">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="font-green-sharp fa fa-user"></i>
+                    <span class="caption-subject font-green-sharp bold uppercase">@ViewBag.Title<span>@("发消息")</span></span>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="form-body form-horizontal">
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><span style="color:red"></span>@("发件人编号")：</label>
+                        <div class="col-md-4">
+                            <input type="hidden" name="MsgId" value="@Model.MsgId" />
+                            <input type="hidden" name="SenderCode" value="@Model.SenderCode" />
+                            <label class="control-label">@Model.SenderCode</label>
+                        </div>
+                        <span></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><span style="color:red"></span>@("收件人编号")：</label>
+                        <div class="col-md-4">
+                            <label class="control-label">@Model.ReceiverCode</label>
+                        </div>
+                        <span></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><span style="color:red"></span>@("标题")：</label>
+                        <div class="col-md-4">
+                            <label class="control-label">@Model.Title</label>
+                        </div>
+                        <span></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><span style="color:red"></span>@("留言图片")：</label>
+                        <div class="col-md-4">
+                            <label class="control-label"><img style="width: 50%;
+    float: left;" src="@Model.Image" /></label>
+                        </div>
+                        <span></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><span style="color:red"></span>@("内容")：</label>
+                        <div class="col-md-4">
+                            <label class="control-label">@Model.Comment</label>
+                        </div>
+                        <span></span>
+                    </div>
+                    <div class="form-actions">
+                        <div class="row">
+                            <div class="col-md-offset-3 col-md-9">
+                                @if (ViewBag.LoginName != "chakan")
+                                {
+                                    if (ViewBag.IsHiddenReply == false)
+                                    {
+                                        <a id="reply" href="/Admin_Infos/AdminMsg/Detail?msgid=@(Model.MsgId)" class="btn green"><i class="fa fa-check"></i><span>@("回") @("复")</span></a>
+                                    }
+                                }
+                                <button type="button" class="btn default" onclick="window.history.back()"><i class="fa fa-mail-reply"></i>@("返回")</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END PAGE CONTENT -->

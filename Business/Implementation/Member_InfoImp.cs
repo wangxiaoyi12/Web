@@ -957,6 +957,7 @@ namespace Business.Implementation
                     model.IsLockCommission = entity.IsLockCommission;
                     model.IsLockFen = entity.IsLockFen;
                     model.IsLockDraw = entity.IsLockDraw;
+                    model.IsSub = entity.IsSub;
                     model.StarLevel = entity.StarLevel;
                     if (model.Commission < 0 || model.CommissionSum < 0 || model.Coins < 0 || model.ShopCoins < 0 || model.Scores < 0 || model.TourScores < 0)
                     {

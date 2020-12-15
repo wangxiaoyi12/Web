@@ -91,6 +91,16 @@ namespace Business.Implementation
                         json.Msg = "不能转给自己！";
                         return json;
                     }
+                    if (fm.IsSub.Value )
+                    {
+                        json.Msg = "转出方开关关闭，操作失败！";
+                        return json;
+                    }
+                    if (tm.IsSub.Value)
+                    {
+                        json.Msg = "转入方开关关闭，操作失败！";
+                        return json;
+                    }
                     //if (entity.TransferType == "收益币互转")
                     //{
                     //    if (fm.Commission < entity.Amount)

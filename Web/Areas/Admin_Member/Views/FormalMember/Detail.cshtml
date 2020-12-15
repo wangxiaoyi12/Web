@@ -122,109 +122,109 @@
                                     </div>
                                 </div>
                                 @*<div class="form-group">
-                                        <label class="col-md-2 control-label"><span style="color:red"></span>加盟资格：</label>
-                                        <div class="col-md-4">
-                                            <select name="MemberLevelId" class="form-control select2">
-                                                <option value="">===选择级别=</option>
-                                                @{
-                                                    foreach (var item in ViewData["Level"] as dynamic)
-                                                    {
-                                                        if (Model.MemberLevelId == item.LevelId)
-                                                        {
-                                                            <option value="@item.LevelId" selected="selected">@item.LevelName</option>
-                                                        }
-                                                        else
-                                                        {
-                                                            <option value="@item.LevelId">@item.LevelName</option>
-                                                        }
-                                                    }
-                                                }
-                                            </select>
-                                        </div>
-                                    </div>*@
+            <label class="col-md-2 control-label"><span style="color:red"></span>加盟资格：</label>
+            <div class="col-md-4">
+                <select name="MemberLevelId" class="form-control select2">
+                    <option value="">===选择级别=</option>
+                    @{
+                        foreach (var item in ViewData["Level"] as dynamic)
+                        {
+                            if (Model.MemberLevelId == item.LevelId)
+                            {
+                                <option value="@item.LevelId" selected="selected">@item.LevelName</option>
+                            }
+                            else
+                            {
+                                <option value="@item.LevelId">@item.LevelName</option>
+                            }
+                        }
+                    }
+                </select>
+            </div>
+        </div>*@
                                 @*<div class="form-group">
-                                        <label class="col-md-2 control-label"><span style="color:red"></span>级：</label>
-                                        <div class="col-md-4">
-                                            <select name="StarLevel" class="form-control select2">
-                                                <option value=" ">===空=</option>
-                                                @{
-                                                    foreach (var item in Enums.GetList<Enums.StarLevel>())
-                                                    {
-                                                        if (Model.StarLevel == item.Key)
-                                                        {
-                                                            <option value="@item.Key" selected="selected">@item.Value</option>
-                                                        }
-                                                        else
-                                                        {
-                                                            <option value="@item.Key">@item.Value</option>
-                                                        }
-                                                    }
-                                                }
-                                            </select>
-                                        </div>
-                                    </div>*@
+            <label class="col-md-2 control-label"><span style="color:red"></span>级：</label>
+            <div class="col-md-4">
+                <select name="StarLevel" class="form-control select2">
+                    <option value=" ">===空=</option>
+                    @{
+                        foreach (var item in Enums.GetList<Enums.StarLevel>())
+                        {
+                            if (Model.StarLevel == item.Key)
+                            {
+                                <option value="@item.Key" selected="selected">@item.Value</option>
+                            }
+                            else
+                            {
+                                <option value="@item.Key">@item.Value</option>
+                            }
+                        }
+                    }
+                </select>
+            </div>
+        </div>*@
 
                                 <div class="form-group">
                                     <label class="col-md-2 control-label"><span style="color:red"></span>推荐人编号：</label>
                                     <div class="col-md-4">
                                         <label class="control-label"><span style="color:red"></span>@Model.RecommendCode</label>
                                         @*<input type="text" readonly="readonly" name="RecommendCode" value="@Model.RecommendCode" class="form-control"
-                                            datatype="*"
-                                            errormsg="推荐人编号不能空">*@
+                datatype="*"
+                errormsg="推荐人编号不能空">*@
                                     </div>
                                 </div>
                                 @*<div class="form-group">
-                                    <label class="col-md-2 control-label"><span style="color:red"></span>店主编号：</label>
-                                    <div class="col-md-4">
-                                        <label class="control-label"><span style="color:red"></span>@Model.ServiceCenterCode</label>
-                                    </div>
-                                </div>*@
+            <label class="col-md-2 control-label"><span style="color:red"></span>店主编号：</label>
+            <div class="col-md-4">
+                <label class="control-label"><span style="color:red"></span>@Model.ServiceCenterCode</label>
+            </div>
+        </div>*@
                                 @*
-                                    <div class="form-group">
-                                        <label class="col-md-2 control-label"><span style="color:red"></span>安置人编号：</label>
-                                        <div class="col-md-4">
-                                            <label class="control-label"><span style="color:red"></span>@Model.UpperCode</label>
-                                        </div>
-                                    </div>*@
+        <div class="form-group">
+            <label class="col-md-2 control-label"><span style="color:red"></span>安置人编号：</label>
+            <div class="col-md-4">
+                <label class="control-label"><span style="color:red"></span>@Model.UpperCode</label>
+            </div>
+        </div>*@
                                 @*<div class="form-group">
-                                    <label class="col-md-2 control-label"><span style="color:red">*</span>是否店主：</label>
-                                    <div class="col-md-4">
-                                        <div class="mt-radio-inline">
-                                            <label class="mt-radio">
-                                                <input type="radio" name="IsServiceCenter" checked="checked" value="否" @(Model.IsServiceCenter == "否" ? "checked" : "")> 否
-                                                <span></span>
-                                            </label>
-                                            <label class="mt-radio">
-                                                <input type="radio" name="IsServiceCenter" value="是" @(Model.IsServiceCenter == "是" ? "checked" : "")> 是
-                                                <span></span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <span></span>
-                                </div>*@
+            <label class="col-md-2 control-label"><span style="color:red">*</span>是否店主：</label>
+            <div class="col-md-4">
+                <div class="mt-radio-inline">
+                    <label class="mt-radio">
+                        <input type="radio" name="IsServiceCenter" checked="checked" value="否" @(Model.IsServiceCenter == "否" ? "checked" : "")> 否
+                        <span></span>
+                    </label>
+                    <label class="mt-radio">
+                        <input type="radio" name="IsServiceCenter" value="是" @(Model.IsServiceCenter == "是" ? "checked" : "")> 是
+                        <span></span>
+                    </label>
+                </div>
+            </div>
+            <span></span>
+        </div>*@
                                 @*<div class="form-group">
-                                        <label class="col-md-2 control-label"><span style="color:red">*</span>当前店主级别：</label>
-                                        <div class="col-md-4">
-                                            <input type="text" name="AppellationLeveName" value="@Model.AppellationLeveName" class="form-control" readonly="readonly">
-                                        </div>
-                                        <span></span>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-md-2 control-label"><span style="color:red"></span>店主级别：</label>
-                                        <div class="col-md-4">
-                                            <select name="NiCheng" id="NiCheng" class="form-control select2" datatype="*" nullmsg="">
-                                                <option value="会员">会员</option>
-                                                <option value="直营店">直营店</option>
-                                                <option value="专卖店">专卖店</option>
-                                            </select>
-                                        </div>
-                                    </div>*@
+            <label class="col-md-2 control-label"><span style="color:red">*</span>当前店主级别：</label>
+            <div class="col-md-4">
+                <input type="text" name="AppellationLeveName" value="@Model.AppellationLeveName" class="form-control" readonly="readonly">
+            </div>
+            <span></span>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label"><span style="color:red"></span>店主级别：</label>
+            <div class="col-md-4">
+                <select name="NiCheng" id="NiCheng" class="form-control select2" datatype="*" nullmsg="">
+                    <option value="会员">会员</option>
+                    <option value="直营店">直营店</option>
+                    <option value="专卖店">专卖店</option>
+                </select>
+            </div>
+        </div>*@
                                 @*<div class="form-group">
-                                        <label class="col-md-2 control-label"><span style="color:red"></span>店主编号：</label>
-                                        <div class="col-md-4">
-                                            <label class="control-label"><span style="color:red"></span>@Model.ServiceCenterCode</label>
-                                        </div>
-                                    </div>*@
+            <label class="col-md-2 control-label"><span style="color:red"></span>店主编号：</label>
+            <div class="col-md-4">
+                <label class="control-label"><span style="color:red"></span>@Model.ServiceCenterCode</label>
+            </div>
+        </div>*@
                                 <div class="form-group">
                                     <label class="col-md-2 control-label"><span style="color:red">*</span>是否锁定：</label>
                                     <div class="col-md-4">
@@ -274,21 +274,37 @@
                                     <span></span>
                                 </div>
                                 <div class="form-group">
-                                        <label class="col-md-2 control-label"><span style="color:red">*</span>是否突出贡献职称：</label>
-                                        <div class="col-md-4">
-                                            <div class="mt-radio-inline">
-                                                <label class="mt-radio">
-                                                    <input type="radio" name="IsLockFen" checked="checked" value="false" @(Model.IsLockFen != true ? "checked" : "")> 否
-                                                    <span></span>
-                                                </label>
-                                                <label class="mt-radio">
-                                                    <input type="radio" name="IsLockFen" value="true" @(Model.IsLockFen == true ? "checked" : "")> 是
-                                                    <span></span>
-                                                </label>
-                                            </div>
+                                    <label class="col-md-2 control-label"><span style="color:red">*</span>是否锁定互转开关：</label>
+                                    <div class="col-md-4">
+                                        <div class="mt-radio-inline">
+                                            <label class="mt-radio">
+                                                <input type="radio" name="IsSub" checked="checked" value="false" @(Model.IsSub != true ? "checked" : "")> 否
+                                                <span></span>
+                                            </label>
+                                            <label class="mt-radio">
+                                                <input type="radio" name="IsSub" value="true" @(Model.IsSub == true ? "checked" : "")> 是
+                                                <span></span>
+                                            </label>
                                         </div>
-                                        <span></span>
                                     </div>
+                                    <span></span>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label"><span style="color:red">*</span>是否突出贡献职称：</label>
+                                    <div class="col-md-4">
+                                        <div class="mt-radio-inline">
+                                            <label class="mt-radio">
+                                                <input type="radio" name="IsLockFen" checked="checked" value="false" @(Model.IsLockFen != true ? "checked" : "")> 否
+                                                <span></span>
+                                            </label>
+                                            <label class="mt-radio">
+                                                <input type="radio" name="IsLockFen" value="true" @(Model.IsLockFen == true ? "checked" : "")> 是
+                                                <span></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <span></span>
+                                </div>
                             </div>
                             <div role="tabpanel" class="tab-pane" id="tab2">
                                 <div class="form-group">

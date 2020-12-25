@@ -29,17 +29,17 @@ namespace Business.Implementation
             #region 拓展奖(对碰奖)日封顶
 
             #endregion
-            if (amount < 0)
-            {
-                json.Msg = "佣金不能小于0";
-                return json;
-            }
-            else if (amount == 0)
-            {
-                //佣金为0，直接返回，不向数据库增加数据                
-                json.Msg = "佣金为0";
-                return json;
-            }
+            //if (amount < 0)
+            //{
+            //    json.Msg = "佣金不能小于0";
+            //    return json;
+            //}
+            //else if (amount == 0)
+            //{
+            //    //佣金为0，直接返回，不向数据库增加数据                
+            //    json.Msg = "佣金为0";
+            //    return json;
+            //}
             //检查是否锁定此会员不得奖
             if (member.IsLockCommission == true)
             {
@@ -70,7 +70,7 @@ namespace Business.Implementation
             mFin.RefNickName = refMember.NickName;
             mFin.CreateTime = DateTime.Now;
             mFin.GroupDate = (int)(mFin.CreateTime.Value - new DateTime(1900, 1, 1)).TotalDays;
-            if (mFin.Comment == "中级会员级差奖" || mFin.Comment == "高级会员级差奖" || mFin.TypeName == "代理推荐奖" || mFin.TypeName == "拼团奖" || mFin.TypeName == "平级奖" || mFin.TypeName == "超越奖")
+            if (mFin.Comment == "中级会员级差奖" || mFin.Comment == "高级会员级差奖"  || mFin.TypeName == "代理推荐奖"  || mFin.TypeName == "平级奖" || mFin.TypeName == "超越奖")
             {
                 mFin.IsSettlement = false;
 
@@ -186,8 +186,8 @@ namespace Business.Implementation
             else
             {   //产生拼团奖
                 //商品的二级分类
-                var categoryid2 = DB.ShopProductCategory.FindEntity(product.CategoryID).PID;
-                GouW(curUser, order.RealCongXiao, product.CanTuanBiLi, categoryid2.Value);
+                var categoryid2 = DB.ShopProductCategory.FindEntity(product.CategoryID).ID;
+                GouW(curUser, order.RealCongXiao, product.CanTuanBiLi, categoryid2);
 
             }
         }
@@ -776,12 +776,12 @@ namespace Business.Implementation
                 var cantuanbilistr = CanTuanBiLi.Split('|');
                 var recommendlist = DB.Member_Info.Where(a => a.RPosition.StartsWith(Recommend.RPosition) && a.MemberId != Recommend.MemberId).Select(a => a.MemberId);
 
-                var recommendorderlist = DB.ShopOrder.Where(a => a.MemberID == Recommend.MemberId && a.State >= 2).OrderByDescending(a => a.PayTime);
+                var recommendorderlist = DB.ShopOrder.Where(a => a.MemberID == Recommend.MemberId  &&  a.Postage<cantuanbilistr.Count() && a.State >= 2).OrderByDescending(a => a.PayTime);
                 var recommendorder = new List<ShopOrder>();
                 foreach (var item in recommendorderlist)
                 {
                     //二级分类的相同就算
-                    var pid2 = DB.ShopProductCategory.FindEntity(DB.ShopProduct.FindEntity(item.ShopOrderProducts.FirstOrDefault().ProductID).CategoryID).PID;
+                    var pid2 = DB.ShopProductCategory.FindEntity(DB.ShopProduct.FindEntity(item.ShopOrderProducts.FirstOrDefault().ProductID).CategoryID).ID;
                     if (pid2 == ID)
                     {
                         recommendorder.Add(item);
@@ -789,11 +789,11 @@ namespace Business.Implementation
 
                 }
                 //当前推荐人的一笔
-                var firstrecommendorder = recommendorder.OrderByDescending(a => a.PayTime).FirstOrDefault();
+                var firstrecommendorder = recommendorder.OrderBy(a => a.PayTime).FirstOrDefault();
                 if (firstrecommendorder != null)
                 {
                     //奖金明细次数
-                    string comment = "拼团奖分类id" + ID;
+                    string comment = "拼团奖分类id" + ID+firstrecommendorder.OrderCode;
                     var fincount = DB.Fin_Info.Where(a => a.MemberId == Recommend.MemberId && a.Comment == comment && a.CreateTime >= firstrecommendorder.PayTime).Count();
                     if (fincount < cantuanbilistr.Count())
                     {
@@ -802,7 +802,7 @@ namespace Business.Implementation
                         foreach (var item in order)
                         {
                             //二级分类的相同就算
-                            var pid2 = DB.ShopProductCategory.FindEntity(DB.ShopProduct.FindEntity(item.ShopOrderProducts.FirstOrDefault().ProductID).CategoryID).PID;
+                            var pid2 = DB.ShopProductCategory.FindEntity(DB.ShopProduct.FindEntity(item.ShopOrderProducts.FirstOrDefault().ProductID).CategoryID).ID;
 
                             if (pid2 == ID)
                             {
@@ -820,12 +820,15 @@ namespace Business.Implementation
                         {
                             bili = Convert.ToDecimal(cantuanbilistr[fincount]);
 
-                            decimal? amount = money * bili / 100m;
-                            if (amount > 0)
+                            decimal? amount = firstrecommendorder.RealCongXiao * bili / 100m;
+                            if (amount >= 0)
                             {
-                                DB.Jiang.InsertFin(Recommend, member, amount.Value, "拼团奖", "拼团奖分类id" + ID);
+                                DB.Jiang.InsertFin(Recommend, member, amount.Value, "拼团奖", "拼团奖分类id" + ID+firstrecommendorder.OrderCode);
+                                firstrecommendorder.Postage += 1;
+                                DB.ShopOrder.Update(firstrecommendorder);
                             }
                             break;
+
                         }
                     }
                 }

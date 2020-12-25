@@ -91,6 +91,11 @@ namespace Business.Implementation
                         json.Msg = "不能转给自己！";
                         return json;
                     }
+                    if (!DB.XmlConfig.XmlSite.IsTransfer)
+                    {
+                        json.Msg = "转账总开关关闭，操作失败！";
+                        return json;
+                    }
                     if (fm.IsSub.Value )
                     {
                         json.Msg = "转出方开关关闭，操作失败！";

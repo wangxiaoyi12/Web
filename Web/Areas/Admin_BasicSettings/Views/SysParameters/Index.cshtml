@@ -467,6 +467,20 @@
                         <span></span>
                     </div>
                     <div class="form-group">
+                        <label class="col-md-2 control-label"><span style="color:red">*</span>互转总开关：</label>
+                        <div class="col-md-4">
+                            <label class="mt-radio">
+                                <input type="radio" name="IsTransfer" checked="IsTransfer" value="true" @(Model.IsTransfer == true ? "checked" : "")>  开
+                                <span></span>
+                            </label>
+                            <label class="mt-radio">
+                                <input type="radio" name="IsTransfer" value="IsTransfer" @(Model.IsJiHuo == false ? "checked" : "")> 关
+                                <span></span>
+                            </label>
+                        </div>
+                        <span></span>
+                    </div>
+                    <div class="form-group">
                         <label class="col-md-2 control-label"><span style="color:red">*</span>短信开关：</label>
                         <div class="col-md-4">
                             <label class="mt-radio">

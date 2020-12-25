@@ -72,6 +72,7 @@ namespace DataBase
         /// 税金
         /// </summary>
         public decimal? Poundage { get; set; }
+        public bool IsTransfer { get; set; } = true;
         public decimal? LingDao1 { get; set; }
         public decimal? GouWuFanL { get; set; }
         public decimal? MeiRiFanL { get; set; }
